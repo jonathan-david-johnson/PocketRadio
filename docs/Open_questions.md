@@ -44,6 +44,20 @@ MVP duplicates ~3 files (station model, Supabase client, tracklist APIs).
 Post-MVP: extract into a shared Swift package inside the pocket-casts-ios fork.
 Not urgent until both apps are stable.
 
+## PocketCastsOSX — fork, inspire, or ignore?
+
+Local copy: `/Users/jdj/Documents/code/PocketRadio/other_apps/PocketCastsOSX`
+
+Prior conclusion (from plan): discard — uses deprecated `WebView` API and brittle JS injection into the Angular web player. Wrong architecture for a native audio player.
+
+Still worth a quick scan before M6 to check:
+- Any useful `NSStatusItem` / menubar plumbing patterns to borrow
+- Any audio session or media key handling worth adapting
+- Anything else that saves reinventing the wheel
+
+Decision: fork (unlikely), use for inspiration (maybe), or confirm ignore.
+Do before starting M6 menubar work.
+
 ## Local favorites fallback
 
 Favorites tab currently shows "Sign in to Pocket Casts" if user is logged out.
