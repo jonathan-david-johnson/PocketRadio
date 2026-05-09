@@ -1,0 +1,30 @@
+PocketRadio — NOTICE
+
+Copyright (c) 2026 Jonathan David Johnson
+
+This software is a fork of Pocket Casts iOS (https://github.com/Automattic/pocket-casts-ios),
+copyright Automattic Inc., licensed under the Mozilla Public License 2.0.
+
+---
+
+DONATION LINK PRESERVATION REQUIREMENT
+
+Any distributed fork or derivative of PocketRadio must preserve, in a clearly visible
+location within the user interface, working links to the donation pages of the public
+radio stations distributed in curated_stations.json.
+
+The current required donation links are:
+
+  KCRW         https://join.kcrw.com
+  KEXP         https://www.kexp.org/donate
+  NPR Hourly   https://www.npr.org/donations/support
+
+Removal or replacement of these links with non-functional or redirected URLs constitutes
+a violation of the terms under which this software is distributed.
+
+This requirement applies to any fork that includes the curated_stations.json file or
+any derivative of it.
+
+---
+
+Mozilla Public License 2.0 full text: https://www.mozilla.org/en-US/MPL/2.0/

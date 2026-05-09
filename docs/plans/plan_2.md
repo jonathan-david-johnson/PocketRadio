@@ -27,6 +27,7 @@ Android deferred post-MVP.
 | iOS | `Automattic/pocket-casts-ios` fork | Swift, UIKit+SwiftUI hybrid |
 | macOS menubar | New SwiftUI target in same repo | `NSStatusItem` + `AVFoundation`; no web wrapper |
 
+jdj: gooing to need an in app link to help people install menubar app
 Pull upstream iOS changes periodically via `git merge upstream/trunk`.
 
 **PocketCastsOSX discarded** — old `WebView` API (deprecated), brittle JS injection into Angular web player. Wrong architecture.
@@ -59,6 +60,7 @@ custom_streams  (user_uuid, id, name, url, donate_url, added_at)
 donations       (user_uuid, station_id, amount_cents, donated_at)
 listen_time     (user_uuid, station_id, seconds, date)
 ```
+jdj: does PC have listen time for podcasts?
 
 ### Station Data
 
