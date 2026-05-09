@@ -1,4 +1,4 @@
--- VibeStreams initial schema
+-- PocketRadio initial schema
 -- user_uuid = ServerSettings.userId from Pocket Casts iOS
 
 create table radio_favorites (
