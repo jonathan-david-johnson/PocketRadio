@@ -3,6 +3,8 @@
 ## Todo
 
 - [ ] Register WordPress.com OAuth app for `dotcomSecret` (PC sign-in requirement)
+- [ ] On first account sync: load user's existing favorites/listen history from Supabase and show a loading state until ready
+- [ ] When we get to the menu bar app, we need a selection for whether it's going to scroll the title like our current KCWR app or just do something else. 
 
 ---
 
