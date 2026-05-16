@@ -5,6 +5,7 @@
 - [ ] Register WordPress.com OAuth app for `dotcomSecret` (PC sign-in requirement)
 - [ ] On first account sync: load user's existing favorites/listen history from Supabase and show a loading state until ready
 - [ ] When we get to the menu bar app, we need a selection for whether it's going to scroll the title like our current KCWR app or just do something else. 
+- [ ] Streams shouldn't go in the Up Next list.
 
 ---
 
@@ -96,3 +97,8 @@ PC's existing signup flow is intact and untouched — this is fine under MPL 2.0
 UX friction: new users hitting PocketRadio for radio streaming must create a PC account first.
 Options: (a) keep as-is (acceptable for early adopters), (b) add a guest/offline mode with local-only favorites (post-MVP), (c) surface a "create account" prompt with clear explanation of why it's needed.
 Decide before public launch.
+
+### New Web UI
+
+Need to build a web UI that replaces the existing web UI. Can we fork a repo for this like we are for other things?
+
