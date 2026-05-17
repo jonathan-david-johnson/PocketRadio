@@ -11,10 +11,19 @@
 Tap Podcasts → existing PC nav, unchanged.
 
 ```
-[ ← ]  [ Podcasts ]  [ Playlists ]  [ Discover ]  [ Up Next ]
+[ ← ]  [ Podcasts ]  [ Playlists ]  [ Discover ]
 ```
 
 `←` returns to Home Nav.
+
+### Playlists tab
+
+Header is a segmented title view: `Playlists / Up Next` (active label = bold + primary text color; inactive = regular weight + dimmer; `/` separator is inert).
+
+- **Playlists** segment: list of user playlists / filters.
+- **Up Next** segment: current Up Next queue.
+
+Left and right bar buttons swap with the active segment to match that view's actions (e.g. `+` add playlist when Playlists is active; `Select` / `Cancel` etc. when Up Next is active). Tapping the inactive label flips the active segment, swaps the child view, and swaps the bar buttons atomically.
 
 ## Streams World
 
