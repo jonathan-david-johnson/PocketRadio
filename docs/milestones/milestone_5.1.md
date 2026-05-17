@@ -1,7 +1,7 @@
 # M5.1: Unified Segmented Header in Nav Bar
 
-**Status**: NOT STARTED
-**Builds on**: M5 (already shipped — committed at `0f3045a`).
+**Status**: COMPLETED 2026-05-17 — shipped on `pocket-casts-ios` trunk in commit `cf4ef1d`.
+**Builds on**: M5 (committed at `0f3045a`).
 
 ## Goal
 
