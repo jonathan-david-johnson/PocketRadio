@@ -6,6 +6,7 @@
 - [ ] On first account sync: load user's existing favorites/listen history from Supabase and show a loading state until ready
 - [ ] When we get to the menu bar app, we need a selection for whether it's going to scroll the title like our current KCWR app or just do something else. 
 - [ ] Streams shouldn't go in the Up Next list.
+- [ ] Clean up stranded M6 radio favorites in Supabase. After M7 migrates seeding to radio-browser UUIDs, the old string-id rows (`"kcrw"`, `"kexp"`, `"npr_hourly"`) seeded under M6's `radioFavoritesSeededM6` flag remain in the Supabase `radio_favorites` table as orphaned data. Either delete by hand from another client, or write a one-shot cleanup that the app runs on launch to issue `removeFavorite(stationId:)` for the three legacy ids and set a `radioFavoritesM6CleanupRan` flag.
 
 ---
 
