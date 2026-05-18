@@ -1,6 +1,6 @@
 # M7: Unify curated enhancements across Favorites + Browse
 
-**Status**: NOT STARTED
+**Status**: COMPLETED 2026-05-18 — shipped on `pocket-casts-ios` trunk in commit `1a7134c`.
 **Builds on**: M6.1 (committed at `8d557f3`).
 
 ## Goal
