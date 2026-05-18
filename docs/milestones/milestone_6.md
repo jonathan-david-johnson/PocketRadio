@@ -1,6 +1,6 @@
 # M6: Streams page cleanup + ICY-only now playing
 
-**Status**: NOT STARTED
+**Status**: COMPLETED 2026-05-17 — shipped on `pocket-casts-ios` trunk in commit `02d1a00`.
 **Builds on**: M5.1 (committed at `cf4ef1d`).
 
 ## Goal
@@ -71,6 +71,7 @@ Stations of interest: KCRW, KEXP, NPR Hourly News. NPR is already in `curated_st
 - **Observer lifetime.** `AVPlayerItemMetadataOutput.setDelegate` holds the delegate weakly. `DefaultPlayer` must retain the `RadioMetadataObserver` for the player item's lifetime and drop it when `player` is replaced or nilled.
 - **Album-art swap path is dormant.** No source is plumbed in this milestone. The notification payload includes a nil `albumArtURL` slot; detail VC code handles a non-nil value but never receives one. Avoid wiring an external album-art lookup in M6 — out of scope.
 - **Bitrate field accuracy.** `bitrate` on curated stations is hardcoded in JSON. If a station migrates to a different bitrate, the displayed value drifts. For radio-browser stations, `bitrate` comes from the station owner's self-report and is also stale-able. Accept this; do not attempt live measurement via `AVPlayerItemAccessLog`.
+- **Child bar buttons in StreamsHostViewController (Phase 3).** `FavoritesViewController` and `BrowseViewController` are plain `UIViewController` subclasses and do not write `navigationItem.{left,right}BarButtonItem` directly, so no bar-button routing is needed for M6. If either child is later promoted to `PCViewController`, add `pc.refreshRightButtons()` to `StreamsHostViewController.showChild(_:)` (the hook is already commented in the host file).
 
 ## Reference sweep
 
