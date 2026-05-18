@@ -1,6 +1,6 @@
 # M6.1: Tracklist enrichment for curated radio stations
 
-**Status**: NOT STARTED
+**Status**: COMPLETED 2026-05-18 — shipped on `pocket-casts-ios` trunk in commit `8d557f3`.
 **Builds on**: M6 (committed at `02d1a00`).
 
 ## Goal
