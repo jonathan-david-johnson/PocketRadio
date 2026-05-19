@@ -1,1 +1,1 @@
-milestones/milestone_7.1.md
+milestones/milestone_7.2.md

@@ -1,6 +1,6 @@
 # M7.1: Mute + Stop replace skip for live streams
 
-**Status**: NOT STARTED
+**Status**: COMPLETED 2026-05-18 — shipped on `pocket-casts-ios` trunk in commit `dad2b1d`.
 **Builds on**: M7 (committed at `1a7134c`).
 
 ## Goal
