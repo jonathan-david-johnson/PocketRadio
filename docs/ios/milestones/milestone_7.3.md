@@ -1,6 +1,6 @@
-# M7.3: <one-line title>
+# M7.3: Light/dark theme adaptation for radio surfaces
 
-**Status**: NOT STARTED
+**Status**: COMPLETED 2026-05-20 — shipped on `pocket-casts-ios` trunk in commit `3a23c22`.
 **Builds on**: M7.2 (committed at `057cbfb`).
 
 ## Goal
