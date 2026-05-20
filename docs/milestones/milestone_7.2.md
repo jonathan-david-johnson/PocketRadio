@@ -1,6 +1,6 @@
 # M7.2: Per-track artwork for enhanced live streams
 
-**Status**: NOT STARTED
+**Status**: COMPLETED 2026-05-20 — shipped on `pocket-casts-ios` trunk in commit `057cbfb`.
 **Builds on**: M7.1 (committed at `dad2b1d`).
 
 ## Goal
