@@ -1,6 +1,6 @@
-# M8: <one-line title>
+# M8: PocketRadio 4×2 home-screen widget
 
-**Status**: NOT STARTED
+**Status**: COMPLETED 2026-05-21 — shipped on `pocket-casts-ios` trunk at commit `56cbced` (initial drop `f74f424` + follow-up polish).
 **Builds on**: M7.3 (committed at `3a23c22`).
 
 ## Goal
