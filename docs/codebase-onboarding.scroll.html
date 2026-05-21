@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pocket Casts iOS — Full Codebase Onboarding — Scroll</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: #0f1419; color: #e6edf3; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
+  .layout { display: flex; min-height: 100vh; }
+  nav.side { width: 260px; background: #161b22; border-right: 1px solid #30363d; padding: 1.5rem 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0; }
+  nav.side h3 { color: #f78166; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 0 1.2rem 0.8rem; border-bottom: 1px solid #30363d; margin-bottom: 0.5rem; }
+  nav.side a { display: block; padding: 0.5rem 1.2rem; color: #8b949e; text-decoration: none; font-size: 0.9rem; border-left: 3px solid transparent; transition: all 0.15s; }
+  nav.side a:hover { color: #e6edf3; background: #21262d; }
+  nav.side a.active { color: #58a6ff; border-left-color: #58a6ff; background: #21262d; }
+  nav.side .num { color: #6e7681; margin-right: 0.5em; font-variant-numeric: tabular-nums; }
+  main { flex: 1; max-width: 1100px; padding: 2rem 4rem 6rem; }
+  section { min-height: 60vh; padding: 3rem 0; border-bottom: 1px solid #21262d; scroll-margin-top: 1rem; }
+  section:last-child { border-bottom: none; }
+  h1 { font-size: 2.6rem; margin-bottom: 0.4em; color: #f78166; }
+  h2 { font-size: 1.9rem; margin-bottom: 0.7em; color: #58a6ff; border-bottom: 2px solid #30363d; padding-bottom: 0.3em; }
+  h3 { font-size: 1.25rem; margin: 1em 0 0.4em; color: #7ee787; }
+  p, li { font-size: 1rem; line-height: 1.65; margin-bottom: 0.5em; }
+  ul, ol { padding-left: 1.5em; margin-bottom: 0.8em; }
+  table { border-collapse: collapse; width: 100%; margin: 0.8em 0; font-size: 0.95rem; }
+  th, td { border: 1px solid #30363d; padding: 0.5em 0.8em; text-align: left; vertical-align: top; }
+  th { background: #161b22; color: #58a6ff; }
+  code { background: #161b22; padding: 0.1em 0.4em; border-radius: 3px; color: #f78166; font-family: "SF Mono", Monaco, monospace; font-size: 0.9em; }
+  pre { background: #161b22; padding: 1em; border-radius: 4px; overflow-x: auto; margin: 0.8em 0; }
+  pre code { background: transparent; padding: 0; color: #e6edf3; font-size: 0.9rem; }
+  blockquote { border-left: 4px solid #30363d; padding: 0.5em 1em; margin: 0.8em 0; color: #8b949e; }
+  a { color: #58a6ff; }
+  .meta { color: #8b949e; font-size: 1rem; margin-top: 0.3em; }
+  .pill { display: inline-block; padding: 0.2em 0.7em; border-radius: 12px; font-size: 0.85rem; margin: 0.2em 0.3em 0.2em 0; }
+  .pill.high { background: #5a1d1d; color: #ffa198; }
+  .pill.med { background: #5a4a1d; color: #ffd866; }
+  .pill.low { background: #1d3b1d; color: #7ee787; }
+  .pill.good { background: #1d3b5a; color: #79c0ff; }
+  .small { font-size: 0.85rem; color: #8b949e; }
+  hr { border: none; border-top: 1px solid #30363d; margin: 1em 0; }
+  @media (max-width: 900px) {
+    nav.side { width: 180px; }
+    main { padding: 1.5rem 1.5rem 4rem; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="side">
+    <h3>Pocket Casts iOS Onboarding</h3>
+    <a href="#project-overview"><span class="num">01</span>Project Overview</a>
+    <a href="#module-architecture-shared-code"><span class="num">02</span>Module Architecture</a>
+    <a href="#third-party-dependencies"><span class="num">03</span>Third-Party Dependencies</a>
+    <a href="#data-layer-grdb-sqlite"><span class="num">04</span>Data Layer — GRDB</a>
+    <a href="#server-api-layer"><span class="num">05</span>Server / API Layer</a>
+    <a href="#playback-architecture"><span class="num">06</span>Playback Architecture</a>
+    <a href="#radio-system-pocketradio-additions"><span class="num">07</span>Radio System</a>
+    <a href="#error-handling-patterns"><span class="num">08</span>Error Handling</a>
+    <a href="#memory-management"><span class="num">09</span>Memory Management</a>
+    <a href="#widgets-widgetextension"><span class="num">10</span>Widgets</a>
+    <a href="#watch-app"><span class="num">11</span>Watch App</a>
+    <a href="#build-system"><span class="num">12</span>Build System</a>
+    <a href="#notification-system"><span class="num">13</span>Notification System</a>
+    <a href="#navigation-system"><span class="num">14</span>Navigation System</a>
+    <a href="#theme-system"><span class="num">15</span>Theme System</a>
+    <a href="#download-manager"><span class="num">16</span>Download Manager</a>
+    <a href="#key-patterns-and-conventions"><span class="num">17</span>Key Patterns</a>
+    <a href="#end-to-end-flows"><span class="num">18</span>End-to-End Flows</a>
+    <a href="#supabase-backend"><span class="num">19</span>Supabase / Backend</a>
+    <a href="#known-issues-open-questions"><span class="num">20</span>Known Issues</a>
+    <a href="#quick-reference-key-files"><span class="num">21</span>Quick Reference</a>
+  </nav>
+  <main>
+    <section id="title"><h1>Pocket Casts iOS — Full Codebase Onboarding</h1>
+    <p class="meta">Written for a senior developer assuming full ownership. Last updated: 2026-05-20.</p>
+</section>
+
+    <section id="project-overview">
+      <h2>1. Project Overview</h2>
+      <p><strong>PocketRadio</strong> is a fork of Automattic's <code>pocket-casts-ios</code> (MPL 2.0 licensed). The fork adds live radio streaming capabilities (the "Radio" feature set) to the existing podcast player. The upstream repo is <code>Automattic/pocket-casts-ios</code>.</p>
+      <ul>
+        <li><strong>~837 Swift files</strong> total across all targets</li>
+        <li><strong>287 files</strong> in the <code>Modules/</code> shared package</li>
+        <li><strong>iOS 16+</strong> deployment target, watchOS 9+, macOS 10.15+, tvOS 17+</li>
+        <li><strong>Swift 5.10</strong> toolchain with Xcode 16</li>
+      </ul>
+
+      <h3>Target Architecture</h3>
+      <p>The Xcode project contains multiple targets, all under <code>podcasts.xcodeproj</code>:</p>
+      <table>
+        <tr><th>Target</th><th>Purpose</th></tr>
+        <tr><td><code>podcasts</code> (main)</td><td>The iOS app — all UI, playback, Radio, widgets</td></tr>
+        <tr><td><code>Pocket Casts Watch App</code></td><td>watchOS companion app</td></tr>
+        <tr><td><code>Pocket Casts App Clip</code></td><td>iOS App Clip (lightweight version)</td></tr>
+        <tr><td><code>Pocket Casts TV App</code></td><td>tvOS app</td></tr>
+        <tr><td><code>WidgetExtension</code></td><td>iOS home/lock screen widgets</td></tr>
+        <tr><td><code>NotificationExtension</code></td><td>Rich notification content</td></tr>
+        <tr><td><code>NotificationContent</code></td><td>Notification service extension</td></tr>
+        <tr><td><code>PodcastsIntents</code> / <code>PodcastsIntentsUI</code></td><td>Siri Shortcuts intents</td></tr>
+        <tr><td><code>Share Extension</code></td><td>Share sheet extension</td></tr>
+      </table>
+      <p>The "Pocket Casts Staging" scheme is the one you actually use for development (<code>build_sim</code>, <code>run_sim</code> in the Makefile).</p>
+    </section>
+
+    <section id="module-architecture-shared-code">
+      <h2>2. Module Architecture (Shared Code)</h2>
+      <p>The <code>Modules/</code> directory is a <strong>Swift Package Manager</strong> package containing shared libraries used by all targets. This is how Automattic shares code across the main app, watch, widgets, and app clip.</p>
+
+      <h3>Package Structure</h3>
+<pre><code>Modules/
+├── Package.swift          # Central manifest
+├── Sources/
+│   ├── PocketCastsUtils/       # Foundation-level utilities, logging, feature flags
+│   ├── PocketCastsDataModel/   # GRDB database layer, models, query builder
+│   ├── PocketCastsServer/      # REST API client, sync engine, subscriptions
+│   ├── PocketCastsDependencyInjection/  # DI container (lightweight)
+│   ├── EndOfYear/              # Year-end wrapped experience (SwiftUI)
+│   ├── GRDBMacros/             # Swift macros for GRDB column definitions
+│   ├── GRDBMacrosPlugin/       # Compiler plugin for the macros
+│   ├── Modules/                # Umbrella module re-exporting everything
+│   └── XcodeSupport/           # Per-target dependency shims (one per Xcode target)
+└── Tests/
+    ├── PocketCastsUtilsTests/
+    ├── PocketCastsDataModelTests/
+    ├── PocketCastsServerTests/
+    ├── PocketCastsDependencyInjectionTests/
+    ├── GRDBMacrosTests/
+    └── ModulesTests/</code></pre>
+
+      <h3>Key Package Design Detail: <code>XcodeSupport</code></h3>
+      <p>The <code>Package.swift</code> defines a clever pattern: each Xcode target gets a thin Swift package target (<code>XcodeTarget_podcasts</code>, <code>XcodeTarget_WidgetExtension</code>, etc.) that re-exports its dependencies. This lets Xcode project targets depend on SPM packages without SPM directly managing the Xcode project.</p>
+      <p><strong>Why this matters for you</strong>: When you add a new third-party dependency, you add it to <code>Package.swift</code> under the relevant <code>xcodeTarget(...)</code> entry. The <code>podcasts</code> target dependency list is where you'd add anything the main app needs.</p>
+
+      <h3>Dependency Graph (Simplified)</h3>
+<pre><code>PocketCastsUtils  (leaf — no internal deps)
+    ↓
+PocketCastsDataModel  (depends on Utils + GRDB)
+    ↓
+PocketCastsServer  (depends on DataModel + Utils)
+    ↓
+EndOfYear  (depends on DataModel + Server + Utils)</code></pre>
+    </section>
+
+    <section id="third-party-dependencies">
+      <h2>3. Third-Party Dependencies</h2>
+      <p>Full list from <code>Package.swift</code>:</p>
+      <table>
+        <tr><th>Dependency</th><th>Purpose</th><th>Notes</th></tr>
+        <tr><td><strong>GRDB.swift 7.x</strong></td><td>SQLite ORM</td><td>Core data layer. Entire app state lives in GRDB.</td></tr>
+        <tr><td><strong>Kingfisher 7.x</strong></td><td>Image loading/caching</td><td>All artwork, station logos, track art</td></tr>
+        <tr><td><strong>Firebase 10.x</strong></td><td>Analytics, Remote Config, Performance</td><td>AnalyticsWithoutAdIdSupport variant (privacy)</td></tr>
+        <tr><td><strong>Google Cast SDK</strong></td><td>Chromecast streaming</td><td>Automattic fork <code>google-cast</code></td></tr>
+        <tr><td><strong>Google Sign-In</strong></td><td>OAuth provider</td><td>SSO login option</td></tr>
+        <tr><td><strong>Supabase Swift 2.x</strong></td><td>Radio favorites storage</td><td>Added by PocketRadio. User-scoped via <code>x-user-uuid</code> header.</td></tr>
+        <tr><td><strong>Automattic Tracks</strong></td><td>Event tracking</td><td>Automattic's own analytics pipeline</td></tr>
+        <tr><td><strong>EventHorizonSDK</strong></td><td>Binary framework</td><td>Closed-source analytics/SDK from Automattic</td></tr>
+        <tr><td><strong>Lottie 4.x</strong></td><td>Animation</td><td>Onboarding animations, loading states</td></tr>
+        <tr><td><strong>DifferenceKit</strong></td><td>Diffable data sources</td><td>Smooth list updates</td></tr>
+        <tr><td><strong>Fuse</strong></td><td>Fuzzy search</td><td>Podcast search in Intents</td></tr>
+        <tr><td><strong>SwipeCellKit</strong></td><td>Swipe actions</td><td>Episode list swipes</td></tr>
+        <tr><td><strong>JLRoutes</strong></td><td>URL routing</td><td>Deep link handling</td></tr>
+        <tr><td><strong>SwiftProtobuf</strong></td><td>Protocol Buffers</td><td>Server sync protocol</td></tr>
+        <tr><td><strong>SwiftSubtitles</strong></td><td>Transcript parsing</td><td>SRT/VTT subtitle parsing</td></tr>
+        <tr><td><strong>Swime</strong></td><td>MIME type detection</td><td>File type sniffing</td></tr>
+        <tr><td><strong>WrappingHStack</strong></td><td>SwiftUI layout</td><td>Tag/filter chip layouts</td></tr>
+        <tr><td><strong>Agrume</strong></td><td>Image viewer</td><td>Full-screen artwork viewer</td></tr>
+        <tr><td><strong>Fingerprint</strong></td><td>Device fingerprinting</td><td>Automattic's fork</td></tr>
+      </table>
+    </section>
+
+    <section id="data-layer-grdb-sqlite">
+      <h2>4. Data Layer — GRDB (SQLite)</h2>
+
+      <h3>How It Works</h3>
+      <p><code>DataManager</code> (58,523 lines in <code>PocketCastsDataModel/Public/DataManager.swift</code>) is the <strong>central data access layer</strong>. It wraps GRDB's <code>DatabaseQueue</code> (single-writer serial queue) and provides:</p>
+      <ul>
+        <li><strong>Generated column accessors</strong> via Swift macros (<code>@GrdbColumn</code> in <code>GRDBMacros/</code>)</li>
+        <li><strong>Type-safe queries</strong> via <code>PlaylistQueryBuilder</code> (41,020 lines)</li>
+        <li><strong>Observed publishers</strong> via GRDB's <code>ValueObservation</code> for reactive UI updates</li>
+      </ul>
+
+      <h3>Key Models</h3>
+      <p>All models live in <code>Modules/Sources/PocketCastsDataModel/Public/Model/</code>:</p>
+      <table>
+        <tr><th>Model</th><th>Purpose</th></tr>
+        <tr><td><code>Episode</code></td><td>Podcast episodes (GRDB-persisted)</td></tr>
+        <tr><td><code>Podcast</code></td><td>Subscribed podcasts</td></tr>
+        <tr><td><code>BaseEpisode</code></td><td>Protocol that both <code>Episode</code> and <code>RadioStation</code> conform to</td></tr>
+        <tr><td><code>UserEpisode</code></td><td>User-uploaded files</td></tr>
+        <tr><td><code>PlaylistEpisode</code></td><td>Junction table for playlists/filters</td></tr>
+        <tr><td><code>EpisodeFilter</code></td><td>Named filters (aka playlists)</td></tr>
+        <tr><td><code>Folder</code></td><td>Podcast folders</td></tr>
+        <tr><td><code>Bookmark</code></td><td>Episode bookmarks</td></tr>
+        <tr><td><code>UpNextEpisode</code></td><td>Up Next queue items</td></tr>
+      </table>
+
+      <h3>Important: <code>BaseEpisode</code> Protocol</h3>
+      <p>This is the <strong>polymorphism key</strong> for PocketRadio. <code>RadioStation</code> conforms to <code>BaseEpisode</code>, which allows it to enter the existing playback stack (<code>PlaybackManager</code>, <code>PlaybackQueue</code>) without modifying the core data model. The trick:</p>
+<pre><code>// RadioStation.swift
+downloadUrl = streamUrl     // EpisodeManager.urlForEpisode reads this
+sizeInBytes = Int64.max     // DownloadManager cache guard always fails → no caching
+duration = 0                // Mini player hides progress bar
+played() → false            // Live stream is never "completed"</code></pre>
+      <p><strong>Critical gotcha</strong>: After <code>PlaybackManager.load(episode:)</code> saves a <code>RadioStation</code> to the SQL queue table, <code>currentEpisode()</code> returns an <code>Episode</code> shim (not <code>RadioStation</code>). This means <code>episode as? RadioStation</code> <strong>always fails</strong> after load. The fix in M7.1: <code>RadioStationRegistry</code> — an in-memory <code>[String: RadioStation]</code> dictionary that's the source of truth for "is this a radio station" lookups. Always use <code>RadioStationRegistry.shared.station(for: uuid)</code> not <code>as? RadioStation</code>.</p>
+    </section>
+
+    <section id="server-api-layer">
+      <h2>5. Server / API Layer</h2>
+
+      <h3>Architecture</h3>
+      <p><code>PocketCastsServer</code> module contains <strong>all networking code</strong>. It uses a custom URLSession-based stack (not Alamofire).</p>
+<pre><code>PocketCastsServer/Public/
+├── API/
+│   ├── ApiServerHandler.swift          # Main REST client
+│   ├── ApiServerHandler+Account.swift  # Account management endpoints
+│   ├── ApiServerHandler+SocialAuth.swift # Google/Apple sign-in
+│   ├── ApiServerHandler+Suggestions.swift # Discovery suggestions
+│   └── ...many more extensions
+├── Sync/
+│   ├── SyncManager.swift               # Full sync orchestration
+│   ├── SyncTask.swift                  # Base sync task
+│   ├── SyncTask+FullSync.swift         # Full sync implementation
+│   ├── SyncTask+LocalChanges.swift     # Local→Server sync
+│   ├── SyncTask+ServerChanges.swift    # Server→Local sync
+│   ├── UpNextSyncTask.swift            # Up Next queue sync
+│   ├── BackgroundSyncManager.swift     # BGTask-based background sync
+│   └── ServerSyncDelegateProtocol.swift
+├── Refresh/
+│   └── RefreshManager.swift            # Podcast feed refresh
+├── ServerSettings.swift                # Server-side persisted user settings (14,559 lines)
+├── ServerPodcastManager.swift          # Podcast subscription management
+├── SubscriptionHelper.swift            # IAP + subscription status
+├── Upload/                             # User file upload pipeline
+├── Discover/                           # Discover feed endpoint
+├── Search/                             # Podcast search endpoint
+└── Sharing/                            # Clip sharing endpoints
+
+PocketCastsServer/Private/
+├── API Tasks/                          # Individual API call implementations (~39 files)
+│   ├── ApiBaseTask.swift               # Base class for all API calls
+│   ├── RetrievePodcastsTask.swift      # Fetch subscribed podcasts
+│   ├── RetrieveEpisodesTask.swift      # Fetch episode list
+│   ├── MetadataTask.swift              # Podcast metadata refresh
+│   ├── SubscriptionStatusTask.swift    # Check subscription status
+│   └── ...40+ more task files
+└── TokenHelper.swift                   # Auth token management (10,173 lines)</code></pre>
+
+      <h3>How API Calls Work</h3>
+      <p>All API calls subclass <code>ApiBaseTask</code> and follow a pattern:</p>
+      <ol>
+        <li>Construct a <code>URLRequest</code> with auth headers</li>
+        <li>Execute via <code>URLConnection.sendAsync(request:completion:)</code></li>
+        <li>Parse the response (JSON or protobuf)</li>
+        <li>Call completion handler</li>
+      </ol>
+      <p>The <code>ApiServerHandler</code> public class exposes a clean Swift API that internally creates and executes these task objects.</p>
+
+      <h3>Sync Engine</h3>
+      <p>The sync engine uses <strong>Protocol Buffers</strong> for efficiency. The flow:</p>
+      <ol>
+        <li><strong>Pull</strong>: <code>SyncTask+ServerChanges</code> requests changes since last sync timestamp → receives protobuf of modified/added/deleted records → applies to GRDB</li>
+        <li><strong>Push</strong>: <code>SyncTask+LocalChanges</code> finds locally modified records → encodes as protobuf → sends to server</li>
+        <li><strong>Full Sync</strong>: Resets the sync timestamp and re-downloads everything</li>
+      </ol>
+      <p><strong>Playback position sync</strong> is separate: <code>PositionSyncTask</code> sends <code>playedUpTo</code> values to the server periodically (every 30 seconds during playback, see <code>PlaybackManager.updatesPerSave</code>).</p>
+
+      <h3>Auth &amp; Tokens</h3>
+      <ul>
+        <li>Authentication is handled by the persistent Pocket Casts account system</li>
+        <li><code>ServerSettings.userId</code> is the user UUID — this is what PocketRadio uses for Supabase scoping</li>
+        <li><code>TokenHelper</code> manages refresh tokens, OAuth flows, and password auth</li>
+        <li>Google Sign-In and Apple Sign-In are supported via <code>ApiServerHandler+SocialAuth.swift</code></li>
+      </ul>
+    </section>
+
+    <section id="playback-architecture">
+      <h2>6. Playback Architecture</h2>
+
+      <h3>PlaybackManager (2,722 lines)</h3>
+      <p><code>PlaybackManager</code> is a <strong>singleton</strong> (<code>PlaybackManager.shared</code>). It's the central coordinator for all audio playback:</p>
+      <ul>
+        <li>Manages the <code>PlaybackQueue</code> (current episode + up next list)</li>
+        <li>Creates and swaps player implementations (<code>PlaybackProtocol</code>)</li>
+        <li>Handles audio session lifecycle (<code>AVAudioSession</code>)</li>
+        <li>Manages <code>MPNowPlayingInfoCenter</code> (lock screen / Control Center)</li>
+        <li>Coordinates <code>MPRemoteCommandCenter</code> (headphone controls, CarPlay)</li>
+        <li>Tracks sleep timer, chapters, effects</li>
+      </ul>
+
+      <h3>Player Implementations</h3>
+      <p><code>PlaybackProtocol</code> has multiple implementations:</p>
+      <table>
+        <tr><th>Player</th><th>Use Case</th></tr>
+        <tr><td><code>DefaultPlayer</code></td><td>Standard <code>AVPlayer</code>-based playback</td></tr>
+        <tr><td><code>EffectsPlayer</code></td><td><code>AVPlayer</code> with effects (trim silence, volume boost, speed)</td></tr>
+        <tr><td><code>GoogleCastManager</code></td><td>Chromecast streaming</td></tr>
+        <tr><td><code>StreamingPlayer</code></td><td>HTTP live streaming via <code>AVPlayer</code></td></tr>
+      </table>
+      <p>Radio stations use <code>DefaultPlayer</code> with an AVPlayer connected to the stream URL.</p>
+
+      <h3>Key PlaybackManager Methods for Radio</h3>
+<pre><code>// M7.1 additions:
+func isLiveStream(_ episode: BaseEpisode? = nil) -> Bool  // Uses RadioStationRegistry
+func shouldUseMuteControls(for episode: BaseEpisode? = nil) -> Bool  // Live + unseekable
+func toggleMute()  // Toggles AVPlayer.isMuted, fires .playbackMuteChanged notification
+func stopRadioPlayback()  // Tears down playback entirely
+var isMuted: Bool  // Mute state, resets on item change
+
+// Added in M7.2:
+func liveStation(for episode: BaseEpisode? = nil) -> RadioStation?  // Registry lookup
+handleRadioTrackChanged(_:)  // Per-track artwork resolution (lock screen)
+handleRadioTracklistRefreshed(_:)  // Tracklist-based artwork</code></pre>
+
+      <h3>Audio Session Management</h3>
+      <p><code>PlaybackManager</code> activates/deactivates the <code>AVAudioSession</code> on play/pause. Key detail: deactivation is <strong>delayed by 3 seconds</strong> (<code>deactiveAudioSession</code>) because iOS gets "cranky" if you deactivate while audio is still playing out. There's a <code>shouldDeactivateSession</code> atomic flag to cancel scheduled deactivation if playback resumes.</p>
+    </section>
+
+    <section id="radio-system-pocketradio-additions">
+      <h2>7. Radio System (PocketRadio Additions)</h2>
+      <p><strong>19 files</strong> in <code>podcasts/Radio/</code>. This is entirely your team's code.</p>
+      <table>
+        <tr><th>File</th><th>Purpose</th></tr>
+        <tr><td><code>RadioStation.swift</code></td><td><code>BaseEpisode</code> conforming model for live streams</td></tr>
+        <tr><td><code>RadioStationRegistry.swift</code></td><td>In-memory UUID→Station lookup (survives SQL round-trip)</td></tr>
+        <tr><td><code>RadioBrowserAPI.swift</code></td><td>radio-browser.info REST client</td></tr>
+        <tr><td><code>RadioSupabase.swift</code></td><td>Supabase client factory (per-user scoped)</td></tr>
+        <tr><td><code>RadioFavoritesManager.swift</code></td><td>CRUD for radio favorites in Supabase</td></tr>
+        <tr><td><code>RadioFavoritesSeeder.swift</code></td><td>First-launch curated station seeding</td></tr>
+        <tr><td><code>RadioMetadataObserver.swift</code></td><td>ICY metadata polling (Shoutcast/Icecast <code>metadata.xsl</code> endpoint)</td></tr>
+        <tr><td><code>RadioTracklistService.swift</code></td><td>KCRW-style JSON tracklist parsing</td></tr>
+        <tr><td><code>TracklistEntry.swift</code></td><td>Tracklist entry model (artist, title, imageUrl)</td></tr>
+        <tr><td><code>TrackArtworkResolver.swift</code></td><td>Per-track artwork resolution (tracklist→iTunes→logo fallback chain)</td></tr>
+        <tr><td><code>CuratedStation.swift</code></td><td>Curated station JSON model</td></tr>
+        <tr><td><code>CuratedEnhancement.swift</code></td><td>Enhancement decoration struct (logo, tracklistUrl)</td></tr>
+        <tr><td><code>curated_stations.json</code></td><td>Bundled curated station definitions (KCRW, KEXP, NPR)</td></tr>
+        <tr><td><code>FavoritesViewController.swift</code></td><td>Favorites tab UI</td></tr>
+        <tr><td><code>BrowseViewController.swift</code></td><td>Browse/search tab UI</td></tr>
+        <tr><td><code>StreamsHostViewController.swift</code></td><td>Container for Favorites + Browse tabs</td></tr>
+        <tr><td><code>StationDetailViewController.swift</code></td><td>Station detail screen (logo, bitrate, tracklist, donate)</td></tr>
+        <tr><td><code>RadioStationCell.swift</code></td><td>Station list cell</td></tr>
+        <tr><td><code>TracklistCell.swift</code></td><td>Tracklist row cell</td></tr>
+      </table>
+
+      <h3>Radio Station Lifecycle</h3>
+      <ol>
+        <li><strong>Discovery</strong>: User browses radio-browser.info or sees curated seeded stations</li>
+        <li><strong>Favoriting</strong>: <code>RadioFavoritesManager</code> writes to Supabase <code>radio_favorites</code> table</li>
+        <li><strong>Playback</strong>: <code>RadioStation</code> is loaded via <code>PlaybackManager.load(episode:)</code> → enters the standard podcast playback stack</li>
+        <li><strong>Metadata</strong>: <code>RadioMetadataObserver</code> polls the stream's ICY metadata endpoint every N seconds</li>
+        <li><strong>Tracklist</strong>: <code>RadioTracklistService</code> fetches/enriches from KCRW-style JSON APIs</li>
+        <li><strong>Artwork</strong>: <code>TrackArtworkResolver</code> resolves per-track album art (M7.2)</li>
+      </ol>
+
+      <h3>RadioBrowserAPI</h3>
+      <p>Talks to <code>https://de1.api.radio-browser.info/json</code>:</p>
+      <ul>
+        <li><code>topStations(limit:)</code> — top voted stations</li>
+        <li><code>search(query:limit:)</code> — search by name</li>
+        <li><code>station(uuid:)</code> — lookup by UUID</li>
+      </ul>
+      <p>No rate limiting implemented yet (noted as open question). Uses <code>URLSession.shared</code> with a custom <code>User-Agent: PocketRadio/1.0</code>.</p>
+
+      <h3>RadioSupabase</h3>
+      <p>Factory that creates a <code>SupabaseClient</code> per operation. Key detail: reads <code>SUPABASE_URL</code> and <code>SUPABASE_ANON_KEY</code> from <code>Info.plist</code> (secrets not in source). Sets <code>x-user-uuid</code> header from <code>ServerSettings.userId</code> — this is how Supabase scopes data, but RLS is disabled (see <code>security_concerns.md</code>).</p>
+    </section>
+
+    <section id="error-handling-patterns">
+      <h2>8. Error Handling Patterns</h2>
+
+      <h3>Playback Errors</h3>
+      <p><code>PlaybackManager.PlaybackError</code> is a well-structured error enum:</p>
+<pre><code>enum PlaybackError: Error {
+    case internetConnection(logMessage: String?)
+    case episodeNotAvailable(errorCode: Int, logMessage: String?)
+    case fileCorrupted(logMessage: String?)
+    case chromecastError(logMessage: String?)
+    case playbackError(logMessage: String?, isLocalFile: Bool)
+}</code></pre>
+      <p>Each case provides:</p>
+      <ul>
+        <li><code>userMessage</code>: Long-form localized string for UI</li>
+        <li><code>shortUserMessage</code>: Short form for mini player</li>
+        <li><code>shortUserAttributedMessage</code>: Rich text with "Learn More" link</li>
+        <li><code>userAction</code>: Support URL for the specific error</li>
+        <li><code>logMessage</code>: Debug details sent to <code>FileLog</code></li>
+      </ul>
+
+      <h3>Fallback Player</h3>
+      <p>When playback fails, the system tries to fall back from <code>EffectsPlayer</code> to <code>DefaultPlayer</code>:</p>
+<pre><code>if fallbackToDefaultPlayer, let episode = currentEpisode() {
+    fallbackToPlayer = DefaultPlayer.self
+    load(episode: episode, autoPlay: true, overrideUpNext: false)
+}</code></pre>
+
+      <h3>File Corruption Heuristic</h3>
+      <p>If playback fails near the end of an episode (within 3 minutes of duration, and we've listened to >1 minute), the app marks it as finished rather than erroring — handles corrupt file headers at the tail end of downloads.</p>
+
+      <h3>Logging</h3>
+      <p>The app uses two logging systems:</p>
+      <ol>
+        <li><strong><code>FileLog</code></strong> — writes to a rolling log file on disk (used for debug and crash diagnosis)</li>
+        <li><strong><code>SentryLogger</code></strong> — conforms to <code>ErrorLogger</code> protocol, sends errors to Sentry (<code>CrashLoggingAdapter</code>) in debug, or captures breadcrumbs-only in App Store builds</li>
+      </ol>
+<pre><code>struct SentryLogger: ErrorLogger {
+    func log(error: Error, context: [String: String]?) {
+        if BuildEnvironment.current == .appStore {
+            let crumb = Breadcrumb()
+            crumb.level = SentryLevel.info
+            crumb.category = "grdb"
+            crumb.message = error.localizedDescription
+            SentrySDK.addBreadcrumb(crumb)
+        } else {
+            CrashLoggingAdapter.sharedManager?.crashLogging?.logError(error, ...)
+        }
+    }
+}</code></pre>
+      <p>DataManager and ServerConfig both set this as their error logger:</p>
+<pre><code>DataManager.logger = SentryLogger()
+ServerConfig.shared.errorLogger = SentryLogger()</code></pre>
+    </section>
+
+    <section id="memory-management">
+      <h2>9. Memory Management</h2>
+
+      <h3>Strong Reference Cycles</h3>
+      <p>The codebase uses standard iOS patterns:</p>
+      <ul>
+        <li><strong><code>[weak self]</code></strong> in closures extensively (see <code>PlaybackManager</code>'s many NotificationCenter blocks)</li>
+        <li><strong><code>unowned</code></strong> is rare — mostly avoided</li>
+        <li><strong>Deinit</strong> is consistently implemented with <code>NotificationCenter.default.removeObserver(self)</code></li>
+      </ul>
+
+      <h3>Caching Strategy</h3>
+      <p><strong>ImageManager</strong> uses multiple Kingfisher <code>ImageCache</code> instances:</p>
+      <table>
+        <tr><th>Cache</th><th>Purpose</th><th>Limit</th><th>Expiry</th></tr>
+        <tr><td><code>subscribedPodcastsCache</code></td><td>Podcast artwork</td><td>400MB disk</td><td>365 days</td></tr>
+        <tr><td><code>networkImageCache</code></td><td>General network images</td><td>Default</td><td>56 days</td></tr>
+        <tr><td><code>searchImageCache</code></td><td>Search results</td><td>10MB disk</td><td>Default</td></tr>
+        <tr><td><code>userEpisodeCache</code></td><td>User files</td><td>10MB disk</td><td>Default</td></tr>
+        <tr><td><code>discoverCache</code></td><td>Discover feed</td><td>Default</td><td>Default</td></tr>
+      </table>
+      <p><strong>TrackArtworkResolver</strong> (M7.2) adds an <code>NSCache&lt;NSString, URL&gt;</code> for artwork resolution results — this is the in-memory cache for track → artwork URL lookups, separate from the Kingfisher pixel cache.</p>
+
+      <h3>Thread Safety</h3>
+      <ul>
+        <li><strong><code>ThreadSafeDictionary</code></strong>: Used for <code>downloadEpisodesCache</code> and <code>downloadAndStreamEpisodes</code> caches (feature-flagged via <code>downloadsThreadSafeCache</code>)</li>
+        <li><strong><code>AtomicBool</code></strong>: Used for <code>aboutToPlay</code> and <code>shouldDeactivateSession</code> in PlaybackManager</li>
+        <li><strong>GRDB's <code>DatabaseQueue</code></strong>: All database access is serialized through a single writer queue</li>
+        <li><strong>DispatchQueue</strong>: Several custom queues exist — <code>playerCleanupQueue</code> for player teardown, <code>DispatchQueue.global()</code> for background setup work</li>
+      </ul>
+
+      <h3>Audio Session Cleanup</h3>
+      <p>The <code>deactiveAudioSession</code> method has a deliberate 3-second delay to avoid deactivating while audio buffers are still draining. Uses <code>TimedActionHelper</code> with a weak self capture.</p>
+    </section>
+
+    <section id="widgets-widgetextension">
+      <h2>10. Widgets (WidgetExtension)</h2>
+      <p>The widget extension is a <strong>separate process</strong> that communicates with the main app via <strong>App Group UserDefaults</strong>.</p>
+
+      <h3>Architecture</h3>
+<pre><code>WidgetExtension/
+├── PocketCastsWidgetBundle.swift   # @main WidgetBundle entry point
+├── Data/
+│   ├── WidgetData.swift            # ObservableObject, loads from App Group
+│   └── WidgetEpisode.swift         # Episode model with sync image loading
+├── Common/
+│   ├── CommonWidgetHelper.swift    # Reads/writes App Group UserDefaults
+│   ├── ArtworkViews.swift          # Shared artwork rendering
+│   ├── PCWidgetColorScheme.swift   # Theme-aware colors
+│   └── Widget+Accentable.swift     # iOS tint handling
+├── Now Playing/                    # Now Playing widget (home + lock screen)
+├── Up Next/                        # Up Next widget (home + lock screen)
+└── App Icon/                       # App icon shortcut widget</code></pre>
+
+      <h3>Data Flow</h3>
+      <ol>
+        <li><strong>Main App writes</strong> → <code>WidgetHelper.publishUpNextInfo()</code> serializes <code>CommonUpNextItem</code> array to App Group UserDefaults</li>
+        <li><strong>Widget reads</strong> → <code>CommonWidgetHelper.loadNowPlayingEpisodes()</code> deserializes from App Group UserDefaults</li>
+        <li><strong>Triggers</strong>: <code>WidgetHelper</code> observes <code>playbackStarted</code>, <code>playbackPaused</code>, <code>playbackTrackChanged</code>, <code>upNextQueueChanged</code>, etc.</li>
+        <li><strong>Artwork</strong>: Images are copied to <code>widget_images/</code> directory in the App Group container during publish (sync, not async — widget timeline can't do network)</li>
+        <li><strong>PocketRadio Widget</strong>: Added in M8 — mirrors favorites, live stream status, mute state, and track info via <code>WidgetHelper.publishPocketRadio*</code> methods</li>
+      </ol>
+
+      <h3>Key Implementation Detail</h3>
+      <p>Widgets <strong>cannot load images asynchronously</strong> — the timeline provider must supply image data synchronously. So <code>WidgetEpisode.loadImageData()</code> does a synchronous <code>try? Data(contentsOf: imageUrl)</code> from the app group container during timeline snapshot:</p>
+<pre><code>func loadImageData() {
+    guard let imageUrl else { return }
+    imageData = try? Data(contentsOf: imageUrl)
+}</code></pre>
+    </section>
+
+    <section id="watch-app">
+      <h2>11. Watch App (Pocket Casts Watch App)</h2>
+      <p>~60 Swift files in the watch target. Uses <strong>SwiftUI</strong> (not WatchKit storyboards).</p>
+
+      <h3>Architecture</h3>
+<pre><code>Pocket Casts Watch App/
+├── UI/
+│   ├── PocketCastsApp.swift           # @main App entry point
+│   ├── ExtensionDelegate.swift        # Legacy WKExtensionDelegate
+│   ├── Main Page/                     # Main menu
+│   ├── Now Playing/                   # Now Playing screen + row controller
+│   ├── Episode Lists/                 # Episode lists
+│   ├── Episode/                       # Episode detail + actions
+│   ├── Podcasts/                      # Podcast list
+│   ├── Folders/                       # Folder navigation
+│   ├── Filters/                       # Filter/playlist list
+│   ├── Effects/                       # Playback effects
+│   ├── Play Source/                   # Source selection
+│   └── SwiftUI/                       # Shared components
+├── Data & Communication/
+│   ├── SessionManager.swift           # WCSession management
+│   ├── WatchDataManager.swift         # Local watch data cache (GRDB)
+│   └── WatchImageHelper.swift         # Artwork loading
+└── Complication/
+    └── ComplicationController.swift   # Watch face complications</code></pre>
+
+      <h3>How the Watch Communicates</h3>
+      <p>Uses <strong>WCSession</strong> (Watch Connectivity framework):</p>
+      <ul>
+        <li><strong>SessionManager</strong> manages the WCSession lifecycle</li>
+        <li>Data is transferred via <code>sendMessage(_:replyHandler:errorHandler:)</code> for real-time and <code>transferUserInfo(_:)</code> for background</li>
+        <li><code>WatchSyncManager</code> syncs podcasts and episodes from the phone</li>
+        <li><code>WatchDataManager</code> caches data locally using GRDB (same database module as the phone)</li>
+        <li><strong>Playback can happen on the watch itself</strong> (local files synced from phone) or remotely on the phone</li>
+      </ul>
+
+      <h3>Watch Playback Sources</h3>
+      <p>The watch supports two playback sources:</p>
+      <ul>
+        <li><strong>PhoneSourceViewModel</strong>: Controls playback on the paired iPhone (remote control)</li>
+        <li><strong>WatchSourceViewModel</strong>: Plays synced episodes locally on the watch</li>
+      </ul>
+    </section>
+
+    <section id="build-system">
+      <h2>12. Build System</h2>
+
+      <h3>Xcode Project</h3>
+      <ul>
+        <li><strong><code>podcasts.xcodeproj</code></strong> — single project, multiple targets</li>
+        <li><strong>"Pocket Casts Staging" scheme</strong> — the scheme used for development builds with your custom bundle ID (<code>com.jdj.pocketradio</code>)</li>
+        <li>The upstream "pocketcasts" scheme uses Automattic's bundle ID and signing</li>
+      </ul>
+
+      <h3>Makefile</h3>
+      <p>The local <code>Makefile</code> provides convenience commands:</p>
+      <table>
+        <tr><th>Command</th><th>What It Does</th></tr>
+        <tr><td><code>make build_sim</code></td><td>Build StagingDebug for iPhone 17 Pro simulator</td></tr>
+        <tr><td><code>make run_sim</code></td><td>Build + install + launch on simulator</td></tr>
+        <tr><td><code>make build_device</code></td><td>Build StagingDebug for physical iPhone</td></tr>
+        <tr><td><code>make run_device</code></td><td>Build + install + launch on device</td></tr>
+        <tr><td><code>make test</code></td><td>Run PocketCastsTests</td></tr>
+        <tr><td><code>make test_staging</code></td><td>Run tests against StagingDebug</td></tr>
+        <tr><td><code>make lint</code> / <code>make format</code></td><td>SwiftLint (auto-correct available)</td></tr>
+        <tr><td><code>make generate_code</code></td><td>Run SwiftGen for string/asset code generation</td></tr>
+        <tr><td><code>make external_contributor</code></td><td>Generate empty API credentials for open-source builds</td></tr>
+      </table>
+
+      <h3>Code Generation</h3>
+      <ul>
+        <li><strong>SwiftGen</strong>: Generates <code>Strings+Generated.swift</code> from string catalogs and asset catalogs. Run with <code>make generate_code</code> after adding new assets or localized strings.</li>
+        <li><strong>GRDBMacros</strong>: Custom Swift macro (<code>@GrdbColumn</code>) auto-generates GRDB column definitions from model properties.</li>
+      </ul>
+
+      <h3>Feature Flags</h3>
+      <p><code>FeatureFlag</code> enum in <code>PocketCastsUtils/Feature Flags/</code>. Flags can be:</p>
+      <ul>
+        <li><strong>Compile-time</strong>: Default value in the enum</li>
+        <li><strong>Remote</strong>: Overridden by Firebase Remote Config (fetched on launch)</li>
+        <li><strong>Local override</strong>: <code>FeatureFlagOverrideStore</code> for development/testing</li>
+        <li><strong>Conditional</strong>: <code>slumber</code> flag is active when promo code is present</li>
+      </ul>
+      <p>Notable flags: <code>newSettingsStorage</code>, <code>playerIsReadyToPlay</code>, <code>downloadsThreadSafeCache</code>, <code>playlistsRebranding</code>, <code>upNextShuffle</code>, <code>enableLocalizationHeaders</code>, <code>earlyReloadSubscriptionStatus</code>.</p>
+
+      <h3>Secrets</h3>
+      <p>API credentials are stored in <code>podcasts/Credentials/ApiCredentials.swift</code> (not committed). An <code>ApiCredentials.tpl</code> template exists. Supabase secrets are read from <code>Info.plist</code> (<code>SUPABASE_URL</code>, <code>SUPABASE_ANON_KEY</code>).</p>
+    </section>
+
+    <section id="notification-system">
+      <h2>13. Notification System</h2>
+      <p>The app uses <code>NotificationCenter</code> with <code>Constants.Notifications</code> for inter-component communication. Key notifications:</p>
+      <table>
+        <tr><th>Notification</th><th>Fired When</th></tr>
+        <tr><td><code>playbackStarted</code></td><td>Playback begins</td></tr>
+        <tr><td><code>playbackPaused</code></td><td>Pause</td></tr>
+        <tr><td><code>playbackEnded</code></td><td>Playback ends</td></tr>
+        <tr><td><code>playbackTrackChanged</code></td><td>Track/episode changes</td></tr>
+        <tr><td><code>playbackFailed</code></td><td>Playback error</td></tr>
+        <tr><td><code>playbackEffectsChanged</code></td><td>Speed/trim/boost change</td></tr>
+        <tr><td><code>playbackPositionSaved</code></td><td>Progress saved (every 30s)</td></tr>
+        <tr><td><code>playbackMuteChanged</code></td><td>Radio mute toggled (M7.1)</td></tr>
+        <tr><td><code>currentlyPlayingEpisodeUpdated</code></td><td>Now playing info changed</td></tr>
+        <tr><td><code>upNextQueueChanged</code></td><td>Queue modified</td></tr>
+        <tr><td><code>episodeDownloaded</code></td><td>Download completed</td></tr>
+        <tr><td><code>podcastUpdated</code></td><td>Podcast metadata changed</td></tr>
+        <tr><td><code>manyEpisodesChanged</code></td><td>Bulk episode update</td></tr>
+        <tr><td><code>sleepTimerChanged</code></td><td>Sleep timer state change</td></tr>
+        <tr><td><code>.radioStationNowPlayingDidChange</code></td><td>ICY metadata tick (new song)</td></tr>
+        <tr><td><code>.radioTracklistDidRefresh</code></td><td>Tracklist API response received</td></tr>
+        <tr><td><code>.radioFavoritesChanged</code></td><td>Supabase favorites mutation</td></tr>
+        <tr><td><code>.episodeEmbeddedArtworkLoaded</code></td><td>Embedded artwork parsed</td></tr>
+      </table>
+
+      <h3>Custom Notification Names (Radio)</h3>
+<pre><code>extension NSNotification.Name {
+    static let radioStationNowPlayingDidChange = NSNotification.Name("radioStationNowPlayingDidChange")
+    static let radioTracklistDidRefresh = NSNotification.Name("radioTracklistDidRefresh")
+    static let radioFavoritesChanged = NSNotification.Name("radioFavoritesChanged")
+}</code></pre>
+    </section>
+
+    <section id="navigation-system">
+      <h2>14. Navigation System</h2>
+      <p>The app uses a hybrid navigation approach:</p>
+      <ol>
+        <li><strong><code>MainTabBarController</code></strong> — Root tab bar (Podcasts, Filters, Discover, Profile, Streams)</li>
+        <li><strong><code>NavigationManager</code></strong> — URL-like navigation with <code>navigateTo(_:data:)</code> and route constants</li>
+        <li><strong><code>JLRoutes</code></strong> — Deep link routing (handles <code>pktc://</code> URLs)</li>
+        <li><strong>SwiftUI Navigation</strong> — Newer screens (Profile, EndOfYear, Account) use SwiftUI with <code>NavigationStack</code></li>
+      </ol>
+      <p>The Radio feature added the "Streams" tab (6th tab) to the main tab bar. It contains a <code>StreamsHostViewController</code> with two sub-tabs: Favorites and Browse.</p>
+    </section>
+
+    <section id="theme-system">
+      <h2>15. Theme System</h2>
+      <p><code>Theme</code> is a struct with static properties for all app colors. Themes support:</p>
+      <ul>
+        <li><strong>Light/Dark mode</strong> (follows system)</li>
+        <li><strong>Custom themes</strong>: Default (light/dark), Classic, Electricity, Indigo, Rose, Radioactive, Contrast (dark/light), Gold</li>
+        <li><strong><code>Themeable*</code> views</strong>: Subclasses of standard UIKit views that auto-update when the theme changes</li>
+        <li><strong><code>Themeable+SwiftUI</code></strong>: SwiftUI environment-based theming</li>
+        <li><strong><code>AppTheme</code></strong>: Enum listing all available themes with metadata</li>
+      </ul>
+      <p>Colors are defined in <code>Styles.swift</code> and <code>Theme+AppColors.swift</code>.</p>
+    </section>
+
+    <section id="download-manager">
+      <h2>16. Download Manager</h2>
+      <p><code>DownloadManager</code> is a singleton handling all episode downloads:</p>
+      <ul>
+        <li><strong>Multiple URLSessions</strong>: WiFi-only background, cellular background, cellular foreground</li>
+        <li><strong>Eager initialization</strong>: <code>setupSessions()</code> called from <code>init()</code> to avoid lazy var race conditions</li>
+        <li><strong>Thread-safe caches</strong>: Uses <code>ThreadSafeDictionary</code> (feature-flagged) for episode and stream delegate caches</li>
+        <li><strong>Retry logic</strong>: <code>DownloadAttempt</code> struct tracks retry state</li>
+        <li><strong>Progress tracking</strong>: <code>DownloadProgressManager</code> publishes download progress</li>
+        <li><strong>Downloaded file cleanup</strong>: <code>checkIfRestoreCleanupRequired()</code> on launch finds episodes marked as downloaded where the file is missing</li>
+      </ul>
+    </section>
+
+    <section id="key-patterns-and-conventions">
+      <h2>17. Key Patterns and Conventions</h2>
+
+      <h3>Singleton Usage</h3>
+      <p>Singletons are used heavily (Apple ecosystem convention):</p>
+      <ul>
+        <li><code>PlaybackManager.shared</code></li>
+        <li><code>DownloadManager.shared</code></li>
+        <li><code>DataManager.sharedManager</code></li>
+        <li><code>ImageManager.sharedManager</code></li>
+        <li><code>WatchManager.shared</code></li>
+        <li><code>WidgetHelper.shared</code></li>
+        <li><code>WidgetData.shared</code></li>
+        <li><code>SiriShortcutsManager.shared</code></li>
+        <li><code>UserEpisodeManager.shared</code></li>
+        <li><code>GoogleCastManager.sharedManager</code></li>
+        <li><code>SubscriptionHelper.shared</code></li>
+      </ul>
+
+      <h3>Observer Pattern</h3>
+      <p>Prefer <code>NotificationCenter</code> over delegate protocols for multi-consumer events. Most components add observers in <code>init()</code> and remove them in <code>deinit</code>.</p>
+
+      <h3>File Extensions Convention</h3>
+      <p>Large classes split across files using <code>ClassName+Purpose.swift</code>:</p>
+      <ul>
+        <li><code>PlaybackManager</code> has no direct extensions (huge single file)</li>
+        <li><code>AppDelegate+Analytics.swift</code>, <code>AppDelegate+Defaults.swift</code>, etc.</li>
+        <li><code>DownloadManager+Logging.swift</code>, <code>DownloadManager+SessionManagement.swift</code></li>
+        <li><code>NowPlayingPlayerItemViewController+Seek.swift</code>, <code>+Shelf.swift</code>, <code>+Update.swift</code>, <code>+UpNextPan.swift</code></li>
+        <li><code>PodcastManager+Cleanup.swift</code>, <code>PodcastManager+Delete.swift</code></li>
+      </ul>
+
+      <h3>Threading Convention</h3>
+<pre><code>// UI work always on main
+DispatchQueue.main.async { ... }
+
+// Heavy work on global queue
+DispatchQueue.global().async { [weak self] in ... }
+DispatchQueue.global(qos: .userInitiated).async { ... }
+
+// Post notifications on main thread
+NotificationCenter.postOnMainThread(notification: ...)</code></pre>
+
+      <h3>Async/Await Adoption</h3>
+      <p>Newer code (Radio) uses <code>async/await</code> while older code uses completion handlers. <code>RadioBrowserAPI</code>, <code>RadioFavoritesManager</code>, <code>RadioTracklistService</code> all use async/await. <code>PlaybackManager</code> still uses completion handlers (callback-based).</p>
+    </section>
+
+    <section id="end-to-end-flows">
+      <h2>18. How the Pieces Fit Together — End-to-End Flows</h2>
+
+      <h3>Playing a Radio Station</h3>
+      <ol>
+        <li>User taps station in Browse or Favorites</li>
+        <li><code>StationDetailViewController</code> → user taps "Play"</li>
+        <li><code>RadioStation</code> is constructed with <code>stationId</code>, <code>streamUrl</code>, metadata</li>
+        <li><code>PlaybackManager.load(episode:station, autoPlay:true, overrideUpNext:true)</code></li>
+        <li><code>RadioStationRegistry</code> stores the station in-memory</li>
+        <li><code>PlaybackQueue</code> adds the episode to "currently playing" slot</li>
+        <li>AVPlayer is set up with the stream URL via <code>DefaultPlayer</code></li>
+        <li><code>RadioMetadataObserver</code> starts polling the stream's ICY metadata endpoint</li>
+        <li>On metadata tick: posts <code>.radioStationNowPlayingDidChange</code> → UI updates artist/title</li>
+        <li>If station has <code>tracklistUrl</code>: <code>RadioTracklistService</code> fetches tracklist JSON, posts <code>.radioTracklistDidRefresh</code></li>
+        <li>M7.2: <code>TrackArtworkResolver</code> resolves artwork → Kingfisher loads → <code>MPNowPlayingInfoCenter</code> updates</li>
+      </ol>
+
+      <h3>Syncing Favorites</h3>
+      <ol>
+        <li>User favorites a station → <code>RadioFavoritesManager.addFavorite(stationId:name:)</code></li>
+        <li>Creates <code>SupabaseClient</code> with <code>x-user-uuid: ServerSettings.userId</code> header</li>
+        <li>Inserts row into Supabase <code>radio_favorites</code> table</li>
+        <li>Posts <code>.radioFavoritesChanged</code> notification</li>
+        <li><code>FavoritesViewController</code> reloads from Supabase</li>
+        <li><code>WidgetHelper</code> publishes updated favorites to App Group for widget mirroring</li>
+      </ol>
+
+      <h3>App Launch Sequence</h3>
+      <ol>
+        <li><code>main.swift</code> → <code>UIApplicationMain</code> → <code>AppDelegate</code></li>
+        <li><code>AppDelegate.didFinishLaunchingWithOptions</code>:
+          <ul>
+            <li>Configure Firebase, Sentry</li>
+            <li>Setup analytics, secrets</li>
+            <li>Create unique app ID (UUID)</li>
+            <li>Setup Google Cast, routes</li>
+            <li>Register for push notifications</li>
+            <li>On background queue: setup sync delegate, check defaults, log downloads, ImageManager cleanup, Widget cleanup, Siri setup, start queued downloads</li>
+            <li>Setup badge, Watch connectivity, shortcuts</li>
+            <li>Register background refresh task</li>
+            <li>Setup IAP, sign-out listener</li>
+            <li><strong><code>RadioFavoritesSeeder.seedIfNeeded()</code></strong> — one-shot curated station seeding</li>
+          </ul>
+        </li>
+        <li><code>SceneDelegate.scene(willConnectTo:)</code>:
+          <ul>
+            <li>Creates <code>MainTabBarController</code> as root view controller</li>
+            <li>Makes window key and visible</li>
+            <li>Handles shortcut item, URL, or user activity from launch options</li>
+          </ul>
+        </li>
+      </ol>
+
+      <h3>Upstream Merge Considerations</h3>
+      <p>The codebase is a fork of <code>Automattic/pocket-casts-ios</code>. Files that have been modified for PocketRadio:</p>
+      <ul>
+        <li><code>podcasts/Radio/</code> — entirely new</li>
+        <li><code>podcasts/PlaybackManager.swift</code> — added mute/stop, live stream artwork</li>
+        <li><code>podcasts/DefaultPlayer.swift</code> — radio stream support</li>
+        <li><code>podcasts/Constants.swift</code> — Radio-related constants</li>
+        <li><code>podcasts/SceneDelegate.swift</code> — likely unchanged</li>
+        <li><code>Modules/Package.swift</code> — added Supabase dependency</li>
+      </ul>
+      <p>For any upstream merge, the biggest conflict areas will be <code>PlaybackManager.swift</code> (heavily modified) and <code>DefaultPlayer.swift</code>.</p>
+    </section>
+
+    <section id="supabase-backend">
+      <h2>19. Supabase / Backend</h2>
+      <p>Located at <code>/Users/jdj/Documents/code/PocketRadio/supabase/</code>:</p>
+<pre><code>supabase/
+├── migrations/     # SQL migrations for radio_favorites, listen_time, donations, etc.
+├── config.toml     # Supabase project config
+└── seed.sql        # Seed data</code></pre>
+
+      <h3>Tables (migration-based):</h3>
+      <ul>
+        <li><code>radio_favorites</code> — user's favorited radio stations (scoped by <code>user_uuid</code>)</li>
+        <li><code>custom_streams</code> — user-added custom stream URLs</li>
+        <li><code>listen_time</code> — listening history</li>
+        <li><code>donations</code> — donation tracking</li>
+      </ul>
+
+      <h3>Security Note</h3>
+      <p>RLS (Row Level Security) is <strong>disabled</strong> (migration 004). Data scoping relies entirely on the <code>x-user-uuid</code> header from the client. A malicious client that guesses another user's UUID could read/write their data. Accepted risk for MVP.</p>
+    </section>
+
+    <section id="known-issues-open-questions">
+      <h2>20. Known Issues &amp; Open Questions</h2>
+      <p>From <code>docs/todo.md</code>:</p>
+      <ul>
+        <li><strong>WordPress.com OAuth</strong>: Not yet registered for <code>dotcomSecret</code></li>
+        <li><strong>Account sync loading</strong>: No loading state on first sync</li>
+        <li><strong>Menubar app</strong>: Architecture TBD (your next milestone)</li>
+        <li><strong>iOS→macOS install flow</strong>: Undecided</li>
+        <li><strong>Podcast listen time</strong>: Need to check if PC tracks this internally</li>
+        <li><strong>Menubar auth</strong>: Manual UUID paste MVP approach pending</li>
+        <li><strong>radio-browser rate limits</strong>: Single endpoint, no redundancy yet</li>
+        <li><strong>Upstream merge cadence</strong>: Undecided</li>
+        <li><strong>Shared code iOS/menubar</strong>: Currently duplicated, needs SPM extraction</li>
+      </ul>
+    </section>
+
+    <section id="quick-reference-key-files">
+      <h2>21. Quick Reference: Key Files to Know</h2>
+      <table>
+        <tr><th>File</th><th>Why It Matters</th></tr>
+        <tr><td><code>podcasts/PlaybackManager.swift</code></td><td>Central playback — heavily modified for Radio</td></tr>
+        <tr><td><code>podcasts/Radio/RadioStation.swift</code></td><td>Radio model conforming to BaseEpisode</td></tr>
+        <tr><td><code>podcasts/Radio/RadioStationRegistry.swift</code></td><td>Source of truth for "is this a radio station?"</td></tr>
+        <tr><td><code>podcasts/Radio/RadioBrowserAPI.swift</code></td><td>radio-browser.info client</td></tr>
+        <tr><td><code>podcasts/Radio/RadioSupabase.swift</code></td><td>Supabase client factory</td></tr>
+        <tr><td><code>podcasts/Radio/RadioFavoritesManager.swift</code></td><td>Favorites CRUD</td></tr>
+        <tr><td><code>podcasts/DefaultPlayer.swift</code></td><td>AVPlayer wrapper (radio plays through this)</td></tr>
+        <tr><td><code>podcasts/DownloadManager.swift</code></td><td>Episode downloads &amp; streaming</td></tr>
+        <tr><td><code>podcasts/ImageManager.swift</code></td><td>All image caching (Kingfisher)</td></tr>
+        <tr><td><code>podcasts/WidgetHelper.swift</code></td><td>App Group bridge for widgets</td></tr>
+        <tr><td><code>podcasts/Constants.swift</code></td><td>All notification and UserDefaults keys</td></tr>
+        <tr><td><code>Modules/Sources/PocketCastsServer/Public/API/ApiServerHandler.swift</code></td><td>Main REST client</td></tr>
+        <tr><td><code>Modules/Sources/PocketCastsServer/Public/Sync/SyncManager.swift</code></td><td>Sync engine</td></tr>
+        <tr><td><code>Modules/Sources/PocketCastsDataModel/Public/DataManager.swift</code></td><td>Database layer (58K lines)</td></tr>
+        <tr><td><code>Modules/Package.swift</code></td><td>All dependencies + target wiring</td></tr>
+        <tr><td><code>Makefile</code></td><td>Build/test/run commands</td></tr>
+      </table>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav.side a');
+  const linkMap = {};
+  navLinks.forEach(a => linkMap[a.getAttribute('href').slice(1)] = a);
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const link = linkMap[e.target.id];
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
