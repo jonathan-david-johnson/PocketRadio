@@ -5,7 +5,7 @@ MENUBAR_DIR  = pocket-radio-menubar
 MENUBAR_PROJ = $(MENUBAR_DIR)/PocketRadio.xcodeproj
 MENUBAR_SCHEME = PocketRadio
 
-.PHONY: checkout upstream-remote menubar menubar-build menubar-run menubar-kill run_menubar
+.PHONY: checkout upstream-remote menubar menubar-build menubar-run menubar-kill run_menubar menubar-release install
 
 checkout:
 	@if [ -d "$(IOS_DIR)/.git" ]; then \
@@ -37,3 +37,27 @@ menubar-kill:
 
 # Kill and re-launch existing build (no rebuild)
 run_menubar: menubar-kill menubar-run
+
+# ── Installation ─────────────────────────────────────────────
+
+# Build Release config of menubar app (ad-hoc signed for personal use).
+menubar-release:
+	xcodebuild -project $(MENUBAR_PROJ) -scheme $(MENUBAR_SCHEME) -configuration Release build CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO
+
+# Build Release and copy into /Applications. Kills any running copy first.
+# After install:
+#   1. Open /Applications/PocketRadio.app once to register it.
+#   2. System Settings -> General -> Login Items -> Open at Login: add PocketRadio.
+install: menubar-kill menubar-release
+	@RELEASE_DIR=$$(xcodebuild -project $(MENUBAR_PROJ) -scheme $(MENUBAR_SCHEME) -showBuildSettings -configuration Release 2>/dev/null | grep ' BUILD_DIR = ' | sed 's/.*= //')/Release ; \
+	if [ ! -d "$$RELEASE_DIR/PocketRadio.app" ]; then \
+		echo "Build artifact not found at $$RELEASE_DIR/PocketRadio.app"; exit 1; \
+	fi ; \
+	echo "Removing old /Applications/PocketRadio.app (if any)..." ; \
+	rm -rf /Applications/PocketRadio.app ; \
+	echo "Copying $$RELEASE_DIR/PocketRadio.app -> /Applications/" ; \
+	cp -R "$$RELEASE_DIR/PocketRadio.app" /Applications/ ; \
+	echo "" ; \
+	echo "Installed. Next steps:" ; \
+	echo "  open /Applications/PocketRadio.app   # first launch (Gatekeeper may prompt)" ; \
+	echo "  Then: System Settings -> General -> Login Items -> Open at Login -> + PocketRadio"
