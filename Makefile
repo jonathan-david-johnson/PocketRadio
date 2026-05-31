@@ -1,11 +1,12 @@
-FORK_REPO    = git@github.com:jonathan-david-johnson/pocket-casts-ios.git
+FORK_REPO    = git@github.com:jonathan-david-johnson/pocket-radio-ios.git
 UPSTREAM     = git@github.com:Automattic/pocket-casts-ios.git
-IOS_DIR      = pocket-casts-ios
+IOS_DIR      = pocket-radio-ios
 MENUBAR_DIR  = pocket-radio-menubar
 MENUBAR_PROJ = $(MENUBAR_DIR)/PocketRadio.xcodeproj
 MENUBAR_SCHEME = PocketRadio
+ROKU_DIR     = pocket-radio-roku
 
-.PHONY: help checkout upstream-remote menubar menubar-build menubar-run menubar-kill run_menubar menubar-release install
+.PHONY: help checkout upstream-remote menubar menubar-build menubar-run menubar-kill run_menubar menubar-release install roku-build roku-deploy roku-install roku-telnet roku-screenshot
 
 .DEFAULT_GOAL := help
 
@@ -27,6 +28,13 @@ help:
 	@echo "  Menubar app (install)"
 	@echo "    menubar-release  Build Release (ad-hoc signed)"
 	@echo "    install          Build Release and copy into /Applications"
+	@echo ""
+	@echo "  Roku channel (delegates to $(ROKU_DIR)/Makefile; needs ROKU_PASS env)"
+	@echo "    roku-build       Package channel sources into channel.zip"
+	@echo "    roku-deploy      Build + sideload to the device"
+	@echo "    roku-install     Sideload existing channel.zip"
+	@echo "    roku-telnet      Open BrightScript debug console (port 8085)"
+	@echo "    roku-screenshot  Pull a device screenshot"
 	@echo ""
 	@echo "    help             Show this help"
 
@@ -84,3 +92,21 @@ install: menubar-kill menubar-release
 	echo "Installed. Next steps:" ; \
 	echo "  open /Applications/PocketRadio.app   # first launch (Gatekeeper may prompt)" ; \
 	echo "  Then: System Settings -> General -> Login Items -> Open at Login -> + PocketRadio"
+
+# ── Roku Channel ─────────────────────────────────────────────
+# Real targets live in $(ROKU_DIR)/Makefile; these delegate. Pass ROKU_PASS via env.
+
+roku-build:
+	@$(MAKE) -C $(ROKU_DIR) build
+
+roku-deploy:
+	@$(MAKE) -C $(ROKU_DIR) deploy
+
+roku-install:
+	@$(MAKE) -C $(ROKU_DIR) install
+
+roku-telnet:
+	@$(MAKE) -C $(ROKU_DIR) telnet
+
+roku-screenshot:
+	@$(MAKE) -C $(ROKU_DIR) screenshot
