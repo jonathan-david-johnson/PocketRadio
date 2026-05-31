@@ -19,7 +19,13 @@ Before any encode/decode on Roku, capture known-good wire bytes from the **menub
 
 ---
 
-## Spike 0 — Toolchain + Task HTTP (no protobuf)
+## Spike 0 — Toolchain + Task HTTP (no protobuf) ✅ DONE (2026-05-31)
+
+**Result: PASS.** On-device chain confirmed: `main` → MainScene → `HttpGetTask` (roUrlTransfer) → 200 / 5967 bytes from radio-browser topvote → `ParseJSON` → 5 station names printed (telnet 8085) + rendered. Dev loop works: `make install` (sideload) + ECP `launch/dev` + scripted socket capture of port 8085.
+
+---
+
+### Original plan
 
 Prove the dev loop and the Task-node networking pattern in isolation.
 
@@ -42,9 +48,28 @@ The unknown HANDOFF §3 hand-waves: Roku has **no `AsyncPostToFile`**; a POST th
 **Cost:** ~half day.
 **🚦 Gate:** if response bytes corrupt and unrecoverable → **relay is mandatory**. Stop native protobuf; un-park the relay design.
 
+### ❌ RESULT: GATE FAILED (2026-05-31) → relay mandatory
+
+On-device (`httpbin.org`, firmware as of test):
+
+```
+T1 RESPONSE (GetString binary): FAIL — file=8090 bytes vs str=8 bytes, first diff @ byte 8
+T2 REQUEST  (POST binary):      PASS — round-tripped all 256 bytes (0x00–0xFF)
+```
+
+- **Request side OK** — `roByteArray.WriteFile` + `AsyncPostFromFile` round-trips arbitrary bytes. Sending protobuf would work.
+- **Response side BROKEN** — `roUrlEvent.GetString()` (→`FromAsciiString`) **truncates at the first NUL byte**. PNG = 8-byte signature then `00`, so the string was cut to 8. Roku has **no `AsyncPostToFile`**, so a POST's binary response can only be read via `GetString()`. Protobuf responses contain NUL bytes throughout → unreadable natively.
+- `AsyncGetToFile` reads binary correctly (8090 bytes) but is **GET-only** — no help for POST responses.
+
+**Decision: build a JSON↔protobuf relay for Pocket Casts.** Spike 2 (native protobuf encode) skipped — moot when the response can't be read. radio-browser + Supabase stay native JSON (Spike 0 proved that path). Relay scope = `api.pocketcasts.com` only.
+
 ---
 
-## Spike 2 — Real protobuf round-trip
+## Spike 2 — Real protobuf round-trip — ⏭️ SKIPPED
+
+Spike 1 response gate failed, so native protobuf is moot (can't read the binary response regardless of encode correctness). Not run.
+
+### Original plan (only if Spike 1 had passed)
 
 Only if Spike 1 passes. End-to-end against the live API.
 
@@ -63,6 +88,18 @@ Only if Spike 1 passes. End-to-end against the live API.
 | Spike result | Path |
 |--------------|------|
 | 0 ok, 1 ok, 2 ok | Native protobuf. Proceed M2–M6 as written. Relay shelved. |
-| 1 or 2 fails | Build relay (JSON↔protobuf). Roku M2/M3/M5 collapse to JSON; revisit relay statefulness/scope/hosting decisions. |
+| **1 fails (ACTUAL)** | **Built relay (JSON↔protobuf).** Roku M2/M3/M5 collapse to JSON. |
 
-Spikes 0+1 are throwaway test scaffolds (httpbin, hash compare). Spike 2 code graduates into M2 login.
+## ✅ Relay built + proven (2026-05-31)
+
+Spike 1 forced the relay. Built and validated same day:
+
+- **`pc-relay`** — Supabase Edge Function (Deno/TS), `supabase/functions/pc-relay/` in the meta repo. Stateless proxy: Roku holds the token, passes it per call. Shared-secret header (`x-relay-secret`, env `RELAY_SECRET`), `verify_jwt = false`. Reuses the manual-protobuf wire logic from menubar `APIService.swift`, but in Deno where binary is NUL-safe.
+- **Endpoints** (full Pocket Casts surface, HANDOFF §6): `login`, `upNext`, `podcastEpisodes`, `updateEpisode`, `upNextChange`, `namedSettings`, `podcastList`.
+- **Validated**: local Deno round-trip (login + upNext, 19 episodes) → deployed → live curl (login/upNext/403 gate) → **on-device Roku E2E**: `RelayTask` (JSON POST) → relay → Pocket Casts → JSON → 19 episodes rendered. Telnet-confirmed.
+
+**Decisions locked:** Supabase Edge Functions (zero new infra, ~$0 for one user) · stateless proxy · shared-secret + TLS · relay scope = Pocket Casts only (radio-browser + Supabase stay native JSON from Roku).
+
+**Roku gotchas learned:** `source/` globals aren't visible in component scope — include shared `.brs` via `<script>` in each component. Re-running one Task node from inside its own field observer doesn't refire — create a fresh Task per call.
+
+**Next:** M2+ now hit the relay (JSON), not protobuf. Update milestone bodies accordingly. Relay secret + URL live in `pocket-radio-roku/SECRETS.local.md` and the gitignored `source/secrets.brs`.

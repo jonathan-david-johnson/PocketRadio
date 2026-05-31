@@ -18,14 +18,18 @@ pocket-radio-roku/
 └── images/                        # channel icons (HD 290x218, FHD 336x210) + splash
 ```
 
+> **Architecture decision (2026-05-31):** Roku **cannot** read binary protobuf responses — `roUrlTransfer` truncates them at the first NUL byte and there's no `AsyncPostToFile` (proven in [`spikes.md`](./spikes.md), Spike 1). So all Pocket Casts traffic goes through **`pc-relay`**, a Supabase Edge Function that translates JSON↔protobuf. Roku speaks **only JSON**. radio-browser + Supabase are already JSON → called directly from Roku.
+
 ### Data Flow
 
-1. **Auth**: email/password → `POST api.pocketcasts.com/user/login` (protobuf) → Bearer token + userId → `roRegistrySection`
-2. **Up Next**: Bearer → `POST /up_next/sync` (protobuf) → episodes; fill playedUpTo/duration via `POST /user/podcast/episodes`
-3. **Position sync**: `POST /sync/update_episode` every ~30s + on pause/stop; on finish → mark completed + remove from Up Next
-4. **Favorites**: userId → `x-user-uuid` header → Supabase `radio_favorites` → resolve via radio-browser.info
+1. **Auth**: email/password → relay `login` → Bearer token + userId → `roRegistrySection`
+2. **Up Next**: token → relay `upNext` → episodes (JSON); fill playedUpTo/duration via relay `podcastEpisodes`
+3. **Position sync**: relay `updateEpisode` every ~30s + on pause/stop; on finish → completed + relay `upNextChange` (remove)
+4. **Favorites**: userId → `x-user-uuid` header → Supabase `radio_favorites` (direct) → resolve via radio-browser.info (direct)
 5. **Playback**: `Audio` SceneGraph node — seek to `playedUpTo` for podcasts; play/pause-only for live streams
-6. **Tracklist**: poll KCRW/KEXP APIs while their stream is active
+6. **Tracklist**: poll KCRW/KEXP APIs while their stream is active (direct)
+
+The relay (`pc-relay`) lives in the meta repo at `supabase/functions/pc-relay/`; it ports the manual-protobuf wire logic from menubar `APIService.swift` into Deno.
 
 ### Platform Notes (vs menubar/iOS)
 
