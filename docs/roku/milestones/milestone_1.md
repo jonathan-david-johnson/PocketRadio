@@ -1,6 +1,8 @@
 # M1: Skeleton + Audio — Play a Hardcoded Stream
 
-**Status**: NOT STARTED (scaffold + dev loop already proven in Spike 0)
+**Status**: ✅ DONE (2026-05-31)
+
+Channel plays `https://streams.kcrw.com/e24_mp3` via the `Audio` node (`buffering`→`playing` confirmed on device); physical-remote OK pauses/resumes; state prints to telnet. Note: ECP `/keypress` is blocked by the device's "Control by mobile apps" network setting, so on-device key testing uses the physical remote — ECP `launch/dev` + telnet capture still work for everything else.
 
 ## Goal
 
