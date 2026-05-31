@@ -5,7 +5,30 @@ MENUBAR_DIR  = pocket-radio-menubar
 MENUBAR_PROJ = $(MENUBAR_DIR)/PocketRadio.xcodeproj
 MENUBAR_SCHEME = PocketRadio
 
-.PHONY: checkout upstream-remote menubar menubar-build menubar-run menubar-kill run_menubar menubar-release install
+.PHONY: help checkout upstream-remote menubar menubar-build menubar-run menubar-kill run_menubar menubar-release install
+
+.DEFAULT_GOAL := help
+
+# Show this help.
+help:
+	@echo "PocketRadio — make targets"
+	@echo ""
+	@echo "  Repo setup"
+	@echo "    checkout         Clone the iOS fork into $(IOS_DIR) (skips if present); set upstream remote"
+	@echo "    upstream-remote  Add the Automattic upstream remote to $(IOS_DIR)"
+	@echo ""
+	@echo "  Menubar app (dev)"
+	@echo "    menubar          Kill, build (Debug), and launch the menubar app"
+	@echo "    menubar-build    Build the menubar app (Debug)"
+	@echo "    menubar-run      Launch the built Debug app"
+	@echo "    menubar-kill     Quit any running menubar app"
+	@echo "    run_menubar      Kill and re-launch existing build (no rebuild)"
+	@echo ""
+	@echo "  Menubar app (install)"
+	@echo "    menubar-release  Build Release (ad-hoc signed)"
+	@echo "    install          Build Release and copy into /Applications"
+	@echo ""
+	@echo "    help             Show this help"
 
 checkout:
 	@if [ -d "$(IOS_DIR)/.git" ]; then \
