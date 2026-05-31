@@ -1,6 +1,6 @@
 # M2: Login + Persistence (via Relay)
 
-**Status**: NOT STARTED (relay `login` action already built + proven E2E)
+**Status**: DONE
 
 ## Goal
 
