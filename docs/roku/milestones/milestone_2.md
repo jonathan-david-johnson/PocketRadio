@@ -1,29 +1,24 @@
-# M2: Login + Persistence (Protobuf)
+# M2: Login + Persistence (via Relay)
 
-**Status**: NOT STARTED
+**Status**: NOT STARTED (relay `login` action already built + proven E2E)
 
 ## Goal
 
-Pocket Casts login over manual protobuf (file-based POST), token persisted in `roRegistrySection`, auto-login on launch, 401 handling. First real protobuf round-trip on the device.
+Pocket Casts login through the `pc-relay` JSON endpoint, token persisted in `roRegistrySection`, auto-login on launch, 401 handling. No protobuf on the device — the relay does all of it (see [`spikes.md`](../spikes.md)).
 
 ## Done when
 
-- Login screen accepts email/password (keyboard node)
-- `POST /user/login` succeeds: token + userId + email decoded from the protobuf response
-- Token + userId + email written to registry section `"auth"` (`.Flush()` after write)
-- On relaunch, channel auto-logs-in from stored token (no re-entry)
-- 401/403 → clear stored token, return to login screen
+- Login screen accepts email/password (SceneGraph keyboard), with a **dev prefill** path so the test account isn't re-typed on every sideload
+- `RelayTask` `login` returns token + userId + email (JSON); on success they're written to registry section `"auth"` (`.Flush()` after write)
+- On relaunch, channel auto-logs-in from the stored token (skips login screen)
+- A relay `401`/`403` → clear stored token, drop back to login with a message
 - Logout clears the registry section
+- Empty/failed states named: bad credentials → inline error; no network → retryable error, not a crash
 
 ## What to Build
 
-### Protobuf helpers (HANDOFF §5)
-Implement over `roByteArray`: `encodeVarint`, `encodeStringField`, `encodeVarintField`, `encodeLenDelimField`, and a decode walker (tag → fieldNumber `>>3`, wireType `and 7`; wt0=varint, wt2=len-delimited, wt1 skip 8, wt5 skip 4, skip unknown). Put in `source/protobuf.brs`.
-
-### Login Task node (`components/tasks/LoginTask`)
-- Build `Api_UserLoginRequest`: `f1=email`, `f2=password`, `f3="mobile"` → `roByteArray`.
-- **Binary-safe POST**: `bytes.WriteFile("tmp:/req.bin")`; `xfer.AsyncPostFromFile("tmp:/req.bin")`; capture response to file (`AsyncGetToFile`/file variant) → `ba.ReadFile`. Headers: `Content-Type: application/octet-stream`, `Accept: application/octet-stream`, `User-Agent: PocketRadio/1.0`.
-- Decode response: `f1=token`, `f2=userId`, `f3=email`. Write output field; scene observes.
+### Relay call (already exists)
+`POST` to `RelayUrl()` with `{ action:"login", email, password }` + `x-relay-secret` header → `{ token, userId, email }`. `RelayTask` (`components/tasks/RelayTask.brs`) already does the JSON POST. Reuse the fresh-task-per-call pattern.
 
 ### Persistence (`source/registry.brs`)
 ```brightscript
@@ -31,20 +26,24 @@ sec = CreateObject("roRegistrySection", "auth")
 sec.Write("token", token) : sec.Write("userid", userId) : sec.Write("email", email)
 sec.Flush()
 ```
-Read on boot; if token present → skip login. On 401 → delete keys + flush.
+Read on boot; token present → skip login. On relay 401 → delete keys + flush → login screen.
 
 ### Device ID
-Persist a UUID once in the registry (or `roDeviceInfo().GetChannelClientId()`) — needed for Up Next in M3.
+Use `CreateObject("roDeviceInfo").GetChannelClientId()` — stable per channel/device, no need to persist or generate a UUID. Needed as `deviceId` for Up Next (M4/M5).
+
+### Dev prefill
+Login screen pre-fills from `TestEmail()`/`TestPassword()` in the gitignored `source/secrets.brs` when present, so dev doesn't D-pad-type the password each cycle. Real users type it once; never commit credentials.
 
 ## Implementation Strategy
 
-1. Write + unit-eyeball protobuf encode/decode against the login round-trip (print hex on telnet).
-2. Wire login Task + keyboard screen.
-3. Add registry read/write + auto-login + 401 path.
+1. Boot path: read registry → token? → main : login screen.
+2. Login screen (keyboard) → `RelayTask login` → store token → main.
+3. Auto-login + 401 clear-and-return.
+4. Logout.
 
 ## User Checkpoint
 
-Log in → quit channel → relaunch → still logged in (lands past login). Wrong password → error, stays on login.
+Log in → quit channel → relaunch → still logged in. Wrong password → inline error, stays on login.
 
 ## Commit
 TBD.

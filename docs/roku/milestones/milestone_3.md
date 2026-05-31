@@ -1,45 +1,49 @@
-# M3: Up Next — Queue, Resume, Position Save, Advance
+# M3: Radio Favorites + Browse/Search (Tracer Bullet)
 
 **Status**: NOT STARTED
 
 ## Goal
 
-Fetch + decode the Up Next queue, render it as a list, play with resume-on-start, save position every ~30s + on pause/stop, mark completed + remove + auto-advance on finish, and `playNow` reorder when the user picks an episode. The protobuf-heavy core.
+Favorite radio streams: list from Supabase → resolve via radio-browser.info, play, add/remove, plus Browse/Search. **All JSON, called directly from Roku** (no relay, no protobuf). Deliberately before Up Next: this builds the reusable scaffolding — generic list UI, `Audio` playback of a *dynamic* URL, streamformat inference, live-vs-seekable gating — on the easy path, so Up Next (M4/M5) only adds resume/sync on top.
 
 ## Done when
 
-- Up Next list renders episodes (title + artwork) from `/up_next/sync`
-- Missing `playedUpTo`/`duration` filled via `/user/podcast/episodes` (per distinct podcastUUID)
-- Selecting an episode plays it; podcasts with `playedUpTo > 0` resume at that position
-- Position saved via `/sync/update_episode` every ~30s while playing + on pause/stop
-- On natural end → status `3` (completed) + `remove` (action 4) from Up Next + auto-advance to next
-- Picking a non-top episode sends `playNow` (action 1) and bubbles it to top
-- Scrub bar shows progress for seekable podcasts; skip back/fwd works
+- Favorites list: Supabase `radio_favorites` station_ids → resolved to name/logo/stream via radio-browser `byuuid`
+- Selecting a favorite plays its stream; **live streams = play/pause only** (no scrub — `duration` 0/indefinite)
+- Add favorite (Supabase POST, merge-duplicates) + remove (Supabase DELETE) work and refresh the list
+- Browse shows radio-browser `topvote`; Search by name returns results; add-from-browse persists
+- streamformat inferred from `codec`/URL (`hls` for `.m3u8`, else `aac`/`mp3`) — not hardcoded
+- Empty favorites + offline/rate-limited radio-browser show a message, not a crash
 
 ## What to Build
 
-### Tasks (`components/tasks/`)
-- **UpNextTask** — `POST /up_next/sync` (`f1=deviceTime ms`, `f2="2"`, `f6=deviceID`). Decode `Api_UpNextResponse`: `f4` repeated EpisodeResponse (`f1=title`,`f2=url`,`f3=podcast`,`f4=uuid`,`f5=published Timestamp`), `f5` repeated sync (`f1=uuid`,`f6=playedUpTo Int32Value`,`f7=duration Int32Value`). Merge by uuid; first `f4` = top of queue.
-- **PodcastEpisodesTask** — `POST /user/podcast/episodes` (`f1="2"`,`f2="mobile"`,`f3=podcastUUID`). Decode `f1` repeated `{f1=uuid, f3=playedUpTo, f6=duration}`. Call once per distinct podcastUUID; fill gaps.
-- **UpdateEpisodeTask** — `POST /sync/update_episode` (`f1=uuid`,`f2=podcast`,`f3=position Int32Value`,`f4=status varint 1/2/3`,`f5=duration`). Throttle ~30s + pause/stop.
-- **UpNextChangeTask** — `POST /up_next/sync` with `f4=Api_UpNextChanges{f2=Change}`. Change: `f1=uuid`,`f2=action`(1=playNow,4=remove),`f3=modified ms`,`f4=title`,`f5=url`,`f6=podcast`.
+### Direct HTTP (reuse `HttpGetTask`; add POST/DELETE variants)
+**Supabase** (HANDOFF §6.9) — headers `apikey: <anon key>`, `x-user-uuid: <userId>`:
+- List `GET /rest/v1/radio_favorites?select=station_id`
+- Add `POST /rest/v1/radio_favorites` + `Content-Type: application/json` + `Prefer: return=minimal,resolution=merge-duplicates`; body `{user_uuid, station_id}`
+- Remove `DELETE /rest/v1/radio_favorites?station_id=eq.<id>&user_uuid=eq.<userId>` + `Prefer: return=minimal`
 
-### Playback (Now Playing, HANDOFF §7)
-- Resume: set `content.PlayStart = playedUpTo` before play (or `m.audio.seek` once `state="playing"`).
-- Observe `m.audio.position`/`duration` for scrub; `state="finished"` → completed + remove + advance.
-- Artwork: `https://static.pocketcasts.com/discover/images/130/{podcastUUID}.jpg`.
+**radio-browser** (HANDOFF §6.10) — **always** `User-Agent: PocketRadio/1.0`:
+- `GET /stations/byuuid/{uuid}` (resolve favorite; uses `url` not `url_resolved`)
+- `GET /stations/search?name=<q>&limit=40&hidebroken=true&order=votes&reverse=true`
+- `GET /stations/topvote?limit=50&hidebroken=true`
+- Skip rows with empty name/stream. Mirror note: `de1.api.radio-browser.info` is one mirror — if it fails, fall back to another host (`de2`/`nl1`) rather than dying.
+
+### Reusable UI + playback (the tracer bullet)
+- Generic list (`MarkupList`/`RowList`); OK plays, `*`/Options to add/remove favorite.
+- `Audio` playback of the selected `url` with inferred `streamformat`.
+- **Live-vs-seekable gating** introduced here: `m.audio.duration` 0/indefinite → hide scrub, play/pause only. M4 reuses this for finite content.
 
 ## Implementation Strategy
 
-1. UpNextTask + list render (read-only).
-2. Add PodcastEpisodesTask gap-fill.
-3. Playback with resume + Now Playing scrub.
-4. Position save throttle + finish→remove→advance.
-5. playNow reorder on pick.
+1. Generic list UI + Supabase favorites list + radio-browser `byuuid` resolve.
+2. Play a favorite (live, no scrub) with streamformat inference.
+3. Add/remove favorite + refresh.
+4. Browse `topvote` + name Search + add-from-browse.
 
 ## User Checkpoint
 
-See Up Next queue → play top episode → resumes at last position → progress saves (verify by relaunch). Let one finish → it's removed + next starts. Pick a lower episode → it jumps to play.
+See favorites (KCRW Eclectic 24, KEXP, NPR Hourly) → play one. Remove one → gone. Search a station → add → appears in favorites.
 
 ## Commit
 TBD.

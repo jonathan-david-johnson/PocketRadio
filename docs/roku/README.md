@@ -56,13 +56,15 @@ Before milestones, [`spikes.md`](./spikes.md) settles the pivotal unknown: **can
 
 | Milestone | What | User Checkpoint |
 |-----------|------|-----------------|
-| [Spikes](./spikes.md) | De-risk protobuf — native-vs-relay decision | Login round-trip works on device (or gate → relay) |
+| [Spikes](./spikes.md) ✅ | De-risk protobuf — native-vs-relay decision | DONE → relay (pc-relay) proven E2E |
 | [M1](./milestones/milestone_1.md) | Skeleton + audio — plays hardcoded KCRW stream | Channel installs → launch → hear audio |
-| [M2](./milestones/milestone_2.md) | Login + persistence (protobuf) | Log in → relaunch → still logged in |
-| [M3](./milestones/milestone_3.md) | Up Next — list, resume, position save, advance | See queue → play → resumes + syncs position |
-| [M4](./milestones/milestone_4.md) | Radio favorites + Browse/Search | See favorites → play → add/remove → search |
-| [M5](./milestones/milestone_5.md) | New Releases + detail screens | See last-14d episodes → play; show notes / station detail |
-| [M6](./milestones/milestone_6.md) | Polish — skip settings, scrub, tracklist, Now Playing | Scrub seekable content, tracklist shows, artwork/title |
+| [M2](./milestones/milestone_2.md) | Login + persistence (via relay) | Log in → relaunch → still logged in |
+| [M3](./milestones/milestone_3.md) | Radio favorites + Browse/Search (tracer bullet) | See favorites → play → add/remove → search |
+| [M4](./milestones/milestone_4.md) | Up Next — list + play + resume + position save | See queue → play → resumes + syncs position |
+| [M5](./milestones/milestone_5.md) | Up Next lifecycle + New Releases + detail | Finish→advance, playNow; last-14d list; show notes |
+| [M6](./milestones/milestone_6.md) | Polish — skip settings, scrub, tracklist, Now Playing | Scrub seekable, tracklist shows, artwork/title |
+
+**Ordering rationale:** Radio (M3) comes before Up Next (M4/M5) on purpose — it's all JSON (Supabase + radio-browser, direct) and builds the generic list UI + dynamic-URL playback + live-vs-seekable gating on the easy path. Up Next then layers resume/sync/lifecycle on proven UI. Server-side-heavy work (gap-fill, 14-day new-releases merge, atomic finish→remove) lives in the relay, not BrightScript.
 
 ## Build & Run (sideload)
 
