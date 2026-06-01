@@ -5,8 +5,9 @@ MENUBAR_DIR  = pocket-radio-menubar
 MENUBAR_PROJ = $(MENUBAR_DIR)/PocketRadio.xcodeproj
 MENUBAR_SCHEME = PocketRadio
 ROKU_DIR     = pocket-radio-roku
+ROKU_HOST   ?= 10.99.99.50
 
-.PHONY: help checkout upstream-remote menubar menubar-build menubar-run menubar-kill run_menubar menubar-release install roku-build roku-deploy roku-install roku-telnet roku-screenshot
+.PHONY: help checkout upstream-remote menubar menubar-build menubar-run menubar-kill run_menubar menubar-release install roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run
 
 .DEFAULT_GOAL := help
 
@@ -34,7 +35,9 @@ help:
 	@echo "    roku-deploy      Build + sideload to the device"
 	@echo "    roku-install     Sideload existing channel.zip"
 	@echo "    roku-telnet      Open BrightScript debug console (port 8085)"
+	@echo "    roku-killtelnet  Kill any local telnet/nc sessions to the debug console"
 	@echo "    roku-screenshot  Pull a device screenshot"
+	@echo "    roku-run         Deploy + open debug console (tee /tmp/roku.log)"
 	@echo ""
 	@echo "    help             Show this help"
 
@@ -108,5 +111,17 @@ roku-install:
 roku-telnet:
 	@$(MAKE) -C $(ROKU_DIR) telnet
 
+roku-killtelnet:
+	@$(MAKE) -C $(ROKU_DIR) killtelnet
+
 roku-screenshot:
 	@$(MAKE) -C $(ROKU_DIR) screenshot
+
+roku-run:
+	@$(MAKE) -C $(ROKU_DIR) deploy
+	@echo "Launching channel via ECP..."
+	@curl -s -d '' http://$(ROKU_HOST):8060/keypress/Home >/dev/null
+	@sleep 1
+	@curl -s -d '' http://$(ROKU_HOST):8060/launch/dev >/dev/null
+	@sleep 2
+	nc $(ROKU_HOST) 8085 | tee /tmp/roku.log

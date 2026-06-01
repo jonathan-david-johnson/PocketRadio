@@ -58,8 +58,26 @@ class RelayError extends Error {
   }
 }
 
+// BrightScript ParseJSON rejects \uXXXX escape sequences — both surrogate pairs
+// (non-BMP chars) and control characters (U+0000-U+001F) that JSON.stringify emits.
+// Strip both from string values before serializing.
+function brsClean(v: unknown): unknown {
+  if (typeof v === "string") {
+    return v
+      .replace(/[\uD800-\uDFFF]/g, "")   // surrogate pairs (emoji, etc)
+      .replace(/[\x00-\x1F\x7F]/g, "");  // control chars
+  }
+  if (Array.isArray(v)) return v.map(brsClean);
+  if (v !== null && typeof v === "object") {
+    return Object.fromEntries(
+      Object.entries(v as Record<string, unknown>).map(([k, val]) => [k, brsClean(val)]),
+    );
+  }
+  return v;
+}
+
 function json(data: unknown, status = 200): Response {
-  return new Response(JSON.stringify(data), {
+  return new Response(JSON.stringify(brsClean(data)), {
     status,
     headers: { "Content-Type": "application/json" },
   });
@@ -82,6 +100,51 @@ async function login(p: any) {
   });
 }
 
+// Fetch the user's podcast subscriptions as a uuid -> title map.
+// up_next/sync only returns the podcast UUID per episode, not its name.
+async function fetchPodcastTitles(token: string): Promise<Map<string, string>> {
+  const body = concat(stringField(1, "2"), stringField(2, "mobile"));
+  const resp = decode(await pcPost("/user/podcast/list", body, token));
+  const map = new Map<string, string>();
+  for (const b of getRepeatedBytes(resp, 1)) {
+    const e = decode(b);
+    const uuid = getString(e, 1) ?? "";
+    if (uuid) map.set(uuid, getString(e, 4) ?? "");
+  }
+  return map;
+}
+
+// Fetch authoritative playback positions for a set of podcasts, keyed by episode uuid.
+// /user/podcast/episodes returns bare varints (f3 playedUpTo, f6 duration).
+async function fetchPlaybackData(
+  token: string,
+  podcastUuids: string[],
+): Promise<Map<string, { playedUpTo: number; duration: number }>> {
+  const map = new Map<string, { playedUpTo: number; duration: number }>();
+  const lists = await Promise.all(
+    podcastUuids.map(async (pu) => {
+      const body = concat(
+        stringField(1, "2"),
+        stringField(2, "mobile"),
+        stringField(3, pu),
+      );
+      return decode(await pcPost("/user/podcast/episodes", body, token));
+    }),
+  );
+  for (const resp of lists) {
+    for (const b of getRepeatedBytes(resp, 1)) {
+      const e = decode(b);
+      const uuid = getString(e, 1) ?? "";
+      if (!uuid) continue;
+      map.set(uuid, {
+        playedUpTo: getVarint(e, 3) ?? 0,
+        duration: getVarint(e, 6) ?? 0,
+      });
+    }
+  }
+  return map;
+}
+
 // POST /up_next/sync (read) — Bearer. {deviceId} -> {episodes:[...]}
 async function upNext(p: any) {
   const body = concat(
@@ -89,16 +152,23 @@ async function upNext(p: any) {
     stringField(2, "2"),
     stringField(6, p.deviceId),
   );
-  const resp = decode(await pcPost("/up_next/sync", body, p.token));
+  // Fetch the queue and the podcast-name map in parallel; both need the token.
+  const [rawSync, titles] = await Promise.all([
+    pcPost("/up_next/sync", body, p.token),
+    fetchPodcastTitles(p.token),
+  ]);
+  const resp = decode(rawSync);
 
   // f4 = repeated EpisodeResponse, f5 = repeated EpisodeSyncResponse
   const episodes = getRepeatedBytes(resp, 4).map((b) => {
     const e = decode(b);
     const published = getBytes(e, 5); // Timestamp{ f1 = seconds }
+    const podcast = getString(e, 3) ?? "";
     return {
       title: getString(e, 1) ?? "",
       url: getString(e, 2) ?? "",
-      podcast: getString(e, 3) ?? "",
+      podcast,
+      podcastName: titles.get(podcast) ?? "",
       uuid: getString(e, 4) ?? "",
       published: published ? unwrapInt(published) ?? 0 : 0,
       playedUpTo: 0,
@@ -123,6 +193,22 @@ async function upNext(p: any) {
       ep.duration = s.duration;
     }
   }
+
+  // up_next/sync f5 doesn't reliably carry the latest resume position, so overlay
+  // authoritative playedUpTo/duration from /user/podcast/episodes (one call per
+  // distinct podcast, in parallel). Without this, episodes restart from 0 on reload.
+  const podcastUuids = [...new Set(episodes.map((e) => e.podcast).filter(Boolean))];
+  if (podcastUuids.length) {
+    const playback = await fetchPlaybackData(p.token, podcastUuids);
+    for (const ep of episodes) {
+      const pb = playback.get(ep.uuid);
+      if (pb) {
+        if (pb.playedUpTo > 0) ep.playedUpTo = pb.playedUpTo;
+        if (pb.duration > 0) ep.duration = pb.duration;
+      }
+    }
+  }
+
   // First f4 entry = top of queue / currently playing.
   return json({ episodes });
 }
@@ -202,12 +288,8 @@ async function namedSettings(p: any) {
 
 // POST /user/podcast/list — Bearer. -> [{uuid,title}]
 async function podcastList(p: any) {
-  const body = concat(stringField(1, "2"), stringField(2, "mobile"));
-  const resp = decode(await pcPost("/user/podcast/list", body, p.token));
-  const podcasts = getRepeatedBytes(resp, 1).map((b) => {
-    const e = decode(b);
-    return { uuid: getString(e, 1) ?? "", title: getString(e, 4) ?? "" };
-  });
+  const titles = await fetchPodcastTitles(p.token);
+  const podcasts = [...titles].map(([uuid, title]) => ({ uuid, title }));
   return json({ podcasts });
 }
 
