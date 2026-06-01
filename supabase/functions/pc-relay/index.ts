@@ -268,6 +268,36 @@ async function upNextChange(p: any) {
   return json({ ok: true });
 }
 
+// Mark episode completed then remove from Up Next — ordered, one round-trip.
+async function finishEpisode(p: any) {
+  const updateBody = concat(
+    stringField(1, p.uuid),
+    stringField(2, p.podcast),
+    int32Value(3, p.duration | 0),
+    varintField(4, 3), // status=3 completed
+    varintField(5, p.duration | 0),
+  );
+  await pcPost("/sync/update_episode", updateBody, p.token);
+
+  const change = concat(
+    stringField(1, p.uuid),
+    varintField(2, 4), // 4 = remove
+    varintField(3, Date.now()),
+    stringField(4, p.title ?? ""),
+    stringField(5, p.url ?? ""),
+    stringField(6, p.podcast ?? ""),
+  );
+  const changes = lenDelimField(2, change);
+  const removeBody = concat(
+    varintField(1, Date.now()),
+    stringField(2, "2"),
+    lenDelimField(4, changes),
+    stringField(6, p.deviceId),
+  );
+  await pcPost("/up_next/sync", removeBody, p.token);
+  return json({ ok: true });
+}
+
 // POST /user/named_settings/update — Bearer, effectively read-only.
 // Send only f2; nothing is written. -> {skipForward,skipBack}
 async function namedSettings(p: any) {
@@ -286,6 +316,47 @@ async function namedSettings(p: any) {
   });
 }
 
+// GET subscribed-podcast episodes from last 14 days, sorted newest-first.
+async function newReleases(p: any) {
+  const titles = await fetchPodcastTitles(p.token);
+  const cutoffMs = Date.now() - 14 * 24 * 60 * 60 * 1000;
+
+  const feedResults = await Promise.all(
+    [...titles].map(async ([uuid, podcastName]) => {
+      try {
+        const resp = await fetch(
+          `https://cache.pocketcasts.com/mobile/podcast/full/${uuid}`,
+          { headers: { "User-Agent": UA } },
+        );
+        if (!resp.ok) return [];
+        const data = await resp.json();
+        const episodes: any[] = data?.podcast?.episodes ?? [];
+        return episodes
+          .filter((ep) => {
+            if (!ep.published) return false;
+            return new Date(ep.published).getTime() >= cutoffMs;
+          })
+          .map((ep) => ({
+            uuid: ep.uuid ?? "",
+            title: ep.title ?? "",
+            url: ep.url ?? "",
+            podcast: uuid,
+            podcastName,
+            published: ep.published ?? "",
+            duration: ep.duration ?? 0,
+            artworkUrl: `https://static.pocketcasts.com/discover/images/130/${uuid}.jpg`,
+          }));
+      } catch {
+        return [];
+      }
+    }),
+  );
+
+  const all = feedResults.flat().filter((ep) => ep.uuid && ep.url);
+  all.sort((a, b) => b.published.localeCompare(a.published));
+  return json({ episodes: all.slice(0, 50) });
+}
+
 // POST /user/podcast/list — Bearer. -> [{uuid,title}]
 async function podcastList(p: any) {
   const titles = await fetchPodcastTitles(p.token);
@@ -299,6 +370,8 @@ const HANDLERS: Record<string, (p: any) => Promise<Response>> = {
   podcastEpisodes,
   updateEpisode,
   upNextChange,
+  finishEpisode,
+  newReleases,
   namedSettings,
   podcastList,
 };

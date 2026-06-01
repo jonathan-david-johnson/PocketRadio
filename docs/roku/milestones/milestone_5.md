@@ -1,6 +1,6 @@
 # M5: Up Next Lifecycle + New Releases + Detail
 
-**Status**: NOT STARTED
+**Status**: DONE
 
 ## Goal
 

@@ -1,6 +1,6 @@
 # M4: Up Next — List + Play + Resume + Position Save
 
-**Status**: NOT STARTED (relay `upNext` already built; needs server-side gap-fill enhancement)
+**Status**: DONE
 
 ## Goal
 
