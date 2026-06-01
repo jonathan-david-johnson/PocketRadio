@@ -1,11 +1,13 @@
-FORK_REPO    = git@github.com:jonathan-david-johnson/pocket-radio-ios.git
-UPSTREAM     = git@github.com:Automattic/pocket-casts-ios.git
-IOS_DIR      = pocket-radio-ios
-MENUBAR_DIR  = pocket-radio-menubar
-MENUBAR_PROJ = $(MENUBAR_DIR)/PocketRadio.xcodeproj
+FORK_REPO     = git@github.com:jonathan-david-johnson/pocket-radio-ios.git
+MENUBAR_REPO  = git@github.com:jonathan-david-johnson/pocket-radio-menubar.git
+ROKU_REPO     = git@github.com:jonathan-david-johnson/pocket-radio-roku.git
+UPSTREAM      = git@github.com:Automattic/pocket-casts-ios.git
+IOS_DIR       = pocket-radio-ios
+MENUBAR_DIR   = pocket-radio-menubar
+MENUBAR_PROJ  = $(MENUBAR_DIR)/PocketRadio.xcodeproj
 MENUBAR_SCHEME = PocketRadio
-ROKU_DIR     = pocket-radio-roku
-ROKU_HOST   ?= 10.99.99.50
+ROKU_DIR      = pocket-radio-roku
+ROKU_HOST    ?= 10.99.99.50
 
 .PHONY: help checkout upstream-remote menubar menubar-build menubar-run menubar-kill run_menubar menubar-release install roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run
 
@@ -16,7 +18,7 @@ help:
 	@echo "PocketRadio — make targets"
 	@echo ""
 	@echo "  Repo setup"
-	@echo "    checkout         Clone the iOS fork into $(IOS_DIR) (skips if present); set upstream remote"
+	@echo "    checkout         Clone the iOS, menubar, and Roku repos (skips any that are present)"
 	@echo "    upstream-remote  Add the Automattic upstream remote to $(IOS_DIR)"
 	@echo ""
 	@echo "  Menubar app (dev)"
@@ -49,6 +51,18 @@ checkout:
 		git clone $(FORK_REPO) $(IOS_DIR); \
 		cd $(IOS_DIR) && git remote add upstream $(UPSTREAM); \
 		echo "Done. Upstream remote set to Automattic/pocket-casts-ios"; \
+	fi
+	@if [ -d "$(MENUBAR_DIR)/.git" ]; then \
+		echo "$(MENUBAR_DIR) already cloned — skipping"; \
+	else \
+		echo "Cloning $(MENUBAR_REPO)..."; \
+		git clone $(MENUBAR_REPO) $(MENUBAR_DIR); \
+	fi
+	@if [ -d "$(ROKU_DIR)/.git" ]; then \
+		echo "$(ROKU_DIR) already cloned — skipping"; \
+	else \
+		echo "Cloning $(ROKU_REPO)..."; \
+		git clone $(ROKU_REPO) $(ROKU_DIR); \
 	fi
 
 upstream-remote:
