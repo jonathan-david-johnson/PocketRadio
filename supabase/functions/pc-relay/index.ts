@@ -344,7 +344,7 @@ async function newReleases(p: any) {
             podcastName,
             published: ep.published ?? "",
             duration: ep.duration ?? 0,
-            artworkUrl: `https://static.pocketcasts.com/discover/images/130/${uuid}.jpg`,
+            artworkUrl: `https://static.pocketcasts.com/discover/images/420/${uuid}.jpg`,
           }));
       } catch {
         return [];

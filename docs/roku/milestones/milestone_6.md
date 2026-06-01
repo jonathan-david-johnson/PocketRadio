@@ -1,6 +1,6 @@
 # M6: Polish — Skip Settings, Scrub, Tracklist, Now Playing
 
-**Status**: NOT STARTED
+**Status**: DONE (icons/splash still placeholder — needs manual asset work)
 
 ## Goal
 
