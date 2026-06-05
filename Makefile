@@ -9,7 +9,7 @@ MENUBAR_SCHEME = PocketRadio
 ROKU_DIR      = pocket-radio-roku
 ROKU_HOST    ?= 10.99.99.50
 
-.PHONY: help checkout upstream-remote menubar menubar-build menubar-run menubar-kill run_menubar menubar-release install roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run
+.PHONY: help checkout upstream-remote run_sim menubar menubar-build menubar-run menubar-kill menubar-log run_menubar menubar-release install roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run
 
 .DEFAULT_GOAL := help
 
@@ -21,11 +21,15 @@ help:
 	@echo "    checkout         Clone the iOS, menubar, and Roku repos (skips any that are present)"
 	@echo "    upstream-remote  Add the Automattic upstream remote to $(IOS_DIR)"
 	@echo ""
+	@echo "  iOS app (delegates to $(IOS_DIR)/Makefile)"
+	@echo "    run_sim          Build, install, and launch on the simulator"
+	@echo ""
 	@echo "  Menubar app (dev)"
 	@echo "    menubar          Kill, build (Debug), and launch the menubar app"
 	@echo "    menubar-build    Build the menubar app (Debug)"
 	@echo "    menubar-run      Launch the built Debug app"
 	@echo "    menubar-kill     Quit any running menubar app"
+	@echo "    menubar-log      Stream unified log output from the running menubar app"
 	@echo "    run_menubar      Kill and re-launch existing build (no rebuild)"
 	@echo ""
 	@echo "  Menubar app (install)"
@@ -69,6 +73,12 @@ upstream-remote:
 	@cd $(IOS_DIR) && git remote add upstream $(UPSTREAM) 2>/dev/null || \
 		echo "upstream remote already exists"
 
+# ── iOS App ──────────────────────────────────────────────────
+# Real target lives in $(IOS_DIR)/Makefile; this delegates.
+
+run_sim:
+	@$(MAKE) -C $(IOS_DIR) run_sim
+
 # ── Menubar App ──────────────────────────────────────────────
 
 # Build & launch the menubar app
@@ -84,6 +94,9 @@ menubar-kill:
 	@pkill -f "PocketRadio.app/Contents/MacOS/PocketRadio" 2>/dev/null; true
 
 # Kill and re-launch existing build (no rebuild)
+menubar-log:
+	log stream --predicate 'process == "PocketRadio"' --level debug
+
 run_menubar: menubar-kill menubar-run
 
 # ── Installation ─────────────────────────────────────────────
