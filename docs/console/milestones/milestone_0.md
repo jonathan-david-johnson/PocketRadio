@@ -1,4 +1,4 @@
-# M0 — Spike: mpv IPC + Go skeleton
+# M0 — Spike: mpv IPC + Go skeleton ✓ 2026-06-08
 
 **Goal:** De-risk the single biggest unknown (driving mpv from Go) and stand up
 the repo. This is the tracer bullet for the *audio* path: prove Go can start mpv,

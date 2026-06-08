@@ -1,4 +1,4 @@
-# M3 — Podcast position fidelity
+# M3 — Podcast position fidelity ✓ 2026-06-08
 
 **Goal:** Bring podcast playback to full parity with the menubar: resume at the
 saved position, write progress back to Pocket Casts, auto-advance and remove

@@ -1,4 +1,4 @@
-# M1 — Auth + config + mini-mode podcast
+# M1 — Auth + config + mini-mode podcast ✓ 2026-06-08
 
 **Goal:** First end-to-end user-facing slice. Log in to Pocket Casts, fetch Up
 Next, and play the top episode in mini mode with a live one-line status.

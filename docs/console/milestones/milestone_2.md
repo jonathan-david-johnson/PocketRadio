@@ -1,4 +1,4 @@
-# M2 — Mini-mode radio + arg resolver + tracklist now-playing
+# M2 — Mini-mode radio + arg resolver + tracklist now-playing ✓ 2026-06-08
 
 **Goal:** Make mini mode play radio and resolve arbitrary args, with the one line
 showing the live track for stations that publish a tracklist.
