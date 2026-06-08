@@ -3,4 +3,7 @@ supabase/.branches/
 *.env
 .env.local
 other_apps/
-pocket-casts-ios/
+pocket-radio-ios/
+pocket-radio-console/
+pocket-radio-menubar/
+pocket-radio-roku/
