@@ -63,6 +63,11 @@ Before milestones, [`spikes.md`](./spikes.md) settles the pivotal unknown: **can
 | [M4](./milestones/milestone_4.md) | Up Next — list + play + resume + position save | See queue → play → resumes + syncs position |
 | [M5](./milestones/milestone_5.md) | Up Next lifecycle + New Releases + detail | Finish→advance, playNow; last-14d list; show notes |
 | [M6](./milestones/milestone_6.md) | Polish — skip settings, scrub, tracklist, Now Playing | Scrub seekable, tracklist shows, artwork/title |
+| [M7](./milestones/milestone_7.md) ✅ | UI scaffold — 3-section layout, nav bar, MarkupGrid | Nav bar tabs, grid scrolls, focus moves |
+| [M8](./milestones/milestone_8.md) ✅ | Bug fixes — nav, grid rows, backdrop, layout | Back works, 2 rows visible, backdrop shows |
+| [M9](./milestones/milestone_9.md) ✅ | Now Playing panel — progress, backdrop fade, NOW badge | Progress bar updates, backdrop fades, NOW badge shows |
+| [M10](./milestones/milestone_10.md) | Tile redesign — episode metadata + progress strip | Progress strip per tile, podcast name, time-left |
+| [M11](./milestones/milestone_11.md) | Polish — nav animation, error states, fav dialog, debug cleanup | Underline slides, errors graceful, browse fav dialog |
 
 **Ordering rationale:** Radio (M3) comes before Up Next (M4/M5) on purpose — it's all JSON (Supabase + radio-browser, direct) and builds the generic list UI + dynamic-URL playback + live-vs-seekable gating on the easy path. Up Next then layers resume/sync/lifecycle on proven UI. Server-side-heavy work (gap-fill, 14-day new-releases merge, atomic finish→remove) lives in the relay, not BrightScript.
 

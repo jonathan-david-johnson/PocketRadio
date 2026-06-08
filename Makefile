@@ -4,12 +4,13 @@ ROKU_REPO     = git@github.com:jonathan-david-johnson/pocket-radio-roku.git
 UPSTREAM      = git@github.com:Automattic/pocket-casts-ios.git
 IOS_DIR       = pocket-radio-ios
 MENUBAR_DIR   = pocket-radio-menubar
+CONSOLE_DIR   = pocket-radio-console
 MENUBAR_PROJ  = $(MENUBAR_DIR)/PocketRadio.xcodeproj
 MENUBAR_SCHEME = PocketRadio
 ROKU_DIR      = pocket-radio-roku
 ROKU_HOST    ?= 10.99.99.50
 
-.PHONY: help checkout upstream-remote run_sim menubar menubar-build menubar-run menubar-kill menubar-log run_menubar menubar-release install roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run
+.PHONY: help checkout upstream-remote run_sim menubar menubar-build menubar-run menubar-kill menubar-log run_menubar menubar-release install console console-build console-run_upnext console-run_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run
 
 .DEFAULT_GOAL := help
 
@@ -23,6 +24,14 @@ help:
 	@echo ""
 	@echo "  iOS app (delegates to $(IOS_DIR)/Makefile)"
 	@echo "    run_sim          Build, install, and launch on the simulator"
+	@echo ""
+	@echo "  Console app (delegates to $(CONSOLE_DIR)/Makefile)"
+	@echo "    console          Build the console binary"
+	@echo "    console-build    Build the console binary"
+	@echo "    console-run_upnext  Build and play the top of Up Next (mini mode)"
+	@echo "    console-run_kcrw    Build and play KCRW (mini mode)"
+	@echo "    console-test     Run the hermetic test suite"
+	@echo "    console-vet      Run go vet"
 	@echo ""
 	@echo "  Menubar app (dev)"
 	@echo "    menubar          Kill, build (Debug), and launch the menubar app"
@@ -78,6 +87,26 @@ upstream-remote:
 
 run_sim:
 	@$(MAKE) -C $(IOS_DIR) run_sim
+
+# ── Console App ──────────────────────────────────────────────
+# Real targets live in $(CONSOLE_DIR)/Makefile; these delegate.
+
+console: console-build
+
+console-build:
+	@$(MAKE) -C $(CONSOLE_DIR) build
+
+console-run_upnext:
+	@$(MAKE) -C $(CONSOLE_DIR) run_upnext
+
+console-run_kcrw:
+	@$(MAKE) -C $(CONSOLE_DIR) run_kcrw
+
+console-test:
+	@$(MAKE) -C $(CONSOLE_DIR) test
+
+console-vet:
+	@$(MAKE) -C $(CONSOLE_DIR) vet
 
 # ── Menubar App ──────────────────────────────────────────────
 

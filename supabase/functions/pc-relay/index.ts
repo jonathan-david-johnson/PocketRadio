@@ -170,7 +170,7 @@ async function upNext(p: any) {
       podcast,
       podcastName: titles.get(podcast) ?? "",
       uuid: getString(e, 4) ?? "",
-      published: published ? unwrapInt(published) ?? 0 : 0,
+      published: published ? new Date((unwrapInt(published) ?? 0) * 1000).toISOString() : "",
       playedUpTo: 0,
       duration: 0,
     };
@@ -344,6 +344,7 @@ async function newReleases(p: any) {
             podcastName,
             published: ep.published ?? "",
             duration: ep.duration ?? 0,
+            showNotes: ep.show_notes ?? ep.body ?? "",
             artworkUrl: `https://static.pocketcasts.com/discover/images/420/${uuid}.jpg`,
           }));
       } catch {
