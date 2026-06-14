@@ -10,7 +10,7 @@ MENUBAR_SCHEME = PocketRadio
 ROKU_DIR      = pocket-radio-roku
 ROKU_HOST    ?= 10.99.99.50
 
-.PHONY: help checkout upstream-remote run_sim menubar menubar-build menubar-run menubar-kill menubar-log run_menubar menubar-release install console console-build console-run_upnext console-run_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run
+.PHONY: help checkout upstream-remote status run_sim menubar menubar-build menubar-run menubar-kill menubar-log run_menubar menubar-release install console console-build console-run console-run_upnext console-run_kcrw console-debug console-debug_upnext console-debug_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run
 
 .DEFAULT_GOAL := help
 
@@ -22,14 +22,20 @@ help:
 	@echo "    checkout         Clone the iOS, menubar, and Roku repos (skips any that are present)"
 	@echo "    upstream-remote  Add the Automattic upstream remote to $(IOS_DIR)"
 	@echo ""
+	@echo "  Repo status"
+	@echo "    status           Show branch and sync status for all submodules"
 	@echo "  iOS app (delegates to $(IOS_DIR)/Makefile)"
 	@echo "    run_sim          Build, install, and launch on the simulator"
 	@echo ""
 	@echo "  Console app (delegates to $(CONSOLE_DIR)/Makefile)"
 	@echo "    console          Build the console binary"
 	@echo "    console-build    Build the console binary"
-	@echo "    console-run_upnext  Build and play the top of Up Next (mini mode)"
-	@echo "    console-run_kcrw    Build and play KCRW (mini mode)"
+	@echo "    console-run           Build and launch the full TUI"
+	@echo "    console-run_upnext    Build and play the top of Up Next (mini mode)"
+	@echo "    console-run_kcrw      Build and play KCRW (mini mode)"
+	@echo "    console-debug         Full TUI with debug logging (debug.log)"
+	@echo "    console-debug_upnext  Up Next mini mode with debug logging"
+	@echo "    console-debug_kcrw    KCRW mini mode with debug logging"
 	@echo "    console-test     Run the hermetic test suite"
 	@echo "    console-vet      Run go vet"
 	@echo ""
@@ -82,6 +88,30 @@ upstream-remote:
 	@cd $(IOS_DIR) && git remote add upstream $(UPSTREAM) 2>/dev/null || \
 		echo "upstream remote already exists"
 
+# ── Repo Status ──────────────────────────────────────────────
+
+SUBMODULES = $(IOS_DIR) $(MENUBAR_DIR) $(ROKU_DIR) $(CONSOLE_DIR)
+
+status:
+	@for dir in $(SUBMODULES); do \
+		if [ -d "$$dir/.git" ]; then \
+			branch=$$(git -C "$$dir" branch --show-current 2>/dev/null || echo "(detached)"); \
+			if git -C "$$dir" rev-parse '@{u}' >/dev/null 2>&1; then \
+				counts=$$(git -C "$$dir" rev-list --left-right --count '@{u}...HEAD' 2>/dev/null); \
+				behind=$$(echo "$$counts" | cut -f1); \
+				ahead=$$(echo "$$counts" | cut -f2); \
+			else \
+				behind=0; ahead=0; \
+			fi; \
+			dirty=$$(git -C "$$dir" status --porcelain 2>/dev/null | wc -l); \
+			dirty_str=""; \
+			[ "$$dirty" -gt 0 ] && dirty_str=" [dirty]"; \
+			printf "%-22s %-12s (↓ %s ↑ %s)%s\n" "$$dir" "$$branch" "$$behind" "$$ahead" "$$dirty_str"; \
+		else \
+			echo "%-22s (not a git repo)" "$$dir"; \
+		fi; \
+	done
+
 # ── iOS App ──────────────────────────────────────────────────
 # Real target lives in $(IOS_DIR)/Makefile; this delegates.
 
@@ -96,11 +126,23 @@ console: console-build
 console-build:
 	@$(MAKE) -C $(CONSOLE_DIR) build
 
+console-run:
+	@$(MAKE) -C $(CONSOLE_DIR) run
+
 console-run_upnext:
 	@$(MAKE) -C $(CONSOLE_DIR) run_upnext
 
 console-run_kcrw:
 	@$(MAKE) -C $(CONSOLE_DIR) run_kcrw
+
+console-debug:
+	@$(MAKE) -C $(CONSOLE_DIR) run-debug
+
+console-debug_upnext:
+	@$(MAKE) -C $(CONSOLE_DIR) run_upnext-debug
+
+console-debug_kcrw:
+	@$(MAKE) -C $(CONSOLE_DIR) run_kcrw-debug
 
 console-test:
 	@$(MAKE) -C $(CONSOLE_DIR) test
