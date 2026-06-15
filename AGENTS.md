@@ -15,18 +15,6 @@ This is a monorepo shell holding four sub-projects, each in its own nested git r
 
 Top-level `Makefile` delegates to each sub-project and provides repo setup targets.
 
-## Common Top-Level Commands
-
-```bash
-make checkout        # Clone iOS, menubar, Roku repos (skips if present)
-make status          # Branch/sync/dirty status across all sub-projects
-make run_sim         # Build + launch iOS app on simulator (delegates to iOS Makefile)
-make menubar         # Kill, build Debug, launch menubar app
-make install         # Build Release menubar + copy to /Applications
-make console-test    # Run Go console tests
-make roku-run        # Deploy Roku channel + open BrightScript debug console
-```
-
 ## iOS App (`pocket-radio-ios/`)
 
 Sub-project has its own `AGENTS.md` (symlinked as `CLAUDE.md` inside that directory) with authoritative build, test, and architecture docs. Always read it before touching iOS code.
