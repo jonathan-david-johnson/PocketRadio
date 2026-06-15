@@ -1,16 +1,19 @@
 FORK_REPO     = git@github.com:jonathan-david-johnson/pocket-radio-ios.git
 MENUBAR_REPO  = git@github.com:jonathan-david-johnson/pocket-radio-menubar.git
 ROKU_REPO     = git@github.com:jonathan-david-johnson/pocket-radio-roku.git
+WEB_REPO      = git@github.com:jonathan-david-johnson/pocket-radio-web.git
 UPSTREAM      = git@github.com:Automattic/pocket-casts-ios.git
 IOS_DIR       = pocket-radio-ios
 MENUBAR_DIR   = pocket-radio-menubar
 CONSOLE_DIR   = pocket-radio-console
+WEB_DIR       = pocket-radio-web
 MENUBAR_PROJ  = $(MENUBAR_DIR)/PocketRadio.xcodeproj
 MENUBAR_SCHEME = PocketRadio
 ROKU_DIR      = pocket-radio-roku
 ROKU_HOST    ?= 10.99.99.50
+ROKU_STICK_HOST ?= 10.99.99.54
 
-.PHONY: help checkout upstream-remote status run_sim menubar menubar-build menubar-run menubar-kill menubar-log run_menubar menubar-release install console console-build console-run console-run_upnext console-run_kcrw console-debug console-debug_upnext console-debug_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run
+.PHONY: help checkout upstream-remote status run_sim menubar menubar-build menubar-run menubar-kill menubar-log run_menubar menubar-release install console console-build console-run console-run_upnext console-run_kcrw console-debug console-debug_upnext console-debug_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run roku-deploy-stick roku-install-stick
 
 .DEFAULT_GOAL := help
 
@@ -51,6 +54,8 @@ help:
 	@echo "    menubar-release  Build Release (ad-hoc signed)"
 	@echo "    install          Build Release and copy into /Applications"
 	@echo ""
+	@echo "  Web app (delegates to $(WEB_DIR)/Makefile — not yet scaffolded, see docs/web)"
+	@echo ""
 	@echo "  Roku channel (delegates to $(ROKU_DIR)/Makefile; needs ROKU_PASS env)"
 	@echo "    roku-build       Package channel sources into channel.zip"
 	@echo "    roku-deploy      Build + sideload to the device"
@@ -59,6 +64,8 @@ help:
 	@echo "    roku-killtelnet  Kill any local telnet/nc sessions to the debug console"
 	@echo "    roku-screenshot  Pull a device screenshot"
 	@echo "    roku-run         Deploy + open debug console (tee /tmp/roku.log)"
+	@echo "    roku-deploy-stick   Build + sideload to stick device ($(ROKU_STICK_HOST))"
+	@echo "    roku-install-stick  Sideload existing channel.zip to stick device ($(ROKU_STICK_HOST))"
 	@echo ""
 	@echo "    help             Show this help"
 
@@ -83,6 +90,12 @@ checkout:
 		echo "Cloning $(ROKU_REPO)..."; \
 		git clone $(ROKU_REPO) $(ROKU_DIR); \
 	fi
+	@if [ -d "$(WEB_DIR)/.git" ]; then \
+		echo "$(WEB_DIR) already cloned — skipping"; \
+	else \
+		echo "Cloning $(WEB_REPO)..."; \
+		git clone $(WEB_REPO) $(WEB_DIR); \
+	fi
 
 upstream-remote:
 	@cd $(IOS_DIR) && git remote add upstream $(UPSTREAM) 2>/dev/null || \
@@ -90,7 +103,7 @@ upstream-remote:
 
 # ── Repo Status ──────────────────────────────────────────────
 
-SUBMODULES = $(IOS_DIR) $(MENUBAR_DIR) $(ROKU_DIR) $(CONSOLE_DIR)
+SUBMODULES = $(IOS_DIR) $(MENUBAR_DIR) $(ROKU_DIR) $(CONSOLE_DIR) $(WEB_DIR)
 
 status:
 	@for dir in $(SUBMODULES); do \
@@ -205,6 +218,12 @@ roku-deploy:
 
 roku-install:
 	@$(MAKE) -C $(ROKU_DIR) install
+
+roku-deploy-stick:
+	@$(MAKE) -C $(ROKU_DIR) deploy ROKU_HOST=$(ROKU_STICK_HOST)
+
+roku-install-stick:
+	@$(MAKE) -C $(ROKU_DIR) install ROKU_HOST=$(ROKU_STICK_HOST)
 
 roku-telnet:
 	@$(MAKE) -C $(ROKU_DIR) telnet
