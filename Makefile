@@ -2,18 +2,20 @@ FORK_REPO     = git@github.com:jonathan-david-johnson/pocket-radio-ios.git
 MENUBAR_REPO  = git@github.com:jonathan-david-johnson/pocket-radio-menubar.git
 ROKU_REPO     = git@github.com:jonathan-david-johnson/pocket-radio-roku.git
 WEB_REPO      = git@github.com:jonathan-david-johnson/pocket-radio-web.git
+WINDOWS_REPO  = git@github.com:jonathan-david-johnson/pocket-radio-windows.git
 UPSTREAM      = git@github.com:Automattic/pocket-casts-ios.git
 IOS_DIR       = pocket-radio-ios
 MENUBAR_DIR   = pocket-radio-menubar
 CONSOLE_DIR   = pocket-radio-console
 WEB_DIR       = pocket-radio-web
+WINDOWS_DIR   = pocket-radio-windows
 MENUBAR_PROJ  = $(MENUBAR_DIR)/PocketRadio.xcodeproj
 MENUBAR_SCHEME = PocketRadio
 ROKU_DIR      = pocket-radio-roku
 ROKU_HOST    ?= 10.99.99.50
 ROKU_STICK_HOST ?= 10.99.99.54
 
-.PHONY: help checkout upstream-remote status run_sim menubar menubar-build menubar-run menubar-kill menubar-log run_menubar menubar-release install console console-build console-run console-run_upnext console-run_kcrw console-debug console-debug_upnext console-debug_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run roku-deploy-stick roku-install-stick
+.PHONY: help checkout upstream-remote status run_sim menubar menubar-build menubar-run menubar-kill menubar-log menubar-test run_menubar menubar-release install console console-build console-run console-run_upnext console-run_kcrw console-debug console-debug_upnext console-debug_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run roku-deploy-stick roku-install-stick windows windows-build windows-build-exe windows-vet
 
 .DEFAULT_GOAL := help
 
@@ -48,11 +50,18 @@ help:
 	@echo "    menubar-run      Launch the built Debug app"
 	@echo "    menubar-kill     Quit any running menubar app"
 	@echo "    menubar-log      Stream unified log output from the running menubar app"
+	@echo "    menubar-test     Run menubar unit tests"
 	@echo "    run_menubar      Kill and re-launch existing build (no rebuild)"
 	@echo ""
 	@echo "  Menubar app (install)"
 	@echo "    menubar-release  Build Release (ad-hoc signed)"
 	@echo "    install          Build Release and copy into /Applications"
+	@echo ""
+	@echo "  Windows app (delegates to $(WINDOWS_DIR)/Makefile)"
+	@echo "    windows          Build the Windows systray binary (current platform)"
+	@echo "    windows-build    Build the Windows systray binary (current platform)"
+	@echo "    windows-build-exe  Cross-compile .exe from Mac (requires: brew install mingw-w64)"
+	@echo "    windows-vet      Run go vet"
 	@echo ""
 	@echo "  Web app (delegates to $(WEB_DIR)/Makefile — not yet scaffolded, see docs/web)"
 	@echo ""
@@ -96,6 +105,12 @@ checkout:
 		echo "Cloning $(WEB_REPO)..."; \
 		git clone $(WEB_REPO) $(WEB_DIR); \
 	fi
+	@if [ -d "$(WINDOWS_DIR)/.git" ]; then \
+		echo "$(WINDOWS_DIR) already cloned — skipping"; \
+	else \
+		echo "Cloning $(WINDOWS_REPO)..."; \
+		git clone $(WINDOWS_REPO) $(WINDOWS_DIR); \
+	fi
 
 upstream-remote:
 	@cd $(IOS_DIR) && git remote add upstream $(UPSTREAM) 2>/dev/null || \
@@ -103,7 +118,7 @@ upstream-remote:
 
 # ── Repo Status ──────────────────────────────────────────────
 
-SUBMODULES = $(IOS_DIR) $(MENUBAR_DIR) $(ROKU_DIR) $(CONSOLE_DIR) $(WEB_DIR)
+SUBMODULES = $(IOS_DIR) $(MENUBAR_DIR) $(ROKU_DIR) $(CONSOLE_DIR) $(WEB_DIR) $(WINDOWS_DIR)
 
 status:
 	@for dir in $(SUBMODULES); do \
@@ -177,6 +192,9 @@ menubar-run:
 menubar-kill:
 	@pkill -f "PocketRadio.app/Contents/MacOS/PocketRadio" 2>/dev/null; true
 
+menubar-test:
+	xcodebuild test -project $(MENUBAR_PROJ) -scheme $(MENUBAR_SCHEME) -destination 'platform=macOS'
+
 # Kill and re-launch existing build (no rebuild)
 menubar-log:
 	log stream --predicate 'process == "PocketRadio"' --level debug
@@ -206,6 +224,20 @@ install: menubar-kill menubar-release
 	echo "Installed. Next steps:" ; \
 	echo "  open /Applications/PocketRadio.app   # first launch (Gatekeeper may prompt)" ; \
 	echo "  Then: System Settings -> General -> Login Items -> Open at Login -> + PocketRadio"
+
+# ── Windows App ──────────────────────────────────────────────
+# Real targets live in $(WINDOWS_DIR)/Makefile; these delegate.
+
+windows: windows-build
+
+windows-build:
+	@$(MAKE) -C $(WINDOWS_DIR) build
+
+windows-build-exe:
+	@$(MAKE) -C $(WINDOWS_DIR) build-windows
+
+windows-vet:
+	@$(MAKE) -C $(WINDOWS_DIR) vet
 
 # ── Roku Channel ─────────────────────────────────────────────
 # Real targets live in $(ROKU_DIR)/Makefile; these delegate. Pass ROKU_PASS via env.

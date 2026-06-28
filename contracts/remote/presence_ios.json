@@ -1,0 +1,12 @@
+{
+  "device_id": "AAAAAAAA-0000-0000-0000-000000000000",
+  "device_type": "ios",
+  "device_name": "Test iPhone",
+  "role": "sender",
+  "playback": {
+    "state": "playing",
+    "station_id": "kcrw",
+    "station_name": "KCRW"
+  },
+  "updated_at": "2026-06-28T00:00:00Z"
+}
