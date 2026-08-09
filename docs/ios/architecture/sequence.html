@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PocketRadio — Stream Playback Sequence</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --border: #2e3347;
+    --accent: #5b8dee;
+    --accent2: #a78bfa;
+    --text: #e2e8f0;
+    --text-muted: #7c8db5;
+    --pill-bg: #1e2235;
+    --pill-border: #3b4568;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 40px 32px;
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 40px;
+  }
+  .phase {
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .phase-header {
+    background: var(--surface);
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .phase-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+  .phase-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .phase-body {
+    padding: 0;
+    overflow-x: auto;
+  }
+  .mermaid {
+    padding: 24px 32px;
+    min-width: 900px;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--pill-bg);
+    border: 1px solid var(--pill-border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-user     { background: #38bdf8; }
+  .dot-ui       { background: #a78bfa; }
+  .dot-pm       { background: #f97316; }
+  .dot-av       { background: #34d399; }
+  .dot-tracklist { background: #fbbf24; }
+  .dot-lyrics   { background: #f472b6; }
+  .dot-np       { background: #e2e8f0; }
+  .dot-car      { background: #818cf8; }
+
+  /* Mermaid theme overrides */
+  .mermaid svg {
+    max-width: 100%;
+  }
+</style>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      background: '#0f1117',
+      primaryColor: '#1e2235',
+      primaryTextColor: '#e2e8f0',
+      primaryBorderColor: '#3b4568',
+      lineColor: '#4a5568',
+      secondaryColor: '#1a1d27',
+      tertiaryColor: '#151825',
+      noteBkgColor: '#1e2235',
+      noteTextColor: '#a0aec0',
+      noteBorderColor: '#3b4568',
+      activationBkgColor: '#252a40',
+      activationBorderColor: '#5b8dee',
+      actorTextColor: '#e2e8f0',
+      actorBkg: '#1e2235',
+      actorBorder: '#3b4568',
+      signalColor: '#7c8db5',
+      signalTextColor: '#e2e8f0',
+      labelBoxBkgColor: '#1a1d27',
+      labelBoxBorderColor: '#2e3347',
+      labelTextColor: '#a0aec0',
+      loopTextColor: '#a78bfa',
+      fontSize: '13px',
+    },
+    sequence: {
+      diagramMarginX: 20,
+      diagramMarginY: 20,
+      actorMargin: 40,
+      width: 150,
+      height: 36,
+      boxMargin: 10,
+      boxTextMargin: 5,
+      noteMargin: 10,
+      messageMargin: 35,
+      messageAlign: 'center',
+      mirrorActors: true,
+      bottomMarginAdj: 1,
+      useMaxWidth: true,
+      rightAngles: false,
+      showSequenceNumbers: false,
+    }
+  });
+</script>
+</head>
+<body>
+
+<h1>PocketRadio · Stream Playback Sequence</h1>
+<p class="subtitle">Updated 2026-06-19 · iOS app · covers stream start → song transitions → lyric sync → car/Bluetooth display</p>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot dot-user"></div>User action</div>
+  <div class="legend-item"><div class="legend-dot dot-ui"></div>UI layer (ViewControllers)</div>
+  <div class="legend-item"><div class="legend-dot dot-pm"></div>PlaybackManager</div>
+  <div class="legend-item"><div class="legend-dot dot-av"></div>AVFoundation / ICY</div>
+  <div class="legend-item"><div class="legend-dot dot-tracklist"></div>Tracklist API</div>
+  <div class="legend-item"><div class="legend-dot dot-lyrics"></div>Lyric sync (lrclib)</div>
+  <div class="legend-item"><div class="legend-dot dot-np"></div>NowPlayingHelper</div>
+  <div class="legend-item"><div class="legend-dot dot-car"></div>MPNowPlayingInfoCenter → Car / BT</div>
+</div>
+
+<!-- ─── PHASE 1: Navigate & Start Stream ─── -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-label">Phase 1</span>
+    <span class="phase-title">Navigate to Station · Start Stream</span>
+  </div>
+  <div class="phase-body">
+    <div class="mermaid">
+sequenceDiagram
+  participant U as 👤 User
+  participant FVC as FavoritesVC
+  participant SDVC as StationDetailVC
+  participant PM as PlaybackManager
+  participant DP as DefaultPlayer
+  participant AV as AVPlayer + AVPlayerItem
+  participant RMO as RadioMetadataObserver
+  participant NP as NowPlayingHelper
+  participant MP as 🚗 MPNowPlayingInfoCenter
+
+  U->>FVC: tap station row
+  FVC->>SDVC: push StationDetailViewController(station)
+  SDVC->>SDVC: viewWillAppear → startTracklistRefreshLoop()
+  SDVC->>SDVC: (initial refetchTracklist, then every 30s)
+
+  U->>SDVC: tap Play button
+  SDVC->>PM: PlaybackManager.shared.load(RadioStation, autoPlay:true)
+  PM->>DP: DefaultPlayer.loadEpisode(RadioStation)
+  DP->>AV: AVPlayer(AVPlayerItem(streamURL))
+  DP->>RMO: RadioMetadataObserver(stationId).attach(to: playerItem)
+  Note over RMO: AVPlayerItemMetadataOutput hooked<br/>will fire on every ICY frame
+
+  PM->>NP: updateNowPlayingInfo() → setAllNowPlayingInfo(RadioStation)
+  Note over NP: title  = station.displayableTitle()<br/>artist = "PocketCasts"<br/>artwork = station logo asset
+  NP->>MP: nowPlayingInfo = {title, artist, artwork}
+  Note over MP: Line 1: KEXP<br/>Line 2: PocketCasts<br/>Art:    station logo
+    </div>
+  </div>
+</div>
+
+<!-- ─── PHASE 2: Pre-roll Detected / Suppressed ─── -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-label">Phase 2</span>
+    <span class="phase-title">Pre-roll ICY Frame Detected &amp; Suppressed</span>
+  </div>
+  <div class="phase-body">
+    <div class="mermaid">
+sequenceDiagram
+  participant AV as AVPlayer + AVPlayerItem
+  participant RMO as RadioMetadataObserver
+  participant MP as 🚗 MPNowPlayingInfoCenter
+
+  AV->>RMO: metadataOutput(_:didOutputTimedMetadataGroups:)
+  Note over RMO: ICY frame arrives — one of:<br/>StreamTitle=preroll<br/>adw_ad=true<br/>insertionType=preroll/midroll/postroll
+
+  RMO->>RMO: parseStreamTitle(raw)
+  Note over RMO: Path A — adw_ad=true → nil<br/>Path B — insertionType regex match → nil<br/>Path C — junkTitles contains title → nil<br/>Path D — BREAK sentinel → nil
+
+  RMO-->>RMO: returns nil → emit() NOT called
+  Note over MP: Car display: unchanged<br/>(still shows station name)
+    </div>
+  </div>
+</div>
+
+<!-- ─── PHASE 3: First Song Detected (ICY) ─── -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-label">Phase 3</span>
+    <span class="phase-title">Pre-roll Ends · First Song Detected via ICY Metadata</span>
+  </div>
+  <div class="phase-body">
+    <div class="mermaid">
+sequenceDiagram
+  participant AV as AVPlayer + AVPlayerItem
+  participant RMO as RadioMetadataObserver
+  participant PM as PlaybackManager
+  participant RTS as RadioTracklistService
+  participant TAR as TrackArtworkResolver + Kingfisher
+  participant SDVC as StationDetailVC
+  participant NP as NowPlayingHelper
+  participant MP as 🚗 MPNowPlayingInfoCenter
+
+  AV->>RMO: metadataOutput(_:didOutputTimedMetadataGroups:)
+  Note over RMO: StreamTitle = Billie Eilish - Ocean Eyes
+  RMO->>RMO: parseStreamTitle() — split on first hyphen-space
+  Note over RMO: artist = Billie Eilish<br/>title  = Ocean Eyes
+  RMO->>RMO: emit(title, artist) — dedupes consecutive identical frames
+  RMO-)PM: .radioStationNowPlayingDidChange<br/>stationId + title + artist
+  RMO-)SDVC: same notification
+
+  PM->>PM: handleRadioTrackChanged(_:)
+  PM->>RTS: RadioTracklistService.shared.cached(stationId)?.first
+  Note over RTS: in-memory cache — TracklistEntry<br/>title / artist / album / albumArtURL / playedAt
+  Note over PM: resolvedArtist = ICY artist OR tracklist artist<br/>album = tracklist entry album
+  PM->>NP: setRadioTrackInfo(title, artist, album, stationName)
+  Note over NP: Title  = trackTitle<br/>Artist = artist (fallback: stationName)<br/>Album  = album or stationName
+  NP->>MP: nowPlayingInfo update — title, artist, albumTitle
+  Note over MP: Line 1: Ocean Eyes<br/>Line 2: Billie Eilish<br/>Line 3: dont smile at me
+
+  PM->>TAR: resolveRadioArtworkForLockScreen(stationId, icyArtist, icyTitle)
+  TAR->>TAR: bestResolveEntry() — tracklist or synthetic ICY entry
+  TAR->>TAR: artworkURL(for: entry) — NSCache then iTunes Search
+  TAR->>TAR: KingfisherManager.retrieveImage(url, targetCache: radioAlbumArtCache)
+  Note over TAR: radioAlbumArtCache: 20MB mem, 100MB disk, 30-day TTL
+  TAR->>NP: setArtworkImage(trackArtImage)
+  NP->>MP: nowPlayingInfo update — artwork
+  Note over MP: Art: album cover (station logo on miss)
+
+  SDVC->>SDVC: handleNowPlayingChange — update icyTitle, icyArtist labels
+  SDVC->>SDVC: schedule refetchTracklist() after 2s delay
+    </div>
+  </div>
+</div>
+
+<!-- ─── PHASE 4: Tracklist API Refresh ─── -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-label">Phase 4</span>
+    <span class="phase-title">Tracklist API Refresh (Curated Stations: KEXP / KCRW)</span>
+  </div>
+  <div class="phase-body">
+    <div class="mermaid">
+sequenceDiagram
+  participant SDVC as StationDetailVC
+  participant RTS as RadioTracklistService
+  participant PM as PlaybackManager
+  participant NP as NowPlayingHelper
+  participant MP as 🚗 MPNowPlayingInfoCenter
+  participant LSC as LyricSyncController
+
+  SDVC->>RTS: RadioTracklistService.shared.fetch(stationId, tracklistURL)
+  Note over RTS: KEXP: api.kexp.org/plays/?format=json<br/>KCRW: tracklist-api.kcrw.com/Music/all/1
+  RTS->>RTS: parseKEXP(data) or parseKCRW(data)<br/>→ [TracklistEntry] most-recent-first
+  RTS->>RTS: cache[stationId] = entries
+  RTS-)SDVC: (async return)
+  RTS-)PM: NotificationCenter · .radioTracklistDidRefresh<br/>userInfo: {stationId}
+  Note over PM: handleRadioTracklistRefreshed(_:)<br/>→ resolveRadioArtworkForLockScreen (artwork only)
+
+  SDVC->>SDVC: previousTopKey = entries.first?.songKey
+  SDVC->>SDVC: entries = fresh.prefix(5)
+  SDVC->>SDVC: tracklistTable.reloadData()
+  SDVC->>LSC: lyricSync.load(entry: entries.first)
+
+  opt top TracklistEntry changed (song transition via tracklist, no ICY)
+    SDVC->>NP: setRadioTrackInfo(newTop.title, newTop.artist,<br/>newTop.album, stationName)
+    NP->>MP: update {title, artist, albumTitle}
+    Note over MP: Car syncs even when<br/>ICY was absent or late
+  end
+    </div>
+  </div>
+</div>
+
+<!-- ─── PHASE 5: Lyric Sync ─── -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-label">Phase 5</span>
+    <span class="phase-title">Lyric Sync · User Opens Lyrics Detail</span>
+  </div>
+  <div class="phase-body">
+    <div class="mermaid">
+sequenceDiagram
+  participant U as 👤 User
+  participant SDVC as StationDetailVC
+  participant LVC as LyricsViewController
+  participant LSC as LyricSyncController
+  participant LS as LyricsService (LRUCache)
+  participant NP as NowPlayingHelper
+  participant MP as 🚗 MPNowPlayingInfoCenter
+
+  LSC->>LS: LyricsService.shared.fetch(artist, title, album)
+  Note over LS: LRUCache.get(key) — hit resets TTL, promotes to MRU<br/>Cache: 2 MB max · 7-day TTL<br/>Cost: UTF-8 byte count of lyric text
+  alt LRU cache miss
+    LS->>LS: lrclib.net /api/get?artist=...&track=...&album=...
+    LS->>LS: retry without album (decorated titles)
+    LS->>LS: /api/search fuzzy fallback
+    LS->>LS: sanitize() — strip (Edit)(CLEAN)[Explicit] decorators
+    LS->>LS: LRUCache.set(key, result, cost)
+  end
+  LSC->>LSC: status = .found<br/>startTimer(initialElapsed)
+
+  loop every 1 second (Timer)
+    LSC->>LSC: tick(at: Date() − lyricStartDate + lyricOffset)
+    LSC->>LSC: LyricsService.currentLine(in:at:)
+    LSC->>SDVC: didUpdateHeaderText("♪ Ocean Eyes, I've been watching you…")
+    LSC->>SDVC: didUpdateNowPlayingAlbum("Ocean Eyes, I've been watching you…")
+    SDVC->>NP: NowPlayingHelper.setRadioAlbumTitle(lyricLine)
+    NP->>MP: update {albumTitle = lyricLine}
+    Note over MP: Line 3: Ocean Eyes, I've been watching you…
+  end
+
+  U->>SDVC: tap first TracklistCell (current song)
+  SDVC->>LVC: push LyricsViewController(entry, lyricLines, offset)
+  Note over LVC: Shows scrolled lyric list<br/>+/- offset buttons visible<br/>(current song only)
+
+  U->>LVC: tap − (decrease offset)
+  LVC->>LSC: lyricSync.adjustOffset(by: -1.0)
+  LSC->>LSC: lyricOffset −= 1.0<br/>tick(at: new offset) → re-evaluate line
+  LSC->>LVC: didUpdateHeaderText, didUpdateNowPlayingAlbum
+  LVC->>LVC: table scrolls to new line
+  Note over LSC: 800ms debounce → RadioFavoritesManager<br/>.upsertLyricOffset(stationId, seconds) → Supabase
+    </div>
+  </div>
+</div>
+
+<!-- ─── PHASE 6: Song Transition ─── -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-label">Phase 6</span>
+    <span class="phase-title">Song Transition (New ICY Frame)</span>
+  </div>
+  <div class="phase-body">
+    <div class="mermaid">
+sequenceDiagram
+  participant AV as AVPlayer + AVPlayerItem
+  participant RMO as RadioMetadataObserver
+  participant PM as PlaybackManager
+  participant SDVC as StationDetailVC
+  participant LSC as LyricSyncController
+  participant NP as NowPlayingHelper
+  participant MP as 🚗 MPNowPlayingInfoCenter
+
+  AV->>RMO: metadataOutput(_:didOutputTimedMetadataGroups:)<br/>raw = "StreamTitle='Radiohead - Creep';"
+  RMO->>RMO: parseStreamTitle() → (artist:"Radiohead", title:"Creep")
+  RMO->>RMO: emit() — title != lastEmittedTitle → post notification
+  RMO-)PM: .radioStationNowPlayingDidChange {title:"Creep", artist:"Radiohead"}
+  RMO-)SDVC: same notification
+
+  PM->>NP: setRadioTrackInfo("Creep", "Radiohead", album?, "KEXP")
+  NP->>MP: update {title, artist, albumTitle}
+  Note over MP: Line 1: Creep<br/>Line 2: Radiohead<br/>Line 3: album or KEXP
+
+  SDVC->>SDVC: handleNowPlayingChange → schedule refetchTracklist() +2s
+  SDVC->>LSC: lyricSync.load(entry: newEntry)
+  Note over LSC: songKey changed → resetState()<br/>  lyricTimer.invalidate()<br/>  lyricFetchTask.cancel()<br/>  status = .fetching
+  LSC->>LSC: fetch new lyrics (LRUCache or lrclib.net)
+    </div>
+  </div>
+</div>
+
+<!-- ─── PHASE 7: Between Tracks ─── -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-label">Phase 7</span>
+    <span class="phase-title">Between Tracks (DJ Talk / Ad Gap)</span>
+  </div>
+  <div class="phase-body">
+    <div class="mermaid">
+sequenceDiagram
+  participant LSC as LyricSyncController
+  participant SDVC as StationDetailVC
+  participant NP as NowPlayingHelper
+  participant MP as 🚗 MPNowPlayingInfoCenter
+
+  Note over LSC: Timer fires. elapsed + lyricOffset falls outside<br/>[firstLine.timestamp − 3s, (duration ?? lastLine.timestamp + 12s) + 12s]
+
+  LSC->>LSC: setStatus(.betweenTracks)
+  LSC->>SDVC: didUpdateHeaderText("♪ KEXP")
+  LSC->>SDVC: didUpdateNowPlayingAlbum(currentEntryAlbum ?? stationDisplayTitle)
+  SDVC->>NP: NowPlayingHelper.setRadioAlbumTitle("Pablo Honey")
+  NP->>MP: update {albumTitle}
+  Note over MP: Line 3: Pablo Honey<br/>(album name, not stale lyric)
+
+  Note over LSC: Stays .betweenTracks until next ICY frame<br/>or tracklist poll detects a new song
+    </div>
+  </div>
+</div>
+
+<!-- ─── PHASE 8: Periodic Progress Update ─── -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-label">Phase 8</span>
+    <span class="phase-title">Periodic Progress Update (every ~10s)</span>
+  </div>
+  <div class="phase-body">
+    <div class="mermaid">
+sequenceDiagram
+  participant PM as PlaybackManager
+  participant NP as NowPlayingHelper
+  participant MP as 🚗 MPNowPlayingInfoCenter
+
+  PM->>NP: updateNowPlayingInfo(RadioStation, duration, upTo, rate)
+  Note over NP: liveStation(for: episode) != nil<br/>→ radio fast-path: skip title comparison
+  NP->>MP: update {elapsed, playbackRate} ONLY
+  Note over MP: Title / Artist / Album / Artwork<br/>all preserved unchanged.<br/>(Prevents periodic overwrite bug<br/>where song title → station name.)
+    </div>
+  </div>
+</div>
+
+<!-- ─── Data Model Table ─── -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-label">Reference</span>
+    <span class="phase-title">MPNowPlayingInfoCenter Fields → Car / Bluetooth Display</span>
+  </div>
+  <div class="phase-body" style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:700px;">
+      <thead>
+        <tr style="background:#1e2235;border-bottom:1px solid #3b4568;">
+          <th style="padding:10px 16px;text-align:left;color:#7c8db5;font-weight:600;">MPMediaItem key</th>
+          <th style="padding:10px 16px;text-align:left;color:#7c8db5;font-weight:600;">Set by</th>
+          <th style="padding:10px 16px;text-align:left;color:#7c8db5;font-weight:600;">Value (stream)</th>
+          <th style="padding:10px 16px;text-align:left;color:#7c8db5;font-weight:600;">Car / BT display</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #2e3347;">
+          <td style="padding:9px 16px;font-family:monospace;color:#a78bfa;">MPMediaItemPropertyTitle</td>
+          <td style="padding:9px 16px;color:#7c8db5;">setRadioTrackInfo · setAllNowPlayingInfo</td>
+          <td style="padding:9px 16px;">Song title from ICY or tracklist; stationName if empty</td>
+          <td style="padding:9px 16px;font-weight:600;">Line 1 (large)</td>
+        </tr>
+        <tr style="border-bottom:1px solid #2e3347;background:#141720;">
+          <td style="padding:9px 16px;font-family:monospace;color:#a78bfa;">MPMediaItemPropertyArtist</td>
+          <td style="padding:9px 16px;color:#7c8db5;">setRadioTrackInfo</td>
+          <td style="padding:9px 16px;">ICY artist → tracklist artist fallback → stationName</td>
+          <td style="padding:9px 16px;font-weight:600;">Line 2 (medium)</td>
+        </tr>
+        <tr style="border-bottom:1px solid #2e3347;">
+          <td style="padding:9px 16px;font-family:monospace;color:#a78bfa;">MPMediaItemPropertyAlbumTitle</td>
+          <td style="padding:9px 16px;color:#7c8db5;">setRadioTrackInfo · setRadioAlbumTitle</td>
+          <td style="padding:9px 16px;">Album from tracklist; current lyric line while synced; album or stationName between tracks</td>
+          <td style="padding:9px 16px;font-weight:600;">Line 3 (small)</td>
+        </tr>
+        <tr style="border-bottom:1px solid #2e3347;background:#141720;">
+          <td style="padding:9px 16px;font-family:monospace;color:#a78bfa;">MPMediaItemPropertyArtwork</td>
+          <td style="padding:9px 16px;color:#7c8db5;">setAllNowPlayingInfo · setArtworkImage</td>
+          <td style="padding:9px 16px;">Station logo initially; track art after artwork resolver resolves (radioAlbumArtCache)</td>
+          <td style="padding:9px 16px;font-weight:600;">Album art image</td>
+        </tr>
+        <tr style="border-bottom:1px solid #2e3347;">
+          <td style="padding:9px 16px;font-family:monospace;color:#a78bfa;">MPNowPlayingInfoPropertyElapsedPlaybackTime</td>
+          <td style="padding:9px 16px;color:#7c8db5;">updateNowPlayingInfo (periodic)</td>
+          <td style="padding:9px 16px;">currentTime() — live streams always at 0 / LIVE</td>
+          <td style="padding:9px 16px;font-weight:600;">Progress bar / LIVE badge</td>
+        </tr>
+        <tr style="background:#141720;">
+          <td style="padding:9px 16px;font-family:monospace;color:#a78bfa;">MPNowPlayingInfoPropertyPlaybackRate</td>
+          <td style="padding:9px 16px;color:#7c8db5;">updateNowPlayingInfo (periodic)</td>
+          <td style="padding:9px 16px;">1.0 while playing, 0.0 while paused</td>
+          <td style="padding:9px 16px;font-weight:600;">Play / Pause state</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>

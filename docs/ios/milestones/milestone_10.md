@@ -1,6 +1,6 @@
 # iOS M10 — Port Lyric Sync Tuning from Menubar
 
-**Status**: ACTIVE  
+**Status**: DONE  
 **Depends on**: M9 (complete), menubar M9 (complete)
 
 ---
@@ -174,4 +174,4 @@ make test_staging
 
 ## Commit
 
-TBD.
+`539a5a1` — feat(radio): M10 lyric sync tuning ported from menubar

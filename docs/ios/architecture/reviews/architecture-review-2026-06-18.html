@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PocketRadio iOS — Architecture Review</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral', fontFamily: 'ui-monospace, monospace' });</script>
+<style>
+  body { font-family: ui-sans-serif, system-ui, sans-serif; background: #0f172a; color: #e2e8f0; }
+  .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; margin-bottom: 2rem; overflow: hidden; }
+  .card-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid #334155; display: flex; align-items: center; gap: 0.75rem; }
+  .card-body { padding: 1.5rem; }
+  .badge-strong { background: #dc2626; color: white; font-size: 0.7rem; font-weight: 700; padding: 2px 10px; border-radius: 999px; }
+  .badge-worth { background: #d97706; color: white; font-size: 0.7rem; font-weight: 700; padding: 2px 10px; border-radius: 999px; }
+  .badge-spec { background: #4f46e5; color: white; font-size: 0.7rem; font-weight: 700; padding: 2px 10px; border-radius: 999px; }
+  .diagram-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+  .diagram-box { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 1rem; }
+  .diagram-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #64748b; margin-bottom: 0.5rem; }
+  .shallow-box { border: 2px dashed #ef4444; border-radius: 6px; padding: 0.5rem; background: #1c0a0a; }
+  .deep-box { border: 2px solid #22c55e; border-radius: 6px; padding: 0.5rem; background: #051a0a; }
+  .seam-line { border-top: 2px dashed #22c55e; margin: 0.4rem 0; }
+  .seam-label { font-size: 0.6rem; color: #22c55e; text-align: center; letter-spacing: 0.08em; display:block; }
+  .god-cell { border: 1px solid #ef4444; border-radius: 3px; padding: 0.15rem 0.4rem; font-size: 0.65rem; font-family: ui-monospace; color: #fca5a5; margin: 0.1rem; display: inline-block; }
+  .clean-cell { border: 1px solid #22c55e; border-radius: 3px; padding: 0.15rem 0.4rem; font-size: 0.65rem; font-family: ui-monospace; color: #86efac; margin: 0.1rem; display: inline-block; }
+  .caller-box { border: 1px solid #334155; border-radius: 4px; padding: 0.2rem 0.5rem; font-size: 0.68rem; font-family: ui-monospace; color: #94a3b8; margin: 0.15rem 0; }
+  code { font-family: ui-monospace; font-size: 0.82em; background: #0f172a; padding: 1px 4px; border-radius: 3px; color: #7dd3fc; }
+  .section-header { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #64748b; margin-bottom: 0.5rem; margin-top: 1rem; }
+  .benefit-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.75rem; }
+  .benefit-pill { background: #0f172a; border: 1px solid #475569; border-radius: 6px; padding: 0.35rem 0.7rem; font-size: 0.75rem; color: #94a3b8; }
+  .benefit-pill strong { color: #e2e8f0; }
+  .files-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+  .file-chip { background: #0f172a; border: 1px solid #334155; border-radius: 4px; font-size: 0.68rem; font-family: ui-monospace; color: #7dd3fc; padding: 2px 8px; }
+  .warn { background: #2d1a00; border: 1px solid #d97706; border-radius: 6px; padding: 0.6rem 1rem; font-size: 0.82rem; color: #fcd34d; margin-top: 0.75rem; }
+  .top-rec { background: linear-gradient(135deg, #1e3a5f, #1a2f4a); border: 1px solid #3b82f6; border-radius: 12px; padding: 1.5rem; margin-top: 2rem; }
+  pre { font-size: 0.75rem; font-family: ui-monospace; background: #0f172a; border-radius: 6px; padding: 0.75rem; color: #7dd3fc; margin-top: 0.5rem; overflow-x: auto; }
+</style>
+</head>
+<body style="padding:2rem;max-width:64rem;margin:0 auto">
+
+<div style="margin-bottom:2rem">
+  <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#475569;margin-bottom:0.25rem">Architecture Review &middot; 2026-06-18</div>
+  <h1 style="font-size:2rem;font-weight:800;color:white;margin:0 0 0.25rem">PocketRadio iOS</h1>
+  <p style="color:#64748b;font-size:0.875rem;margin:0">Radio feature &mdash; <code>podcasts/Radio/</code> &mdash; deepening opportunities</p>
+</div>
+
+<!-- C1 -->
+<div class="card">
+  <div class="card-header">
+    <span style="font-size:1.25rem;font-weight:800;color:white">1</span>
+    <div style="flex:1;display:flex;align-items:center;gap:0.5rem">
+      <span style="font-size:1.05rem;font-weight:600;color:#f1f5f9">StationDetailViewController God Object &rarr; <code>LyricSyncController</code></span>
+      <span class="badge-strong">STRONG</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="section-header">Files</div>
+    <div class="files-row">
+      <span class="file-chip">Radio/StationDetailViewController.swift (697 lines)</span>
+      <span class="file-chip">Radio/LyricsViewController.swift (424 lines)</span>
+      <span class="file-chip">Radio/LyricsService.swift</span>
+      <span class="file-chip">Radio/RadioFavoritesManager.swift</span>
+    </div>
+
+    <div class="section-header" style="margin-top:1.25rem">Problem</div>
+    <p style="font-size:0.875rem;color:#cbd5e1"><code>StationDetailViewController</code> owns 8 responsibilities in 697 lines. The lyrics sync state machine alone is ~200: <code>lyricStatus</code>, <code>lyricOffset</code>, <code>lyricTimer</code>, <code>lyricStartDate</code>, <code>lyricLines</code>, <code>currentLyricSongKey</code>, <code>currentLyricLineIndex</code>, <code>lyricFetchTask</code>, <code>lyricOffsetSaveTask</code>. Then <code>LyricsViewController</code> <em>duplicates</em> the same state: its own timer, lineIndex, offset.</p>
+    <p style="font-size:0.875rem;color:#cbd5e1;margin-top:0.5rem"><strong>Deletion test:</strong> delete the lyrics block from StationDetailVC. Complexity reappears across both VCs &mdash; this is a real module waiting to exist. Interface &asymp; implementation complexity. Shallow.</p>
+
+    <div class="section-header">Solution</div>
+    <p style="font-size:0.875rem;color:#cbd5e1">Extract <code>LyricSyncController</code> owning the full state machine: fetch, parse, timer, offset nudge, debounced Supabase persistence. Both VCs become thin consumers of one shared instance.</p>
+    <pre>protocol LyricSyncDelegate: AnyObject {
+    func lyricSync(_ c: LyricSyncController, didUpdateStatus: LyricStatus)
+    func lyricSync(_ c: LyricSyncController, didUpdateOffset: TimeInterval)
+}
+
+class LyricSyncController {
+    weak var delegate: LyricSyncDelegate?
+    var currentOffset: TimeInterval { get }
+    var currentStatus: LyricStatus { get }
+
+    func load(artist: String, title: String, album: String?,
+              playedAt: Date, stationId: String)
+    func adjustOffset(by delta: TimeInterval)
+    func stop()
+}</pre>
+
+    <div class="section-header">Benefits</div>
+    <div class="benefit-row">
+      <div class="benefit-pill"><strong>Locality</strong> &mdash; all lyrics logic in one module</div>
+      <div class="benefit-pill"><strong>Testability</strong> &mdash; state machine testable without loading any VC</div>
+      <div class="benefit-pill"><strong>Leverage</strong> &mdash; both VCs collapse to ~5 lines for lyrics</div>
+      <div class="benefit-pill"><strong>Eliminates duplication</strong> &mdash; LyricsVC no longer duplicates timer+offset</div>
+    </div>
+
+    <div class="diagram-row">
+      <div class="diagram-box">
+        <div class="diagram-label">Before &mdash; state scattered across 2 VCs</div>
+        <div class="shallow-box">
+          <div style="font-size:0.65rem;color:#ef4444;font-weight:700;margin-bottom:0.25rem">StationDetailViewController</div>
+          <span class="god-cell">lyricStatus</span><span class="god-cell">lyricOffset</span><span class="god-cell">lyricTimer</span>
+          <span class="god-cell">lyricStartDate</span><span class="god-cell">lyricLines</span><span class="god-cell">lyricFetchTask</span>
+          <span class="god-cell">lyricOffsetSaveTask</span><span class="god-cell">currentLyricLineIndex</span>
+        </div>
+        <div class="shallow-box" style="margin-top:0.4rem">
+          <div style="font-size:0.65rem;color:#ef4444;font-weight:700;margin-bottom:0.25rem">LyricsViewController (duplicated)</div>
+          <span class="god-cell">lyricTimer</span><span class="god-cell">currentLineIndex</span><span class="god-cell">lyricOffset</span><span class="god-cell">lyricStartDate</span>
+        </div>
+        <div style="font-size:0.65rem;color:#ef4444;margin-top:0.4rem">Interface &asymp; impl. Two sources of truth.</div>
+      </div>
+      <div class="diagram-box">
+        <div class="diagram-label">After &mdash; one controller, two thin consumers</div>
+        <div class="deep-box">
+          <div style="font-size:0.65rem;color:#22c55e;font-weight:700;margin-bottom:0.2rem">LyricSyncController</div>
+          <div style="font-size:0.65rem;color:#86efac">load() &middot; adjustOffset() &middot; stop()</div>
+          <div class="seam-line"></div>
+          <span class="seam-label">LyricSyncDelegate</span>
+          <div style="font-size:0.6rem;color:#64748b;margin-top:0.2rem">&uarr; didUpdateStatus &nbsp;&nbsp; &uarr; didUpdateOffset</div>
+        </div>
+        <div style="margin-top:0.5rem">
+          <div class="caller-box">StationDetailVC &nbsp;<span style="color:#22c55e">&rarr; 5 lines</span></div>
+          <div class="caller-box">LyricsVC &nbsp;<span style="color:#22c55e">&rarr; 5 lines</span></div>
+        </div>
+        <div style="font-size:0.65rem;color:#22c55e;margin-top:0.4rem">Small interface. All complexity behind it.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- C2 -->
+<div class="card">
+  <div class="card-header">
+    <span style="font-size:1.25rem;font-weight:800;color:white">2</span>
+    <div style="flex:1;display:flex;align-items:center;gap:0.5rem">
+      <span style="font-size:1.05rem;font-weight:600;color:#f1f5f9">URL-Routing Parsers &rarr; <code>TracklistParser</code> Protocol</span>
+      <span class="badge-strong">STRONG</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="section-header">Files</div>
+    <div class="files-row">
+      <span class="file-chip">Radio/RadioTracklistService.swift (193 lines)</span>
+      <span class="file-chip">Radio/CuratedStation.swift</span>
+      <span class="file-chip">Radio/curated_stations.json</span>
+    </div>
+
+    <div class="section-header" style="margin-top:1.25rem">Problem</div>
+    <p style="font-size:0.875rem;color:#cbd5e1"><code>RadioTracklistService.fetch()</code> routes to a parser via <code>URL.host.contains("kcrw")</code> / <code>"kexp"</code>. Adding a third station requires editing the service. The parsers (<code>parseKCRW</code>, <code>parseKEXP</code>) are concrete methods on the service &mdash; two adapters in disguise, with no seam named.</p>
+    <p style="font-size:0.875rem;color:#cbd5e1;margin-top:0.5rem"><strong>Deletion test:</strong> delete <code>parseKCRW</code>. Complexity doesn't vanish &mdash; it reappears for every new station. Two adapters are present; the seam just hasn't been named.</p>
+
+    <div class="section-header">Solution</div>
+    <pre>protocol TracklistParser {
+    func parse(data: Data) throws -> [TracklistEntry]
+}
+
+struct KCRWTracklistParser: TracklistParser { ... }
+struct KEXPTracklistParser: TracklistParser  { ... }
+// Adding KQED = new file, zero service edits
+
+extension CuratedStation {
+    var tracklistParser: (any TracklistParser)? { ... }
+}</pre>
+
+    <div class="section-header">Benefits</div>
+    <div class="benefit-row">
+      <div class="benefit-pill"><strong>Locality</strong> &mdash; each station's quirks in one file</div>
+      <div class="benefit-pill"><strong>Leverage</strong> &mdash; service stays thin; station count doesn't grow it</div>
+      <div class="benefit-pill"><strong>Testability</strong> &mdash; each parser unit-testable with fixture JSON alone</div>
+    </div>
+
+    <div class="diagram-row">
+      <div class="diagram-box">
+        <div class="diagram-label">Before &mdash; URL routing inside service</div>
+        <div class="shallow-box">
+          <div style="font-size:0.65rem;color:#ef4444;font-weight:700">RadioTracklistService</div>
+          <div style="font-size:0.65rem;color:#94a3b8;margin:0.25rem 0">if url.contains("kcrw") &rarr; parseKCRW()</div>
+          <div style="font-size:0.65rem;color:#94a3b8">if url.contains("kexp") &rarr; parseKEXP()</div>
+          <div style="font-size:0.65rem;color:#ef4444;margin-top:0.25rem">// KQED &rarr; add another if, edit service</div>
+        </div>
+      </div>
+      <div class="diagram-box">
+        <div class="diagram-label">After &mdash; parser adapters behind protocol</div>
+        <div class="deep-box">
+          <div style="font-size:0.65rem;color:#22c55e;font-weight:700">TracklistParser (protocol)</div>
+          <div class="seam-line"></div>
+          <span class="seam-label">adapters</span>
+          <div style="margin-top:0.3rem">
+            <span class="clean-cell">KCRWTracklistParser</span>
+            <span class="clean-cell">KEXPTracklistParser</span>
+          </div>
+          <div style="margin-top:0.3rem">
+            <span class="clean-cell" style="border-color:#818cf8;color:#a5b4fc">KQEDTracklistParser &larr; new file only</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- C3 -->
+<div class="card">
+  <div class="card-header">
+    <span style="font-size:1.25rem;font-weight:800;color:white">3</span>
+    <div style="flex:1;display:flex;align-items:center;gap:0.5rem">
+      <span style="font-size:1.05rem;font-weight:600;color:#f1f5f9">NotificationCenter Metadata Chain &rarr; <code>RadioNowPlayingCoordinator</code></span>
+      <span class="badge-worth">WORTH EXPLORING</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="section-header">Files</div>
+    <div class="files-row">
+      <span class="file-chip">Radio/RadioMetadataObserver.swift</span>
+      <span class="file-chip">Radio/StationDetailViewController.swift</span>
+      <span class="file-chip">Radio/RadioTracklistService.swift</span>
+      <span class="file-chip">Radio/TrackArtworkResolver.swift</span>
+    </div>
+
+    <div class="section-header" style="margin-top:1.25rem">Problem</div>
+    <p style="font-size:0.875rem;color:#cbd5e1">ICY metadata arrival triggers a 4-step pipeline across 4 files via untyped <code>NotificationCenter</code> posts. The debounce task and intermediate state (<code>icyTitle</code>, <code>icyArtist</code>) live in the VC. No single place describes "when now-playing changes, here's the full response." The notification <code>userInfo</code> is untyped &mdash; any subscriber can silently misread a key.</p>
+
+    <div class="section-header">Solution</div>
+    <pre>struct NowPlayingState {
+    let artist: String; let title: String
+    let tracklist: [TracklistEntry]; let artworkURL: URL?
+}
+
+class RadioNowPlayingCoordinator {
+    var state: AnyPublisher&lt;NowPlayingState, Never&gt; { get }
+    init(stationId: String, metadataObserver: RadioMetadataObserver)
+}</pre>
+
+    <div class="section-header">Benefits</div>
+    <div class="benefit-row">
+      <div class="benefit-pill"><strong>Locality</strong> &mdash; full now-playing pipeline in one testable class</div>
+      <div class="benefit-pill"><strong>Leverage</strong> &mdash; widget, mini-player, NowPlayingVC all consume same coordinator</div>
+      <div class="benefit-pill"><strong>Type safety</strong> &mdash; typed state replaces untyped userInfo dict</div>
+    </div>
+
+    <div style="margin-top:1rem">
+      <div class="mermaid">
+sequenceDiagram
+  participant M as RadioMetadataObserver
+  participant C as NowPlayingCoordinator
+  participant T as RadioTracklistService
+  participant A as TrackArtworkResolver
+  participant V as StationDetailVC
+
+  M->>C: metadata(artist, title)
+  C->>C: debounce 2s
+  C->>T: fetch(stationId)
+  C->>A: artworkURL(entry)
+  C->>V: NowPlayingState (Combine)
+  V->>V: update UI only
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- C4 -->
+<div class="card">
+  <div class="card-header">
+    <span style="font-size:1.25rem;font-weight:800;color:white">4</span>
+    <div style="flex:1;display:flex;align-items:center;gap:0.5rem">
+      <span style="font-size:1.05rem;font-weight:600;color:#f1f5f9">Split <code>RadioFavoritesManager</code> &rarr; <code>LyricOffsetStore</code></span>
+      <span class="badge-worth">WORTH EXPLORING</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="section-header">Files</div>
+    <div class="files-row">
+      <span class="file-chip">Radio/RadioFavoritesManager.swift (180 lines)</span>
+    </div>
+
+    <div class="section-header" style="margin-top:1.25rem">Problem</div>
+    <p style="font-size:0.875rem;color:#cbd5e1"><code>RadioFavoritesManager</code> owns two independent concerns: (1) favorites &mdash; station IDs + ordering in <code>radio_favorites</code>; (2) lyric sync offsets &mdash; per-station integers in <code>lyric_offsets</code>. The only coupling: shared manager object. <code>StationDetailViewController</code> calls <code>fetchLyricOffsets()</code> and <code>upsertLyricOffset()</code> which have nothing to do with favorites. Two seams forced to share one object.</p>
+
+    <div class="section-header">Solution</div>
+    <p style="font-size:0.875rem;color:#cbd5e1">Extract <code>LyricOffsetStore</code> as a separate singleton. After Candidate 1 lands, <code>LyricSyncController</code> absorbs it &mdash; so StationDetailVC never directly calls either.</p>
+
+    <div class="section-header">Benefits</div>
+    <div class="benefit-row">
+      <div class="benefit-pill"><strong>Locality</strong> &mdash; offset bugs don't require reading favorites code</div>
+      <div class="benefit-pill"><strong>Single responsibility</strong> &mdash; each manager does one thing</div>
+      <div class="benefit-pill"><strong>Leverage</strong> &mdash; LyricSyncController absorbs LyricOffsetStore; VCs call neither</div>
+    </div>
+
+    <div class="diagram-row">
+      <div class="diagram-box">
+        <div class="diagram-label">Before &mdash; mixed responsibilities</div>
+        <div class="shallow-box">
+          <div style="font-size:0.65rem;color:#ef4444;font-weight:700;margin-bottom:0.2rem">RadioFavoritesManager</div>
+          <span class="god-cell">loadFavorites()</span><span class="god-cell">addFavorite()</span><span class="god-cell">setOrder()</span>
+          <span class="god-cell">fetchLyricOffsets()</span><span class="god-cell">upsertLyricOffset()</span><span class="god-cell">lyricOffsets cache</span>
+        </div>
+      </div>
+      <div class="diagram-box">
+        <div class="diagram-label">After &mdash; two focused modules</div>
+        <div class="deep-box" style="margin-bottom:0.5rem">
+          <div style="font-size:0.65rem;color:#22c55e;font-weight:700">RadioFavoritesManager</div>
+          <div style="margin-top:0.2rem"><span class="clean-cell">loadFavorites()</span><span class="clean-cell">addFavorite()</span><span class="clean-cell">setOrder()</span></div>
+        </div>
+        <div class="deep-box">
+          <div style="font-size:0.65rem;color:#22c55e;font-weight:700">LyricOffsetStore</div>
+          <div style="margin-top:0.2rem"><span class="clean-cell">fetch(stationId:)</span><span class="clean-cell">upsert(:seconds:)</span><span class="clean-cell">cached(:)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- C5 -->
+<div class="card">
+  <div class="card-header">
+    <span style="font-size:1.25rem;font-weight:800;color:white">5</span>
+    <div style="flex:1;display:flex;align-items:center;gap:0.5rem">
+      <span style="font-size:1.05rem;font-weight:600;color:#f1f5f9">Manual Task Lifecycle &rarr; Structured <code>TaskScope</code></span>
+      <span class="badge-spec">SPECULATIVE</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="section-header">Files</div>
+    <div class="files-row">
+      <span class="file-chip">Radio/StationDetailViewController.swift</span>
+    </div>
+
+    <div class="section-header" style="margin-top:1.25rem">Problem</div>
+    <p style="font-size:0.875rem;color:#cbd5e1"><code>StationDetailViewController</code> manually cancels 5 tasks and 1 timer across 4 lifecycle sites (<code>viewWillAppear</code>, <code>viewDidDisappear</code>, <code>deinit</code>, <code>stopLyricTimer()</code>). Forgetting any one path &rarr; task runs after view is gone.</p>
+
+    <div class="section-header">Solution</div>
+    <p style="font-size:0.875rem;color:#cbd5e1">A lightweight <code>TaskScope</code> container cancels all owned tasks on <code>deinit</code>. Most compelling after Candidates 1 and 3 land &mdash; evaluate then.</p>
+    <div class="warn">Speculative. Candidates 1 and 3 eliminate most manual cancellation naturally. Land those first.</div>
+
+    <div class="section-header">Benefits</div>
+    <div class="benefit-row">
+      <div class="benefit-pill"><strong>Safety</strong> &mdash; impossible to forget cancellation; structural guarantee</div>
+      <div class="benefit-pill"><strong>Locality</strong> &mdash; task ownership explicit and collocated</div>
+    </div>
+  </div>
+</div>
+
+<!-- TOP REC -->
+<div class="top-rec">
+  <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#60a5fa;margin-bottom:0.25rem">Top Recommendation</div>
+  <h2 style="font-size:1.2rem;font-weight:800;color:white;margin:0 0 0.75rem">Start with Candidate 1 &mdash; <code>LyricSyncController</code></h2>
+  <p style="font-size:0.875rem;color:#cbd5e1">Highest leverage: StationDetailVC shrinks ~200 lines, state duplication with LyricsVC disappears, the state machine becomes fully unit-testable, and it creates the natural home for Candidate 4's LyricOffsetStore. It's the prerequisite that makes the others easier.</p>
+  <p style="font-size:0.875rem;color:#94a3b8;margin-top:0.5rem">Candidate 2 is the easiest standalone win &mdash; one afternoon, zero risk, immediate testability for all future station parsers.</p>
+  <div style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.4rem;align-items:center;font-size:0.75rem;color:#64748b">
+    <span>Suggested order:</span>
+    <span class="file-chip" style="color:#22c55e">1 LyricSyncController</span>
+    <span style="color:#334155">&rarr;</span>
+    <span class="file-chip" style="color:#22c55e">2 TracklistParser</span>
+    <span style="color:#334155">&rarr;</span>
+    <span class="file-chip" style="color:#d97706">4 LyricOffsetStore</span>
+    <span style="color:#334155">&rarr;</span>
+    <span class="file-chip" style="color:#d97706">3 NowPlayingCoordinator</span>
+    <span style="color:#334155">&rarr;</span>
+    <span class="file-chip" style="color:#818cf8">5 TaskScope (if still needed)</span>
+  </div>
+</div>
+
+<div style="margin-top:2rem;font-size:0.7rem;color:#334155;text-align:center">
+  /improve-codebase-architecture &middot; PocketRadio iOS &middot; podcasts/Radio/
+</div>
+
+</body>
+</html>
