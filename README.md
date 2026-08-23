@@ -63,9 +63,15 @@ Any station from [radio-browser.info](https://radio-browser.info) can be added v
 
 ## License
 
-[Mozilla Public License 2.0](LICENSE.md) — same as upstream Pocket Casts.
+[Mozilla Public License 2.0](LICENSE.md).
 
-Any distributed fork must preserve working donation links from `curated_stations.json` in a visible UI location. See `NOTICE` for details.
+The iOS app is a fork of Automattic/pocket-casts-ios and stays under MPL 2.0,
+inherited from upstream. The menubar, console, and Roku apps are original works,
+released under MPL 2.0 for consistency rather than by obligation.
+
+If you fork this project, please keep the donation links from
+`curated_stations.json` working and reachable from the UI. That's a request, not
+a license condition — see [`NOTICE`](NOTICE).
 
 ## Backend
 

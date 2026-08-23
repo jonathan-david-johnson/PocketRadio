@@ -1,30 +1,38 @@
-PocketRadio — NOTICE
+PocketRadio
+===========
 
-Copyright (c) 2026 Jonathan David Johnson
+Licensing and provenance
+------------------------
 
-This software is a fork of Pocket Casts iOS (https://github.com/Automattic/pocket-casts-ios),
-copyright Automattic Inc., licensed under the Mozilla Public License 2.0.
+The iOS app (`pocket-radio-ios/`) is a fork of Automattic/pocket-casts-ios and
+remains under the Mozilla Public License 2.0, inherited from upstream. See
+LICENSE.md.
 
----
+The macOS menubar, console, and Roku apps are original works that share no code
+with upstream Pocket Casts. They are released under MPL 2.0 as well, for
+consistency across the project rather than by obligation.
 
-DONATION LINK PRESERVATION REQUIREMENT
+MPL 2.0 is file-level copyleft: modifications to MPL-covered files must remain
+under MPL 2.0 and their source made available, but the license does not extend
+to independent files combined with them.
 
-Any distributed fork or derivative of PocketRadio must preserve, in a clearly visible
-location within the user interface, working links to the donation pages of the public
-radio stations distributed in curated_stations.json.
 
-The current required donation links are:
+A request about donation links
+------------------------------
 
-  KCRW         https://join.kcrw.com
-  KEXP         https://www.kexp.org/donate
-  NPR Hourly   https://www.npr.org/donations/support
+PocketRadio exists to make public radio easier to listen to, and public radio
+runs on listener donations. The curated stations in `curated_stations.json`
+each carry a `donateUrl`:
 
-Removal or replacement of these links with non-functional or redirected URLs constitutes
-a violation of the terms under which this software is distributed.
+    KCRW              https://join.kcrw.com
+    KEXP              https://www.kexp.org/donate
+    NPR Hourly News   https://www.npr.org/donations/support
 
-This requirement applies to any fork that includes the curated_stations.json file or
-any derivative of it.
+If you fork or redistribute this project, please keep those links working and
+reachable from the UI rather than stripping them out.
 
----
-
-Mozilla Public License 2.0 full text: https://www.mozilla.org/en-US/MPL/2.0/
+This is a request, not a license condition. MPL 2.0 section 3.2 does not permit
+restricting the rights it grants in covered source code, so this notice adds no
+requirement to the license terms above and imposes no obligation on you. It is
+asked in good faith, on the expectation that anyone who finds this project
+useful shares the reason it was built.
