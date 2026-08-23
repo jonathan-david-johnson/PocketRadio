@@ -2,6 +2,11 @@
 
 A fork of [Pocket Casts](https://github.com/Automattic/pocket-casts-ios) adding live public radio streaming, podcast listening, and a donation nudge system to support the stations you love.
 
+This repo is organized as a monorepo shell per the
+[`meta-repo`](https://github.com/jonathan-david-johnson/dotfiles/tree/main/.pi/agent/skills/meta-repo)
+skill — my standing convention for multi-platform projects: nested repos per
+platform, `docs/<platform>/` with milestones and bugs, ADRs.
+
 ## What's different from Pocket Casts
 
 - **Radio streams** — curated NPR/public radio stations (KCRW, KEXP, NPR Hourly) + search 90k+ stations via [radio-browser.info](https://radio-browser.info)
