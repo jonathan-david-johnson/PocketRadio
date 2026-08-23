@@ -157,12 +157,16 @@ commands. Acceptable for MVP because it matches current posture. RLS on `realtim
 
 ## Pending on merge
 
-- **Re-add CarPlay entitlement** to both `podcasts/podcasts.entitlements` and `podcasts/podcastsDebug.entitlements`:
+- [x] **Re-add CarPlay entitlement** to both `podcasts/podcasts.entitlements` and `podcasts/podcastsDebug.entitlements`:
   ```xml
   <key>com.apple.developer.carplay-audio</key>
   <true/>
   ```
-  Backed out 2026-06-28 to allow device builds while awaiting Apple CarPlay Audio App capability approval. Restore when merging this branch back to main (or once approval lands, whichever comes first).
+  Backed out 2026-06-28 to allow device builds while awaiting Apple CarPlay Audio App capability approval. **Restored 2026-08-05** — Apple CarPlay Audio App capability approved.
+
+  Follow-ups when signing a device build with this entitlement:
+  - The App ID `com.jdj.pocketradio` must have the CarPlay Audio capability enabled in the developer portal; approval of the account alone is not enough. Cached profiles minted 2026-06-14 predate approval and carry no `carplay-audio` key, so they must be regenerated (`-allowProvisioningUpdates` handles this once the App ID is updated).
+  - `Makefile` `DEVICE_TEAM_ID = 77WV2LMG2L` does not match the team on every local provisioning profile (`X6DVXL53Z3`, "Jonathan Johnson"). A free personal team cannot provision `carplay-audio` at all. Confirm which team holds the approval before building.
 
 ---
 
