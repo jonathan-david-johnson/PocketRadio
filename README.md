@@ -5,11 +5,27 @@ A fork of [Pocket Casts](https://github.com/Automattic/pocket-casts-ios) adding 
 ## What's different from Pocket Casts
 
 - **Radio streams** — curated NPR/public radio stations (KCRW, KEXP, NPR Hourly) + search 90k+ stations via [radio-browser.info](https://radio-browser.info)
-- **Usage & Donations** — see how much you've listened per station, estimated streaming cost, and track your donations back to stations
-- **macOS menubar app** — native SwiftUI menubar player for your favorite streams
-- **Open source, no ads, no tracking**
 
-## Supported stations (curated)
+## Platforms
+
+| Platform | Status | Language | Code | Docs |
+|----------|--------|----------|------|------|
+| **iOS** | Fully implemented — used daily | Swift | [`pocket-radio-ios/`](pocket-radio-ios/) | [`docs/ios/`](docs/ios/) |
+| **Apple CarPlay** | Fully implemented — used daily | Swift | `pocket-radio-ios/podcasts/CarPlay/` | [`docs/ios/`](docs/ios/) |
+| **macOS menubar** | Fully implemented — used daily | Swift / SwiftUI | [`pocket-radio-menubar/`](pocket-radio-menubar/) | [`docs/menubar/`](docs/menubar/) |
+| **Roku** (PocketStreams) | Implemented, buggy | BrightScript | [`pocket-radio-roku/`](pocket-radio-roku/) | [`docs/roku/`](docs/roku/) |
+| **Console (TUI)** | In progress — playback + radio work, Up Next incomplete | Go | [`pocket-radio-console/`](pocket-radio-console/) | [`docs/console/`](docs/console/) |
+| **Windows** | Early — systray player, minimal | Go | [`pocket-radio-windows/`](pocket-radio-windows/) | — |
+| **Android** | Planned — docs only, no code | Kotlin | — | [`docs/android/`](docs/android/) |
+| **Web** | Planned — repo empty | TS / React | — | [`docs/web/`](docs/web/) |
+
+CarPlay ships inside the iOS app rather than as a separate target — it has no
+repo of its own.
+
+Each platform's active task is `docs/<platform>/current_milestone.md` (a symlink
+to the live milestone). Build and run targets for all of them: `make help`.
+
+## Curated Stations
 
 | Station | Stream | Donate |
 |---------|--------|--------|
@@ -34,11 +50,6 @@ Local dev:
 brew install supabase/tap/supabase
 supabase start
 ```
-
-## Plans & Design
-
-- [`docs/plan.md`](docs/plan.md) — current plan
-- [`docs/designs/`](docs/designs/) — UI and feature designs
 
 ## Upstream
 

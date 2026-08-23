@@ -1,101 +1,45 @@
-# CLAUDE.md
+# PocketRadio
 
-This file provides guidance to AI when working with code in this repository.
+Monorepo shell. Each sub-project is its own nested git repo with its own
+`AGENTS.md` and Makefile.
 
-## Repo Layout
+| Directory | What | Language | Docs |
+|-----------|------|----------|------|
+| `pocket-radio-ios/` | iOS app — fork of `Automattic/pocket-casts-ios` | Swift | `docs/ios/` |
+| `pocket-radio-menubar/` | macOS menubar player | Swift / SwiftUI | `docs/menubar/` |
+| `pocket-radio-console/` | Terminal radio player | Go | `docs/console/` |
+| `pocket-radio-roku/` | Roku channel (PocketStreams) | BrightScript | `docs/roku/` |
+| `pocket-radio-web/` | Browser SPA — *not scaffolded* | TS / React | `docs/web/` |
+| `pocket-radio-windows/` | Windows systray player | Go | — |
+| `pocket-radio-android/` | Android TV + mobile — *not scaffolded* | Kotlin | `docs/android/` |
+| `supabase/` | Shared backend — radio favorites, listen-time sync, `pc-relay` | SQL / Deno | `docs/global/` |
 
-This is a monorepo shell holding four sub-projects, each in its own nested git repo:
+**Before touching a sub-project:** read its `AGENTS.md`, then
+`docs/<project>/current_milestone.md`. Both are authoritative over this file.
 
-| Directory | What | Language |
-|-----------|------|----------|
-| `pocket-radio-ios/` | iOS app — fork of `Automattic/pocket-casts-ios` | Swift |
-| `pocket-radio-menubar/` | macOS menubar player | Swift / SwiftUI |
-| `pocket-radio-console/` | Terminal radio player | Go |
-| `pocket-radio-roku/` | Roku channel (PocketStreams) | BrightScript |
+## Conventions
 
-Top-level `Makefile` delegates to each sub-project and provides repo setup targets.
+- **`CLAUDE.md` is a one-line `@AGENTS.md` pointer in every repo — never more.**
+  All real content goes in `AGENTS.md`. Enforced by a pre-commit hook scoped to
+  this repo and its nested repos; run `make hooks` after cloning.
+- **Write-through symlink trap:** `docs/<project>/current_milestone.md` →
+  `milestones/milestone_N.md`. Writing through it overwrites the previous
+  milestone's archive. Create a new numbered file and repoint the symlink.
 
-## iOS App (`pocket-radio-ios/`)
+## Cross-cutting facts
 
-Sub-project has its own `AGENTS.md` (symlinked as `CLAUDE.md` inside that directory) with authoritative build, test, and architecture docs. Always read it before touching iOS code.
+- **The menubar app is the canonical spec** for the Pocket Casts API, protobuf
+  wire format, and playback/state logic. `APIService.swift` and
+  `PlayerViewModel.swift` are what every other surface is ported from.
+- **Supabase rows are scoped by the `x-user-uuid` header.** Clients that can't
+  keep a secret must not set it themselves — see `docs/web/README.md` § Auth
+  model for why web proxies this and iOS doesn't.
 
-Key facts:
-- Scheme: **`Pocket Casts Staging`**, configuration: **`StagingDebug`**
-- Default sim UDID: `F0042A02-0973-4694-B267-49A1CC21FE19` ("iPhone 17 Pro - No Watch")
-- Bundle ID: `au.com.shiftyjelly.podcasts` (not `.staging`)
-- Milestone docs: `docs/ios/current_milestone.md` (symlink → active milestone) — check this first when picking up iOS work
+## Pointers
 
-```bash
-cd pocket-radio-ios
-make build_sim       # Build for simulator
-make run_sim         # Build + boot Simulator + install + launch
-make test_staging    # Run tests (ONLY_TESTING= to filter)
-make format          # SwiftLint autocorrect
-```
-
-Radio feature files live in `pocket-radio-ios/podcasts/Radio/`. New test files under `PocketCastsTests/Tests/` are auto-discovered; main app files under `podcasts/` still require `project.pbxproj` registration.
-
-## Console App (`pocket-radio-console/`)
-
-Go TUI using Bubbletea + mpv for playback. Requires `mpv` on PATH (`brew install mpv`).
-
-```bash
-cd pocket-radio-console
-make build           # Compile binary
-make run_kcrw        # Build + play KCRW
-make test            # Hermetic tests (no mpv required)
-make test-integration  # Includes real mpv test
-make vet             # go vet
-```
-
-Package layout: `cmd/pocket-radio/` (entrypoint), `internal/{config,library,player,pocketcasts,radio,resolver,ui/mini}/`.
-
-Milestone docs: `docs/console/current_milestone.md`.
-
-## Menubar App (`pocket-radio-menubar/`)
-
-```bash
-cd pocket-radio-menubar
-# or from root:
-make menubar         # Kill + build Debug + launch
-make menubar-log     # Stream unified logs from running app
-make install         # Build Release + install to /Applications
-```
-
-Architecture docs: `pocket-radio-menubar/docs/menubar/README.md` (or `docs/menubar/README.md` from root).
-
-## Roku Channel (`pocket-radio-roku/`)
-
-Requires env vars: `ROKU_HOST` (device IP) and `ROKU_PASS` (dev-mode password).
-
-```bash
-cd pocket-radio-roku
-make deploy          # Build channel.zip + sideload to device
-make dev             # deploy + open BrightScript debug console
-make telnet          # Open debug console only (nc to port 8085)
-make killtelnet      # Kill stale console connections (Roku allows only one)
-```
-
-Milestone docs: `docs/roku/current_milestone.md`. Source lives in `source/`, `components/`, `images/`.
-
-## Supabase (Backend)
-
-Radio favorites and listen-time sync. Local dev:
-
-```bash
-brew install supabase/tap/supabase
-supabase start       # from repo root (config in supabase/)
-```
-
-iOS uses Supabase Swift 2.x with `x-user-uuid` header for user scoping. Migrations in `supabase/migrations/`.
-
-## Milestone / Planning Convention
-
-Each sub-project has `docs/<project>/current_milestone.md` (a symlink to the active milestone file). Check this before picking up work in that sub-project. The symlink target is the archive — do NOT write plans through the symlink; create a new numbered milestone file and repoint the symlink.
-
-## Upstream (iOS)
-
-```bash
-git -C pocket-radio-ios fetch upstream
-git -C pocket-radio-ios merge upstream/trunk
-```
+- Build/test/run targets — `make help` (top level delegates; real logic lives
+  in each sub-project's Makefile).
+- Repo + docs + milestone conventions — `docs/REPO_STRUCTURE.md`, or invoke the
+  `meta-repo` skill.
+- Cross-platform work (specs, milestones spanning surfaces) — `docs/global/`.
+  Platform-local bugs — `docs/<project>/bugs/`.

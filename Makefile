@@ -3,19 +3,25 @@ MENUBAR_REPO  = git@github.com:jonathan-david-johnson/pocket-radio-menubar.git
 ROKU_REPO     = git@github.com:jonathan-david-johnson/pocket-radio-roku.git
 WEB_REPO      = git@github.com:jonathan-david-johnson/pocket-radio-web.git
 WINDOWS_REPO  = git@github.com:jonathan-david-johnson/pocket-radio-windows.git
+ANDROID_REPO  = git@github.com:jonathan-david-johnson/pocket-radio-android.git
 UPSTREAM      = git@github.com:Automattic/pocket-casts-ios.git
 IOS_DIR       = pocket-radio-ios
 MENUBAR_DIR   = pocket-radio-menubar
 CONSOLE_DIR   = pocket-radio-console
 WEB_DIR       = pocket-radio-web
 WINDOWS_DIR   = pocket-radio-windows
+ANDROID_DIR   = pocket-radio-android
 MENUBAR_PROJ  = $(MENUBAR_DIR)/PocketRadio.xcodeproj
 MENUBAR_SCHEME = PocketRadio
 ROKU_DIR      = pocket-radio-roku
 ROKU_HOST    ?= 10.99.99.50
 ROKU_STICK_HOST ?= 10.99.99.54
 
-.PHONY: help checkout upstream-remote status run_sim menubar menubar-build menubar-run menubar-kill menubar-log menubar-test run_menubar menubar-release install console console-build console-run console-run_upnext console-run_kcrw console-debug console-debug_upnext console-debug_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run roku-deploy-stick roku-install-stick windows windows-build windows-build-exe windows-vet
+# Android device serials (default: the single connected device)
+ANDROID_TV_SERIAL     ?=
+ANDROID_MOBILE_SERIAL ?=
+
+.PHONY: help checkout upstream-remote hooks hooks-check status run_sim menubar menubar-build menubar-run menubar-kill menubar-log menubar-test run_menubar menubar-release install console console-build console-run console-run_upnext console-run_kcrw console-debug console-debug_upnext console-debug_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run roku-deploy-stick roku-install-stick windows windows-build windows-build-exe windows-vet android android-build android-test android-tv android-mobile android-log android-lint android-clean
 
 .DEFAULT_GOAL := help
 
@@ -26,6 +32,8 @@ help:
 	@echo "  Repo setup"
 	@echo "    checkout         Clone the iOS, menubar, and Roku repos (skips any that are present)"
 	@echo "    upstream-remote  Add the Automattic upstream remote to $(IOS_DIR)"
+	@echo "    hooks            Point this repo + all nested repos at .githooks/"
+	@echo "    hooks-check      Verify every repo resolves to .githooks/pre-commit"
 	@echo ""
 	@echo "  Repo status"
 	@echo "    status           Show branch and sync status for all submodules"
@@ -62,6 +70,16 @@ help:
 	@echo "    windows-build    Build the Windows systray binary (current platform)"
 	@echo "    windows-build-exe  Cross-compile .exe from Mac (requires: brew install mingw-w64)"
 	@echo "    windows-vet      Run go vet"
+	@echo ""
+	@echo "  Android apps (delegates to $(ANDROID_DIR)/Makefile — not yet scaffolded, see docs/android)"
+	@echo "    android          Assemble both app modules (debug)"
+	@echo "    android-build    Assemble both app modules (debug)"
+	@echo "    android-test     Run JVM unit tests across :core:*"
+	@echo "    android-tv       Install + launch on the TV device (ANDROID_TV_SERIAL)"
+	@echo "    android-mobile   Install + launch on the phone device (ANDROID_MOBILE_SERIAL)"
+	@echo "    android-log      adb logcat filtered to the app"
+	@echo "    android-lint     ktlint + android lint"
+	@echo "    android-clean    Gradle clean"
 	@echo ""
 	@echo "  Web app (delegates to $(WEB_DIR)/Makefile — not yet scaffolded, see docs/web)"
 	@echo ""
@@ -111,14 +129,51 @@ checkout:
 		echo "Cloning $(WINDOWS_REPO)..."; \
 		git clone $(WINDOWS_REPO) $(WINDOWS_DIR); \
 	fi
+	@if [ -d "$(ANDROID_DIR)/.git" ]; then \
+		echo "$(ANDROID_DIR) already cloned — skipping"; \
+	else \
+		echo "Cloning $(ANDROID_REPO)..."; \
+		git clone $(ANDROID_REPO) $(ANDROID_DIR) || \
+			echo "$(ANDROID_DIR) not created yet — see docs/android/milestones/milestone_0.md"; \
+	fi
 
 upstream-remote:
 	@cd $(IOS_DIR) && git remote add upstream $(UPSTREAM) 2>/dev/null || \
 		echo "upstream remote already exists"
 
+# ── Git Hooks ────────────────────────────────────────────────
+# Point this repo and every nested repo at .githooks/ (one shared copy).
+# Scoped to PocketRadio only — never set globally. Re-run after `make checkout`.
+
+hooks:
+	@git config core.hooksPath .githooks
+	@echo "$(shell pwd) -> .githooks"
+	@root="$$(pwd)"; \
+	find . -mindepth 2 -maxdepth 4 -name .git -not -path './.git/*' 2>/dev/null | while read -r g; do \
+		repo="$$(dirname "$$g")"; \
+		rel="$$(python3 -c "import os,sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))" "$$root/.githooks" "$$repo")"; \
+		git -C "$$repo" config core.hooksPath "$$rel"; \
+		echo "  $$repo -> $$rel"; \
+	done
+	@echo "Done. Verify with: make hooks-check"
+
+hooks-check:
+	@fail=0; \
+	for repo in . $$(find . -mindepth 2 -maxdepth 4 -name .git -not -path './.git/*' -exec dirname {} \; 2>/dev/null); do \
+		hp="$$(git -C "$$repo" config core.hooksPath 2>/dev/null)"; \
+		resolved="$$(cd "$$repo" && cd "$$hp" 2>/dev/null && pwd -P)/pre-commit"; \
+		if [ -x "$$resolved" ]; then \
+			printf "  ok   %s\n" "$$repo"; \
+		else \
+			printf "  MISS %s (hooksPath=%s)\n" "$$repo" "$$hp"; fail=1; \
+		fi; \
+	done; \
+	[ "$$fail" = 0 ] && echo "All repos wired to .githooks/pre-commit" || \
+		{ echo "Some repos unwired — run: make hooks"; exit 1; }
+
 # ── Repo Status ──────────────────────────────────────────────
 
-SUBMODULES = $(IOS_DIR) $(MENUBAR_DIR) $(ROKU_DIR) $(CONSOLE_DIR) $(WEB_DIR) $(WINDOWS_DIR)
+SUBMODULES = $(IOS_DIR) $(MENUBAR_DIR) $(ROKU_DIR) $(CONSOLE_DIR) $(WEB_DIR) $(WINDOWS_DIR) $(ANDROID_DIR)
 
 status:
 	@for dir in $(SUBMODULES); do \
@@ -136,7 +191,7 @@ status:
 			[ "$$dirty" -gt 0 ] && dirty_str=" [dirty]"; \
 			printf "%-22s %-12s (↓ %s ↑ %s)%s\n" "$$dir" "$$branch" "$$behind" "$$ahead" "$$dirty_str"; \
 		else \
-			echo "%-22s (not a git repo)" "$$dir"; \
+			printf "%-22s (not cloned)\n" "$$dir"; \
 		fi; \
 	done
 
@@ -238,6 +293,33 @@ windows-build-exe:
 
 windows-vet:
 	@$(MAKE) -C $(WINDOWS_DIR) vet
+
+# ── Android Apps ─────────────────────────────────────────────
+# Real targets live in $(ANDROID_DIR)/Makefile; these delegate.
+# Repo not scaffolded yet — see docs/android/milestones/milestone_0.md.
+
+android: android-build
+
+android-build:
+	@$(MAKE) -C $(ANDROID_DIR) build
+
+android-test:
+	@$(MAKE) -C $(ANDROID_DIR) test
+
+android-tv:
+	@$(MAKE) -C $(ANDROID_DIR) tv ANDROID_TV_SERIAL=$(ANDROID_TV_SERIAL)
+
+android-mobile:
+	@$(MAKE) -C $(ANDROID_DIR) mobile ANDROID_MOBILE_SERIAL=$(ANDROID_MOBILE_SERIAL)
+
+android-log:
+	@$(MAKE) -C $(ANDROID_DIR) log
+
+android-lint:
+	@$(MAKE) -C $(ANDROID_DIR) lint
+
+android-clean:
+	@$(MAKE) -C $(ANDROID_DIR) clean
 
 # ── Roku Channel ─────────────────────────────────────────────
 # Real targets live in $(ROKU_DIR)/Makefile; these delegate. Pass ROKU_PASS via env.
