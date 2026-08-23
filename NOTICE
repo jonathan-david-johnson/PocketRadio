@@ -1,12 +1,15 @@
-PocketRadio
-===========
+PocketRadio — NOTICE
+
+Copyright (c) 2026 Jonathan David Johnson
+
 
 Licensing and provenance
 ------------------------
 
-The iOS app (`pocket-radio-ios/`) is a fork of Automattic/pocket-casts-ios and
-remains under the Mozilla Public License 2.0, inherited from upstream. See
-LICENSE.md.
+The iOS app (`pocket-radio-ios/`) is a fork of Pocket Casts iOS
+(https://github.com/Automattic/pocket-casts-ios), copyright Automattic Inc.,
+licensed under the Mozilla Public License 2.0. It remains under MPL 2.0,
+inherited from upstream. See LICENSE.md.
 
 The macOS menubar, console, and Roku apps are original works that share no code
 with upstream Pocket Casts. They are released under MPL 2.0 as well, for
@@ -15,6 +18,8 @@ consistency across the project rather than by obligation.
 MPL 2.0 is file-level copyleft: modifications to MPL-covered files must remain
 under MPL 2.0 and their source made available, but the license does not extend
 to independent files combined with them.
+
+Mozilla Public License 2.0 full text: https://www.mozilla.org/en-US/MPL/2.0/
 
 
 A request about donation links
@@ -29,7 +34,8 @@ each carry a `donateUrl`:
     NPR Hourly News   https://www.npr.org/donations/support
 
 If you fork or redistribute this project, please keep those links working and
-reachable from the UI rather than stripping them out.
+reachable from the user interface rather than stripping them out or pointing
+them somewhere else.
 
 This is a request, not a license condition. MPL 2.0 section 3.2 does not permit
 restricting the rights it grants in covered source code, so this notice adds no
