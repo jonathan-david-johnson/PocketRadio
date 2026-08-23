@@ -10,7 +10,6 @@ Monorepo shell. Each sub-project is its own nested git repo with its own
 | `pocket-radio-console/` | Terminal radio player | Go | `docs/console/` |
 | `pocket-radio-roku/` | Roku channel (PocketStreams) | BrightScript | `docs/roku/` |
 | `pocket-radio-web/` | Browser SPA — *not scaffolded* | TS / React | `docs/web/` |
-| `pocket-radio-windows/` | Windows systray player | Go | — |
 | `pocket-radio-android/` | Android TV + mobile — *not scaffolded* | Kotlin | `docs/android/` |
 | `supabase/` | Shared backend — radio favorites, listen-time sync, `pc-relay` | SQL / Deno | `docs/global/` |
 

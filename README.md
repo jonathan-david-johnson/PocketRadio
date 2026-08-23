@@ -10,12 +10,11 @@ A fork of [Pocket Casts](https://github.com/Automattic/pocket-casts-ios) adding 
 
 | Platform | Status | Language | Code | Docs |
 |----------|--------|----------|------|------|
-| **iOS** | Fully implemented — used daily | Swift | [`pocket-radio-ios/`](pocket-radio-ios/) | [`docs/ios/`](docs/ios/) |
+| **iOS** | Fully implemented — used daily. Supports [remote play](#remote-play) | Swift | [`pocket-radio-ios/`](pocket-radio-ios/) | [`docs/ios/`](docs/ios/) |
 | **Apple CarPlay** | Fully implemented — used daily | Swift | `pocket-radio-ios/podcasts/CarPlay/` | [`docs/ios/`](docs/ios/) |
-| **macOS menubar** | Fully implemented — used daily | Swift / SwiftUI | [`pocket-radio-menubar/`](pocket-radio-menubar/) | [`docs/menubar/`](docs/menubar/) |
+| **macOS menubar** | Fully implemented — used daily. Supports [remote play](#remote-play) | Swift / SwiftUI | [`pocket-radio-menubar/`](pocket-radio-menubar/) | [`docs/menubar/`](docs/menubar/) |
 | **Roku** (PocketStreams) | Implemented, buggy | BrightScript | [`pocket-radio-roku/`](pocket-radio-roku/) | [`docs/roku/`](docs/roku/) |
 | **Console (TUI)** | In progress — playback + radio work, Up Next incomplete | Go | [`pocket-radio-console/`](pocket-radio-console/) | [`docs/console/`](docs/console/) |
-| **Windows** | Early — systray player, minimal | Go | [`pocket-radio-windows/`](pocket-radio-windows/) | — |
 | **Android** | Planned — docs only, no code | Kotlin | — | [`docs/android/`](docs/android/) |
 | **Web** | Planned — repo empty | TS / React | — | [`docs/web/`](docs/web/) |
 
@@ -24,6 +23,33 @@ repo of its own.
 
 Each platform's active task is `docs/<platform>/current_milestone.md` (a symlink
 to the live milestone). Build and run targets for all of them: `make help`.
+
+## Remote Play
+
+Like Spotify Connect: keep listening on one device while controlling it from
+another, even when they're on different networks. Pick up your phone and pause
+what's playing on the Mac, or push a station from the Mac to your phone.
+
+Devices announce themselves on a shared Supabase Realtime channel scoped to your
+Pocket Casts account, then exchange playback commands (`play`, `pause`, `stop`,
+`load_station`) over it. There's no pairing step and nothing to configure —
+anything signed into the same account finds everything else automatically. Wire
+formats live in [`contracts/remote/`](contracts/remote/).
+
+| Platform | Remote play |
+|----------|-------------|
+| iOS | ✅ |
+| macOS menubar | ✅ |
+| Apple CarPlay | ✅ — via the iOS app |
+| Web | Next up |
+| Roku | Planned |
+| Console (TUI) | Planned |
+| Android | Planned |
+
+Currently one-directional: iOS sends commands and the menubar executes them.
+Bidirectional control, a Spotify-style device picker, and "Playing on {device}"
+indicators in both players are in progress — see
+[`docs/global/current_milestone.md`](docs/global/current_milestone.md).
 
 ## Curated Stations
 

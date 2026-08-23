@@ -2,14 +2,12 @@ FORK_REPO     = git@github.com:jonathan-david-johnson/pocket-radio-ios.git
 MENUBAR_REPO  = git@github.com:jonathan-david-johnson/pocket-radio-menubar.git
 ROKU_REPO     = git@github.com:jonathan-david-johnson/pocket-radio-roku.git
 WEB_REPO      = git@github.com:jonathan-david-johnson/pocket-radio-web.git
-WINDOWS_REPO  = git@github.com:jonathan-david-johnson/pocket-radio-windows.git
 ANDROID_REPO  = git@github.com:jonathan-david-johnson/pocket-radio-android.git
 UPSTREAM      = git@github.com:Automattic/pocket-casts-ios.git
 IOS_DIR       = pocket-radio-ios
 MENUBAR_DIR   = pocket-radio-menubar
 CONSOLE_DIR   = pocket-radio-console
 WEB_DIR       = pocket-radio-web
-WINDOWS_DIR   = pocket-radio-windows
 ANDROID_DIR   = pocket-radio-android
 MENUBAR_PROJ  = $(MENUBAR_DIR)/PocketRadio.xcodeproj
 MENUBAR_SCHEME = PocketRadio
@@ -21,7 +19,7 @@ ROKU_STICK_HOST ?= 10.99.99.54
 ANDROID_TV_SERIAL     ?=
 ANDROID_MOBILE_SERIAL ?=
 
-.PHONY: help checkout upstream-remote hooks hooks-check status run_sim menubar menubar-build menubar-run menubar-kill menubar-log menubar-test run_menubar menubar-release install console console-build console-run console-run_upnext console-run_kcrw console-debug console-debug_upnext console-debug_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run roku-deploy-stick roku-install-stick windows windows-build windows-build-exe windows-vet android android-build android-test android-tv android-mobile android-log android-lint android-clean
+.PHONY: help checkout upstream-remote hooks hooks-check status run_sim menubar menubar-build menubar-run menubar-kill menubar-log menubar-test run_menubar menubar-release install console console-build console-run console-run_upnext console-run_kcrw console-debug console-debug_upnext console-debug_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run roku-deploy-stick roku-install-stick android android-build android-test android-tv android-mobile android-log android-lint android-clean
 
 .DEFAULT_GOAL := help
 
@@ -64,12 +62,6 @@ help:
 	@echo "  Menubar app (install)"
 	@echo "    menubar-release  Build Release (ad-hoc signed)"
 	@echo "    install          Build Release and copy into /Applications"
-	@echo ""
-	@echo "  Windows app (delegates to $(WINDOWS_DIR)/Makefile)"
-	@echo "    windows          Build the Windows systray binary (current platform)"
-	@echo "    windows-build    Build the Windows systray binary (current platform)"
-	@echo "    windows-build-exe  Cross-compile .exe from Mac (requires: brew install mingw-w64)"
-	@echo "    windows-vet      Run go vet"
 	@echo ""
 	@echo "  Android apps (delegates to $(ANDROID_DIR)/Makefile — not yet scaffolded, see docs/android)"
 	@echo "    android          Assemble both app modules (debug)"
@@ -123,12 +115,6 @@ checkout:
 		echo "Cloning $(WEB_REPO)..."; \
 		git clone $(WEB_REPO) $(WEB_DIR); \
 	fi
-	@if [ -d "$(WINDOWS_DIR)/.git" ]; then \
-		echo "$(WINDOWS_DIR) already cloned — skipping"; \
-	else \
-		echo "Cloning $(WINDOWS_REPO)..."; \
-		git clone $(WINDOWS_REPO) $(WINDOWS_DIR); \
-	fi
 	@if [ -d "$(ANDROID_DIR)/.git" ]; then \
 		echo "$(ANDROID_DIR) already cloned — skipping"; \
 	else \
@@ -173,7 +159,7 @@ hooks-check:
 
 # ── Repo Status ──────────────────────────────────────────────
 
-SUBMODULES = $(IOS_DIR) $(MENUBAR_DIR) $(ROKU_DIR) $(CONSOLE_DIR) $(WEB_DIR) $(WINDOWS_DIR) $(ANDROID_DIR)
+SUBMODULES = $(IOS_DIR) $(MENUBAR_DIR) $(ROKU_DIR) $(CONSOLE_DIR) $(WEB_DIR) $(ANDROID_DIR)
 
 status:
 	@for dir in $(SUBMODULES); do \
@@ -279,20 +265,6 @@ install: menubar-kill menubar-release
 	echo "Installed. Next steps:" ; \
 	echo "  open /Applications/PocketRadio.app   # first launch (Gatekeeper may prompt)" ; \
 	echo "  Then: System Settings -> General -> Login Items -> Open at Login -> + PocketRadio"
-
-# ── Windows App ──────────────────────────────────────────────
-# Real targets live in $(WINDOWS_DIR)/Makefile; these delegate.
-
-windows: windows-build
-
-windows-build:
-	@$(MAKE) -C $(WINDOWS_DIR) build
-
-windows-build-exe:
-	@$(MAKE) -C $(WINDOWS_DIR) build-windows
-
-windows-vet:
-	@$(MAKE) -C $(WINDOWS_DIR) vet
 
 # ── Android Apps ─────────────────────────────────────────────
 # Real targets live in $(ANDROID_DIR)/Makefile; these delegate.
