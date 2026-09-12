@@ -10,6 +10,56 @@ favorites). Listen-time is out of scope for M1.
 Pocket Casts account, sees curated stations, can favorite/unfavorite, and
 favorites sync to `radio_favorites` (visible in iOS app too).
 
+## Spikes 0 + 1 — resolved 2026-08-23
+
+Resolved via a captured HAR of `pocketcasts.com`'s own web player (browser
+already logged in, refresh-token flow observed) plus a read of the iOS
+`PocketCastsServer` module. Findings:
+
+- **Spike 0 (PC token → `user_uuid`): confirmed, endpoint exists.**
+  `POST https://api.pocketcasts.com/user/token`, body
+  `{"grantType":"refresh_token","refreshToken":"<jwt>"}`. Response includes a
+  stable `uuid` field (matched the `_ui=` param on every analytics beacon in
+  the same capture) — same identity iOS reads as `ServerSettings.userId`.
+  Both refresh and access tokens are JWTs carrying a `pc:uuid` claim in the
+  payload, so `user_uuid` is derivable client-side from a decoded token
+  without an extra round trip. Initial credential login is
+  `POST /user/login` (same host — confirmed via iOS `TokenHelper.swift:154`,
+  not independently captured in the HAR since the browser session was
+  already authenticated).
+- **Spike 1 (CORS): confirmed, and it forecloses "direct fetch."**
+  `api.pocketcasts.com` responds with
+  `Access-Control-Allow-Origin: https://pocketcasts.com` (exact-match
+  allowlist, not a wildcard or reflected origin) +
+  `Access-Control-Allow-Credentials: true`. A Vercel-hosted origin will not
+  be on that allowlist. **"Direct browser fetch to PC login endpoint" is no
+  longer a live option for M1** — drop it from the design space rather than
+  spiking it further. The Edge Function proxy is required for login
+  transport, not only for the Supabase write path.
+- **Wire format: iOS and web hit identical paths on the same host with
+  different bodies.** iOS sends `application/octet-stream` +
+  serialized protobuf (`Api_UserLoginRequest`, `Api_UserTokenLogin`, per
+  `Modules/Sources/PocketCastsServer/Private/Protobuffer/api.pb.swift` in
+  `pocket-radio-ios`). The captured web traffic sends
+  `application/json` to `user/token`, `user/podcast/list`, ... and gets
+  JSON back — `api.pocketcasts.com` already speaks JSON natively for the
+  web client on the paths actually observed. `user/login` was **not** in
+  the capture (see Spike 0 above); JSON support there is inferred from
+  parity with `/user/token`, not confirmed. **The Edge Function does
+  not need `pc-relay`'s protobuf↔JSON translation** (`supabase/functions/pc-relay/protobuf.ts`)
+  for the confirmed paths; treat `/user/login` as unconfirmed until the
+  first real call. It's a plain JSON reverse-proxy that adds session-token
+  issuance and sets `x-user-uuid` server-side — materially simpler than
+  `pc-relay`.
+- **Not yet resolved:** how subsequent authenticated calls attach the access
+  token (Authorization header presumed — `tokenType: "Bearer"` in the
+  `/user/token` response — but the captured HAR had Authorization/Cookie
+  headers stripped by Chrome's HAR export privacy redaction on every
+  endpoint after `/user/token`). Re-capture with "include sensitive data"
+  checked before writing the Edge Function's forwarding logic, or just
+  assume standard `Authorization: Bearer <accessToken>` and confirm on
+  first real call.
+
 ## Security model (non-negotiable)
 
 Current Supabase RLS is **header-trust, not auth**: policies match
@@ -35,14 +85,12 @@ For web, therefore:
 
 - Repo init: `pocket-radio-web` (own git repo), Vite + React, deployed to
   Vercel (preview deploys per PR).
-- **Spike 0 — PC token → `user_uuid` (do first, biggest risk):** confirm a
-  PC API endpoint takes a login token and returns a stable `user_uuid`
-  (the value iOS reads as `ServerSettings.userId`). Web has no PC SDK, so
-  this mapping must be proven to exist and be reachable. If it doesn't
-  exist, M1 is blocked — escalate before building.
-- **Spike 1 — CORS:** call PC login API from the browser. Determines login
-  *transport* (direct fetch vs. Edge Function proxy) only. Does **not**
-  affect the security model — Supabase access is always proxied.
+- ~~Spike 0 — PC token → `user_uuid`~~ and ~~Spike 1 — CORS~~: **resolved,
+  see "Spikes 0 + 1 — resolved" above.** `POST /user/token` confirmed
+  reachable and JSON-speaking; `POST /user/login` inferred from parity,
+  unconfirmed until first real call; direct browser fetch is CORS-blocked
+  for a non-`pocketcasts.com` origin, so login goes through the Edge
+  Function too.
 - Auth: PC account login only (no separate Supabase Auth). Edge Function
   validates the PC token, derives `user_uuid`, issues a short-lived session
   token, and is the sole setter of `x-user-uuid` on Supabase calls.
@@ -65,10 +113,17 @@ For web, therefore:
 
 ## Behaviors to test (red → green, one at a time)
 
-0. PC token → `user_uuid`: login token resolves to a stable `user_uuid`
-   matching iOS `ServerSettings.userId` (spike 0; blocks everything below).
-1. CORS spike: direct browser fetch to PC login endpoint — succeeds or fails
-   with CORS (determines login transport only, not the proxy's existence).
+0. PC token → `user_uuid`: `POST /user/token` (refresh-token grant) resolves
+   to a stable `user_uuid`, matching iOS `ServerSettings.userId` — confirmed
+   via HAR capture (see "Spikes 0 + 1 — resolved"); write a regression test
+   against the real endpoint from the Edge Function, not a fresh spike.
+1. Edge Function ↔ PC JSON round trip: Edge Function forwards `/user/token`
+   as JSON and gets JSON back — no protobuf translation needed (confirmed).
+   Assert the same for `/user/login` — this is the test that confirms the
+   inferred-from-parity claim above, not a given. Confirm the Authorization
+   scheme for subsequent authenticated calls (presumed `Bearer
+   <accessToken>`, unconfirmed — see "Not yet resolved" above) on first
+   real call.
 2. PC login form → authenticated session via Edge Function; short-lived
    session token (httpOnly) survives reload; raw PC token not in JS storage.
 3. Curated stations list renders from the chosen source of truth (Supabase
