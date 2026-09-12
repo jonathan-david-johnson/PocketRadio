@@ -17,12 +17,12 @@ This is the slice the user actually sees; everything before it was scaffolding.
 
 ### 1. The tab exists
 
-- [ ] New file `podcasts/CarPlay/CarPlaySceneDelegate+Radio.swift`, mirroring the
+- [x] New file `podcasts/CarPlay/CarPlaySceneDelegate+Radio.swift`, mirroring the
       shape of `CarPlaySceneDelegate+Tabs.swift`.
-- [ ] `createRadioTab() -> CPListTemplate` built with
+- [x] `createRadioTab() -> CPListTemplate` built with
       `CarPlayListData.template(title:emptyTitle:image:)` so it inherits the
       existing `didAppear` / `needsUpdate` reload plumbing.
-- [ ] Registered in `CarPlaySceneDelegate.swift:21`:
+- [x] Registered in `CarPlaySceneDelegate.swift:21`:
       ```swift
       CPTabBarTemplate(templates: [
           createPodcastsTab(), createFiltersTab(),
@@ -31,9 +31,9 @@ This is the slice the user actually sees; everything before it was scaffolding.
       ```
       Radio goes **before** More — More is the catch-all and belongs last. This is
       exactly 5 templates, CarPlay's hard cap. Adding a 6th silently truncates.
-- [ ] Tab image: SF Symbol `dot.radiowaves.left.and.right` via
+- [x] Tab image: SF Symbol `dot.radiowaves.left.and.right` via
       `UIImage(systemName:)` (D12).
-- [ ] `emptyTitle:` = `L10n.carplayRadioEmpty`. In practice unreachable — the
+- [x] `emptyTitle:` = `L10n.carplayRadioEmpty`. In practice unreachable — the
       curated section always renders — but `CarPlayListData` requires it.
 
 ### 2. Data source: sync paint, async refresh (D5, D11)
@@ -51,35 +51,35 @@ var radioTabSections: [CPListSection] {
 }
 ```
 
-- [ ] The data-source closure is **fully synchronous** — cache read + bundle JSON
+- [x] The data-source closure is **fully synchronous** — cache read + bundle JSON
       only. It must never await.
-- [ ] The same closure kicks `Task { await RadioFavoritesService.resolvedFavorites() }`.
+- [x] The same closure kicks `Task { await RadioFavoritesService.resolvedFavorites() }`.
       The service writes the cache and posts `.radioFavoritesChanged`; the observer
       added below reloads the template. **No bespoke completion callback** — the
       notification already needed for cross-surface updates does the job.
-- [ ] Refresh on every `didAppear`, no throttle (D11). The service's in-flight guard
+- [x] Refresh on every `didAppear`, no throttle (D11). The service's in-flight guard
       (M11.4) prevents stacking.
 
 ### 3. Adapter: `RadioCarPlaySection` → `CPListSection`
 
-- [ ] `convertToListSection(_:) -> CPListSection` in
+- [x] `convertToListSection(_:) -> CPListSection` in
       `CarPlaySceneDelegate+Radio.swift`. This is the **only** CarPlay-aware code in
       the feature — keep it mechanical.
-- [ ] `CPListItem(text: row.title, detailText: row.detail, image: artwork)`
-- [ ] `item.isPlaying = row.isPlaying`, `item.playingIndicatorLocation = .trailing`
-- [ ] **Do not set `playbackProgress`.** Live streams have no progress; the existing
+- [x] `CPListItem(text: row.title, detailText: row.detail, image: artwork)`
+- [x] `item.isPlaying = row.isPlaying`, `item.playingIndicatorLocation = .trailing`
+- [x] **Do not set `playbackProgress`.** Live streams have no progress; the existing
       `else` branch at `CarPlaySceneDelegate+Convert.swift:29` would render a
       misleading half-full bar for `duration == 0`.
-- [ ] **Do not set `accessoryType = .cloud`.** That means "not downloaded" and is
+- [x] **Do not set `accessoryType = .cloud`.** That means "not downloaded" and is
       meaningless for a stream.
-- [ ] `CPListSection(items:header:sectionIndexTitle:)` using `section.header`.
-- [ ] Artwork this milestone: `row.logoAsset.flatMap(UIImage.init(named:))`, falling
+- [x] `CPListSection(items:header:sectionIndexTitle:)` using `section.header`.
+- [x] Artwork this milestone: `row.logoAsset.flatMap(UIImage.init(named:))`, falling
       back to SF Symbol `dot.radiowaves.left.and.right`. Favicons land in M11.7 —
       **not** `noartwork-list-dark`, which is podcast-shaped and misleading.
 
 ### 4. Tap handler
 
-- [ ] `stationTapped(_ row: RadioCarPlayRow)`:
+- [x] `stationTapped(_ row: RadioCarPlayRow)`:
       ```swift
       AnalyticsPlaybackHelper.shared.currentSource = .carPlay
       defer { interfaceController?.showNowPlaying() }
@@ -91,17 +91,17 @@ var radioTabSections: [CPListSection] {
           RadioPlaybackStarter.shared.play(station: row.toRadioStation(), source: .carPlay)
       }
       ```
-- [ ] The empty-`streamUrl` branch is **required**: `CuratedStation` carries
+- [x] The empty-`streamUrl` branch is **required**: `CuratedStation` carries
       `defaultSeedUUID` / `radioBrowserUUIDs`, not a stream URL. The async overload
       resolves it (registry first, then `RadioBrowserAPI`).
-- [ ] `showNowPlaying()` fires in both branches via `defer`, matching
+- [x] `showNowPlaying()` fires in both branches via `defer`, matching
       `episodeTapped`'s pattern (`CarPlaySceneDelegate+Interaction.swift:43`).
-- [ ] Tapping the already-playing station must **not** rebuffer — `RadioPlaybackStarter`
+- [x] Tapping the already-playing station must **not** rebuffer — `RadioPlaybackStarter`
       already handles this by toggling pause instead of reloading. Do not add a
       second guard here.
-- [ ] Do **not** call `AutoplayHelper.shared.playedFrom(playlist:)` — meaningless for
+- [x] Do **not** call `AutoplayHelper.shared.playedFrom(playlist:)` — meaningless for
       a live stream.
-- [ ] Do **not** route through `episodeTapped`. `RadioStation` conforms to
+- [x] Do **not** route through `episodeTapped`. `RadioStation` conforms to
       `BaseEpisode` so it would compile, but it skips
       `RadioStationRegistry.register` and yields a dead-stub queue entry.
 
@@ -109,10 +109,10 @@ var radioTabSections: [CPListSection] {
 
 In `CarPlaySceneDelegate.addChangeListeners()` (`CarPlaySceneDelegate.swift:46`):
 
-- [ ] Add `.radioFavoritesChanged` to the data-updated list
-- [ ] Add `Constants.Notifications.playbackMuteChanged` to the playback list (so
+- [x] Add `.radioFavoritesChanged` to the data-updated list
+- [x] Add `Constants.Notifications.playbackMuteChanged` to the playback list (so
       M11.1's mute icon flips when muted from the phone or lock screen)
-- [ ] `playbackTrackChanged` / `playbackStarted` are **already** subscribed, and
+- [x] `playbackTrackChanged` / `playbackStarted` are **already** subscribed, and
       `handlePlaybackStateChanged` already calls both `updateNowPlayingButtons` and
       `handleDataUpdated` — so row `isPlaying` and the M11.1 radio button set both
       update for free. Add nothing for those.
@@ -121,9 +121,9 @@ The existing 0.2s `Debounce` absorbs notification bursts.
 
 ### 6. Analytics
 
-- [ ] `AnalyticsPlaybackHelper.shared.currentSource = .carPlay` before starting
+- [x] `AnalyticsPlaybackHelper.shared.currentSource = .carPlay` before starting
       playback (the `.carPlay` source already exists — used by `episodeTapped`).
-- [ ] No new analytics events. If station-tap tracking is wanted later, it belongs
+- [x] No new analytics events. If station-tap tracking is wanted later, it belongs
       with the widget's `.pocketRadioWidgetInteraction` family, not here.
 
 ### 7. Tests
@@ -133,10 +133,10 @@ New file `PocketCastsTests/Tests/CarPlay/RadioCarPlayAdapterTests.swift`.
 The adapter touches `CPListItem`, which is constructible in a simulator-hosted test
 but barely readable. Keep assertions to what is genuinely observable:
 
-- [ ] `testSectionCountMatchesModel` — N model sections → N `CPListSection`s
-- [ ] `testItemCountMatchesRows` — per-section `items.count`
-- [ ] `testSectionHeaderCarriedThrough` — `CPListSection.header`
-- [ ] `testCuratedRowRoutesToAsyncResolve` — a pure helper
+- [x] `testSectionCountMatchesModel` — N model sections → N `CPListSection`s
+- [x] `testItemCountMatchesRows` — per-section `items.count`
+- [x] `testSectionHeaderCarriedThrough` — `CPListSection.header`
+- [x] `testCuratedRowRoutesToAsyncResolve` — a pure helper
       `RadioCarPlayRouting.needsResolution(streamUrl:) -> Bool` returns `true` for
       `""`, `false` otherwise. Extract this rather than asserting on a write-only
       `handler`.
