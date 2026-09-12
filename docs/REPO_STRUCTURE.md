@@ -57,10 +57,21 @@ clones it, skips if absent).
 - `docs/bugs/bug_N.md` — bugs spanning platforms, or in shared backend
   (Supabase, sync API). Anything one platform team can't fix alone.
 - `docs/<platform>/bugs/bug_N.md` — platform-local bugs.
-- Bug doc format (see `docs/console/bugs/bug_1.md` for a worked example):
-  - Title + **Status:** (Open / Fixed YYYY-MM-DD)
+- Bug doc format (see `docs/console/bugs/bug_1.md` for a worked fixed bug,
+  `docs/ios/bugs/bug_1.md` for a worked open one):
+  - Title + **Status:** (Open / Fixed YYYY-MM-DD / Suggestion)
   - One `## Symptom <X>` section per distinct observed issue
-  - `### Root cause`, `### Fix applied (date)`, `### Files changed`
+  - `### Root cause`, then either `### Fix applied (date)` + `### Files
+    changed` once fixed, or `### Proposed fix` + `## Files involved` while
+    still open. An open bug keeps the same skeleton; only those two headings
+    change, so a fix is a rename rather than a rewrite.
+  - An open bug should carry its **evidence** — the commands or queries that
+    establish the diagnosis — so the next reader does not repeat them. Say
+    plainly what was predicted but not yet confirmed.
+  - **Status: Suggestion** is for a latent design weakness worth exploring
+    rather than an observed failure. Same skeleton, with `## Suggestion` in
+    place of `## Symptom` and an explicit "what would have to be true for this
+    to be worth doing" section.
   - Multi-symptom bugs get lettered symptoms (A, B, ...) under one doc if
     they were diagnosed/fixed together.
 
