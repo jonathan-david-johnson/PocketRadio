@@ -1,6 +1,35 @@
 # iOS M12.3 — Supabase layout sync and live playlist reconciliation
 
-**Status**: COMPLETED (2026-09-11)
+**Status**: COMPLETE — manual sign-off received 2026-09-17; committed and merged to `trunk`.
+
+## Post-handoff amendment — Up Next required
+
+User approved Up Next as core: always visible or under More, never deletable.
+Default is Podcasts, Playlists, Discover, Streams, More; Profile and Up Next
+live in More. Existing saved layouts/timestamps are untouched. Add Tab now
+lists only optional playlists. Up Next deep links use the regular core resolver;
+the Playlists segmented shortcut remains available.
+
+Validation on a separate, signed-out `PocketRadio Tab Tests` simulator (iOS 26.5)
+to avoid the known tests wiping the user's simulator preferences:
+- `make build_staging`: passed.
+- Full `.xcresult`: 842 total, 841 passed, 1 expected failure, 0 failed.
+- Result: `Test-Pocket Casts Staging-2026.09.12_16-25-32--0400.xcresult`.
+- `make format` run; unrelated formatter-only changes reverted.
+
+**Manual sign-off (2026-09-17).** The user reported all owed checks passing:
+promote/demote Up Next, Up Next cannot be deleted, opening it from More,
+save/relaunch persistence, the mini player surviving a rebuild, and playlist
+rename/delete refreshing More. This covers the amendment and all eleven
+post-merge files. `make build_staging` re-run against the signed-off tree
+immediately before commit: **BUILD SUCCEEDED**.
+
+Historical manual-verification statements below predate this sign-off and
+describe narrower passes; read them as the record of what was checked *when*,
+not as the current status. Sync concurrency, account-switch handling, and test
+dependency isolation remain separate follow-up, as do `bug_1` and `bug_2`.
+
+---
 **Depends on**: M12.2
 **Required by**: none
 **Design**: `docs/ios/architecture/configurable-tab-bar.md` §4, §6;

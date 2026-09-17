@@ -1,6 +1,13 @@
 # Configurable tab bar (M12)
 
-Status: **designed, not implemented**. Agreed in grill session 2026-09-04.
+Status: **implemented through M12.3**. Original design agreed 2026-09-04.
+
+**2026-09-12 amendment:** Up Next is now required/core, not extra. Default bar
+is Podcasts | Playlists | Discover | Streams | More; More holds Profile and
+Up Next. Existing saved slots are unchanged. Up Next navigation uses its own tab
+or More, not a fallback to the Playlists segment. These rules supersede the
+original five-tab/no-Overflow examples below. See
+[ADR 0001](../adr/0001-core-vs-extra-destinations-and-derived-overflow.md).
 
 The bottom tab bar is hard-coded at `MainTabBarController.swift:86`:
 
@@ -23,8 +30,8 @@ Terms below are canonical. Use them in code, milestones, and commits.
 | Term | Meaning |
 |------|---------|
 | **Destination** | A place the app can navigate to that is *capable* of rooting a tab. Has a stable id, a title, an icon, and a `makeRootViewController()` factory. |
-| **Core destination** | A Destination for which the tab bar is the **only** entry point: Podcasts, Playlists, Discover, Streams, Profile. Must always be reachable. |
-| **Extra destination** | A Destination that has another home in the app, so it need not be reachable from the bar: Up Next (a segment of the Playlists host), and any specific playlist (a row in the Playlists list). |
+| **Core destination** | Required in the bar or More: Podcasts, Playlists, Discover, Streams, Profile, Up Next. Cannot be deleted from the layout editor. |
+| **Extra destination** | Optional shortcut to a specific playlist. Can be removed from the layout entirely. |
 | **Slot** | One entry in the user's layout. A Destination reference plus optional payload — e.g. `playlist:<uuid>`. Slots are ordered. |
 | **Layout** | The user's ordered list of Slots. The single persisted, synced artifact. |
 | **Promoted** | A Destination that has a Slot in the Layout. |
