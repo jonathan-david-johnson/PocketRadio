@@ -78,6 +78,7 @@ pocket-radio-menubar/
 | [M7](./milestones/milestone_7_lyrics.md) | Synced radio lyrics | Follow the current lyric line for supported stations |
 | [M8](./milestones/milestone_8.md) | Headphone and media-key control | Control playback from hardware buttons and macOS Now Playing |
 | [M9](./milestones/milestone_9.md) | Lyric sync tuning and lookup fixes | Adjust station sync and see sensible between-track state |
+| [M10](./milestones/milestone_10.md) | Stream Lab capture and replay *(in progress)* | Mark an audible change and replay the trace offline |
 
 ## Build & Run
 
