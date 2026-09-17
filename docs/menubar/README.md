@@ -70,6 +70,14 @@ pocket-radio-menubar/
 | [M3](./milestones/milestone_3.md) | Up-next podcast in menubar | See top podcast → click play → hear it |
 | [M4](./milestones/milestone_4.md) | Radio favorites from Supabase | See favorites → play a station |
 | [M5](./milestones/milestone_5.md) | Now-playing metadata + polish | Track title scrolls, artwork shows, controls work |
+| [M6.1](./milestones/milestone_6.1.md) | Source pills and playback controls | Switch among podcast and stream sources and use the appropriate controls |
+| [M6.2](./milestones/milestone_6.2.md) | Full Up Next list *(planned)* | Browse the queue and start another episode |
+| [M6.2.5](./milestones/milestone_6.2.5.md) | Dark theme and remaining-time display | See per-episode and total remaining time in the styled queue |
+| [M6.3](./milestones/milestone_6.3.md) | Enhanced-stream tracklists *(planned)* | See KCRW/KEXP track history while that stream plays |
+| [M6.4](./milestones/milestone_6.4.md) | Browse, search, and favorites *(planned)* | Find, save, and play a station from the menubar |
+| [M7](./milestones/milestone_7_lyrics.md) | Synced radio lyrics | Follow the current lyric line for supported stations |
+| [M8](./milestones/milestone_8.md) | Headphone and media-key control | Control playback from hardware buttons and macOS Now Playing |
+| [M9](./milestones/milestone_9.md) | Lyric sync tuning and lookup fixes | Adjust station sync and see sensible between-track state |
 
 ## Build & Run
 

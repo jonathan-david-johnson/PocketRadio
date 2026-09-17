@@ -34,7 +34,7 @@ help:
 	@echo "    hooks-check      Verify every repo resolves to .githooks/pre-commit"
 	@echo ""
 	@echo "  Repo status"
-	@echo "    status           Show branch and sync status for all submodules"
+	@echo "    status           Show branch and sync status for root and nested repos"
 	@echo "  iOS app (delegates to $(IOS_DIR)/Makefile)"
 	@echo "    run_sim          Build, install, and launch on the simulator"
 	@echo ""
@@ -160,11 +160,15 @@ hooks-check:
 # ── Repo Status ──────────────────────────────────────────────
 
 SUBMODULES = $(IOS_DIR) $(MENUBAR_DIR) $(ROKU_DIR) $(CONSOLE_DIR) $(WEB_DIR) $(ANDROID_DIR)
+STATUS_REPOS = . $(SUBMODULES)
 
 status:
-	@for dir in $(SUBMODULES); do \
+	@for dir in $(STATUS_REPOS); do \
+		label="$$dir"; \
+		[ "$$dir" = "." ] && label="PocketRadio (root)"; \
 		if [ -d "$$dir/.git" ]; then \
-			branch=$$(git -C "$$dir" branch --show-current 2>/dev/null || echo "(detached)"); \
+			branch=$$(git -C "$$dir" branch --show-current 2>/dev/null); \
+			[ -z "$$branch" ] && branch="(detached)"; \
 			if git -C "$$dir" rev-parse '@{u}' >/dev/null 2>&1; then \
 				counts=$$(git -C "$$dir" rev-list --left-right --count '@{u}...HEAD' 2>/dev/null); \
 				behind=$$(echo "$$counts" | cut -f1); \
@@ -175,9 +179,9 @@ status:
 			dirty=$$(git -C "$$dir" status --porcelain 2>/dev/null | wc -l); \
 			dirty_str=""; \
 			[ "$$dirty" -gt 0 ] && dirty_str=" [dirty]"; \
-			printf "%-22s %-12s (↓ %s ↑ %s)%s\n" "$$dir" "$$branch" "$$behind" "$$ahead" "$$dirty_str"; \
+			printf "%-22s %-12s (↓ %s ↑ %s)%s\n" "$$label" "$$branch" "$$behind" "$$ahead" "$$dirty_str"; \
 		else \
-			printf "%-22s (not cloned)\n" "$$dir"; \
+			printf "%-22s (not cloned)\n" "$$label"; \
 		fi; \
 	done
 
