@@ -34,6 +34,13 @@ Monorepo shell. Each sub-project is its own nested git repo with its own
   keep a secret must not set it themselves — see `docs/web/README.md` § Auth
   model for why web proxies this and iOS doesn't.
 
+## Task routing
+
+| If you need to… | Read or use… | Evidence boundary |
+|---|---|---|
+| Inspect raw ICY headers/metadata blocks, check whether a station feed is stale, or compare upstream ICY and feed titles | `tools/stream-probe.py` (`python3 tools/stream-probe.py --help`); background in `docs/menubar/ACR_track_fingerprinting.md` | Opens its own HTTP stream connection and discards audio. It diagnoses upstream transport/feed behavior, not what AVPlayer or the listener received. |
+| Measure metadata, media time, buffering, feed observations, and human markers on the macOS AVPlayer path, then replay them offline | `pocket-radio-menubar/Tools/StreamLab/README.md` and `docs/menubar/current_milestone.md` | Uses the application playback framework. A parallel connection from another tool is not the same audio timeline. |
+
 ## Pointers
 
 - Build/test/run targets — `make help` (top level delegates; real logic lives
