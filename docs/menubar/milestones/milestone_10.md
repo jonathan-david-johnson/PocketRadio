@@ -31,10 +31,10 @@ Avoid a long-lived cross-platform integration branch. Share a versioned trace co
 
 ## Behaviors to test (red -> green, one at a time)
 
-1. Trace write/read/replay produces identical observation snapshots; captures require a start, ordered sequence/time, and an explicit end. Corrupt or incomplete traces fail clearly.
+1. Trace write/read/replay produces identical observation snapshots; captures require a start, ordered sequence/elapsed time, and an explicit end. Persisted UTC dates use millisecond resolution; corrupt or incomplete traces fail clearly.
 2. File recording is bounded, refuses overwrite, and strips URL credentials/query/fragment. Limits or write failures cannot silently look like complete captures.
 3. KCRW/KEXP parsers preserve music/break observations, source time, and KEXP play IDs. Feed observations do not overwrite the separate player metadata candidate.
-4. Replays reject events for another session, backward sequence/time, unsupported schema, and events after stop. Multiple metadata items and their media ranges remain observable.
+4. Replays reject events for another session, backward sequence/elapsed time, unsupported schema, and events after stop. Wall-clock corrections may move backward; multiple metadata items and their media ranges remain observable.
 5. A local synthetic audio capture yields player state samples and a complete replayable trace without using an account or contacting a real feed. Verify the live recorder manually on KCRW/KEXP before merge.
 
 ## Out of scope
