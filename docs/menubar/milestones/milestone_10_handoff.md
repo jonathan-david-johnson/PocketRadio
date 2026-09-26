@@ -2,7 +2,7 @@
 
 **Updated:** 2026-09-25  
 **Branch:** menubar `feature/stream-monitoring-lab` at `a995f06`, Stream Lab package still untracked  
-**Status:** Phases 1–3 are complete. Four unattended KCRW captures have run, yielding five findings; the headline is that KCRW feed publish lag is variable and cannot be corrected with a fixed offset. Phase 4 still needs an attended session with human markers; nothing yet ties any observation to audible reality.
+**Status:** Phases 1–3 are complete. Four unattended KCRW captures have run, yielding six findings (Finding 5 is withdrawn; see Finding 6). The headline is that KCRW's feed sits behind a ~60s cache and delivers no player metadata, so client-visible title timing is bounded by that cache. Phase 4 still needs an attended session with human markers; nothing yet ties any observation to audible reality.
 
 This file tracks execution of [M10](milestone_10.md) without changing the milestone's scope after work began. The design and evidence model remain in the [stream-monitoring review](../../ios/architecture/reviews/stream-monitoring-review-2026-09-16.md).
 
@@ -133,7 +133,7 @@ produced exactly one metadata group with an empty `values` array; this one produ
 So KCRW player metadata is not merely empty but inconsistent between sessions. Any design that
 waits on an AVPlayer metadata callback for KCRW can wait forever. This strengthens Finding 1.
 
-**Finding 4 — the KCRW tracklist feed publishes well after an entry's own stated airtime.** *(Refined by Finding 5 below: the lag is variable, not a fixed 29–60s.)*
+**Finding 4 — the KCRW tracklist feed publishes after an entry's own stated airtime.** *(The 29–60s bracket below is uncorrected for cache age; Finding 6 supersedes it with an upper bound only.)*
 One transition was observed with a 30s poll interval:
 
 | Evidence | Wall time relative to the new entry's stated airtime |
@@ -164,7 +164,10 @@ measures the offset between broadcast and what a listener hears.
 - One metadata event, again with an empty `values` array. Across four KCRW sessions the count
   has been 1, 0, 1, 1 and the array has been empty every time. Findings 1 and 3 hold.
 
-**Finding 5 — publish lag is variable, not a fixed offset. This supersedes Finding 4.**
+**Finding 5 — WITHDRAWN. Read Finding 6 instead.** *This claimed publish lag was variable and*
+*that a fixed-offset policy was ruled out. Both conclusions were wrong: they came from treating*
+*stale cached responses as current observations. The table below is kept because the raw receipt*
+*times are real; the inference drawn from them was not.*
 Tightening the poll interval to 10s produced three more brackets, and they do not agree:
 
 | Transition | Poll interval | Published, relative to claimed airtime |
@@ -174,22 +177,47 @@ Tightening the poll interval to 10s produced three more brackets, and they do no
 | Every Single Weekend | 10s | +33.2s to +43.5s |
 | Don't You Want Me (with Cat Power) | 10s | +29.2s to +39.4s |
 
-The intersection of all four brackets is empty, so no single lag value explains them. Three
-pairs are provably disjoint: "Breathless" published no later than +17.7s, while the other
-three published no earlier than +29.2s. The lag genuinely differs between transitions, across
-an observed range of roughly 7s to 60s.
+~~The intersection of all four brackets is empty, so no single lag value explains them.~~ This
+reasoning assumed each poll's response described the feed at the moment it was received. It did
+not: the responses were cached and often stale. See Finding 6.
 
-**Consequence for the alignment policy.** KCRW offers no player metadata at all, so the feed is
-the only title source; and the feed's publish lag cannot be corrected with a constant offset,
-because it is not constant. A fixed-offset correction was the obvious cheap policy and these
-four transitions rule it out. Any KCRW alignment either tolerates tens of seconds of error,
-or needs a signal other than feed arrival.
+**Finding 6 — the feed is cached with a ~60s refresh, which explains the apparent variability.**
 
-**What this still does not establish.** Four transitions from one stream variant on one evening
-is not a distribution; it is enough to disprove a constant, not to characterise the variation.
-The meaning of KCRW's `datetime` field remains unverified and the whole interpretation rests on
-it. Every session was muted and unattended, so the offset between any of these timestamps and
-what a listener hears is still entirely unmeasured.
+Every feed response carries `cache-control: max-age=15, public, must-revalidate`, and the `age`
+header cycles 0 → ~51s and then resets. So the effective refresh is about 60s, not the advertised
+15s. In all four transitions across s2 and s3, the new entry was first seen on a cache-fresh
+response (`age` header absent), and the preceding poll's response was already 30–51s stale.
+
+That invalidates every lower bound in Finding 5's table. A response that is 51s stale cannot show
+an entry published 40s ago, so its failure to show the entry proves nothing about publication
+time. Correcting each bound for `age` gives only upper bounds:
+
+| Transition | Origin held the entry by |
+|---|---|
+| Breathless | claimed airtime **+17.7s** |
+| Don't You Want Me (with Cat Power) | +39.4s |
+| Every Single Weekend | +43.5s |
+| Comes Back to You | +59.6s |
+
+A single constant publish lag anywhere in 0s..+17.7s is consistent with all four. **The
+fixed-offset policy is therefore not ruled out** — Finding 5 said it was, and that was wrong.
+
+**What does survive, and is actionable.** A client's observed delay is publish lag *plus* up to
+~60s of cache staleness, and it cannot do better by polling harder: a cached feed cannot reveal a
+change sooner than it refreshes. The s3 run made 89 requests to learn what roughly 15 would have.
+Combined with Findings 1 and 3 — KCRW delivers no usable player metadata at all — a KCRW client's
+title information is bounded by that cache regardless of implementation effort.
+
+**What this does not establish.** Only upper bounds; the publish lag itself is unmeasured and this
+endpoint cannot reveal it, because the cache floor exceeds the quantity of interest. Measuring it
+needs a cache-bypassing request or a station-side answer. The meaning of KCRW's `datetime` field
+remains unverified and the whole interpretation rests on it. Every session was muted and
+unattended, so the offset between any of these timestamps and what a listener hears is still
+entirely unmeasured.
+
+**Process note.** Finding 5 was committed before the `age` header was examined, and the header was
+already being captured in the trace the whole time. The evidence to catch the error was in hand
+before the wrong conclusion was published.
 
 ## Decisions recorded
 
@@ -221,12 +249,29 @@ Worth a direct check against the station's API documentation or a maintainer bef
 
 ## Evidence limits
 
-- The 47 passing tests establish the synthetic trace contract, command dispatch, clock-gap detection, and publish-lag bracketing. They do not establish live station behavior.
+- The 51 passing tests establish the synthetic trace contract, command dispatch, clock-gap detection, and cache-age-corrected publish-lag bracketing. They do not establish live station behavior.
 - The regressions close the reproduced serialization and embedded-file-URL gaps; they do not establish audible drift or exhaustive privacy coverage.
 - The local fixture and the four KCRW sessions establish that the capture-to-replay path works against real audio and a live station. None establishes what a listener heard: all were muted and unattended.
 - The local fixture's pause/resume markers were piped on stdin and landed 0ms apart, so no pause was ever observed in the playback samples. The KCRW session had no markers at all. Phase 4 still has to exercise a real pause.
 - No account access or credential use has occurred. The only network contact was the public KCRW stream and tracklist endpoints.
 - Feed timestamps, AVPlayer program dates, metadata arrivals, and human markers are observations with different uncertainty. None is automatically a song boundary.
+
+## Session records and retained data
+
+Per-session records in the runbook's Results-record shape, plus the retained traces, are in
+[`docs/menubar/experiments/`](../experiments/2026-09-25_kcrw_sessions.md). Traces live in
+`docs/menubar/experiments/traces/` at mode `0600` and replay with `stream-lab replay <file>`.
+
+They were moved there out of `/tmp`, which is not retention: every finding above traces back to
+one of those files and a reboot would have lost them.
+
+Privacy review of the retained traces (the runbook requires an explicit one before they leave the
+local machine): no credentials, tokens, auth headers, cookies, usernames, or unredacted local
+paths. Contents are the redacted public stream/feed URLs, the macOS version string, public album
+artwork CDN links carried in the feed, KCRW track titles with timestamps, and timing/buffer data.
+Captured response headers are limited to `age`, `cache-control`, `content-type`, and `date`. The
+residual consideration is that the traces are a record of what this machine streamed and when,
+for a public station.
 
 ## Repository guardrails
 
