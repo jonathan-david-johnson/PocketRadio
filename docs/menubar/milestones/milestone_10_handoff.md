@@ -2,7 +2,7 @@
 
 **Updated:** 2026-09-25  
 **Branch:** menubar `feature/stream-monitoring-lab` at `a995f06`, Stream Lab package still untracked  
-**Status:** Phases 1–3 are complete and a first unattended KCRW capture has run. Phase 4 still needs an attended session with human markers; no audible marker has been recorded yet.
+**Status:** Phases 1–3 are complete. Two unattended KCRW captures have run, one clean, yielding four findings. Phase 4 still needs an attended session with human markers; nothing yet ties any observation to audible reality.
 
 This file tracks execution of [M10](milestone_10.md) without changing the milestone's scope after work began. The design and evidence model remain in the [stream-monitoring review](../../ios/architecture/reviews/stream-monitoring-review-2026-09-16.md).
 
@@ -121,6 +121,41 @@ coverage is in `ReplayReportTests`.
 **Not established by this session:** audible behavior, song-boundary timing, feed-to-audio
 lag, and anything about KEXP. The capture was muted and no one was listening.
 
+### Session: KCRW caffeinated 7-minute capture
+
+- Same stream and feed. Muted, unattended, `caffeinate -is`, `--duration 420`, `--feed-interval 30`.
+- 420.009s monotonic against 420.005s wall: **no clock gap**. `caffeinate -is` is sufficient, and
+  the `clock` section confirms a clean run rather than leaving it assumed.
+- 410 playback observations, 14 feed responses, 0 failures, no stalls or time jumps.
+
+**Finding 3 — zero timed-metadata events across the whole run.** The two earlier KCRW runs each
+produced exactly one metadata group with an empty `values` array; this one produced none at all.
+So KCRW player metadata is not merely empty but inconsistent between sessions. Any design that
+waits on an AVPlayer metadata callback for KCRW can wait forever. This strengthens Finding 1.
+
+**Finding 4 — the KCRW tracklist feed publishes 29–60s after an entry's own stated airtime.**
+One transition was observed with a 30s poll interval:
+
+| Evidence | Wall time relative to the new entry's stated airtime |
+|---|---|
+| Entry's own `datetime` (`2026-09-25T18:16:36-07:00`) | +0s by definition |
+| Last poll that did **not** yet contain the entry | +29.4s |
+| First poll that **did** contain the entry | +59.6s |
+
+The publish therefore happened between +29.4s and +59.6s. The 30s poll interval is what leaves a
+30s window; a 10s interval would tighten it to ~10s.
+
+This is the most consequential observation for the lyric-alignment policy M10 exists to inform.
+For KCRW there is no player metadata at all, so the feed is the only title source, and that source
+lags its own stated airtime by at least half a minute. Feed arrival cannot be used as a song-start
+signal without correcting for that lag.
+
+**What this does not establish.** One transition is not a distribution. The semantics of KCRW's
+`datetime` field are unverified: it may be a logging or scheduling time rather than the audible
+start, which would change the interpretation entirely. The capture was muted and unattended, so
+the listener's buffered audio position was never tied to any of these timestamps. Nothing here
+measures the offset between broadcast and what a listener hears.
+
 ## Decisions recorded
 
 1. **Persisted UTC dates:** `wallTime`, `programDate`, and parsed `playedAt` use millisecond resolution for stable, language-neutral JSON round trips.
@@ -130,25 +165,35 @@ lag, and anything about KEXP. The capture was muted and no one was listening.
 
 ## Next bounded slice
 
-Run Phase 4 as an attended session; this is the M10 user checkpoint and needs a person listening.
+Two independent pieces of work, in either order.
 
-1. Run an unmuted KCRW capture on the intended output route, long enough for at least five
-   song transitions, marking each one with `1`.
-2. Exercise one pause/resume cycle with real time between them.
-3. Repeat for KEXP, whose ICY metadata does carry track titles and so exercises a path KCRW cannot.
-4. Disconnect the network and replay both traces.
-5. Check the `clock` section first. If it reports untracked time, keep the machine awake and re-run
-   before drawing any timing conclusion.
-6. Compare human marker, feed receipt, and (for KEXP) metadata arrival on the elapsed axis.
-   Report the distribution and worst case, not a single transition.
+**A. Tighten the feed publish-lag bound (unattended, cheap).** Re-run with `--feed-interval 10`
+for long enough to catch three or more transitions. That narrows Finding 4's 30s window to ~10s
+and turns one sample into a small distribution. Use `caffeinate -is` and check the `clock`
+section before trusting any number. Be considerate of a public station API: 10s is the floor
+worth using, and only for short diagnostic windows.
 
-Keep the machine awake for the whole capture. `caffeinate -i` is the simplest guard.
+**B. Run the attended session (the M10 user checkpoint).** This needs a person listening and
+cannot be automated:
+
+1. Unmuted KCRW capture on the intended output route, long enough for five or more transitions.
+2. Mark each clearly heard song change with `1`; use `2` only for a recognizable lyric landmark.
+3. Exercise one pause/resume cycle with real time between the two.
+4. Repeat for KEXP, whose ICY metadata does carry titles and so exercises a path KCRW cannot.
+5. Disconnect the network and replay both traces.
+6. Compare human marker against feed receipt and stated airtime on the elapsed axis.
+
+Only B can connect any of Findings 1–4 to what a listener actually hears. Until it runs, the
+feed-to-audio offset is unmeasured and no alignment policy should be chosen.
+
+Also worth resolving before Phase 5: what KCRW's `datetime` field actually means. Findings 4's
+interpretation depends on it, and it is currently an assumption.
 
 ## Evidence limits
 
 - The 42 passing tests establish the synthetic trace contract, command dispatch, and clock-gap detection. They do not establish live station behavior.
 - The regressions close the reproduced serialization and embedded-file-URL gaps; they do not establish audible drift or exhaustive privacy coverage.
-- The local fixture and the KCRW session establish that the capture-to-replay path works against real audio. Neither establishes what a listener heard: both were muted and unattended.
+- The local fixture and the three KCRW sessions establish that the capture-to-replay path works against real audio and a live station. None establishes what a listener heard: all were muted and unattended.
 - The local fixture's pause/resume markers were piped on stdin and landed 0ms apart, so no pause was ever observed in the playback samples. The KCRW session had no markers at all. Phase 4 still has to exercise a real pause.
 - No account access or credential use has occurred. The only network contact was the public KCRW stream and tracklist endpoints.
 - Feed timestamps, AVPlayer program dates, metadata arrivals, and human markers are observations with different uncertainty. None is automatically a song boundary.
