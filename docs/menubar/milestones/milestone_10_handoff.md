@@ -2,7 +2,7 @@
 
 **Updated:** 2026-09-25  
 **Branch:** menubar `feature/stream-monitoring-lab` at `a995f06`, Stream Lab package still untracked  
-**Status:** Phases 1 and 2 are complete. `capture` and `replay` dispatch and run; Phase 3 is a network-free local audio fixture. No live station has been observed.
+**Status:** Phases 1–3 are complete and a first unattended KCRW capture has run. Phase 4 still needs an attended session with human markers; no audible marker has been recorded yet.
 
 This file tracks execution of [M10](milestone_10.md) without changing the milestone's scope after work began. The design and evidence model remain in the [stream-monitoring review](../../ios/architecture/reviews/stream-monitoring-review-2026-09-16.md).
 
@@ -14,9 +14,9 @@ The Foundation-only package builds and its existing suite passes:
 swift test --package-path pocket-radio-menubar/Tools/StreamLab
 ```
 
-Last verified result: **40 tests, 0 failures** on 2026-09-25 (22 `StreamDiagnosticsTests`, 18 `StreamLabTests`).
+Last verified result: **42 tests, 0 failures** on 2026-09-25 (22 `StreamDiagnosticsTests`, 20 `StreamLabTests`).
 
-This does not satisfy the M10 user checkpoint. Capture and replay now run, but every trace exercised so far is synthetic: no station has been contacted and no audible marker has been recorded against real audio.
+This does not satisfy the M10 user checkpoint. KCRW has now been captured and replayed, but the run was muted and unattended, so no human marker exists and nobody confirmed what was audible.
 
 ## Execution plan
 
@@ -24,8 +24,8 @@ This does not satisfy the M10 user checkpoint. Capture and replay now run, but e
 |---|---|---|
 | 1. Trace contract | Persisted events round-trip exactly; reducer failures, date policy, and privacy guarantees have regression coverage | Complete |
 | 2. Executable wiring | `capture` and `replay` dispatch from the command line and report failures clearly | Complete |
-| 3. Network-free integration | A local synthetic audio session produces a complete trace that replays offline | Next |
-| 4. Live observation | Short KCRW and KEXP captures include audible markers and replay without network access | Not started |
+| 3. Network-free integration | A local synthetic audio session produces a complete trace that replays offline | Complete |
+| 4. Live observation | Short KCRW and KEXP captures include audible markers and replay without network access | Partial — KCRW transport observed unattended; markers and KEXP outstanding |
 | 5. Measurement report | Results separate player, feed, wall-clock, media-clock, and human-marker evidence; limitations and next policy decision are recorded | Not started |
 | 6. Manual checkpoint | User runs the documented scenario and approves the result before any commit or merge | Not started |
 
@@ -90,32 +90,67 @@ This does not satisfy the M10 user checkpoint. Capture and replay now run, but e
 - Run manual KCRW and KEXP observations using explicit stream URLs.
 - Compare evidence without treating feed-top or first metadata arrival as an audible boundary.
 
+## Live observations (2026-09-25)
+
+### Session: KCRW unattended transport check
+
+- Stream: `https://streams.kcrw.com/e24_mp3` (from `curated_stations.json`); feed: station default.
+- Muted, unattended, `--duration 150`. 145 events, ended `duration`, replayed offline cleanly.
+- 136 playback observations, 5 feed responses, 0 feed failures, 0 markers.
+
+**Finding 1 — KCRW delivers no usable timed metadata.** One metadata event arrived at
+4.26s with an empty `values` array, and nothing after it. This independently confirms the
+2026-06-03 `tools/stream-probe.py` finding ("KCRW ICY StreamTitle is permanently empty")
+from the AVPlayer path rather than from a raw ICY reader. For KCRW, the tracklist feed is
+the only title source, so lyric alignment cannot key off player metadata at all.
+
+**Finding 2 — monotonic elapsed time freezes across a system suspend.** The Mac slept
+during the run. `wallTime` advanced 201.905s while `elapsedSeconds` advanced 133.813s: a
+68.094s gap, entirely in one step. The reducer accepted the trace, because the sequence
+stayed ordered and elapsed time stayed non-decreasing. Nothing in the trace flagged it.
+
+This qualifies decision 2 below. `elapsedSeconds` derives from `ProcessInfo.systemUptime`,
+which does not advance while the system is suspended. It remains the right axis for
+intervals *within* continuous playback, but any interval spanning a suspend under-reports
+real time and must be read as a lower bound.
+
+`ReplayReport` now prints a `clock` section comparing the two spans and naming every gap
+over 2s, so a slept-through capture can no longer pass as a clean shorter one. Regression
+coverage is in `ReplayReportTests`.
+
+**Not established by this session:** audible behavior, song-boundary timing, feed-to-audio
+lag, and anything about KEXP. The capture was muted and no one was listening.
+
 ## Decisions recorded
 
 1. **Persisted UTC dates:** `wallTime`, `programDate`, and parsed `playedAt` use millisecond resolution for stable, language-neutral JSON round trips.
-2. **Timing precision:** `elapsedSeconds`, media time, and metadata ranges retain full `Double` precision and are authoritative for interval analysis.
+2. **Timing precision:** `elapsedSeconds`, media time, and metadata ranges retain full `Double` precision and are authoritative for interval analysis *within continuous playback*. Monotonic time freezes across a system suspend; see Finding 2 above and the `clock` section of a replay.
 3. **Wall-clock correction:** replay allows wall time to move backward. Sequence and monotonic elapsed time define event ordering.
 4. **Privacy guarantee:** standalone and embedded HTTP(S)/file URLs are redacted. Redaction remains defense in depth; review traces before sharing.
 
 ## Next bounded slice
 
-Run Phase 3, the network-free local fixture, per the package [runbook](../../../pocket-radio-menubar/Tools/StreamLab/README.md) § Experiment protocol step 2:
+Run Phase 4 as an attended session; this is the M10 user checkpoint and needs a person listening.
 
-1. Produce a local synthetic or rights-cleared audio fixture. Do not use station audio.
-2. Capture it with `--no-feed`, exercising one pause/resume cycle and at least one marker.
-3. Confirm the trace has one start, player state samples, both markers, and one explicit end.
-4. Disable network access and confirm `replay` still succeeds.
-5. Confirm replay snapshots match the captured event sequence.
-6. Rerun the complete package suite and record the result here.
+1. Run an unmuted KCRW capture on the intended output route, long enough for at least five
+   song transitions, marking each one with `1`.
+2. Exercise one pause/resume cycle with real time between them.
+3. Repeat for KEXP, whose ICY metadata does carry track titles and so exercises a path KCRW cannot.
+4. Disconnect the network and replay both traces.
+5. Check the `clock` section first. If it reports untracked time, keep the machine awake and re-run
+   before drawing any timing conclusion.
+6. Compare human marker, feed receipt, and (for KEXP) metadata arrival on the elapsed axis.
+   Report the distribution and worst case, not a single transition.
 
-A plain local audio file validates the playback-signal path only. It cannot validate Icecast metadata interleaving, HLS program-date behavior, or live feed timing; those wait for Phase 4.
+Keep the machine awake for the whole capture. `caffeinate -i` is the simplest guard.
 
 ## Evidence limits
 
-- The 40 passing tests establish the synthetic trace contract and command dispatch; they do not validate live AVPlayer or station behavior.
+- The 42 passing tests establish the synthetic trace contract, command dispatch, and clock-gap detection. They do not establish live station behavior.
 - The regressions close the reproduced serialization and embedded-file-URL gaps; they do not establish audible drift or exhaustive privacy coverage.
-- The only AVPlayer run so far failed immediately on a deliberately absent local file (`AVFoundationErrorDomain -11800`). It proves the capture-to-replay path, not that audio playback was observed.
-- No station contact, account access, or credential use has occurred.
+- The local fixture and the KCRW session establish that the capture-to-replay path works against real audio. Neither establishes what a listener heard: both were muted and unattended.
+- The local fixture's pause/resume markers were piped on stdin and landed 0ms apart, so no pause was ever observed in the playback samples. The KCRW session had no markers at all. Phase 4 still has to exercise a real pause.
+- No account access or credential use has occurred. The only network contact was the public KCRW stream and tracklist endpoints.
 - Feed timestamps, AVPlayer program dates, metadata arrivals, and human markers are observations with different uncertainty. None is automatically a song boundary.
 
 ## Repository guardrails
