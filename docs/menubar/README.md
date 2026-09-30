@@ -79,6 +79,7 @@ pocket-radio-menubar/
 | [M8](./milestones/milestone_8.md) | Headphone and media-key control | Control playback from hardware buttons and macOS Now Playing |
 | [M9](./milestones/milestone_9.md) | Lyric sync tuning and lookup fixes | Adjust station sync and see sensible between-track state |
 | [M10](./milestones/milestone_10.md) | Stream Lab capture and replay *(in progress)* | Mark an audible change and replay the trace offline |
+| [M11](./milestones/milestone_11.md) | KCRW playback-aligned tracklist and lyrics *(offline validation approved; M10 remains active)* | Test an opt-in AAC/HLS media-clock model in the menubar app and replay its decisions |
 
 ## Build & Run
 
