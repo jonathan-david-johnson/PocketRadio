@@ -4,46 +4,64 @@ This is the preferred shape for a project with one product shipped to
 multiple platforms, each platform living in its own nested git repo, with a
 shared top-level shell for orchestration and docs.
 
+This file owns the **conventions**: layout, formats, and rules. The
+`meta-repo` skill owns the **procedures** (step-by-step tasks) and points
+here for every convention.
+
 ## Layout
 
 ```
-project/
-├── Makefile                     # top-level: branch admin + delegation
-├── CLAUDE.md / AGENTS.md         # repo map + conventions (for AI agents)
+project/                           # shell repo, always on `main`
+├── Makefile                       # top-level: repo admin + delegation
+├── CLAUDE.md / AGENTS.md          # repo map + conventions (for AI agents)
+├── .githooks/                     # shared hooks; `make hooks` wires every repo
+├── contracts/                     # cross-platform contracts
+│   ├── <area>/*.json              #   golden fixtures, e.g. contracts/remote/
+│   └── features/<area>/*.feature  #   shared Gherkin specs; steps live per platform
+├── tools/                         # shell-level diagnostic scripts
+├── supabase/                      # shared backend
 ├── docs/
-│   ├── bugs/                     # GLOBAL bugs — cross-platform or shared-backend
+│   ├── REPO_STRUCTURE.md          # this file
+│   ├── bugs/                      # GLOBAL bugs — cross-platform or shared-backend
 │   │   └── bug_1.md
 │   ├── todo.md
 │   ├── security_concerns.md
-│   ├── <platform_a>/             # one dir per platform implementation
+│   ├── <platform_a>/              # one dir per platform implementation
 │   │   ├── README.md
-│   │   ├── CONTEXT.md            # optional: persistent architecture notes
-│   │   ├── current_milestone.md  # symlink -> active milestones/milestone_N.md
-│   │   ├── adr/                  # architecture decision records (optional)
-│   │   ├── bugs/                 # PLATFORM-SPECIFIC bugs
+│   │   ├── CONTEXT.md             # optional: persistent architecture notes
+│   │   ├── current_milestone.md   # symlink -> active milestones/milestone_N.md
+│   │   ├── adr/                   # architecture decision records (optional)
+│   │   ├── architecture/          # design docs (optional)
+│   │   │   └── reviews/           #   dated review reports
+│   │   ├── bugs/                  # PLATFORM-SPECIFIC bugs
 │   │   │   └── bug_1.md
+│   │   ├── experiments/           # dated experiment reports (optional)
+│   │   │   └── traces/            #   raw evidence the reports cite
 │   │   └── milestones/
 │   │       ├── milestone_0.md
 │   │       ├── milestone_1.md
+│   │       ├── milestone_1_handoff.md
 │   │       └── ...
-│   ├── <platform_b>/
-│   │   └── ... (same shape)
-│   └── <platform_c>/
-│       └── ... (same shape)
-├── <platform_a_dir>/             # nested git repo (own .git, own Makefile)
-├── <platform_b_dir>/             # nested git repo
-└── <platform_c_dir>/             # nested git repo (may not exist yet)
+│   └── <platform_b>/ ...          # same shape
+├── <platform_a_dir>/              # nested git repo (own .git, own Makefile)
+├── <platform_a_dir>-<topic>/      # optional: worktree of platform_a for parallel work
+└── <platform_b_dir>/              # nested git repo (may not exist yet)
 ```
 
 Not every platform needs to be implemented — `docs/<platform>/` can exist
 with a roadmap/milestone_0 before the nested repo is created (`make checkout`
 clones it, skips if absent).
 
+Nested repos and their worktrees are gitignored by the shell
+(`pocket-radio-*/` in this project).
+
 ## Makefile hierarchy
 
 - **Top-level `Makefile`**: repo-shell concerns only.
   - `checkout` — clone any missing platform repos.
-  - `status` — branch/sync/dirty status across all nested repos.
+  - `status` — branch/sync/dirty status across all nested repos, plus any
+    extra worktrees.
+  - `hooks` / `hooks-check` — wire every repo (and worktree) to `.githooks/`.
   - `upstream-remote` — wire upstream remotes for forks.
   - Thin **delegating** targets per platform, e.g. `console-test`, `roku-deploy`,
     `menubar-build` — each is `@$(MAKE) -C $(PLATFORM_DIR) <target>`.
@@ -51,6 +69,74 @@ clones it, skips if absent).
 - **Per-platform `Makefile`** (inside the nested repo): owns the real build/
   test/run/deploy targets and platform-specific tooling. Top-level never
   duplicates this logic — it only forwards.
+
+## Branches and parallel work
+
+The shell is the coordination record. Platform repos are where code changes.
+
+### The shell stays on `main`
+
+- Plans, milestone status, handoffs, experiment reports, bug docs, and
+  contracts are committed straight to shell `main`. Docs may describe work
+  that is still in flight on a platform branch; the milestone's status line
+  says so.
+- Don't create long-lived shell feature branches for platform work.
+
+### Code happens on platform branches
+
+- Each milestone names its repo, branch, and worktree in a
+  **Where the work happens** table (see [Milestone doc shape](#milestone-doc-shape)).
+- One platform branch at a time can use the main checkout,
+  `<platform_dir>/`.
+- For a second, parallel branch in the same platform, create a **sibling
+  worktree** at `<platform_dir>-<topic>/`, e.g. `pocket-radio-ios-carplay/`.
+  It must sit at the same depth as `<platform_dir>/`, because nested repos
+  find the shell by relative path:
+  - tests load `../contracts/...` via `#filePath` or the equivalent;
+  - hooks use `core.hooksPath=../.githooks`, which worktrees share with
+    their repo.
+- Never place a worktree anywhere else, or fixtures and hooks silently break.
+
+### Untracked files a new worktree needs
+
+A worktree contains only tracked files. Copy these from the main checkout:
+
+| Platform | Files |
+|---|---|
+| iOS | `podcasts/Credentials/LocalApiCredentials.swift` (secrets); `podcasts/Strings+Generated.swift`, `podcasts/ThemeColor.swift`, `podcasts/ThemeStyle.swift` (generated by `make generate_code` / `make generate_colors`, not by a build phase) |
+
+Add a row when another platform needs one. Each worktree also gets its own
+Xcode DerivedData, so expect a full first build.
+
+### Shell changes during platform work
+
+- **Additive changes go straight to `main`:** new docs, new contract
+  fixtures, new `.feature` files, new delegating Make targets. Nothing reads
+  them until a platform does, so they can't break another branch.
+- **Breaking changes need a shell branch:** editing an existing contract,
+  rewording a Gherkin step another platform already implements, a Supabase
+  migration that must ship with an app release, or restructuring the
+  top-level Makefile. Create a shell worktree on that branch, with the
+  platform worktree nested inside it at the usual relative position.
+- Nested repos aren't submodules, so nothing pins which shell commit a
+  platform branch was tested against. Record the shell commit hash in the
+  milestone's verification notes.
+
+### Committing in the shared shell checkout
+
+Several sessions share one shell checkout, and so one staging area.
+
+- Stage explicit file paths only.
+- Never use `git add -A`, `git add .`, `git add docs/`, or `git commit -a`.
+- Before committing, check `git diff --cached --name-only` and make sure it
+  lists only your files.
+
+### Finishing parallel work
+
+1. Merge the platform branch in its repo.
+2. `git -C <platform_dir> worktree remove ../<platform_dir>-<topic>`
+3. Delete the branch.
+4. Update the milestone's status on shell `main`.
 
 ## Bugs
 
@@ -74,6 +160,8 @@ clones it, skips if absent).
     to be worth doing" section.
   - Multi-symptom bugs get lettered symptoms (A, B, ...) under one doc if
     they were diagnosed/fixed together.
+- Bug docs are append-only history: change the status and add sections; don't
+  delete past symptoms once fixed.
 
 ## Milestones
 
@@ -81,10 +169,32 @@ clones it, skips if absent).
 symlink to the active one. **Never edit through the symlink** — when a
 milestone completes, create `milestone_N+1.md` and repoint the symlink.
 
+Numbering:
+
+- `milestone_N.M.md` — a sequenced sub-milestone of N (iOS uses this).
+- `milestone_Na.md`, `milestone_Nb.md` — sibling slices of N (menubar uses
+  this). Either is fine; stay consistent within a platform.
+- Handoff notes: `milestone_<id>_handoff.md` next to the milestone they
+  belong to.
+
 ### Milestone doc shape
 
 ```markdown
-# M<N> — <short title>
+# <Platform> M<N> — <short title>
+
+**Status**: PLANNED | IN PROGRESS | COMPLETE — <commit or date>
+**Depends on**: <milestones / decisions>
+**Required by**: <milestones / branches>
+**Model**: optional — which work suits which model
+
+## Where the work happens
+
+| | |
+|---|---|
+| Plan | Shell `main`: this file (+ reports, bug docs) |
+| Code | `<platform_dir>`, branch `<branch>` from `<base>` |
+| Worktree | `<platform_dir>/` or `<platform_dir>-<topic>/` |
+| Shell changes | None, or the additive list |
 
 **Goal:** one paragraph, plain language, what this milestone achieves.
 
@@ -109,10 +219,25 @@ done — a concrete, demoable scenario, not an implementation detail.
 - What's explicitly deferred, and to which milestone.
 ```
 
+### Experiment milestones
+
+When a milestone exists to prove feasibility or gather evidence before
+building, replace **Behaviors to test** with:
+
+- **Hypotheses** — predictions, labeled as not yet observed.
+- **Experiments** — each with question, method, pass criterion, and the
+  decision it feeds. These are the fan-out units.
+- **Decision gate** — the decisions the user makes from the results, and
+  which experiment supplies the evidence for each.
+
+Record each result in `docs/<platform>/experiments/YYYY-MM-DD_<topic>.md`,
+with raw evidence under `experiments/traces/`. See
+`docs/ios/milestones/milestone_13.md` and `docs/menubar/milestones/milestone_10.md`.
+
 ### Sub-agent fan-out
 
-The **Behaviors to test** list is the fan-out unit. Each numbered behavior
-should be:
+The **Behaviors to test** (or **Experiments**) list is the fan-out unit.
+Each numbered item should be:
 
 - **Independently verifiable** — has its own test(s), doesn't require another
   behavior's code to exist first (or clearly states the dependency).
@@ -123,9 +248,22 @@ should be:
   (`milestone_N.1.md`) rather than growing the list item.
 
 When a milestone needs cross-cutting handoff notes (partial progress, open
-questions for the next session/agent), add `milestone_N_handoff.md` alongside
-the milestone file rather than editing the milestone doc's scope after work
+questions for the next session/agent), add a handoff file alongside the
+milestone file rather than editing the milestone doc's scope after work
 has started.
+
+## Contracts and shared specs
+
+- `contracts/<area>/` holds golden fixtures that every platform's tests load.
+  The fixtures are the contract; typed structs on each platform are
+  conveniences that must conform.
+- `contracts/features/<area>/*.feature` holds Gherkin specs worded
+  platform-neutrally (e.g. "the system now-playing display shows") and tagged
+  by platform (`@ios`, `@carplay`, …). Each platform implements its own step
+  definitions. Platform-specific known-bug markers live with that platform's
+  steps, never as tags in the shared spec.
+- Contracts change additively. See
+  [Shell changes during platform work](#shell-changes-during-platform-work).
 
 ## Cross-platform consistency
 

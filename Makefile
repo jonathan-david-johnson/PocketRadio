@@ -34,7 +34,7 @@ help:
 	@echo "    hooks-check      Verify every repo resolves to .githooks/pre-commit"
 	@echo ""
 	@echo "  Repo status"
-	@echo "    status           Show branch and sync status for root and nested repos"
+	@echo "    status           Show branch and sync status for root, nested repos, and worktrees"
 	@echo "  iOS app (delegates to $(IOS_DIR)/Makefile)"
 	@echo "    run_sim          Build, install, and launch on the simulator"
 	@echo ""
@@ -180,6 +180,9 @@ status:
 			dirty_str=""; \
 			[ "$$dirty" -gt 0 ] && dirty_str=" [dirty]"; \
 			printf "%-22s %-12s (↓ %s ↑ %s)%s\n" "$$label" "$$branch" "$$behind" "$$ahead" "$$dirty_str"; \
+			git -C "$$dir" worktree list 2>/dev/null | tail -n +2 | while read -r wt sha br; do \
+				printf "  %-20s %s\n" "↳ $$(basename "$$wt")" "$$br"; \
+			done; \
 		else \
 			printf "%-22s (not cloned)\n" "$$label"; \
 		fi; \

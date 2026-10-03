@@ -24,6 +24,16 @@ Monorepo shell. Each sub-project is its own nested git repo with its own
 - **Write-through symlink trap:** `docs/<project>/current_milestone.md` →
   `milestones/milestone_N.md`. Writing through it overwrites the previous
   milestone's archive. Create a new numbered file and repoint the symlink.
+- **The shell stays on `main`; code happens on platform branches.** Commit
+  docs and additive contracts straight to `main`. A parallel branch in the
+  same platform goes in a sibling worktree, `pocket-radio-<platform>-<topic>/`,
+  at the same depth as the main checkout so `../contracts` and `../.githooks`
+  resolve. Each milestone's **Where the work happens** table names the repo,
+  branch, and worktree. Details: `docs/REPO_STRUCTURE.md` § Branches and
+  parallel work.
+- **Stage explicit paths in the shell.** Several sessions share this checkout.
+  Never use `git add -A`, `git add .`, `git add docs/`, or `git commit -a`.
+  Check `git diff --cached --name-only` before committing.
 
 ## Cross-cutting facts
 

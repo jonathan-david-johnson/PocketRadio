@@ -3,11 +3,8 @@ supabase/.branches/
 *.env
 .env.local
 other_apps/
-pocket-radio-ios/
-pocket-radio-console/
-pocket-radio-menubar/
-pocket-radio-roku/
-pocket-radio-web/
+# Nested platform repos and their sibling worktrees (pocket-radio-<platform>-<topic>/)
+pocket-radio-*/
 pocket-casts-ios/
 .firecrawl/
 .DS_Store
