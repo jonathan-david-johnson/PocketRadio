@@ -1,6 +1,6 @@
 # M10 — Stream Lab: capture and deterministic observation replay
 
-**Status:** In progress (2026-09-16). No menubar production playback changes or Stream Lab commits yet.
+**Status:** Complete. Stream Lab feature commit `0d6653e` was merged and pushed to menubar `main` by `a3787ff`. No production playback changes.
 
 **Execution tracking:** [current handoff, phase status, and open decisions](milestone_10_handoff.md).
 

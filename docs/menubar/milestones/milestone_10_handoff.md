@@ -1,8 +1,8 @@
 # M10 handoff — Stream Lab execution status
 
 **Updated:** 2026-09-30
-**Branch:** menubar `feature/stream-monitoring-lab` at `a995f06`, Stream Lab package still untracked  
-**Status:** Phases 1–3 and short attended captures on both stations are complete. Four unattended MP3 and two attended AAC/HLS KCRW captures, plus one attended KEXP AAC capture, are retained. KCRW's nine identified audible changes support a ~160s media-date-to-feed mapping for that HLS endpoint. KEXP supplies ICY titles, but the first arrival can precede audibility and its feed can lag or lead this listener. KEXP has only three marked song changes plus an airbreak, so no KEXP timing policy is established. User approval to commit and push Stream Lab and the M10/M11 docs was received on 2026-09-30; merge approval remains separate. See Findings 7–9.
+**Branch:** M10 feature commit `0d6653e` was merged and pushed to menubar `main` by `a3787ff`; M11-A child branch `feature/stream-session-model` remains based on `0d6653e`
+**Status:** Complete. Phases 1–3 and short attended captures on both stations are complete. Four unattended MP3 and two attended AAC/HLS KCRW captures, plus one attended KEXP AAC capture, are retained. KCRW's nine identified audible changes support a ~160s media-date-to-feed mapping for that HLS endpoint. KEXP supplies ICY titles, but the first arrival can precede audibility and its feed can lag or lead this listener. KEXP has only three marked song changes plus an airbreak, so no KEXP timing policy is established. The 52-test suite passed on the merged result before `main` was pushed. See Findings 7–9.
 
 This file tracks execution of [M10](milestone_10.md) without changing the milestone's scope after work began. The design and evidence model remain in the [stream-monitoring review](../../ios/architecture/reviews/stream-monitoring-review-2026-09-16.md).
 
@@ -16,7 +16,7 @@ swift test --package-path pocket-radio-menubar/Tools/StreamLab
 
 Last verified result: **52 tests, 0 failures** on 2026-09-30 (22 `StreamDiagnosticsTests`, 30 `StreamLabTests`). The new synthetic regression covers untitled KEXP airbreak transitions; this suite does not test the proposed M11 selection policy.
 
-The user ran and annotated two unmuted KCRW AAC/HLS sessions and one KEXP AAC session with real pause/resume cycles. All three traces replay offline without a clock gap. KCRW has nine identified song changes; KEXP has three song markers and an airbreak marker, with pre-roll and a stall. The short two-station capture checkpoint has been exercised; KEXP has not met the five-song threshold for a timing distribution. User approval to commit and push was received on 2026-09-30; merge approval remains separate.
+The user ran and annotated two unmuted KCRW AAC/HLS sessions and one KEXP AAC session with real pause/resume cycles. All three traces replay offline without a clock gap. KCRW has nine identified song changes; KEXP has three song markers and an airbreak marker, with pre-roll and a stall. The short two-station capture checkpoint has been exercised; KEXP has not met the five-song threshold for a timing distribution. User approval to merge was received after M11 was split; merge commit `a3787ff` is on local and remote menubar `main`.
 
 ## Execution plan
 
@@ -27,7 +27,7 @@ The user ran and annotated two unmuted KCRW AAC/HLS sessions and one KEXP AAC se
 | 3. Network-free integration | A local synthetic audio session produces a complete trace that replays offline | Complete |
 | 4. Live observation | Short KCRW and KEXP captures include audible markers and replay without network access | Complete for the short two-station capture; KEXP has only three song transitions, not a timing distribution |
 | 5. Measurement report | Results separate player, feed, wall-clock, media-clock, and human-marker evidence; limitations and next policy decision are recorded | KCRW and preliminary KEXP reports recorded; selection-policy validation is proposed separately in M11 |
-| 6. Manual checkpoint | User runs the documented scenario and approves the result before any commit or merge | Two-station scenario exercised by user; commit/push approval received 2026-09-30; merge approval remains separate |
+| 6. Manual checkpoint | User runs the documented scenario and approves the result before any commit or merge | Complete: two-station scenario exercised; feature commit/push and later `main` merge separately approved |
 
 ## Milestone behavior status
 
@@ -88,8 +88,8 @@ The user ran and annotated two unmuted KCRW AAC/HLS sessions and one KEXP AAC se
 
 **Still required:**
 
-- Obtain separate user approval before any merge or production playback change.
-- In the separate approved M11 offline slice, validate an HLS media-clock selection rule against replay fixtures and the intended production playback route. Obtain five or more named KEXP song transitions in a later session **only if** selecting a KEXP timing policy; the present short KEXP capture does not support one.
+- M10 merge is complete; production playback changes still require separate approval.
+- The separate [M11-A](milestone_11a.md) offline slice validated the HLS media-clock selection rule against replay fixtures and is stopped for user review. The opt-in app experiment is separately planned in [M11-B](milestone_11b.md) and is not yet approved. Obtain five or more named KEXP song transitions in a later session **only if** selecting a KEXP timing policy; the present short KEXP capture does not support one.
 
 ## Live observations (2026-09-25)
 
@@ -286,28 +286,28 @@ fix on 2026-09-30 make the unchanged trace report five feed-top transitions, inc
 
 ## Next bounded slice
 
-The [approved M11 offline plan](milestone_11.md) now defines the offline selection tests and a later
-opt-in menubar AAC/HLS experiment, including separate calibration/lyric corrections and both
-pause paths. Approval covers committing and pushing the plan and starting offline validation; it
-does not approve merge, production playback changes, or a default endpoint switch. M10's short KEXP
-observation is recorded. A five-song KEXP timing policy would need a longer independent attended
-run, but is not a prerequisite for KCRW's M11 plan.
+[M11](milestone_11.md) is split at the user-review boundary. The
+[M11-A](milestone_11a.md) slice has produced a deterministic `+160s` occurrence-selection report
+from the two retained KCRW traces, covering early feed arrival, both pauses, the missed marker, the
+unreported commercial, missing clocks, and causal replay. It reported all nine marker residuals
+and the predeclared sensitivity comparison without presenting the development captures as an
+independent holdout. See the [M11-A result](../experiments/2026-10-02_kcrw_m11a_offline.md).
 
-**Prototype and validate, without a production playback change yet:** select the latest feed
-occurrence only when the current AVPlayer media/program date passes that occurrence's `playedAt`
-plus a measured, HLS-endpoint-specific ~160s estimate. Build deterministic fixtures from the two
-attended traces; cover early feed arrival, two pauses, the missed marker, the unreported commercial,
-cache freshness, a missing media date, reconnects, and correction of a feed entry. Keep feed
-history distinct from the selected audible candidate. Lyrics must use player media time rather
-than `Date.now` and must not double-apply the existing saved KCRW manual offset.
+M11-A may branch directly from the M10 `feature/stream-monitoring-lab` head; that branch-base
+decision does not merge M10 or authorize an M11-A commit. [M11-B](milestone_11b.md) is a separately
+planned, not-yet-approved opt-in menubar experiment. Only after M11-A review may it put a frozen
+candidate behind Off, Observe only, and Apply candidate
+controls on the exact AAC/HLS endpoint. It keeps calibration separate from lyric correction,
+leaves saved KCRW offsets and station URLs untouched, validates reconnect before buffered pause,
+and gathers fresh attended evidence on a recorded route. No M11 approval implies merge, default
+endpoint, production rollout, or iOS approval.
 
 The user prefers AAC for quality and is not prioritizing ad recognition. `curated_stations.json`
 currently names KCRW's `e24_mp3` path; `PlayerViewModel` reads the station stream URL, immediately
 selects feed row zero, and tears down live radio on pause. Do not transplant the HLS calibration
-onto MP3 or silently change the production endpoint. Choose and validate the AAC production
-endpoint in a separate, explicit implementation step with an audible menubar build. Preserve
-fallback/uncertainty when `currentDate()` is unavailable or a stream/item changes. The output
-route of the attended captures was not recorded, so route-specific validation remains necessary.
+onto MP3 or silently change the production endpoint. Preserve explicit uncertainty when
+`currentDate()` is unavailable or a stream/item changes. The output route of the attended captures
+was not recorded, so M11-A cannot validate route behavior and M11-B must record it.
 
 For the remainder of **M10**, do not treat the three KEXP song markers as a timing distribution or
 transfer the KCRW HLS calibration to this AAC/ICY connection. The meaning of KCRW's `datetime`
@@ -346,9 +346,10 @@ for a public station.
 
 ## Repository guardrails
 
-- The Stream Lab package is still untracked under `pocket-radio-menubar/Tools/`.
+- The Stream Lab package feature commit `0d6653e` was merged and pushed to menubar `main` by `a3787ff` after the 52 tests passed.
+- M11-A menubar branch `feature/stream-session-model` was created from the exact M10 feature head before the merge commit. M11-A commits remain separately gated.
 - The shell milestone/review documents are tracked on root `feature/stream-monitoring-lab`. Stage only explicit paths when recording status changes.
 - iOS configurable-tab-bar work is merged and pushed: local and remote `trunk` are at `0751918f8`. M10 does not modify iOS or manage cleanup of the remaining feature-branch refs.
-- Manual checkpoint approval for commit/push was received on 2026-09-30. Do not merge or delete Stream Lab branches without separate explicit approval.
+- Manual checkpoint approvals for the M10 feature commit/push and later `main` merge were received. Do not delete Stream Lab branches without separate explicit approval.
 - Do not edit `docs/menubar/current_milestone.md` through its symlink.
 - Never place ACR credentials, signed URL parameters, account data, or unredacted local paths in docs, traces, tests, or logs.

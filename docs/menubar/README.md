@@ -78,8 +78,10 @@ pocket-radio-menubar/
 | [M7](./milestones/milestone_7_lyrics.md) | Synced radio lyrics | Follow the current lyric line for supported stations |
 | [M8](./milestones/milestone_8.md) | Headphone and media-key control | Control playback from hardware buttons and macOS Now Playing |
 | [M9](./milestones/milestone_9.md) | Lyric sync tuning and lookup fixes | Adjust station sync and see sensible between-track state |
-| [M10](./milestones/milestone_10.md) | Stream Lab capture and replay *(in progress)* | Mark an audible change and replay the trace offline |
-| [M11](./milestones/milestone_11.md) | KCRW playback-aligned tracklist and lyrics *(offline validation approved; M10 remains active)* | Test an opt-in AAC/HLS media-clock model in the menubar app and replay its decisions |
+| [M10](./milestones/milestone_10.md) | Stream Lab capture and replay *(complete; merged at `a3787ff`)* | Mark an audible change and replay the trace offline |
+| [M11](./milestones/milestone_11.md) | KCRW playback-alignment experiment *(split plan)* | Review the offline proof before authorizing an app experiment |
+| [M11-A](./milestones/milestone_11a.md) | Offline KCRW media-clock selection proof *(complete; awaiting review)* | Reproduce all retained-trace decisions and review their errors and exclusions |
+| [M11-B](./milestones/milestone_11b.md) | Opt-in AAC/HLS menubar experiment *(planned; blocked on M11-A)* | Test the frozen candidate in fresh attended sessions without changing saved defaults |
 
 ## Build & Run
 

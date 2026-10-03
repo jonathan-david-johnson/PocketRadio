@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "sessionID": "74395893-F4A8-42EC-9525-2083E8CA4AA8",
+  "traceFilename": "2026-09-26_kcrw_hls_attended_s1.jsonl",
+  "traceSHA256": "8c72bd4b694e55892cb36b9cc96063e85dbc4e271f4c1c503e996b7688924057",
+  "markers": [
+    {
+      "id": "s1-i-go-up-you-go-down",
+      "classification": "song_start",
+      "traceSequence": 78,
+      "markerElapsedSeconds": 70.16898083333217,
+      "expected": {
+        "title": "I Go Up, You Go Down",
+        "artist": "My Precious Bunny",
+        "kind": "trackplay",
+        "playedAtMilliseconds": 1790424225000
+      },
+      "identityProvenance": "inferred from feed order and intervals",
+      "includeInMetrics": true,
+      "note": "Listener marked the transition but did not name it contemporaneously."
+    },
+    {
+      "id": "s1-hardy",
+      "classification": "song_start",
+      "traceSequence": 287,
+      "markerElapsedSeconds": 280.5259250833333,
+      "expected": {
+        "title": "Hardy (feat. Clairo)",
+        "artist": "Rostam",
+        "kind": "trackplay",
+        "playedAtMilliseconds": 1790424435000
+      },
+      "identityProvenance": "inferred from feed order and intervals",
+      "includeInMetrics": true,
+      "note": "Listener marked the transition but did not name it contemporaneously."
+    },
+    {
+      "id": "s1-i-feel-electric",
+      "classification": "song_start",
+      "traceSequence": 519,
+      "markerElapsedSeconds": 512.8424133333319,
+      "expected": {
+        "title": "I Feel Electric (Max Essa remix)",
+        "artist": "Rubies",
+        "kind": "trackplay",
+        "playedAtMilliseconds": 1790424668000
+      },
+      "identityProvenance": "inferred from feed order and intervals",
+      "includeInMetrics": true,
+      "note": "Listener marked the transition but did not name it contemporaneously."
+    },
+    {
+      "id": "s1-what-was-i-made-for",
+      "classification": "missed_song_start",
+      "expected": {
+        "title": "What Was I Made For? (From The Motion Picture \"Barbie\")",
+        "artist": "Billie Eilish",
+        "kind": "trackplay",
+        "playedAtMilliseconds": 1790425190000
+      },
+      "identityProvenance": "listener later identified the missed transition",
+      "includeInMetrics": false,
+      "note": "No audible-change keypress was recorded for this occurrence."
+    },
+    {
+      "id": "s1-things-take-time",
+      "classification": "song_start",
+      "traceSequence": 1249,
+      "markerElapsedSeconds": 1250.6269618333317,
+      "expected": {
+        "title": "Things Take Time",
+        "artist": "Gang of Youths",
+        "kind": "trackplay",
+        "playedAtMilliseconds": 1790425403000
+      },
+      "identityProvenance": "listener explicitly identified the song",
+      "includeInMetrics": true
+    },
+    {
+      "id": "s1-wanderlust",
+      "classification": "song_start",
+      "traceSequence": 1460,
+      "markerElapsedSeconds": 1454.5144145833328,
+      "expected": {
+        "title": "Wanderlust (Original Mix)",
+        "artist": "Claptone",
+        "kind": "trackplay",
+        "playedAtMilliseconds": 1790425597000
+      },
+      "identityProvenance": "listener explicitly identified the song after the recorded pause",
+      "includeInMetrics": true
+    }
+  ],
+  "pauses": [
+    {
+      "id": "s1-11-second-pause",
+      "pauseSequence": 1296,
+      "pauseElapsedSeconds": 1297.4113134583313,
+      "resumeSequence": 1311,
+      "resumeElapsedSeconds": 1308.4105312499996
+    }
+  ]
+}

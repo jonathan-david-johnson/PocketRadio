@@ -1,0 +1,147 @@
+stream-lab compare — M11-A development evidence; not an independent holdout.
+
+primary offset: +160.000s
+sessions: 2
+included markers measured: 9/9
+combined median absolute error: 0.571s
+combined worst absolute error: 3.193s
+
+sensitivity (fixed before retained-trace replay)
+  offset     measured   median-abs   worst-abs
+  +158.000s   9/9          1.622s         5.260s
+  +159.000s   9/9          0.712s         4.247s
+  +160.000s   9/9          0.571s         3.193s
+  +161.000s   9/9          1.488s         2.157s
+  +162.000s   9/9          2.469s         3.223s
+  +163.000s   9/9          3.488s         4.291s
+
+leave-one-session-out median calibration
+  train=2026-09-26_kcrw_hls_attended_s1.jsonl fitted=+160.805s evaluate=2026-09-26_kcrw_hls_attended_s2.jsonl
+    measured=4/4 median-abs=2.006s worst-abs=2.157s
+  train=2026-09-26_kcrw_hls_attended_s2.jsonl fitted=+159.818s evaluate=2026-09-26_kcrw_hls_attended_s1.jsonl
+    measured=5/5 median-abs=0.571s worst-abs=1.813s
+
+primary session reports
+
+=== session 1: 2026-09-26_kcrw_hls_attended_s1.jsonl ===
+stream-lab select — development evidence from retained traces; not an independent holdout.
+
+session 74395893-F4A8-42EC-9525-2083E8CA4AA8
+  trace:  2026-09-26_kcrw_hls_attended_s1.jsonl
+  sha256: 8c72bd4b694e55892cb36b9cc96063e85dbc4e271f4c1c503e996b7688924057
+  offset: +160.000s
+
+selection transitions (7)
+  [4.412] "Stuck in the Middle" kind=trackplay trigger=playerSample song=103.000s
+    id=4:kcrw|7:derived|13:1790424061000|9:trackplay|13:greentea peng|19:stuck in the middle
+  [70.087] "I Go Up, You Go Down" kind=trackplay trigger=playerSample song=0.012s
+    id=4:kcrw|7:derived|13:1790424225000|9:trackplay|17:my precious bunny|20:i go up, you go down
+  [280.879] "Hardy (feat. Clairo)" kind=trackplay trigger=playerSample song=0.805s
+    id=4:kcrw|7:derived|13:1790424435000|9:trackplay|6:rostam|20:hardy (feat. clairo)
+  [513.414] "I Feel Electric (Max Essa remix)" kind=trackplay trigger=playerSample song=0.340s
+    id=4:kcrw|7:derived|13:1790424668000|9:trackplay|6:rubies|32:i feel electric (max essa remix)
+  [1035.498] "What Was I Made For? (From The Motion Picture \"Barbie\")" kind=trackplay trigger=playerSample song=0.425s
+    id=4:kcrw|7:derived|13:1790425190000|9:trackplay|13:billie eilish|55:what was i made for? (from the motion picture "barbie")
+  [1248.814] "Things Take Time" kind=trackplay trigger=playerSample song=0.741s
+    id=4:kcrw|7:derived|13:1790425403000|9:trackplay|14:gang of youths|16:things take time
+  [1454.077] "Wanderlust (Original Mix)" kind=trackplay trigger=playerSample song=0.989s
+    id=4:kcrw|7:derived|13:1790425597000|9:trackplay|8:claptone|25:wanderlust (original mix)
+
+annotations (6)
+  s1-i-go-up-you-go-down [song_start] expected="I Go Up, You Go Down"
+    marker=70.169s predicted=70.087s error=-0.082s observed-program-offset=+160.012s metrics=included
+    identity=inferred from feed order and intervals
+    note=Listener marked the transition but did not name it contemporaneously.
+  s1-hardy [song_start] expected="Hardy (feat. Clairo)"
+    marker=280.526s predicted=280.879s error=+0.353s observed-program-offset=+160.805s metrics=included
+    identity=inferred from feed order and intervals
+    note=Listener marked the transition but did not name it contemporaneously.
+  s1-i-feel-electric [song_start] expected="I Feel Electric (Max Essa remix)"
+    marker=512.842s predicted=513.414s error=+0.571s observed-program-offset=+159.323s metrics=included
+    identity=inferred from feed order and intervals
+    note=Listener marked the transition but did not name it contemporaneously.
+  s1-what-was-i-made-for [missed_song_start] expected="What Was I Made For? (From The Motion Picture \"Barbie\")"
+    marker=<missed> predicted=1035.498s error=n/a observed-program-offset=n/a metrics=excluded
+    identity=listener later identified the missed transition
+    note=No audible-change keypress was recorded for this occurrence.
+  s1-things-take-time [song_start] expected="Things Take Time"
+    marker=1250.627s predicted=1248.814s error=-1.813s observed-program-offset=+162.841s metrics=included
+    identity=listener explicitly identified the song
+  s1-wanderlust [song_start] expected="Wanderlust (Original Mix)"
+    marker=1454.514s predicted=1454.077s error=-0.438s observed-program-offset=+160.989s metrics=included
+    identity=listener explicitly identified the song after the recorded pause
+
+pauses (1)
+  s1-11-second-pause: elapsed=10.999s media=+0.027s program=+0.027s frozen=true
+
+metrics (included song-start markers only)
+  count: 5
+  median absolute error: 0.438s
+  worst absolute error: 1.813s
+
+invalid player-clock samples
+  missingPair: 7
+
+unavailable decisions
+  missingPlayerProgramDate: 7
+
+Evidence boundary: the same captures motivated this offset and test it.
+A passing replay supports a fresh opt-in experiment; it does not validate lyrics, routes, or rollout.
+
+=== session 2: 2026-09-26_kcrw_hls_attended_s2.jsonl ===
+stream-lab select — development evidence from retained traces; not an independent holdout.
+
+session 44E22774-D6F7-449A-9CB4-E4AD82BA6A28
+  trace:  2026-09-26_kcrw_hls_attended_s2.jsonl
+  sha256: 92d5a557fa0633cd1eb3561b0f92fdd3645153583173ce9ae773d8c482b3805c
+  offset: +160.000s
+
+selection transitions (5)
+  [2.054] "She\'s My Religion" kind=trackplay trigger=playerSample song=159.000s
+    id=4:kcrw|7:derived|13:1790425793000|9:trackplay|6:willow|17:she's my religion
+  [85.667] "Barthelona" kind=trackplay trigger=playerSample song=0.074s
+    id=4:kcrw|7:derived|13:1790426031000|9:trackplay|11:sofi tukker|10:barthelona
+  [305.092] "Fools in Love" kind=trackplay trigger=playerSample song=0.499s
+    id=4:kcrw|7:derived|13:1790426250000|9:trackplay|12:inara george|13:fools in love
+  [585.765] "Friend of Mine" kind=trackplay trigger=playerSample song=0.172s
+    id=4:kcrw|7:derived|13:1790426531000|9:trackplay|12:doran danoff|14:friend of mine
+  [834.014] "Colosse (feat. Laurence-Anne)" kind=trackplay trigger=playerSample song=0.042s
+    id=4:kcrw|7:derived|13:1790426748000|9:trackplay|15:choses sauvages|29:colosse (feat. laurence-anne)
+
+annotations (5)
+  s2-barthelona [song_start] expected="Barthelona"
+    marker=88.860s predicted=85.667s error=-3.193s observed-program-offset=+163.182s metrics=included
+    identity=listener explicitly identified the song
+  s2-station-id-commercial [commercial] expected="Fools in Love"
+    marker=246.879s predicted=305.092s error=+58.213s observed-program-offset=+101.821s metrics=excluded
+    identity=listener explicitly classified this marker as a station-ID commercial, not the expected song
+    note=The feed omitted the break; the selector must not call this the Fools in Love start.
+  s2-fools-in-love [song_start] expected="Fools in Love"
+    marker=304.635s predicted=305.092s error=+0.457s observed-program-offset=+160.499s metrics=included
+    identity=listener explicitly distinguished the song from the preceding station ID
+  s2-friend-of-mine [song_start] expected="Friend of Mine"
+    marker=584.657s predicted=585.765s error=+1.108s observed-program-offset=+159.137s metrics=included
+    identity=listener explicitly identified the song
+  s2-colosse [song_start] expected="Colosse (feat. Laurence-Anne)"
+    marker=833.198s predicted=834.014s error=+0.816s observed-program-offset=+158.977s metrics=included
+    identity=listener explicitly identified the song after the recorded pause
+
+pauses (1)
+  s2-31-second-pause: elapsed=31.367s media=+0.027s program=+0.027s frozen=true
+
+metrics (included song-start markers only)
+  count: 4
+  median absolute error: 0.962s
+  worst absolute error: 3.193s
+
+invalid player-clock samples
+  missingPair: 6
+
+unavailable decisions
+  missingPlayerProgramDate: 6
+
+Evidence boundary: the same captures motivated this offset and test it.
+A passing replay supports a fresh opt-in experiment; it does not validate lyrics, routes, or rollout.
+
+Comparison boundary: both retained sessions helped motivate the rule.
+Only fresh fixed-policy sessions can act as holdout evidence for M11-B.
