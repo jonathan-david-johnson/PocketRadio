@@ -1,10 +1,10 @@
 # M11-B — Opt-in KCRW AAC/HLS menubar experiment
 
-**Status:** Planned and blocked on M11-A review. Not approved to implement.
+**Status:** M11-A committed at menubar `186aa6d`. Off / Observe / opt-in Apply candidate are implemented on menubar `feature/stream-session-model` at `94814f6`; three fresh Observe captures were replayed offline: one single-transition smoke, a second run with three listener-confirmed music markers and a corrected commercial button, and a third with five listener-confirmed song identities but deliberately delayed buttons, no recorded output-route category, and later speaker-route confirmation for all runs. These do not complete the attended immediate-boundary protocol; do not treat delayed buttons as a timing failure or retune. The user explicitly approved Apply candidate; the opt-in Debug implementation and signed synthetic tests were committed in the menubar feature repo at `94814f6`. The [first attended Apply smoke](../experiments/2026-10-03_kcrw_m11b_apply_s0.md) recorded `speaker` and one listener-reported perfectly timed scrolling-title change, while the legacy/feed next row appeared early. This is not a title distribution, Now Playing check, or lyric validation. A later [Apply pause capture](../experiments/2026-10-03_kcrw_m11b_apply_pause_teardown.md) was exported automatically at item teardown; it has five raw song buttons, one later corrected by the listener to station-ID-like speech, and no independently confirmed song identities or resumed item. The user does not want another long capture merely to resolve this marker; after Resume they reported a good title with aligned Now Playing and lyrics. This is attended qualitative feedback, not a second post-resume trace, independent recording match, lyric-landmark measurement, or completion of the formal multi-session targets. The user chose **reconnect-style pause only**; buffered pause is out of scope. The user approved a local Debug export-status UI fix; a new signed build and 18 app unit tests passed, and the user authorized switching to that build. The listener visually checked its banner after a short completed Apply capture and said it looks good. A focused review then fixed an Apply lyric-detail row-ID refresh issue in a separate signed, unit-tested build that has not been launched for listening. The user approved this scoped M11-B commit. No merge, push, default-endpoint change, or rollout approval. See [Apply staging](../experiments/2026-10-03_kcrw_m11b_apply_staging.md) and [M11-B handoff](milestone_11b_handoff.md), the [first smoke report](../experiments/2026-10-03_kcrw_m11b_observe_smoke.md), [second session report](../experiments/2026-10-03_kcrw_m11b_observe_s1.md), and [third delayed-marker report](../experiments/2026-10-03_kcrw_m11b_observe_s2.md).
 
 **Goal:** Put the frozen M11-A occurrence-selection candidate behind explicit, reversible controls in the menubar app, observe it on the same AAC/HLS player item, and collect fresh title and lyric evidence without changing production defaults or saved user data.
 
-**User checkpoint:** On a recorded macOS output route, enable observe-only mode, verify the exact AAC/HLS item and candidate clock, then explicitly apply the candidate. Hear at least five identified song changes in each of two fresh fixed-policy sessions, compare selected history/title and lyric highlights with the audio, exercise reconnect and buffered pauses in separate sessions, export the app's trace, replay its decisions offline, and disable the experiment without changing station URLs or saved lyric offsets.
+**User checkpoint:** On a recorded macOS output route, enable observe-only mode, verify the exact AAC/HLS item and candidate clock, then explicitly apply the candidate. Hear at least five identified song changes in each of two fresh fixed-policy sessions, compare selected history/title and lyric highlights with the audio, exercise reconnect-style pause and fresh-item resume, export the app's trace, replay its decisions offline, and disable the experiment without changing station URLs or saved lyric offsets.
 
 ## Entry criteria from M11-A
 
@@ -47,18 +47,16 @@ lyricSeconds = candidateSongSeconds + recordingCorrection
 
 Start correction at zero, hold it in memory, and reset it for a different occurrence/recording. Do not read, apply, or save the existing per-station lyric offset. A fuzzy lookup or mismatched recording remains uncertain; do not retune the station mapping to hide it.
 
-### Pause staging
+### Pause behavior — reconnect only
 
-Validate **Reconnect on resume** first because it matches the existing app behavior: teardown invalidates the old generation, and resume joins from a new item and valid current clock.
-
-Only after that passes, expose **Preserve buffer** as a separately selected experimental pause mode. It pauses the existing item and clock. Feed polling may continue but cannot advance the selected occurrence or lyrics. HLS window loss, a forced go-live action, or AVPlayer recovery jump invalidates and reanchors rather than pretending continuity. Neither mode changes default pause behavior outside the experiment.
+The user explicitly wants **Reconnect on resume**, which matches the existing radio behavior: Pause tears down the item and ends its capture, invalidating the old generation. Resume joins from a new item and valid current clock; a new capture is a **separate** trace. Validate the fresh-generation title and lyric anchor after resume and reject late callbacks from the old item. Make the automatic export and its path conspicuous in the Debug UI so Pause does not appear to lose a capture. **Preserve buffer is not requested and is out of scope.** Do not change radio pause behavior outside the experiment.
 
 ## Scope
 
 | Area | Files/modules and responsibility |
 |---|---|
 | Shared core | Consume the frozen `Packages/StreamSession` library from M11-A. Policy changes require a new labeled validation, not hidden app-only logic. |
-| Configuration | **New** `PocketRadio/Services/StreamExperimentConfiguration.swift`. Off/observe/apply mode, exact endpoint, frozen policy, pause mode, and in-memory correction; injectable store with no production persistence writes. |
+| Configuration | **New** `PocketRadio/Services/StreamExperimentConfiguration.swift`. Off/observe/apply mode, exact endpoint, frozen policy, reconnect-only pause behavior, and in-memory correction; injectable store with no production persistence writes. |
 | Player/session adapter | **New** `PocketRadio/Services/RadioPlaybackSession.swift`; focused changes to `PocketRadio/View Models/PlayerViewModel.swift`. Item generation, paired samples, lifecycle, endpoint override, candidate publication, and stale-callback rejection. Keep policy out of the large view model. |
 | Feed adapter | **New** `PocketRadio/Services/RadioFeedClient.swift`; narrow changes to `APIService.swift` only where the experimental adapter needs stable occurrence/break/failure evidence. Serial active-session polling, distinct empty/failure/stale state, and feed publication before optional artwork enrichment. Legacy callers remain unchanged when off. |
 | Lyrics | Narrow `LyricsService.swift` integration that exposes resource identity and lookup provenance. Reuse one resource/clock across experimental surfaces and keep correction isolated from saved offsets. No general catalog rewrite. |
@@ -74,7 +72,7 @@ Only after that passes, expose **Preserve buffer** as a separately selected expe
 4. **Apply-candidate publication.** Menubar title, selected feed occurrence, live lyric resource, and existing system title consume one snapshot/revision. History stays in feed order and may select a row other than row zero. No broad artwork rewrite.
 5. **Nonblocking feed lifecycle.** One in-flight request per active session; immediate startup fetch then bounded polling. Slow resource enrichment cannot delay occurrence selection. Failure, empty, stale, cancelled, and out-of-order results remain distinct.
 6. **Reconnect pause path.** Pause teardown invalidates the item; resume creates a new generation and joins at the occurrence supported by its new clock. It never resumes the prior anchor or starts the current song at zero.
-7. **Buffered pause path.** Only after behavior 6 passes, pause the existing item. Media, selection, and lyrics freeze through approximately 11s and 31s pauses while feed polling may continue. Window loss, failed item, and go-live reanchor explicitly. Mute is separate and continues media progression.
+7. **Pause export visibility.** Tear-down finalizes the trace and sidecar with `item_teardown` before the old capture controls disappear. Prominently retain a completed-export status and path; do not leave the user thinking data were lost. A fresh resume capture must have a distinct item/generation. Mute remains separate and continues media progression.
 8. **Lyric resource/correction isolation.** Late lookup results cannot populate another occurrence. Bar and live detail use identical lines/indices. Correction starts at zero, affects lyrics only, never touches selection/calibration, and never reads or saves legacy offsets. Repeat plays reset position even when reusing a resource.
 9. **View lifecycle and historical lyrics.** Opening/closing the popover or live lyrics does not reset the session. Historical lyrics do not move the active anchor or gain live highlighting. Missing timing removes timed highlights without suppressing history.
 10. **Same-player export and replay.** Capture configuration, sanitized endpoint, output-route category, paired clocks, transport, feed evidence, selection reason, correction, lyric-resource identity/timestamps, publication revision, and human markers. Raw observations and decisions replay deterministically. Limits and write failures produce an explicit incomplete export; files are owner-only and never overwritten.
@@ -82,10 +80,10 @@ Only after that passes, expose **Preserve buffer** as a separately selected expe
 
 ## Execution and approval gates
 
-1. Obtain explicit approval of the frozen M11-A candidate and M11-B implementation scope.
-2. Implement Off and Observe only first. Run unit/integration tests and inspect the same-player trace before enabling Apply candidate.
+1. Begin M11-B implementation after M11-A review. The frozen `+160s` values are staged only in Off / Observe mode; no Apply candidate or production policy is authorized.
+2. Implement Off and Observe only first. Run unit/integration tests and inspect a **fresh same-player live trace** before enabling Apply candidate. A local synthetic recorder test does not satisfy the live evidence checkpoint.
 3. Review observe-only evidence with the user. Enabling Apply candidate requires an explicit checkpoint, not merely a passing build.
-4. Validate reconnect-on-resume before implementing or enabling buffered pause.
+4. Validate reconnect-on-resume and the automatic teardown export. Buffered pause is out of scope by user choice.
 5. Freeze policy values and run the attended protocol below. Do not launch a live stream from automated tests.
 6. Review title and lyric evidence separately. A successful experiment still requires separate commit, merge, default-endpoint, pause-semantics, and rollout decisions.
 
@@ -94,7 +92,7 @@ Only after that passes, expose **Preserve buffer** as a separately selected expe
 Prerequisites: tests pass; capture is enabled; exact build/dirty state, endpoint, observable codec/rendition details, output-route category, mode, pause mode, and policy values are recorded; `caffeinate -is` is active; and no parallel probe/browser player is treated as the same audio timeline.
 
 1. Start in Observe only. Verify that the AAC/HLS override is the active player item and that paired clocks and candidate decisions are plausible.
-2. Run two fresh fixed-policy sessions with at least five identified song transitions each on the intended route. Use reconnect-on-resume in one. After that path passes, use buffered pauses of roughly 11s and 31s in the other. Do not count missed markers, speech, or commercials as song starts.
+2. Run two fresh fixed-policy sessions with at least five identified song transitions each on the intended route. Exercise reconnect-on-resume in one and keep the other uninterrupted; a paused item and resumed item produce separate traces. Do not count missed markers, speech, or commercials as song starts.
 3. Move to Apply candidate only after the explicit checkpoint. Mark every identified transition and any wrong-title interval.
 4. For at least three songs with plausible matched synced lyrics, mark recognizable lyric landmarks and their lyric timestamps. Measure the zero-correction baseline before any adjustment. If suitable lyrics are unavailable, leave lyric validation incomplete.
 5. Exercise close/reopen, browsing another station without playing it, live/historical lyrics, mute, reconnect, and station/podcast switching during a pending lookup. Treat network interruption, long pause, and route change as separately labeled recovery tests.
@@ -106,6 +104,6 @@ Prerequisites: tests pass; capture is enabled; exact build/dirty state, endpoint
 
 - Default endpoint changes or persistence to favorite, curated, constants, or Supabase data.
 - Production rollout, merge, or iOS port without later approval.
-- KEXP/MP3 calibration, ad recognition, audio capture/upload, or ACR alignment.
+- Buffered/preserve-buffer pause; KEXP/MP3 calibration, ad recognition, audio capture/upload, or ACR alignment.
 - Broad artwork, lyrics-catalog, podcast, UI, or repository refactors.
 - Claims about unrecorded output routes or external displays.
