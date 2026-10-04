@@ -1,24 +1,27 @@
 # Menubar M12 — KCRW alignment in normal playback
 
-**Status:** PROPOSED — next-step plan only. M11-B acceptance authorizes its commit, merge, and push, not a production default change. Implementation and rollout require the user's approval of this scope.
+**Status:** ACCEPTED (2026-10-04) — the user ran the installed build in ordinary use and reported it works well. Merged to menubar `main` at `8838df5` (feature commit `fb1943d`) and pushed. Bugs 2 and 3 are accepted as open, non-blocking follow-ups.
 **Depends on:** Accepted M11-A/M11-B, merged and pushed at menubar `e6fa855`.
+**Execution plan:** [All-Sol subagent implementation plan](milestone_12_subagent_plan.md).
+**Verification:** [Implementation and review handoff](milestone_12_handoff.md) — final commands, results, build paths, and remaining uncertainty.
+**Open user-check issues:** [Bug 2 — alignment message on a nonplaying stream](../bugs/bug_2.md); [Bug 3 — footer Remote Debug button has no visible action](../bugs/bug_3.md). Filed on 2026-10-04; not fixed; non-blocking for acceptance.
 
 ## Where the work happens
 
 | Area | Location |
 |---|---|
 | Plan | Shell `main`: this file, the menubar index, and any verification notes |
-| Code | `pocket-radio-menubar`, proposed branch `feature/kcrw-normal-use` from `main` at `e6fa855` or its verified successor |
+| Code | `pocket-radio-menubar`, branch `feature/kcrw-normal-use` from verified `main` successor `464ca70` |
 | Worktree | `pocket-radio-menubar/`, provided no other menubar branch is active there |
 | Shell changes | Additive documentation only; no shared contracts or backend changes |
 
-**Goal:** After separate approval, use the accepted KCRW alignment path during ordinary playback without requiring the Debug Apply picker. Keep experimental recording separate and explicitly opt-in. Do not turn experiment telemetry into normal-use monitoring.
+**Goal:** Use the accepted KCRW alignment path during ordinary playback without requiring the Debug Apply picker. Keep experimental recording separate and explicitly opt-in. Do not turn experiment telemetry into normal-use monitoring.
 
 **User checkpoint:** In normal app use, play an eligible KCRW Eclectic24 station without opening Debug controls. Titles and lyrics follow the player clock, pause/resume reconnects normally, and no recording starts. Other stations and podcasts retain their existing behavior.
 
-## Decision gate before implementation
+## Approved implementation decision
 
-The user must approve promoting alignment to normal playback for the exact eligible KCRW variants. That includes selecting the measured HLS endpoint for playback and using the frozen `+160s` policy, without rewriting saved station URLs. This is not approval for other streams, routes, platforms, or background telemetry.
+The user approved promoting alignment to normal playback for the existing exact eligible KCRW variants, selecting the measured HLS endpoint and frozen `+160s` policy without rewriting saved station URLs. Debug **Off** disables the experiment, not ordinary alignment; Observe remains a comparison override and capture stays explicit. This does not authorize other streams, routes, platforms, or background telemetry. The user separately approved the macOS installation and replacement-app launch.
 
 ## Scope
 
