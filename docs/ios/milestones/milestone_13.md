@@ -1,6 +1,6 @@
 # iOS M13 — CarPlay output harness: experiments
 
-**Status**: PLANNED
+**Status**: IN PROGRESS — E1 and E2 PASS (2026-10-04); E3–E7 not started. See [Progress](#progress).
 **Depends on**: M12.3 (`trunk` at `0751918f8`)
 **Required by**: M13.1 (harness), M13.2 (CarPlay output suite), and the later
 `fix/stream-presentation` branch proposed in the
@@ -43,6 +43,69 @@ timings) and asserts the title, artist, album, and artwork that iOS publishes
 for CarPlay.
 
 ---
+
+## Progress
+
+Last updated 2026-10-04. Shell commit with the reports: `7f78aba`. Shell `main`
+was at `7f78aba` when E1 and E2 ran.
+
+| Experiment | Status | Report |
+|---|---|---|
+| E1 Read back output | **PASS**: 400/400 iterations over 20 launches | [2026-10-04_m13_e1](../experiments/2026-10-04_m13_e1.md) |
+| E2 Real playback | **PASS**: 6/6 launches; median 5.22 s, p95 5.27 s | [2026-10-04_m13_e2](../experiments/2026-10-04_m13_e2.md) |
+| E3 Network interception | not started | |
+| E4 Reset and isolation | not started | |
+| E5 Determinism and cost | not started | |
+| E6 Gherkin runner | not started | |
+| E7 Baseline H1–H3 | not started | |
+
+The stop-early gate did not trigger: E1 and E2 both passed, so the in-process
+approach is still viable. Next step is E3, then E4, E5 and E7, with E6 in parallel.
+
+### Where the code is
+
+- Worktree `pocket-radio-ios-carplay/`, branch `spike/carplay-harness`, based on
+  `trunk` `0751918f8`. **Nothing is committed** in `pocket-radio-ios` (no approval
+  yet), so the spike exists only as uncommitted files in that worktree:
+  - `Makefile`: `test_carplay_spike`, `CARPLAY_SIM_UDID`, `CARPLAY_TESTS`.
+  - `PocketCastsTests/Tests/CarPlayOutputSpike/`: `CarPlayOutputSpikeE1Tests`,
+    `CarPlayOutputSpikeE2Tests`, `SpikeIcyServer` (in-process `NWListener` ICY
+    server), `SpikeLog`, `tone_128k.mp3`.
+- No production file has been changed. No reset seams exist yet (E4 identifies them).
+- Dedicated simulator: "PocketRadio CarPlay Tests", UDID
+  `6565636E-BB8D-4C34-A9EB-56F2BB638400`, iOS 26.5, signed out. Never sign in on it.
+- Run: `make test_carplay_spike` (both classes), or
+  `make test_carplay_spike CARPLAY_TESTS=CarPlayOutputSpikeE2Tests`.
+  `xcodebuild test-without-building` avoids a rebuild when only re-running.
+- Raw logs go to `/tmp/m13_results/` on the host. That folder is not in any repo
+  and may be cleared; the reports quote what matters.
+
+### Findings that change later experiments
+
+- **Latency.** A real ICY title change costs about 5 s of real time, mostly the
+  gap between where the server writes the block and where the playhead is. This is
+  an inference; the burst size was not varied. E5 should use it for the cost estimate.
+- **AVPlayer opens two connections.** A `Range: bytes=0-1` probe with no
+  `icy-metadata` header, then the real stream. The fake world must tolerate both.
+- **E2 disabled the tracklist prefetch and widget republish** (`prefetchTracklist: false`,
+  `republishWidgetState: false`), so no tracklist or artwork code ran. E3 and E7 must
+  turn those paths on.
+- **The E2 cleanup matters.** `endPlayback(saveCurrentEpisode: false)` plus registry
+  removal keeps the next launch from restoring the radio shim. E4 should fold this
+  into a proper reset.
+- **Artwork colour comparison** needs a tolerance of at least 2/255 (observed max 1).
+- **Template buttons** (`CPNowPlayingTemplate.shared`) are readable without a scene.
+  Whether the favourite and mute buttons are in M13.2's scope is still the user's call (D4).
+
+### Open items before E3
+
+- **Wi-Fi was on** during E1 and E2. The checkpoint wants it off. Turn it off before
+  E3, whose network guard is meant to produce a clean inventory. The simulator shares
+  the host's network, so this is a manual step.
+- E2 covers only MP3 over ICY with an idle main thread. KCRW's real stream may be
+  AAC or HLS; the HLS path is not tested.
+- Decisions D1–D4 are not yet made. E2 supports in-process Swift for D2 (`NWListener`).
+  D1 waits on E5.
 
 ## Goal
 
