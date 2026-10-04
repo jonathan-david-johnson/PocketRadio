@@ -1,0 +1,36 @@
+# Bug 4 — A song missing from a stale tracklist keeps the previous song's artwork
+
+**Status:** Open — reproduced in the M13 test harness (2026-10-04); not yet observed on a device. Not fixed.
+
+Found by M13 E7 (H1). Evidence: [2026-10-04_m13_e7](../experiments/2026-10-04_m13_e7.md), scenario `@h1` in `contracts/features/now_playing/carplay_artwork.feature` (uncommitted draft).
+
+---
+
+## Symptom
+
+The now-playing display (lock screen, CarPlay) shows the new song's title and artist with the **previous song's artwork**.
+
+Timeline from the harness: Song A plays with its artwork. The stream announces Song B. The display changes to "Song B" and the artwork stays on A's image. It does not change again.
+
+## When it happens
+
+All of these must hold:
+
+- The station is a curated one with a `tracklistUrl` (so artwork resolution runs).
+- The cached tracklist does not contain the new song. The tracklist is fetched at playback start and again only when the station detail screen is visible, so a phone that never opens that screen keeps the start-up copy.
+
+It does **not** happen when the new song is in the cached tracklist.
+
+## Root cause (from code, confirmed by the harness)
+
+`TrackArtworkResolver.bestResolveEntry` falls back to the cached tracklist's top entry when the ICY artist and title match nothing. `PlaybackManager.resolveRadioArtworkForLockScreen` builds its dedupe key from that entry. The top entry is still the previous song, so the key equals `lastResolvedRadioKey` and the function returns early. The title and artist come from a separate write (`setRadioTrackInfo`), so they update while the artwork does not.
+
+The existing test `testBestResolveEntryPopulatedCacheICYMismatchFallsBackToTop` asserts the top-entry fallback, so a fix must change that test deliberately.
+
+## Not decided
+
+How to fix it. The M13 plan keeps fixes in `fix/stream-presentation`. Options include refreshing the tracklist on a miss, falling back to the station logo when the ICY song is not in the list, or keying on the ICY pair instead of the fallback row.
+
+## Open question
+
+How often a real KCRW user meets it. It depends on whether the real tracklist usually has the new song when the ICY title changes. Not measured.

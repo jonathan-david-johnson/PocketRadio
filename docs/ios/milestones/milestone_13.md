@@ -1,6 +1,6 @@
 # iOS M13 — CarPlay output harness: experiments
 
-**Status**: IN PROGRESS — E1 and E2 PASS (2026-10-04); E3–E7 not started. See [Progress](#progress).
+**Status**: IN PROGRESS — E1–E7 done (2026-10-04). Waiting on the user's decisions D1–D4. See [Progress](#progress).
 **Depends on**: M12.3 (`trunk` at `0751918f8`)
 **Required by**: M13.1 (harness), M13.2 (CarPlay output suite), and the later
 `fix/stream-presentation` branch proposed in the
@@ -46,21 +46,31 @@ for CarPlay.
 
 ## Progress
 
-Last updated 2026-10-04. Shell commit with the reports: `7f78aba`. Shell `main`
-was at `7f78aba` when E1 and E2 ran.
+Last updated 2026-10-04. E1 and E2 reports were committed at `7f78aba`; E3 to E7 are
+in the commit that follows it.
 
 | Experiment | Status | Report |
 |---|---|---|
 | E1 Read back output | **PASS**: 400/400 iterations over 20 launches | [2026-10-04_m13_e1](../experiments/2026-10-04_m13_e1.md) |
 | E2 Real playback | **PASS**: 6/6 launches; median 5.22 s, p95 5.27 s | [2026-10-04_m13_e2](../experiments/2026-10-04_m13_e2.md) |
-| E3 Network interception | not started | |
-| E4 Reset and isolation | not started | |
-| E5 Determinism and cost | not started | |
-| E6 Gherkin runner | not started | |
-| E7 Baseline H1–H3 | not started | |
+| E3 Network interception | **PASS**: fixtures, Kingfisher loopback and guard all work; real-playback inventory clean | [2026-10-04_m13_e3](../experiments/2026-10-04_m13_e3.md) |
+| E4 Reset and isolation | **PASS**: 4 `#if DEBUG` seams; order-independent with them, contaminated without | [2026-10-04_m13_e4](../experiments/2026-10-04_m13_e4.md) |
+| E5 Determinism and cost | **PASS**: 50/50, 0.2 s spread; host sleep breaks audio, so use `caffeinate` | [2026-10-04_m13_e5](../experiments/2026-10-04_m13_e5.md) |
+| E6 Gherkin runner | minimal runner (156 lines) meets all 5 checks; no library tried | [2026-10-04_m13_e6](../experiments/2026-10-04_m13_e6.md) |
+| E7 Baseline H1–H3 | **H1 and H2 reproduced; H3 not** | [2026-10-04_m13_e7](../experiments/2026-10-04_m13_e7.md) |
 
-The stop-early gate did not trigger: E1 and E2 both passed, so the in-process
-approach is still viable. Next step is E3, then E4, E5 and E7, with E6 in parallel.
+The stop-early gate did not trigger. All seven experiments are done. The next
+step is the decision gate below. Bugs found: [bug 4](../bugs/bug_4.md) (H1) and
+[bug 5](../bugs/bug_5.md) (H2, a start-up race, and a stale dedupe key).
+
+### Evidence for the decisions
+
+| Decision | Evidence | Suggested answer |
+|---|---|---|
+| D1 Input tier | E5: 50/50 real-stream runs, about 5.7 s per title change. E7's bugs depend on real playback timing. | Real ICY stream for every scenario. Keep an injection shortcut only for pure logic scenarios. |
+| D2 Fake-world placement | E2 to E7: in-process `NWListener`, `URLProtocol` and loopback art server all worked. | In-process Swift. |
+| D3 Gherkin runner | E6: minimal parser meets all five checks at 156 lines. The one stale library candidate was not tested. | Minimal in-bundle parser. |
+| D4 Spec S1–S7 | E7: H1 and H2 are real; H3 passes. Needs the S1–S7 wording reviewed against this. | Your call. See M13.2. |
 
 ### Where the code is
 
@@ -68,10 +78,16 @@ approach is still viable. Next step is E3, then E4, E5 and E7, with E6 in parall
   `trunk` `0751918f8`. **Nothing is committed** in `pocket-radio-ios` (no approval
   yet), so the spike exists only as uncommitted files in that worktree:
   - `Makefile`: `test_carplay_spike`, `CARPLAY_SIM_UDID`, `CARPLAY_TESTS`.
-  - `PocketCastsTests/Tests/CarPlayOutputSpike/`: `CarPlayOutputSpikeE1Tests`,
-    `CarPlayOutputSpikeE2Tests`, `SpikeIcyServer` (in-process `NWListener` ICY
-    server), `SpikeLog`, `tone_128k.mp3`.
-- No production file has been changed. No reset seams exist yet (E4 identifies them).
+  - `PocketCastsTests/Tests/CarPlayOutputSpike/`: `CarPlayOutputSpikeE1Tests` to `E5Tests`,
+    `CarPlayArtworkFeatureTests` (E6/E7), `SpikeIcyServer` (in-process `NWListener` ICY
+    server), `SpikeSupport` (art server, network guard), `SpikeScenarioCase` (shared
+    scenario and reset code), `SpikeGherkin` (the minimal runner), probes, `SpikeLog`,
+    `tone_128k.mp3`.
+  - Draft spec `contracts/features/now_playing/carplay_artwork.feature` in the shell,
+    uncommitted until D3.
+- Four `#if DEBUG` reset seams in production files (E4): `PlaybackManager`,
+  `NowPlayingHelper`, `TrackArtworkResolver`, `RadioTracklistService`. No other
+  production change.
 - Dedicated simulator: "PocketRadio CarPlay Tests", UDID
   `6565636E-BB8D-4C34-A9EB-56F2BB638400`, iOS 26.5, signed out. Never sign in on it.
 - Run: `make test_carplay_spike` (both classes), or
@@ -80,7 +96,29 @@ approach is still viable. Next step is E3, then E4, E5 and E7, with E6 in parall
 - Raw logs go to `/tmp/m13_results/` on the host. That folder is not in any repo
   and may be cleared; the reports quote what matters.
 
-### Findings that change later experiments
+### Findings from E3 to E7
+
+- **The fake world needs no production seams for the network.** `URLProtocol` on
+  `URLSession.shared` and on Kingfisher's `sessionConfiguration` covers the tracklist,
+  iTunes and artwork. AVPlayer traffic is not covered, so scenarios must use loopback
+  stream URLs only.
+- **Four `#if DEBUG` seams are needed** (E4): `PlaybackManager.lastResolvedRadioKey`,
+  `NowPlayingHelper.radioTrackStationId`, `TrackArtworkResolver` (cache and key) and
+  `RadioTracklistService` (cache and toasts). Two are in upstream files and reset
+  `private` state. They are in the spike worktree and are not committed.
+- **The E2 cleanup is not a reset.** Without the seams, a second scenario that starts on
+  the first one's last song loses its artwork.
+- **The host must stay awake.** The Mac's maintenance sleep makes the simulator's audio
+  fail (`CoreMediaErrorDomain -66681`); titles never arrive. Wrap runs in
+  `caffeinate -dimsu`. This must be part of the M13.1 Make target.
+- **Playback touches `UserDefaults.standard`** (`StatsListenedTo`, `lastPauseTime`,
+  `lastPausedAt`). Harmless on the dedicated simulator, but the harness should document it.
+- **Cost:** about 3.3 s to start and 5.7 s per title change. Scenarios in E7 took 17 to 29 s.
+  A 15-scenario suite is roughly 3 to 5 minutes.
+- **Still not covered:** the HLS path (KCRW's real stream), AAC, an offline (Wi-Fi off)
+  run, and the full and mini players' own artwork resolution.
+
+### Findings that changed earlier experiments
 
 - **Latency.** A real ICY title change costs about 5 s of real time, mostly the
   gap between where the server writes the block and where the playhead is. This is
@@ -97,15 +135,18 @@ approach is still viable. Next step is E3, then E4, E5 and E7, with E6 in parall
 - **Template buttons** (`CPNowPlayingTemplate.shared`) are readable without a scene.
   Whether the favourite and mute buttons are in M13.2's scope is still the user's call (D4).
 
-### Open items before E3
+### Open items
 
-- **Wi-Fi was on** during E1 and E2. The checkpoint wants it off. Turn it off before
-  E3, whose network guard is meant to produce a clean inventory. The simulator shares
-  the host's network, so this is a manual step.
-- E2 covers only MP3 over ICY with an idle main thread. KCRW's real stream may be
-  AAC or HLS; the HLS path is not tested.
-- Decisions D1–D4 are not yet made. E2 supports in-process Swift for D2 (`NWListener`).
-  D1 waits on E5.
+- **Wi-Fi was on for every run.** The E3 guard blocks `URLSession.shared` and Kingfisher
+  traffic regardless, but the "Wi-Fi off" run the user checkpoint asks for has not been
+  done. It is a manual step. I did not turn Wi-Fi off from the agent session, because
+  that would cut the session's own connection.
+- **KCRW's real stream is HLS and AAC.** Everything so far used MP3 over ICY. The HLS path
+  is untested in this harness. It matters most for the alignment work in M14.
+- **Full and mini players** run their own artwork resolution and were not covered by E7.
+- **Decisions D1–D4** are the user's, see "Evidence for the decisions" above.
+- **Nothing is committed in `pocket-radio-ios`.** The spike is uncommitted files in the
+  worktree, including four `#if DEBUG` seams in production files.
 
 ## Goal
 
