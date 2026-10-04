@@ -1,6 +1,6 @@
 # iOS M14 — KCRW playback alignment (port from menubar)
 
-**Status**: PROPOSED — plan only, written 2026-10-04. Nothing is approved or started. `current_milestone.md` still points at M13; do not repoint it until the user starts this.
+**Status**: PROPOSED, decisions D1–D5 made 2026-10-04. Not started: M13 finishes first. `current_milestone.md` stays on M13 until then.
 **Depends on**: Menubar M11-A/M11-B/M12, accepted. Core and adapter at menubar `main` `8838df5`. iOS base is `trunk` `0751918f8`.
 **Required by**: The later stream-presentation work in the [stream-monitoring review](../architecture/reviews/stream-monitoring-review-2026-09-16.md) §6 steps 2 and 5.
 **Related**: [M13](milestone_13.md) (CarPlay output harness). M14 can start without it. M13.2 gives M14 its strongest output test, so see decision D2.
@@ -96,7 +96,9 @@ Tests use the `PocketCastsTests` host. Inject the clock, feed, lyrics, and publi
 - Replacing the whole artwork pipeline. Only the single-writer rule for the eligible station.
 - watchOS, tvOS, App Clip. Guard new code with `#if !os(watchOS) && !APPCLIP && !os(tvOS)`, as `DefaultPlayer` already does for the radio observer.
 
-## Decisions needed from the user
+## Decisions (made 2026-10-04)
+
+**D1 path dependency on the menubar package; D2 finish M13 first; D3 leave non-KCRW as is; D4 `FileLog` only; D5 defer menubar bugs 2 and 3.** Detail below keeps the options considered. Consequences: M14.1 starts after M13 closes, so M13.2 is available for 14.2 and 14.4. The menubar bugs stay open and are not blockers; iOS still follows behavior 6.
 
 | # | Decision | Options | Recommendation |
 |---|---|---|---|
