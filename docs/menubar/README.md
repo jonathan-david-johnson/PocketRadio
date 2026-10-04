@@ -82,6 +82,7 @@ pocket-radio-menubar/
 | [M11](./milestones/milestone_11.md) | KCRW playback-alignment experiment *(split plan)* | Review the offline proof before authorizing an app experiment |
 | [M11-A](./milestones/milestone_11a.md) | Offline KCRW media-clock selection proof *(accepted; merged/pushed at `e6fa855`)* | Reproduce all retained-trace decisions and review their errors and exclusions |
 | [M11-B](./milestones/milestone_11b.md) | Opt-in AAC/HLS menubar experiment *(qualitative prototype accepted; merged/pushed at `e6fa855`)* | Titles and lyrics align by listener report; Off works; formal numerical targets remain unverified |
+| [M12](./milestones/milestone_12.md) | KCRW alignment in normal playback *(proposed; requires default-behavior approval)* | Play KCRW with aligned titles/lyrics without Debug Apply or automatic recording |
 
 ## Build & Run
 
