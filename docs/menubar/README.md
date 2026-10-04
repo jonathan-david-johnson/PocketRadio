@@ -80,8 +80,8 @@ pocket-radio-menubar/
 | [M9](./milestones/milestone_9.md) | Lyric sync tuning and lookup fixes | Adjust station sync and see sensible between-track state |
 | [M10](./milestones/milestone_10.md) | Stream Lab capture and replay *(complete; merged at `a3787ff`)* | Mark an audible change and replay the trace offline |
 | [M11](./milestones/milestone_11.md) | KCRW playback-alignment experiment *(split plan)* | Review the offline proof before authorizing an app experiment |
-| [M11-A](./milestones/milestone_11a.md) | Offline KCRW media-clock selection proof *(complete; awaiting review)* | Reproduce all retained-trace decisions and review their errors and exclusions |
-| [M11-B](./milestones/milestone_11b.md) | Opt-in AAC/HLS menubar experiment *(planned; blocked on M11-A)* | Test the frozen candidate in fresh attended sessions without changing saved defaults |
+| [M11-A](./milestones/milestone_11a.md) | Offline KCRW media-clock selection proof *(accepted; merged/pushed at `e6fa855`)* | Reproduce all retained-trace decisions and review their errors and exclusions |
+| [M11-B](./milestones/milestone_11b.md) | Opt-in AAC/HLS menubar experiment *(qualitative prototype accepted; merged/pushed at `e6fa855`)* | Titles and lyrics align by listener report; Off works; formal numerical targets remain unverified |
 
 ## Build & Run
 

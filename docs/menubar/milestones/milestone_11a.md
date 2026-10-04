@@ -1,6 +1,6 @@
 # M11-A — Offline KCRW media-clock selection proof
 
-**Status:** Offline implementation and retained-trace validation complete; awaiting user review. Work branch `feature/stream-session-model` starts at M10 feature head `0d6653e`; M10 was later merged and pushed to `main` by `a3787ff`. The M11-A work is dirty and uncommitted. No app code, live playback, M11-A commit, or M11-A merge is approved.
+**Status:** COMPLETE — reviewed and accepted as the frozen candidate for M11-B. M11-A was committed at menubar `186aa6d`; the user later accepted the M11-B qualitative prototype and approved commit, merge, and push on 2026-10-04. Existing merge `e6fa855` includes both slices and is pushed to `origin/main`. No production default or iOS rollout approval. Work branch `feature/stream-session-model` began at M10 feature head `0d6653e`; M10 was merged at `a3787ff`.
 
 **Execution tracking:** [M11-A handoff, results, and open decision](milestone_11a_handoff.md).
 

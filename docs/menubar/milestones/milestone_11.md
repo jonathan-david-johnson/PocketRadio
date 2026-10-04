@@ -1,6 +1,6 @@
 # M11 — KCRW playback-aligned tracklist and lyrics experiment
 
-**Status:** M11-A offline validation is complete and awaiting user review after approved M10 merge `a3787ff`. M11-B still requires separate approval. No production endpoint change, M11 commit, or M11 merge is authorized by this index.
+**Status:** COMPLETE — M11-A supplied the frozen offline candidate; the user accepted M11-B as a qualitative opt-in prototype and approved commit, merge, and push on 2026-10-04. Existing menubar merge `e6fa855` includes both slices and is pushed to `origin/main`. Formal live timing targets remain unverified; further experiment telemetry and measured sessions are deferred. No production default, automatic recording, or iOS rollout approval.
 
 **Goal:** Evaluate KCRW's measured AAC/HLS media-clock relationship without allowing the experiment to grow into an unreviewed production refactor. First prove and report the occurrence-selection rule offline. Only after a separate user approval may the menubar app expose the rule behind reversible experimental controls.
 
@@ -8,10 +8,10 @@
 
 | Slice | Status | Purpose | Approval gate |
 |---|---|---|---|
-| [M11-A](milestone_11a.md) | Offline result complete; awaiting review | Replay the retained KCRW traces and measure the fixed `+160s` occurrence-selection rule | Review the derived decisions, residuals, pause behavior, exclusions, and sensitivity analysis with the user |
-| [M11-B](milestone_11b.md) | Planned; not approved to implement | Put the frozen candidate behind opt-in AAC/HLS controls in the menubar app and run fresh attended sessions | Requires explicit approval after M11-A; rollout remains a later decision |
+| [M11-A](milestone_11a.md) | Complete; accepted and merged | Replay the retained KCRW traces and measure the fixed `+160s` occurrence-selection rule | Review the derived decisions, residuals, pause behavior, exclusions, and sensitivity analysis with the user |
+| [M11-B](milestone_11b.md) | Complete; qualitative prototype accepted and merged | Put the frozen candidate behind opt-in AAC/HLS controls in the menubar app and run fresh attended sessions | Requires explicit approval after M11-A; rollout remains a later decision |
 
-M11-A is not evidence from a new listening session. The same two captures motivated the candidate and test it, so they are development evidence rather than an independent holdout. M11-B supplies fresh attended evidence on a recorded output route.
+M11-A is not evidence from a new listening session. The same two captures motivated the candidate and test it, so they are development evidence rather than an independent holdout. M11-B supplied fresh attended captures and later qualitative acceptance of titles, lyrics, and Off. Its final acceptance check has no separately recorded route or measured timing; it does not satisfy the original formal multi-session protocol.
 
 ## Shared evidence and constraints
 
@@ -28,7 +28,7 @@ M11-A is not evidence from a new listening session. The same two captures motiva
 2. M11-A may add offline core/replay code and tests only. It ends with a user review; it does not flow automatically into app work.
 3. M11-B requires explicit approval after that review. It may not change default endpoints, favorite rows, curated station data, or saved lyric offsets.
 4. A successful M11-B attended experiment still does not authorize a default rollout, commit, merge, or iOS port. Those remain separate decisions.
-5. `docs/menubar/current_milestone.md` points to M11-A. Repoint the symlink for later milestones rather than writing through it.
+5. `docs/menubar/current_milestone.md` points to completed M11-B until a next milestone is selected. Repoint the symlink for later milestones rather than writing through it.
 
 ## Out of scope for all of M11
 
