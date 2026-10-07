@@ -1,8 +1,7 @@
 # iOS M13.1 — CarPlay output harness
 
-**Status**: PLANNED, provisional. Revise this plan after the M13 decision gate.
-Several scope items depend on D1–D3.
-**Depends on**: M13, including the user's decisions D1–D3
+**Status**: PLANNED. M13 decisions D1–D3 made 2026-10-04 (see below). Not started.
+**Depends on**: M13 (complete). D1 real ICY stream, D2 in-process Swift, D3 minimal parser.
 **Required by**: M13.2
 **Model**: **Sonnet** for the servers, fixtures, and probe. **Opus** reviews
 the reset seams in upstream files.
@@ -22,6 +21,30 @@ If M13 E1–E5 pass cleanly, this milestone and M13.2 merge into one on the same
 
 The [test boundary](milestone_13.md#test-boundary) from M13 applies: test
 our extensions, not upstream behavior.
+
+## Carried over from the M13 spike
+
+The spike in `spike/carplay-harness` already proves most parts. M13.1 turns it into
+kept code. Things the spike learned that this milestone must build in:
+
+- **Hold the Mac awake.** `make test_carplay` wraps `xcodebuild` in `caffeinate -dimsu`.
+  Host sleep makes the simulator's audio fail ([E5](../experiments/2026-10-04_m13_e5.md)).
+- **Loopback stream URLs only.** AVPlayer traffic bypasses the guard, so the station
+  factory rejects a non-loopback `streamUrl`.
+- **Kingfisher ignores `URLProtocol.registerClass`.** Add the guard to its
+  `sessionConfiguration.protocolClasses` as well, and set `downloadTimeout` above any
+  scripted slow-download delay.
+- **Four `#if DEBUG` reset seams** ([E4](../experiments/2026-10-04_m13_e4.md)):
+  `PlaybackManager`, `NowPlayingHelper`, `TrackArtworkResolver`, `RadioTracklistService`.
+  Opus reviews the two in upstream files.
+- **Playback writes `StatsListenedTo`, `lastPauseTime`, `lastPausedAt`** to
+  `UserDefaults.standard`. Document it in the harness README.
+- **Tracklist arrival order matters.** The control API needs `setLatency` on the
+  tracklist, because artwork survival at start depends on whether it beats the first
+  Now Playing rebuild ([E7](../experiments/2026-10-04_m13_e7.md)).
+- **Runner.** Promote `SpikeGherkin.swift` (156 lines). Its dynamic scenario
+  registration is the part most exposed to XCTest changes.
+- **Not yet covered:** HLS/AAC streams, and an offline (Wi-Fi off) run.
 
 ## Goal
 

@@ -1,6 +1,6 @@
 # iOS M13 — CarPlay output harness: experiments
 
-**Status**: IN PROGRESS — E1–E7 done (2026-10-04). Waiting on the user's decisions D1–D4. See [Progress](#progress).
+**Status**: COMPLETE as an experiment milestone — E1–E7 done and D1–D4 decided (2026-10-04). Work continues in [M13.1](milestone_13.1.md) and [M13.2](milestone_13.2.md). See [Progress](#progress).
 **Depends on**: M12.3 (`trunk` at `0751918f8`)
 **Required by**: M13.1 (harness), M13.2 (CarPlay output suite), and the later
 `fix/stream-presentation` branch proposed in the
@@ -365,7 +365,22 @@ cost and benefit should be re-evaluated before going further.
 
 ---
 
-## Decision gate (user)
+## Decisions (made 2026-10-04)
+
+The user accepted the recommendations.
+
+| Decision | Outcome |
+|---|---|
+| D1 Input tier | Real ICY stream for every scenario. A metadata-injection shortcut is allowed only for pure-logic scenarios. |
+| D2 Fake-world placement | In-process Swift (`NWListener`, `URLProtocol`, loopback art server). |
+| D3 Gherkin runner | Minimal in-bundle parser, promoted from the spike's `SpikeGherkin.swift`. |
+| D4 Spec | S1–S7 approved as proposed in [M13.2](milestone_13.2.md#spec-decisions-user-approves-before-any-scenario-is-written). Favourite and mute buttons (behavior 14) stay a stretch goal. |
+
+M13.1 and M13.2 merge into one milestone on `feature/carplay-harness`, as this
+plan said they would if E1–E5 passed. They stay as two files so the harness
+and the scenarios are reviewed as separate steps.
+
+## Decision gate (user) — original options
 
 | Decision | Options | Evidence |
 |---|---|---|

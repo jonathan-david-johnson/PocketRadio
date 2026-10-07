@@ -1,7 +1,7 @@
 # iOS M13.2 — CarPlay Now Playing output suite
 
-**Status**: PLANNED, provisional. Revise after M13 E7 and the M13.1 smoke.
-**Depends on**: M13.1, and the user's approval of S1–S7 below
+**Status**: PLANNED. S1–S7 approved as proposed on 2026-10-04. Revise scenario details after the M13.1 smoke.
+**Depends on**: M13.1
 **Required by**: `fix/stream-presentation`. That branch removes the
 expected-failure markers when it fixes each bug.
 **Model**: **Opus** writes the spec and the scenario wording. **Sonnet**
@@ -37,7 +37,21 @@ so a fix can't land without its marker being removed.
 
 ---
 
-## Spec decisions (user approves before any scenario is written)
+## Spec decisions (approved 2026-10-04)
+
+The user approved S1–S7 as written. E7 results against them:
+
+| Rule | Today's app (E7) |
+|---|---|
+| S1, S2 | Broken: [bug 4](../bugs/bug_4.md) |
+| S3 | Broken: [bug 5](../bugs/bug_5.md), symptoms A and B |
+| S4 | Holds (H3 not reproduced). Keep as a passing regression guard. |
+| S5, S6, S7 | Not yet tested |
+
+Additions from E7: add a scenario "A cached tracklist at playback start keeps the
+artwork" (bug 5, symptom B) and one for stop-and-replay on the same song (symptom C).
+Behavior 14 (favourite and mute buttons) stays a stretch goal.
+
 
 The suite asserts a policy. Today's code and the stream-monitoring review
 disagree in places, and one existing unit test,
