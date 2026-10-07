@@ -32,11 +32,22 @@ Built by the [subagent plan](milestone_13.1_subagent_plan.md) on 2026-10-07. All
 | Smoke scenario, 20 separate launches in a row | 20 of 20 passed, each 9.15 to 9.19 s (run on the build before the review fixes). After the fixes: 3 more launches passed, and the full 43-test run passed. |
 | Tracklist fault (HTTP 500) | Fails at the `.feature` line, names `tracklist-api.kcrw.com` and `HTTP 500`, shows the last Now Playing snapshot and the diff |
 | Harness skips itself outside `make test_carplay` | Confirmed: a plain run reports the harness tests as skipped |
+| **On the physical device** ("Jonathan iPhone", signed in, 2026-10-07, `make test_carplay_device`) | 43 tests, 0 failures, 92 s, after two fixes (below). The first device run had 15 failures. |
 | Single scenario selection | `-only-testing:…/NowPlayingSmokeTests/scenario_L12_…` runs exactly that scenario |
+
+### Device run (2026-10-07)
+
+You chose a device run instead of the Wi-Fi-off check. What it showed:
+
+- **The harness works on a real device**: real iOS audio session, loopback servers in the app process, the same scenarios and the same 20 s per scenario. The tone and the `.feature` files had to be bundled into the test target, because the Mac's source paths do not exist on the phone. `make test_carplay_device` copies the contracts in first.
+- **A signed-in install is chatty.** The guard blocked 7 to 16 requests per scenario, only to two endpoints: `supabase.co /rest/v1/radio_favorites` (radio favorites sync) and `api.pocketcasts.com /up_next/sync`. They are now tolerated on device runs (still blocked, never sent), and listed nowhere else. This also means the Up Next wipe the run causes was **not** sent to the server by `URLSession.shared` (the sync was blocked). The phone's local Up Next is still gone, and I have not checked whether the app restores it on its next sync.
+- **Real episode on the phone.** One probe test read a real "Syntax" podcast title, because the app already had an episode loaded. The probe tests now reset the app first.
+- **A timing race showed up on the device**: the Y scenario lost its artwork once, the known [bug 5](../bugs/bug_5.md) symptom B (the tracklist beat the first Now Playing rebuild). The reset test now delays the tracklist by 2 s, like the smoke scenario.
+- **Side effects on the phone**: Up Next cleared locally, current episode replaced then ended, listening stats (`StatsListenedTo`, `lastPauseTime`, `lastPausedAt`) changed, a quiet tone played.
 
 Not done, by design or by your checkpoint:
 
-- **Wi-Fi-off run.** Manual, yours. Nothing in the suite needs the network.
+- **Wi-Fi-off run.** Skipped by choice. The device run covered the real-network-present case: the guard saw and blocked everything unexpected.
 - **Phone UI state helper** (`StationDetailViewController`). Deferred to M13.2.
 - **HLS/AAC fake station.** Still ICY over MP3 only.
 - **Commit.** Nothing is committed in `pocket-radio-ios`, per its `AGENTS.md`.
