@@ -1,6 +1,6 @@
 # iOS M13.1 — CarPlay output harness
 
-**Status**: PLANNED. M13 decisions D1–D3 made 2026-10-04 (see below). Not started.
+**Status**: IMPLEMENTED, AWAITING USER CHECK (2026-10-07). Uncommitted in `pocket-radio-ios-carplay/` on branch `feature/carplay-harness`. See [Progress](#progress).
 **Depends on**: M13 (complete). D1 real ICY stream, D2 in-process Swift, D3 minimal parser.
 **Required by**: M13.2
 **Model**: **Sonnet** for the servers, fixtures, and probe. **Opus** reviews
@@ -21,6 +21,35 @@ If M13 E1–E5 pass cleanly, this milestone and M13.2 merge into one on the same
 
 The [test boundary](milestone_13.md#test-boundary) from M13 applies: test
 our extensions, not upstream behavior.
+
+## Progress
+
+Built by the [subagent plan](milestone_13.1_subagent_plan.md) on 2026-10-07. All numbers below are from runs on the dedicated simulator with the Mac kept awake.
+
+| Check | Result |
+|---|---|
+| `make test_carplay` (harness self-tests + smoke + fault check) | 43 tests, 0 failures, 90.8 s |
+| Smoke scenario, 20 separate launches in a row | 20 of 20 passed, each 9.15 to 9.19 s (run on the build before the review fixes). After the fixes: 3 more launches passed, and the full 43-test run passed. |
+| Tracklist fault (HTTP 500) | Fails at the `.feature` line, names `tracklist-api.kcrw.com` and `HTTP 500`, shows the last Now Playing snapshot and the diff |
+| Harness skips itself outside `make test_carplay` | Confirmed: a plain run reports the harness tests as skipped |
+| Single scenario selection | `-only-testing:…/NowPlayingSmokeTests/scenario_L12_…` runs exactly that scenario |
+
+Not done, by design or by your checkpoint:
+
+- **Wi-Fi-off run.** Manual, yours. Nothing in the suite needs the network.
+- **Phone UI state helper** (`StationDetailViewController`). Deferred to M13.2.
+- **HLS/AAC fake station.** Still ICY over MP3 only.
+- **Commit.** Nothing is committed in `pocket-radio-ios`, per its `AGENTS.md`.
+- **Spike folder** `CarPlayOutputSpike/` is untouched. Delete it once you accept the harness.
+
+Review findings fixed before this checkpoint: stale delayed responses no longer cross scenarios, the harness refuses to run outside `make test_carplay`, teardown order, a fixture class that could break a whole-target run, and a few weak tests. Known remaining notes are in the plan's outcome section.
+
+### User checkpoint
+
+1. Turn Wi-Fi off.
+2. From `pocket-radio-ios-carplay/`: `make test_carplay`. Expect 43 tests, 0 failures.
+3. Break it on purpose: in `NowPlayingSmokeTests`, change the feature to fail the tracklist (see `HarnessTests/Fixtures/smoke_tracklist_500.feature`), and read the failure.
+4. Approve the commit, or say what to change.
 
 ## Carried over from the M13 spike
 
@@ -114,6 +143,8 @@ files where possible. Each reset runs before every scenario, and clearing
   rather than sleeping.
 
 ### Phone UI state
+
+> **Deferred to M13.2 (2026-10-07).** M13.1 did not build this helper. H1 and H2 reproduce without a station detail screen, so the harness needs it only for the scenario that models "station detail is open" (M13.2 behavior 3).
 
 - An optional helper that creates and retains a `StationDetailViewController`.
   This models "the phone has station detail open", which changes when the
