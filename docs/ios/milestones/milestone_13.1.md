@@ -1,6 +1,6 @@
 # iOS M13.1 — CarPlay output harness
 
-**Status**: IMPLEMENTED, AWAITING USER CHECK (2026-10-07). Uncommitted in `pocket-radio-ios-carplay/` on branch `feature/carplay-harness`. See [Progress](#progress).
+**Status**: COMMITTED (2026-10-07). `pocket-radio-ios-carplay/`, branch `feature/carplay-harness`, commit `2358aab83`, not pushed and not merged to `trunk`. Sign-off was two clean device runs instead of the Wi-Fi-off check. See [Progress](#progress).
 **Depends on**: M13 (complete). D1 real ICY stream, D2 in-process Swift, D3 minimal parser.
 **Required by**: M13.2
 **Model**: **Sonnet** for the servers, fixtures, and probe. **Opus** reviews
