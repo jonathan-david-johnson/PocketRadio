@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PocketRadio test architecture</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: #0f1419; color: #e6edf3; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
+  .layout { display: flex; min-height: 100vh; }
+  nav.side { width: 260px; background: #161b22; border-right: 1px solid #30363d; padding: 1.5rem 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0; }
+  nav.side h3 { color: #f78166; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 0 1.2rem 0.8rem; border-bottom: 1px solid #30363d; margin-bottom: 0.5rem; }
+  nav.side a { display: block; padding: 0.5rem 1.2rem; color: #8b949e; text-decoration: none; font-size: 0.9rem; border-left: 3px solid transparent; transition: all 0.15s; }
+  nav.side a:hover { color: #e6edf3; background: #21262d; }
+  nav.side a.active { color: #58a6ff; border-left-color: #58a6ff; background: #21262d; }
+  nav.side .num { color: #6e7681; margin-right: 0.5em; font-variant-numeric: tabular-nums; }
+  main { flex: 1; max-width: 1100px; padding: 2rem 4rem 6rem; min-width: 0; }
+  section { padding: 3rem 0; border-bottom: 1px solid #21262d; scroll-margin-top: 1rem; }
+  section:last-child { border-bottom: none; }
+  h1 { font-size: 2.6rem; margin-bottom: 0.4em; color: #f78166; }
+  h2 { font-size: 1.9rem; margin-bottom: 0.7em; color: #58a6ff; border-bottom: 2px solid #30363d; padding-bottom: 0.3em; }
+  h3 { font-size: 1.25rem; margin: 1.4em 0 0.4em; color: #7ee787; }
+  h4 { font-size: 1.05rem; margin: 1.1em 0 0.3em; color: #d2a8ff; }
+  p, li { font-size: 1rem; line-height: 1.65; margin-bottom: 0.5em; }
+  ul, ol { padding-left: 1.5em; margin-bottom: 0.8em; }
+  table { border-collapse: collapse; width: 100%; margin: 0.8em 0 1.2em; font-size: 0.93rem; }
+  th, td { border: 1px solid #30363d; padding: 0.5em 0.8em; text-align: left; vertical-align: top; }
+  th { background: #161b22; color: #58a6ff; }
+  td.c, th.c { text-align: center; }
+  code { background: #161b22; padding: 0.1em 0.4em; border-radius: 3px; color: #f78166; font-family: "SF Mono", Monaco, monospace; font-size: 0.88em; }
+  pre { background: #161b22; padding: 1em; border-radius: 4px; overflow-x: auto; margin: 0.8em 0 1.2em; }
+  pre code { background: transparent; padding: 0; color: #e6edf3; font-size: 0.88rem; }
+  blockquote { border-left: 4px solid #30363d; padding: 0.5em 1em; margin: 0.8em 0; color: #8b949e; }
+  a { color: #58a6ff; }
+  .meta { color: #8b949e; font-size: 1rem; margin-top: 0.3em; line-height: 1.6; }
+  .small { font-size: 0.85rem; color: #8b949e; }
+  hr { border: none; border-top: 1px solid #30363d; margin: 1em 0; }
+
+  .pill { display: inline-block; padding: 0.15em 0.65em; border-radius: 12px; font-size: 0.8rem; margin: 0.1em 0.2em 0.1em 0; white-space: nowrap; }
+  .pill.high { background: #5a1d1d; color: #ffa198; }
+  .pill.med { background: #5a4a1d; color: #ffd866; }
+  .pill.low { background: #1d3b1d; color: #7ee787; }
+  .pill.good { background: #1d3b5a; color: #79c0ff; }
+  .pill.none { background: #2b2f36; color: #8b949e; }
+
+  .callout { border: 1px solid #30363d; border-left: 4px solid #58a6ff; background: #161b22; padding: 0.9em 1.2em; margin: 1em 0 1.4em; border-radius: 4px; }
+  .callout.warn { border-left-color: #ffd866; }
+  .callout.risk { border-left-color: #ffa198; }
+  .callout.ok { border-left-color: #7ee787; }
+  .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+  .callout strong.lead { display: block; color: #e6edf3; margin-bottom: 0.3em; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.9rem; margin: 1em 0 1.4em; }
+  .card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 0.9em 1.1em; }
+  .card h4 { margin: 0 0 0.3em; color: #58a6ff; }
+  .card p { font-size: 0.92rem; margin: 0; }
+
+  /* Matrix cells */
+  td.real { background: #14301d; color: #7ee787; text-align: center; }
+  td.fake { background: #3a3014; color: #ffd866; text-align: center; }
+  td.none { background: #1a1d23; color: #6e7681; text-align: center; }
+  td.rec { background: #162c44; color: #79c0ff; text-align: center; }
+  td.real, td.fake, td.none, td.rec { font-size: 0.85rem; }
+
+  /* Architecture diagram */
+  .diagram { display: grid; grid-template-columns: 1fr 2.2rem 1.25fr 2.2rem 1fr; gap: 0.5rem; align-items: stretch; margin: 1.2em 0 0.4em; }
+  .arrow { display: flex; align-items: center; justify-content: center; color: #6e7681; font-size: 1.4rem; }
+  .box { border: 1px solid #30363d; border-radius: 6px; padding: 0.7em 0.9em; background: #161b22; font-size: 0.88rem; line-height: 1.45; }
+  .box h4 { margin: 0 0 0.4em; font-size: 0.95rem; color: #e6edf3; }
+  .box.real { border-color: #2ea043; }
+  .box.fake { border-color: #d29922; }
+  .box.probe { border-color: #388bfd; }
+  .box .tag { display: inline-block; font-size: 0.7rem; padding: 0.05em 0.5em; border-radius: 8px; margin-left: 0.4em; vertical-align: middle; }
+  .box.real .tag { background: #14301d; color: #7ee787; }
+  .box.fake .tag { background: #3a3014; color: #ffd866; }
+  .box.probe .tag { background: #162c44; color: #79c0ff; }
+  .stack { display: flex; flex-direction: column; gap: 0.5rem; }
+  .inner { border: 1px dashed #30363d; border-radius: 4px; padding: 0.35em 0.6em; background: #0f1419; }
+  .legend { font-size: 0.85rem; color: #8b949e; margin-bottom: 1em; }
+  .legend span { margin-right: 1.2em; }
+  .sw { display: inline-block; width: 0.8em; height: 0.8em; border-radius: 2px; margin-right: 0.35em; vertical-align: -1px; }
+  .sw.real { background: #2ea043; } .sw.fake { background: #d29922; } .sw.probe { background: #388bfd; }
+
+  @media (max-width: 900px) {
+    nav.side { display: none; }
+    main { padding: 1.5rem 1.2rem 4rem; }
+    .diagram { grid-template-columns: 1fr; }
+    .arrow { transform: rotate(90deg); padding: 0.2rem 0; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="side">
+    <h3>Test architecture</h3>
+    <a href="#summary"><span class="num">01</span>Summary</a>
+    <a href="#principles"><span class="num">02</span>How we test</a>
+    <a href="#layers"><span class="num">03</span>The layers</a>
+    <a href="#ios-unit"><span class="num">04</span>iOS unit tests</a>
+    <a href="#ios-harness"><span class="num">05</span>iOS CarPlay harness</a>
+    <a href="#menubar"><span class="num">06</span>Menubar</a>
+    <a href="#others"><span class="num">07</span>Console, Roku, Supabase</a>
+    <a href="#contracts"><span class="num">08</span>Shared contracts</a>
+    <a href="#matrix"><span class="num">09</span>Faked vs real</a>
+    <a href="#gaps"><span class="num">10</span>Gaps and risks</a>
+    <a href="#running"><span class="num">11</span>Running everything</a>
+    <a href="#reading"><span class="num">12</span>Where to read more</a>
+  </nav>
+  <main>
+
+  <section id="title">
+    <h1>PocketRadio test architecture</h1>
+    <p class="meta"><strong>Audience:</strong> a new engineering manager. No prior knowledge of the repo assumed.<br>
+    <strong>As of:</strong> 2026-10-04. <strong>Scope:</strong> every sub-project in the monorepo, with the most detail on iOS and the macOS menubar app.<br>
+    <strong>Sources:</strong> the test code itself, each project's <code>AGENTS.md</code>, and the milestone and experiment docs under <code>docs/</code>. Test counts come from counting <code>func test…</code> and <code>func Test…</code> declarations, not from a fresh run of every suite.<br>
+    <strong>Status key:</strong>
+      <span class="pill low">In use</span>
+      <span class="pill med">Spike, uncommitted</span>
+      <span class="pill good">Planned</span>
+      <span class="pill none">None</span></p>
+  </section>
+
+  <section id="summary">
+    <h2>1. Summary</h2>
+    <p>PocketRadio is a set of players for internet radio and Pocket Casts: an iOS app (a fork of Automattic's Pocket Casts), a macOS menubar app, a terminal player, and a Roku channel. One Supabase backend serves them all. Each player is its own git repo.</p>
+
+    <div class="callout ok">
+      <strong class="lead">The short version</strong>
+      <ul>
+        <li><strong>Most tests are fast unit tests that run on a developer's Mac with no network, account, or audio.</strong> They replace the outside world with fakes passed in at the edges.</li>
+        <li><strong>Proof of timing and metadata behavior comes from replaying recorded real-station sessions offline</strong> (macOS only), plus attended listening checks by a person.</li>
+        <li><strong>One new layer, an in-process "CarPlay harness", exists on iOS as an uncommitted spike.</strong> It plays a fake radio station through the real app code and reads what CarPlay would display. It has already found two real bugs that the unit tests missed.</li>
+        <li><strong>Nothing runs automatically.</strong> We have no continuous integration of our own. Someone has to run the suites.</li>
+      </ul>
+    </div>
+
+    <h3>Suites at a glance</h3>
+    <table>
+      <tr><th>Suite</th><th>Framework</th><th>Size</th><th>Run it with</th><th>Status</th></tr>
+      <tr><td><strong>iOS app tests</strong><br><span class="small"><code>pocket-radio-ios/PocketCastsTests</code></span></td><td>XCTest; the app is the test host</td><td>124 files, about 850 tests. About 290 are ours (Radio, CarPlay, Widget, tab layout). The rest come from Automattic.</td><td><code>make test_staging ONLY_TESTING=PocketCastsTests</code></td><td><span class="pill low">In use</span></td></tr>
+      <tr><td><strong>iOS module tests</strong><br><span class="small"><code>pocket-radio-ios/Modules/Tests</code></span></td><td>XCTest via SwiftPM</td><td>75 files, 5 test targets. Upstream's.</td><td><code>make test_staging ONLY_TESTING=PocketCastsDataModelTests</code> (and <code>…ServerTests</code>, <code>…UtilsTests</code>)</td><td><span class="pill low">In use</span></td></tr>
+      <tr><td><strong>iOS CarPlay harness</strong><br><span class="small">worktree <code>pocket-radio-ios-carplay/</code></span></td><td>XCTest, real <code>AVPlayer</code>, loopback fake servers</td><td>Experiments E1–E7, plus 3 Gherkin scenarios</td><td><code>make test_carplay_spike</code></td><td><span class="pill med">Spike, uncommitted</span></td></tr>
+      <tr><td><strong>Menubar app tests</strong><br><span class="small"><code>pocket-radio-menubar/PocketRadioTests</code></span></td><td>XCTest</td><td>30 tests. Two are Xcode template placeholders.</td><td><code>make menubar-test</code></td><td><span class="pill low">In use</span></td></tr>
+      <tr><td><strong>StreamSession core</strong><br><span class="small"><code>Packages/StreamSession</code></span></td><td>XCTest via SwiftPM</td><td>23 tests</td><td><code>swift test --package-path pocket-radio-menubar/Packages/StreamSession</code></td><td><span class="pill low">In use</span></td></tr>
+      <tr><td><strong>Stream Lab</strong><br><span class="small"><code>Tools/StreamLab</code></span></td><td>XCTest via SwiftPM</td><td>63 tests</td><td><code>swift test --package-path pocket-radio-menubar/Tools/StreamLab</code></td><td><span class="pill low">In use</span></td></tr>
+      <tr><td><strong>Menubar UI tests</strong></td><td>XCUITest</td><td>3 tests, all Xcode templates</td><td>Xcode only</td><td><span class="pill none">Placeholder</span></td></tr>
+      <tr><td><strong>Console player</strong><br><span class="small"><code>pocket-radio-console</code></span></td><td>Go <code>testing</code></td><td>About 76 tests in 19 files</td><td><code>make console-test</code>. Real-<code>mpv</code> tests: <code>make -C pocket-radio-console test-integration</code></td><td><span class="pill low">In use</span></td></tr>
+      <tr><td><strong>Roku channel</strong></td><td>—</td><td>No automated tests</td><td>Manual on a device (<code>make roku-deploy</code>, telnet, screenshot)</td><td><span class="pill none">None</span></td></tr>
+      <tr><td><strong>Supabase backend</strong><br><span class="small"><code>supabase/functions/pc-relay</code></span></td><td>—</td><td>No automated tests found</td><td>—</td><td><span class="pill none">None</span></td></tr>
+      <tr><td><strong>Web, Android</strong></td><td>—</td><td>Not scaffolded yet</td><td>—</td><td><span class="pill none">None</span></td></tr>
+    </table>
+
+    <div class="callout warn">
+      <strong class="lead">What I did not verify</strong>
+      <p>I did not re-run every suite to write this page. The menubar counts match the M12 handoff (core 23, Stream Lab 63, app tests 30). The iOS harness experiments all passed when run on 2026-10-04. I have not confirmed that the full iOS suite, including upstream's tests, is green today.</p>
+    </div>
+  </section>
+
+  <section id="principles">
+    <h2>2. How we test</h2>
+    <p>Seven working rules explain most of the code you will see. They are habits of this team, not a written standard.</p>
+
+    <div class="cards">
+      <div class="card"><h4>1. Hermetic by default</h4><p>A normal test needs no network, no login, no credentials, and no sound card. Tests that break this rule are separate and labeled (the Go <code>integration</code> tag, the iOS harness, attended captures).</p></div>
+      <div class="card"><h4>2. Inject the edges</h4><p>Code takes its outside dependencies as parameters or protocols: a URL session, a feed fetcher, an "episode loader", a "publish now playing" closure. Tests pass fakes. We rarely mock internals.</p></div>
+      <div class="card"><h4>3. Contracts are shared files</h4><p>Wire formats between apps live as golden JSON in <code>contracts/</code>. Each platform's tests read the same files, so the apps cannot drift apart silently.</p></div>
+      <div class="card"><h4>4. Pure core, thin platform shell</h4><p>The stream timing model (<code>StreamSession</code>) has no audio or UI code, so it is tested as plain functions. Platform code feeds it samples.</p></div>
+      <div class="card"><h4>5. Record once, replay offline</h4><p>Real station sessions are captured to JSON trace files. Later, the same traces are replayed with no network, so timing logic can be tested against real-world evidence.</p></div>
+      <div class="card"><h4>6. State the evidence boundary</h4><p>Each tool says what it can and cannot prove. A test that opens its own connection to a station does not show what the app's player heard. The repo's <code>AGENTS.md</code> has a routing table for this.</p></div>
+      <div class="card"><h4>7. Humans own "does it sound right"</h4><p>No test can tell whether a title changes at the moment the song changes. People listen and mark it. Acceptance of the menubar alignment work (M11, M12) was qualitative for this reason.</p></div>
+    </div>
+  </section>
+
+  <section id="layers">
+    <h2>3. The layers</h2>
+    <p>From cheapest to most realistic. A lower layer answers "is this piece of logic right?". A higher layer answers "do the pieces work together?". The iOS history shows why both are needed (see <a href="#ios-unit">iOS unit tests</a>).</p>
+
+    <table>
+      <tr><th>Layer</th><th>Question it answers</th><th>Where it lives</th><th>Speed</th></tr>
+      <tr><td><strong>A. Unit</strong></td><td>Is this function, parser, or reducer correct?</td><td>All projects</td><td>Milliseconds per test</td></tr>
+      <tr><td><strong>B. Contract fixture</strong></td><td>Do all apps read and write the same wire format?</td><td><code>contracts/remote/</code>, loaded by iOS and menubar tests</td><td>Milliseconds</td></tr>
+      <tr><td><strong>C. Integration with fakes</strong></td><td>Do the real classes work together when only the outside world is faked?</td><td>Menubar <code>StreamSessionIntegrationTests</code>; iOS <code>RadioPlaybackStarterTests</code>; Go UI model tests</td><td>Milliseconds to a second</td></tr>
+      <tr><td><strong>D. Offline replay</strong></td><td>Does the timing model pick the right song on recorded real sessions?</td><td>Stream Lab (<code>replay</code>, <code>select</code>, <code>compare</code>)</td><td>Seconds</td></tr>
+      <tr><td><strong>E. In-process end-to-end</strong></td><td>If a station plays this song, what does the phone's Now Playing screen show?</td><td>iOS CarPlay harness (spike)</td><td>3–30 s per scenario, real playback</td></tr>
+      <tr><td><strong>F. Attended</strong></td><td>Is the title correct by ear, on real hardware and a real station?</td><td>Menubar experiments in <code>docs/menubar/experiments/</code>; M11-B and M12 acceptance</td><td>Minutes, with a person present</td></tr>
+    </table>
+
+    <p>Layers A–D run unattended. Layer E runs unattended but needs a Mac that stays awake and a dedicated simulator. Layer F can't be automated.</p>
+  </section>
+
+  <section id="ios-unit">
+    <h2>4. iOS unit tests</h2>
+    <p>The iOS app is a fork of Automattic's Pocket Casts. About two thirds of its tests are upstream's, and we leave them alone apart from merging. Our additions are the radio features, the CarPlay radio integration, the configurable tab bar, and the PocketRadio widget.</p>
+
+    <h3>What is in the suite</h3>
+    <table>
+      <tr><th>Area</th><th>Files / tests</th><th>Owner</th><th>What it covers</th></tr>
+      <tr><td><code>Tests/Radio</code></td><td>16 / 127</td><td>Ours</td><td>Tracklist parsing (KCRW, KEXP), artwork selection, ICY title parsing, the "start a station" entry point, favorites cache and seeding, lyrics lookup, ACR fingerprinting, remote-command fixtures, playback-effects rules</td></tr>
+      <tr><td><code>Tests/CarPlay</code></td><td>4 / 25</td><td>Ours</td><td>Row builders and adapter for the CarPlay radio list, the Now Playing button set, the "CarPlay connected" flag</td></tr>
+      <tr><td><code>Tests/Main</code> (tab layout)</td><td>9 / 127</td><td>Ours</td><td>Configurable tab bar: layout store, overflow, sync with Supabase, reconciliation</td></tr>
+      <tr><td><code>Tests/Widget</code></td><td>2 / 11</td><td>Ours</td><td>PocketRadio widget provider and state publishing</td></tr>
+      <tr><td>Everything else</td><td>about 93 / about 560</td><td>Automattic</td><td>Podcasts, playback queue, downloads, Discover, Up Next, analytics, onboarding, In-App Purchase, and more</td></tr>
+      <tr><td><code>Modules/Tests</code></td><td>75 files</td><td>Automattic</td><td>Database (<code>DataModel</code>, GRDB), server layer (<code>Server</code>), utilities, and macros</td></tr>
+    </table>
+    <p class="small">Ownership by directory is my judgement from the code layout, not from git blame. Counts are of <code>func test…</code> declarations.</p>
+
+    <h3>What is faked in our radio tests</h3>
+    <ul>
+      <li><strong>The network.</strong> Tracklist and iTunes calls take an injected <code>URLSession</code>. Tests give it an ephemeral session with a stub <code>URLProtocol</code>. Parsers are also tested directly on JSON strings.</li>
+      <li><strong>The app's own collaborators.</strong> <code>RadioPlaybackStarter</code> takes protocols (<code>RadioStationRegistering</code>, <code>RadioEpisodeLoading</code>). Tests supply <code>FakeRegistry</code> and <code>FakeEpisodeLoader</code> and check what was called.</li>
+      <li><strong>Persistent state.</strong> Newer tests give the store an injected <code>UserDefaults(suiteName:)</code>. The model is <code>TabLayoutStoreTests</code>.</li>
+      <li><strong>Wire contracts.</strong> <code>RemoteCommandFixtureTests</code> decodes the shared <code>contracts/remote/*.json</code> files into the iOS types.</li>
+    </ul>
+
+    <h3>What is real</h3>
+    <ul>
+      <li>The app process itself. The test host is the app, so singletons such as <code>PlaybackManager</code> and the system Now Playing center are the genuine ones. For example, <code>CarPlayConnectionStateTests</code> writes and reads <code>MPNowPlayingInfoCenter</code> directly.</li>
+      <li>The parsers, resolvers, and decision functions under test. We fake what is around them, not them.</li>
+    </ul>
+
+    <div class="callout warn">
+      <strong class="lead">Hazard: the test host is the app</strong>
+      <p><code>UserDefaults.standard</code> inside a test is the app's real preferences on that simulator. Older tests that wrote real keys once deleted a developer's saved tab layout and sent a bug diagnosis down the wrong path (<a href="ios/bugs/bug_1.md">iOS bug 1</a>, <a href="ios/bugs/bug_2.md">iOS bug 2</a>). New tests must inject their own defaults suite. The iOS <code>AGENTS.md</code> states this rule.</p>
+    </div>
+
+    <h3>What these tests cannot see</h3>
+    <p>They check pieces. They don't check what the pieces do together over time. The artwork bugs found in M13 show the gap: no unit test failed for either bug, and one existing unit test even asserts the behavior behind <a href="ios/bugs/bug_4.md">bug 4</a> (it expects a fallback to the top tracklist entry when the stream's title isn't in the list). This gap is why the harness in the next section exists.</p>
+
+    <h3>How they run</h3>
+    <ul>
+      <li><code>make test_staging ONLY_TESTING=&lt;target-or-class&gt;</code> runs <code>xcodebuild test</code> against a simulator chosen by name. It does not pin one by UDID.</li>
+      <li>The test plan <code>UnitTests.xctestplan</code> skips <code>IAPHelperTests</code>.</li>
+      <li>New test files placed under <code>PocketCastsTests/Tests/&lt;Feature&gt;/</code> are picked up automatically (the folder is a synchronized group, so there is no project-file edit).</li>
+      <li>Formatting and linting: <code>make format</code> and <code>make lint</code> (SwiftLint).</li>
+    </ul>
+  </section>
+
+  <section id="ios-harness">
+    <h2>5. iOS CarPlay harness</h2>
+    <p><span class="pill med">Spike, uncommitted</span> Milestone M13. The experiments are done. The kept version (M13.1 and M13.2) is planned but not started.</p>
+
+    <h3>Why it exists</h3>
+    <p>CarPlay's Now Playing screen is drawn by iOS from one shared record, <code>MPNowPlayingInfoCenter.nowPlayingInfo</code>. Several code paths write to that record: the stream's title events, a tracklist refresh, an artwork download, a full rebuild on play or pause, and lyric sync. Bugs appear when those writers interleave, and no unit test exercises the interleaving. The harness lets us script a radio station, play it through the real app code, and assert what the record holds.</p>
+
+    <h3>The idea in one picture</h3>
+    <div class="legend">
+      <span><i class="sw real"></i>Real app code</span>
+      <span><i class="sw fake"></i>Fake world</span>
+      <span><i class="sw probe"></i>Test driver and probe</span>
+    </div>
+
+    <div class="diagram" role="img" aria-label="Data flow of the harness. A feature file drives a Gherkin runner and step definitions. The steps script a fake world made of a loopback radio stream server, a network guard that serves tracklist and iTunes responses, and a loopback artwork server. The real app code plays the stream, parses metadata, resolves artwork and writes the system Now Playing record. A probe reads that record and the steps assert on it.">
+      <div class="stack">
+        <div class="box probe"><h4>Scenario <span class="tag">driver</span></h4>
+          A <code>.feature</code> file in plain language, for example "the stream announces Song B".</div>
+        <div class="box probe"><h4>Gherkin runner + steps <span class="tag">driver</span></h4>
+          Turns each scenario into its own XCTest. Steps script the fake world and wait for outcomes.</div>
+        <div class="box fake"><h4>Fake world <span class="tag">fake</span></h4>
+          <div class="stack">
+            <div class="inner"><strong>Radio stream server.</strong> Loopback, Shoutcast-style, with song titles interleaved at real bitrate.</div>
+            <div class="inner"><strong>Network guard.</strong> Serves the KCRW tracklist and iTunes answers from memory. Blocks and logs any other host.</div>
+            <div class="inner"><strong>Artwork server.</strong> Loopback. Each song's art is a solid colour.</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="box real"><h4>App under test <span class="tag">real</span></h4>
+        <div class="stack">
+          <div class="inner"><code>RadioPlaybackStarter</code> → <code>PlaybackManager</code></div>
+          <div class="inner">Real <code>AVPlayer</code> plays the stream</div>
+          <div class="inner"><code>RadioMetadataObserver</code> parses titles</div>
+          <div class="inner"><code>RadioTracklistService</code> + <code>TrackArtworkResolver</code> + Kingfisher fetch art</div>
+          <div class="inner"><code>NowPlayingHelper</code> writes the record</div>
+          <div class="inner"><code>MPNowPlayingInfoCenter</code></div>
+        </div>
+      </div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="box probe"><h4>Probe <span class="tag">read</span></h4>
+        Samples the record every 100 ms: title, artist, album, live-stream flag, and the artwork's centre pixel, so assertions compare colours rather than image bytes.<br><br>
+        A step then asserts, for example, "the display shows Song B and not red artwork".</div>
+    </div>
+    <p class="small">Text version: scenario → runner and steps → script the fake world; the fake world's servers feed the real app; the app writes the system Now Playing record; the probe reads the record back to the steps for assertions.</p>
+
+    <h3>The parts</h3>
+    <table>
+      <tr><th>Part</th><th>What it is</th><th>Real or fake</th></tr>
+      <tr><td>Radio stream server</td><td>An in-process <code>NWListener</code> on loopback. Serves a looped 10 s tone as 128 kbps MP3, paced at real speed, with <code>icy-metaint</code> framing. <code>AVPlayer</code> connects twice (a probe request, then the real stream) and the server handles both.</td><td>Fake server, real wire format, real <code>AVPlayer</code></td></tr>
+      <tr><td>Network guard</td><td>A <code>URLProtocol</code> on <code>URLSession.shared</code> and on Kingfisher's own session. It keeps the real host names (so the KCRW parser is still chosen), answers <code>tracklist-api.kcrw.com</code> and <code>itunes.apple.com</code> from fixtures, and fails and logs any other non-loopback host. It can delay a response.</td><td>Fake</td></tr>
+      <tr><td>Artwork server</td><td>Loopback HTTP server returning solid-colour PNGs. It can hold a response for N seconds, to stage "slow download" races.</td><td>Fake</td></tr>
+      <tr><td>Reset seams</td><td>Four <code>#if DEBUG</code> functions that clear process-wide state between scenarios (see below).</td><td>Test-only code in the app</td></tr>
+      <tr><td>Now Playing probe</td><td>Reads <code>MPNowPlayingInfoCenter</code> and the artwork's pixel. Logs a timeline of every change.</td><td>Real record, test reader</td></tr>
+      <tr><td>Gherkin runner</td><td>156 lines. Parses <code>.feature</code> files, registers each scenario as its own XCTest method, matches steps by regex, and reports failures at the <code>.feature</code> line.</td><td>Test infrastructure</td></tr>
+    </table>
+
+    <h3>What the real app code runs</h3>
+    <p>Everything in the picture's middle box is production code, unmodified apart from the four reset seams. The harness enters through the same function the Streams tab uses (<code>RadioPlaybackStarter.play</code>) and the station is the curated KCRW Eclectic 24 entry, so the artwork-resolution path is switched on exactly as in the shipping app.</p>
+
+    <h3>What is faked, and what is not</h3>
+    <table>
+      <tr><th>Faked</th><th>Real</th><th>Not covered at all</th></tr>
+      <tr>
+        <td><ul>
+          <li>The radio station (loopback server, a tone as audio)</li>
+          <li>The tracklist and iTunes responses</li>
+          <li>The artwork CDN</li>
+          <li>The station record (made up, but with the real KCRW identifier)</li>
+        </ul></td>
+        <td><ul>
+          <li><code>AVPlayer</code>, audio session, and playback pacing</li>
+          <li>Real seconds. There is no fake clock, so a title change costs about 5.7 s</li>
+          <li>All the app classes in the picture</li>
+          <li>The system Now Playing record</li>
+          <li>The simulator's audio path to the host Mac</li>
+        </ul></td>
+        <td><ul>
+          <li>HLS and AAC streams. KCRW's real stream is HLS</li>
+          <li>CarPlay's own rendering, head units, Bluetooth</li>
+          <li>The full and mini players' own artwork code</li>
+          <li>Lyrics, ACR fingerprinting</li>
+          <li>Signed-in accounts and sync</li>
+          <li>Playing offline with Wi-Fi off (not yet run)</li>
+        </ul></td>
+      </tr>
+    </table>
+
+    <h3>Reset: process-wide state</h3>
+    <p>The test host is one long-lived process. Scenarios share singletons, and leftovers from one change the next one's result. Experiment E4 found that without a reset, a second scenario that starts on the first one's last song loses its artwork. Four seams fix it, each a few lines under <code>#if DEBUG</code>:</p>
+    <ul>
+      <li><code>PlaybackManager</code>: the "last artwork key" used to skip repeat lookups.</li>
+      <li><code>NowPlayingHelper</code>: which station's song a rebuild would keep.</li>
+      <li><code>TrackArtworkResolver</code> and <code>RadioTracklistService</code>: caches and in-flight state.</li>
+    </ul>
+    <p>Two of the four sit in files that come from Automattic, which raises the cost of merging upstream. The rest of the reset uses public calls (end playback, clear the registry, clear the image cache, clear Now Playing).</p>
+
+    <h3>Results so far (all on 2026-10-04)</h3>
+    <table>
+      <tr><th>Experiment</th><th>Finding</th></tr>
+      <tr><td>E1 Read the output</td><td>Title, artist, album, live flag, and artwork pixel read back correctly in 400 of 400 iterations.</td></tr>
+      <tr><td>E2 Real playback</td><td>Real playback works in the test host. A title change reaches the app about 5.2 s after the server sends it.</td></tr>
+      <tr><td>E3 Network</td><td>Fake tracklist, iTunes, and artwork all work. A real playback run contacted only the two expected hosts.</td></tr>
+      <tr><td>E4 Reset</td><td>Four seams make results independent of scenario order. Without them, results depend on order.</td></tr>
+      <tr><td>E5 Stability</td><td>50 of 50 scenarios correct, 0.2 s spread. About 3.3 s to start and 5.7 s per title change.</td></tr>
+      <tr><td>E6 Gherkin runner</td><td>The 156-line runner meets all five checks (each scenario reported separately, selectable, failure points at the feature line, undefined steps fail loudly).</td></tr>
+      <tr><td>E7 Bug baseline</td><td><strong>Two bugs reproduced</strong>: a new song can keep the previous song's artwork (<a href="ios/bugs/bug_4.md">bug 4</a>), and pause or resume replaces artwork with the station logo (<a href="ios/bugs/bug_5.md">bug 5</a>). A third suspected bug, a slow download overwriting newer art, did not reproduce.</td></tr>
+    </table>
+
+    <div class="callout risk">
+      <strong class="lead">Operational hazard: the Mac must stay awake</strong>
+      <p>Real playback uses the host Mac's audio device. When macOS entered maintenance sleep during a run, playback failed with a CoreMedia error and every title wait timed out. Two attempts failed this way before the cause was found. Running under <code>caffeinate -dimsu</code> fixed it. The planned Make target will wrap <code>xcodebuild</code> in <code>caffeinate</code>.</p>
+    </div>
+
+    <h3>Where it is going</h3>
+    <ul>
+      <li><span class="pill good">Planned</span> <strong>M13.1</strong> turns the spike into kept code on <code>feature/carplay-harness</code>: a proper fake world, network guard, probe, reset seams, and the Gherkin runner.</li>
+      <li><span class="pill good">Planned</span> <strong>M13.2</strong> adds the scenario suite. The rules it asserts (S1–S7, approved 2026-10-04) include "a new song never shows the previous song's artwork" and "pause and resume keeps the artwork". Scenarios for known bugs run as <em>strict expected failures</em>: the run fails if one starts passing, so a fix can't land without removing its marker.</li>
+      <li><span class="pill good">Planned</span> Later, the iOS alignment work (M14) will need an HLS station in this harness. The current fake serves ICY only.</li>
+      <li>Decided design choices: every scenario uses a real stream, not injected metadata (50 of 50 stable); the fake world runs in-process; the <code>.feature</code> files live in the shared <code>contracts/features/</code> folder so other platforms can adopt them later (a draft exists but is uncommitted).</li>
+    </ul>
+  </section>
+
+  <section id="menubar">
+    <h2>6. Menubar app</h2>
+    <p>The macOS menubar player is the project's reference implementation for the Pocket Casts API and for the stream-timing logic. Its test setup is more layered than iOS's, because the hard problem there was timing: showing the song that is audible, not the newest row in a station's feed.</p>
+
+    <table>
+      <tr><th>Layer</th><th>What it tests</th><th>Size</th><th>What is faked</th></tr>
+      <tr>
+        <td><strong>StreamSession core</strong><br><span class="small">SwiftPM package, Foundation only</span></td>
+        <td>The timing model: the media clock, occurrence history, and the selector that picks which feed row is audible. Runs as pure functions on synthetic inputs.</td>
+        <td>23 tests</td>
+        <td>Everything outside the model. Inputs are hand-written samples. No audio, no network.</td>
+      </tr>
+      <tr>
+        <td><strong>Stream Lab</strong><br><span class="small">SwiftPM command-line tool</span></td>
+        <td>Trace format, reducers, and <code>replay</code>, <code>select</code>, <code>compare</code> commands that re-run the model over recorded sessions. Failures include truncated or out-of-order traces.</td>
+        <td>63 tests</td>
+        <td>Synthetic values only. The tests never contact stations or play audio.</td>
+      </tr>
+      <tr>
+        <td><strong>App integration tests</strong><br><span class="small"><code>StreamSessionIntegrationTests</code></span></td>
+        <td>Real <code>PlayerViewModel</code> and <code>RadioPlaybackSession</code> wired together: normal playback publishes only paired selections, late callbacks after pause or switch are rejected, lyrics follow the same line the bar shows, alignment-unavailable is visible instead of silently falling back, capture only starts when asked.</td>
+        <td>22 of the 30 app tests</td>
+        <td>See the next table.</td>
+      </tr>
+      <tr>
+        <td><strong>Contract fixtures</strong></td>
+        <td>The remote-control wire format, decoded from <code>contracts/remote/*.json</code>.</td>
+        <td>6 tests</td>
+        <td>Nothing. The files are the contract.</td>
+      </tr>
+      <tr>
+        <td><strong>UI tests</strong></td>
+        <td>Nothing yet. The three tests are Xcode's template stubs (launch the app, measure launch time).</td>
+        <td>3 tests</td>
+        <td>—</td>
+      </tr>
+    </table>
+
+    <h3>How the integration tests fake the world</h3>
+    <p>The app takes a <code>RadioPlaybackDependencies</code> struct holding every outside call as a closure. The default values are the real ones. The tests replace them:</p>
+    <table>
+      <tr><th>Boundary</th><th>In production</th><th>In the tests</th></tr>
+      <tr><td>Player item</td><td><code>AVPlayerItem(url:)</code> for the station</td><td>An item pointing at a file that does not exist. The test records which URL was requested.</td></tr>
+      <tr><td>Start playing</td><td><code>player.play()</code></td><td>No-op</td></tr>
+      <tr><td>Player clock</td><td>Sampled from the player</td><td>The test builds a <code>MediaClockSample</code> and hands it in</td></tr>
+      <tr><td>Station feed</td><td>Real HTTP fetch, polled every 30 s</td><td>A canned result. An unexpected call fails the test.</td></tr>
+      <tr><td>Lyrics, saved offsets, tracklist</td><td>Network, saved settings</td><td>In-memory fixtures that count their calls</td></tr>
+      <tr><td>Now Playing</td><td><code>MPNowPlayingInfoCenter</code></td><td>A closure that stores the dictionary</td></tr>
+      <tr><td>Capture files</td><td>The user's data folder</td><td>A fresh temp directory</td></tr>
+    </table>
+    <p>What stays real: the view model, the session, the selection policy, the lyric-clock rules, and the capture recorder.</p>
+
+    <h3>Replay: real evidence without the network</h3>
+    <p>Attended sessions with KCRW (AAC over HLS) and KEXP (AAC with ICY titles) were recorded into JSON-lines trace files (8 files in <code>docs/menubar/experiments/traces/</code>). A trace holds the player's clock, timed metadata, feed rows as received, and human "song started" markers on one timeline. <code>replay</code> and <code>select</code> read only that file, so anyone can re-run the analysis later without a network or a station.</p>
+
+    <div class="callout">
+      <strong class="lead">What replay proves and what it doesn't</strong>
+      <p>It proves the model makes the same choices on the recorded evidence, every time. It does not prove the audio matched. The same-item alignment was accepted by ear (M11-B, M12). The formal accuracy targets (for example ±5 s for titles) are still unverified, and the docs say so.</p>
+    </div>
+
+    <h3>Related tools</h3>
+    <ul>
+      <li><code>tools/stream-probe.py</code> (in the shell repo) opens its own connection to a station and shows raw ICY headers and metadata. Use it to check whether a station's feed is stale. It shows upstream behavior, not what the app's player received.</li>
+      <li>The menubar app has a Debug-only capture mode. It only starts when explicitly asked and never by default.</li>
+    </ul>
+  </section>
+
+  <section id="others">
+    <h2>7. Console, Roku, Supabase, web, Android</h2>
+
+    <h3>Console player (Go)</h3>
+    <ul>
+      <li>About 76 tests across 19 files. <code>go test ./...</code> is meant to be hermetic.</li>
+      <li><strong>Fakes:</strong> local <code>httptest</code> servers stand in for the radio and Pocket Casts APIs. The audio player has a <code>Fake</code> implementation. The lookup for the <code>mpv</code> binary is swapped to test the "mpv missing" error. The Bubble Tea screen is tested by sending key messages straight to the model.</li>
+      <li><strong>Real, and separate:</strong> <code>make test-integration</code> (Go build tag <code>integration</code>) plays a short silent WAV file through a real <code>mpv</code>. It needs <code>mpv</code> installed.</li>
+      <li>Pocket Casts protobuf encoding and the client are covered by their own tests.</li>
+    </ul>
+
+    <h3>Roku channel (BrightScript)</h3>
+    <p><span class="pill none">None</span> There are no automated tests. The workflow is: build and deploy to a Roku on the local network, watch the debug console over telnet, and take screenshots (<code>make roku-deploy</code>, <code>roku-telnet</code>, <code>roku-screenshot</code>). Findings from device spikes are in <code>docs/roku/spikes.md</code>.</p>
+
+    <h3>Supabase backend</h3>
+    <p><span class="pill none">None</span> I found no automated tests for the SQL migrations or the <code>pc-relay</code> edge function (Deno). Rows are scoped by an <code>x-user-uuid</code> header, so a mistake here is a data-access question, not just a bug.</p>
+
+    <h3>Web and Android</h3>
+    <p>Not scaffolded. Docs exist under <code>docs/web</code> and <code>docs/android</code>. No test setup yet.</p>
+
+    <h3>Repository hooks</h3>
+    <p>The only automated check at commit time is a pre-commit hook (<code>.githooks/pre-commit</code>). It enforces that every <code>CLAUDE.md</code> is a one-line pointer to <code>AGENTS.md</code>. It does not run tests or linters. Install it with <code>make hooks</code>.</p>
+  </section>
+
+  <section id="contracts">
+    <h2>8. Shared contracts</h2>
+    <p>The <code>contracts/</code> folder in the shell repo holds files that more than one platform must agree on.</p>
+
+    <h3><code>contracts/remote/</code> <span class="pill low">In use</span></h3>
+    <p>Six golden JSON files for the cross-device remote control protocol: play, pause, stop, load-station commands, and iOS and macOS presence records. They are the inner payloads that travel over Supabase Realtime. The envelope is each platform's own concern. iOS and menubar tests find the files by path relative to the test source (<code>#filePath</code>) and check that their types decode them.</p>
+    <p><strong>Rule:</strong> a change that affects the wire format starts by editing these files. Every platform's fixture test then shows what has to change.</p>
+
+    <h3><code>contracts/features/</code> <span class="pill med">Draft, uncommitted</span></h3>
+    <p>Plain-language Gherkin scenarios, such as "the display shows the title Song B and does not show red artwork". They are worded without iOS terms so Android Auto, the menubar, or another platform could later write its own step definitions against the same files. Only iOS would implement them first. A platform's known bugs are tracked in that platform's own test code, not in the shared file, since a bug on iOS says nothing about Android.</p>
+  </section>
+
+  <section id="matrix">
+    <h2>9. What is faked and what is real</h2>
+    <p>One row per outside dependency. Read across to see where each is real, fake, replayed, or untouched.</p>
+    <div class="legend">
+      <span><i class="sw real"></i>Real</span>
+      <span><i class="sw fake"></i>Fake</span>
+      <span><i class="sw" style="background:#388bfd"></i>Recorded</span>
+      <span><i class="sw" style="background:#444"></i>Not exercised</span>
+    </div>
+    <table>
+      <tr>
+        <th>Dependency</th>
+        <th class="c">iOS unit tests</th>
+        <th class="c">iOS harness</th>
+        <th class="c">Menubar app tests</th>
+        <th class="c">Stream Lab replay</th>
+        <th class="c">Console tests</th>
+      </tr>
+      <tr><td>Station audio stream</td><td class="none">Not exercised</td><td class="fake">Fake server, real wire format</td><td class="fake">Fake item, never plays</td><td class="rec">Recorded</td><td class="fake">Fake player; real <code>mpv</code> only under the integration tag</td></tr>
+      <tr><td><code>AVPlayer</code> / audio playback</td><td class="none">Not exercised</td><td class="real">Real</td><td class="none">Not exercised</td><td class="none">Not exercised</td><td class="none">n/a</td></tr>
+      <tr><td>Station track feed (KCRW, KEXP)</td><td class="fake">JSON fixtures</td><td class="fake">Fake via <code>URLProtocol</code></td><td class="fake">Canned result</td><td class="rec">Recorded</td><td class="fake"><code>httptest</code></td></tr>
+      <tr><td>Pocket Casts API</td><td class="fake">Mocks</td><td class="none">Not exercised (signed out)</td><td class="none">Not exercised</td><td class="none">Not exercised</td><td class="fake"><code>httptest</code></td></tr>
+      <tr><td>iTunes artwork search, artwork CDN</td><td class="fake">Stub session</td><td class="fake">Fake via guard and loopback</td><td class="none">n/a</td><td class="none">n/a</td><td class="fake"><code>httptest</code></td></tr>
+      <tr><td>Supabase</td><td class="none">Not audited; no live calls known</td><td class="none">Not exercised</td><td class="none">Fixtures only</td><td class="none">Not exercised</td><td class="none">n/a</td></tr>
+      <tr><td>Clock and timing</td><td class="fake">Injected or synthetic</td><td class="real">Real seconds</td><td class="fake">Synthetic samples</td><td class="rec">Recorded timestamps</td><td class="fake">Injected</td></tr>
+      <tr><td>System Now Playing record</td><td class="real">Real (some tests)</td><td class="real">Real, read back</td><td class="fake">Closure captures it</td><td class="none">n/a</td><td class="none">n/a</td></tr>
+      <tr><td>Saved settings (<code>UserDefaults</code>)</td><td class="fake">Injected suite in newer tests; ambient in some older ones</td><td class="real">Real, reset by seams</td><td class="fake">Injected closures</td><td class="none">n/a</td><td class="fake">Temp directories</td></tr>
+      <tr><td>CarPlay screen, head unit, Bluetooth</td><td class="none">Row and button logic only</td><td class="none">Not exercised</td><td class="none">n/a</td><td class="none">n/a</td><td class="none">n/a</td></tr>
+      <tr><td>Human judgement of "right song"</td><td class="none">No</td><td class="none">No</td><td class="none">No</td><td class="none">No</td><td class="none">No</td></tr>
+    </table>
+    <p class="small">Cells reflect what I confirmed in the code. "Mocks" for the iOS Pocket Casts API refers to upstream's mock classes; I did not audit every upstream test. The last row is deliberate: attended listening is the only check of audibility, and it is outside every automated suite.</p>
+  </section>
+
+  <section id="gaps">
+    <h2>10. Gaps and risks</h2>
+    <p>Ordered by how much I would worry about them. Each is a fact about today, followed by what I would do.</p>
+
+    <table>
+      <tr><th>Risk</th><th>Detail</th><th>Suggested response</th></tr>
+      <tr>
+        <td><span class="pill high">High</span><br>No CI for our work</td>
+        <td>Every suite depends on someone running it. The iOS repo still carries Automattic's Buildkite pipeline and two GitHub workflows for Claude automation. I did not verify whether any of them runs for this fork. The other repos have no CI config.</td>
+        <td>Decide whether menubar, console, and iOS unit tests should run on every push. The Go and Swift package suites need no simulator and are the cheapest start.</td>
+      </tr>
+      <tr>
+        <td><span class="pill high">High</span><br>Harness code is uncommitted</td>
+        <td>The iOS spike is a pile of untracked files, plus four edits to production files, in one worktree on one machine. Nothing is committed because commits need explicit approval after manual testing.</td>
+        <td>Approve committing the spike to <code>spike/carplay-harness</code> as a backup, then start M13.1.</td>
+      </tr>
+      <tr>
+        <td><span class="pill high">High</span><br>Known user-visible bugs</td>
+        <td>Bugs 4 and 5 (wrong or lost artwork on lock screen and CarPlay) reproduce in the harness. They have not been seen on a device, and no fix is scheduled yet. The unit tests don't catch them.</td>
+        <td>Finish M13.2 so each bug has a strict expected-failure scenario, then fix on a separate branch.</td>
+      </tr>
+      <tr>
+        <td><span class="pill med">Med</span><br>Roku and Supabase untested</td>
+        <td>The relay function and the Roku channel have no automated checks. The relay is the shared backend for remote control and listen-time sync.</td>
+        <td>Add Deno tests for <code>pc-relay</code> first. It is the higher-impact surface.</td>
+      </tr>
+      <tr>
+        <td><span class="pill med">Med</span><br>Harness covers ICY, not HLS</td>
+        <td>KCRW's real stream is HLS with AAC. The harness has only tested MP3 over ICY. The iOS alignment work depends on HLS behavior.</td>
+        <td>Add an HLS fake station before or during M14.</td>
+      </tr>
+      <tr>
+        <td><span class="pill med">Med</span><br>Harness environment</td>
+        <td>Needs a Mac that stays awake and a dedicated, signed-out simulator. It touches the simulator's listening-stat settings. The offline (Wi-Fi off) run has not been done.</td>
+        <td>Build <code>caffeinate</code> and the simulator setup into the Make target. Document the rest in the harness README.</td>
+      </tr>
+      <tr>
+        <td><span class="pill med">Med</span><br>Test host = the app</td>
+        <td>Any iOS test that writes real <code>UserDefaults</code> or singletons can corrupt a simulator's state and mislead debugging. Upstream tests were not written with this in mind.</td>
+        <td>Keep the rule in <code>AGENTS.md</code>. Review new iOS tests for it.</td>
+      </tr>
+      <tr>
+        <td><span class="pill med">Med</span><br>Upstream merge cost</td>
+        <td>About 850 iOS tests and 75 module test files are Automattic's. Our reset seams touch two upstream files. Every upstream merge may need test fixes.</td>
+        <td>Keep our seams to a minimum and in fork-owned files where possible.</td>
+      </tr>
+      <tr>
+        <td><span class="pill med">Med</span><br>Timing accuracy is unproven</td>
+        <td>The menubar alignment passed by ear. Numerical targets (±5 s titles, ±2 s lyrics) are unverified. The <code>+160 s</code> feed offset was measured on macOS only.</td>
+        <td>Treat iOS 14.1 as the first cross-device check. Decide if formal targets are worth the effort.</td>
+      </tr>
+      <tr>
+        <td><span class="pill low">Low</span><br>Menubar UI tests are stubs</td>
+        <td>Three template tests count as coverage but check nothing.</td>
+        <td>Delete them or write real ones.</td>
+      </tr>
+      <tr>
+        <td><span class="pill low">Low</span><br>Hook scope</td>
+        <td>The pre-commit hook only enforces the <code>CLAUDE.md</code> convention.</td>
+        <td>Optionally add fast checks (Go vet, SwiftLint on staged files).</td>
+      </tr>
+    </table>
+  </section>
+
+  <section id="running">
+    <h2>11. Running everything</h2>
+    <p>From the shell repo root unless noted. <code>make help</code> lists the full set of targets.</p>
+
+<pre><code># Menubar
+make menubar-test
+swift test --package-path pocket-radio-menubar/Packages/StreamSession
+swift test --package-path pocket-radio-menubar/Tools/StreamLab
+
+# Console
+make console-test
+make -C pocket-radio-console test-integration      # needs mpv installed
+
+# iOS (from pocket-radio-ios/)
+make test_staging ONLY_TESTING=PocketCastsTests
+make test_staging ONLY_TESTING=PocketCastsTests/RadioTracklistServiceTests
+make test_staging ONLY_TESTING=PocketCastsDataModelTests
+
+# iOS CarPlay harness spike (from pocket-radio-ios-carplay/; keep the Mac awake)
+caffeinate -dimsu make test_carplay_spike
+caffeinate -dimsu make test_carplay_spike CARPLAY_TESTS=CarPlayArtworkFeatureTests
+
+# Roku (device on the network)
+make roku-deploy</code></pre>
+
+    <h3>Conventions to know before you add a test</h3>
+    <ul>
+      <li><strong>iOS:</strong> put new tests under <code>PocketCastsTests/Tests/&lt;Feature&gt;/</code>. Inject <code>UserDefaults(suiteName:)</code>. Never commit without approval after manual testing.</li>
+      <li><strong>Shell repo:</strong> stage explicit file paths only, because several sessions share one checkout. Never <code>git add -A</code>.</li>
+      <li><strong>Milestone docs</strong> define "behaviors to test", one numbered, red-to-green item each. These double as the work-splitting plan.</li>
+    </ul>
+  </section>
+
+  <section id="reading">
+    <h2>12. Where to read more</h2>
+    <table>
+      <tr><th>Topic</th><th>Document</th></tr>
+      <tr><td>Repo layout and doc conventions</td><td><a href="REPO_STRUCTURE.md"><code>docs/REPO_STRUCTURE.md</code></a></td></tr>
+      <tr><td>iOS CarPlay harness: plan and decisions</td><td><a href="ios/milestones/milestone_13.md">M13</a>, <a href="ios/milestones/milestone_13.1.md">M13.1</a>, <a href="ios/milestones/milestone_13.2.md">M13.2</a></td></tr>
+      <tr><td>Harness experiment reports</td><td><a href="ios/experiments/2026-10-04_m13_e1.md">E1</a> · <a href="ios/experiments/2026-10-04_m13_e2.md">E2</a> · <a href="ios/experiments/2026-10-04_m13_e3.md">E3</a> · <a href="ios/experiments/2026-10-04_m13_e4.md">E4</a> · <a href="ios/experiments/2026-10-04_m13_e5.md">E5</a> · <a href="ios/experiments/2026-10-04_m13_e6.md">E6</a> · <a href="ios/experiments/2026-10-04_m13_e7.md">E7</a></td></tr>
+      <tr><td>Bugs the harness found</td><td><a href="ios/bugs/bug_4.md">iOS bug 4</a>, <a href="ios/bugs/bug_5.md">iOS bug 5</a></td></tr>
+      <tr><td>Why a review proposed the event model</td><td><a href="ios/architecture/reviews/stream-monitoring-review-2026-09-16.md">Stream monitoring review</a></td></tr>
+      <tr><td>iOS alignment port (planned)</td><td><a href="ios/milestones/milestone_14.md">iOS M14</a></td></tr>
+      <tr><td>Menubar alignment work</td><td><a href="menubar/milestones/milestone_12.md">M12</a>, <a href="menubar/milestones/milestone_12_handoff.md">M12 handoff</a>, <a href="menubar/README.md">menubar README</a></td></tr>
+      <tr><td>Stream Lab usage</td><td><code>pocket-radio-menubar/Tools/StreamLab/README.md</code></td></tr>
+      <tr><td>Remote contract fixtures</td><td><a href="../contracts/remote/README.md"><code>contracts/remote/README.md</code></a></td></tr>
+      <tr><td>Console test intent (hermetic vs integration)</td><td><a href="console/milestones/milestone_0.md">Console M0</a></td></tr>
+      <tr><td>Codebase tour of the iOS fork</td><td><a href="codebase-onboarding.scroll.html">Codebase onboarding</a></td></tr>
+    </table>
+    <p class="small">Links to <code>.md</code> files open as text in a browser. They resolve relative to this file in <code>docs/</code>.</p>
+  </section>
+
+  </main>
+</div>
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav.side a');
+  const linkMap = {};
+  navLinks.forEach(a => linkMap[a.getAttribute('href').slice(1)] = a);
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const link = linkMap[e.target.id];
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
