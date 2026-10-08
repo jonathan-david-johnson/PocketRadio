@@ -57,10 +57,9 @@ Review findings fixed before this checkpoint: stale delayed responses no longer 
 
 ### User checkpoint
 
-1. Turn Wi-Fi off.
-2. From `pocket-radio-ios-carplay/`: `make test_carplay`. Expect 43 tests, 0 failures.
-3. Break it on purpose: in `NowPlayingSmokeTests`, change the feature to fail the tracklist (see `HarnessTests/Fixtures/smoke_tracklist_500.feature`), and read the failure.
-4. Approve the commit, or say what to change.
+The user rejected the Wi-Fi-off check on 2026-10-07 and accepted two clean physical-device runs instead. That sign-off is complete; do not ask the user to disable Wi-Fi or repeat destructive device tests.
+
+For later simulator verification, run `make test_carplay` from `pocket-radio-ios-carplay/`. The M13.1 checkpoint had 43 tests; M13.2 expands the selection. The tracklist fault fixture is `HarnessTests/Fixtures/smoke_tracklist_500.feature`.
 
 ## Carried over from the M13 spike
 
@@ -84,7 +83,7 @@ kept code. Things the spike learned that this milestone must build in:
   Now Playing rebuild ([E7](../experiments/2026-10-04_m13_e7.md)).
 - **Runner.** Promote `SpikeGherkin.swift` (156 lines). Its dynamic scenario
   registration is the part most exposed to XCTest changes.
-- **Not yet covered:** HLS/AAC streams, and an offline (Wi-Fi off) run.
+- **Not yet covered:** HLS/AAC streams. Offline operation was not validated; a Wi-Fi-off run is not an acceptance requirement.
 
 ## Goal
 
@@ -98,10 +97,7 @@ M13.1 ships the harness and one smoke scenario. M13.2 adds the scenarios.
 
 ## User checkpoint
 
-Turn Wi-Fi off and run `make test_carplay` on the pinned simulator. The smoke
-scenario passes 20 runs in a row. Then make the fake tracklist return a 500:
-the scenario fails with a message naming the endpoint and showing the last
-Now Playing snapshot.
+Run `make test_carplay` on the dedicated signed-out simulator, with Wi-Fi unchanged. The smoke scenario passes 20 runs in a row. Then make the fake tracklist return a 500: the scenario fails with a message naming the endpoint and showing the last Now Playing snapshot. These simulator checks and the replacement device sign-off are complete; see [Progress](#progress).
 
 ---
 

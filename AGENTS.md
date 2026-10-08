@@ -44,6 +44,13 @@ Monorepo shell. Each sub-project is its own nested git repo with its own
   keep a secret must not set it themselves — see `docs/web/README.md` § Auth
   model for why web proxies this and iOS doesn't.
 
+## Asking for decisions
+
+When asking the user to decide, restate each option in plain words and give a
+recommendation. Explain what would change and any important trade-off. Decision
+IDs such as “D1–D4” and labels such as “scope exception” are not explanations;
+include the actual choice even when the preceding document defines it.
+
 ## Task routing
 
 | If you need to… | Read or use… | Evidence boundary |

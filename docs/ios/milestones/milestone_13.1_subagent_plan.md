@@ -92,7 +92,7 @@ Slices 2 to 6 run in that order. The whole plan runs 1, 2, 3, 4, 5, 6, 7, 8, 9. 
 4. **Slice 7 (Opus).** Seam review. Findings go back to slice 6's owner, under explicit ownership transfer.
 5. **Slice 8 (lead).** Integration, the 20-run loop, and the user checkpoint described in M13.1.
 6. **Slice 9 (Opus).** Final review. The lead fixes what it reports.
-7. **User checkpoint.** You turn Wi-Fi off and run `make test_carplay`. You approve commits (per `pocket-radio-ios/AGENTS.md`).
+7. **User checkpoint (completed).** The user rejected the Wi-Fi-off check on 2026-10-07 and signed off with two clean physical-device runs instead. Do not ask for Wi-Fi changes or another destructive device run. Commit approval still follows `pocket-radio-ios/AGENTS.md`.
 
 ## Stopping rules
 
