@@ -1,0 +1,27 @@
+# PocketRadio iOS
+
+The iOS app is a fork of Pocket Casts with radio playback and CarPlay integration. Code lives in `pocket-radio-ios/`; platform decisions, architecture and open issues live here.
+
+## CarPlay regression boundary
+
+The maintained harness uses real AVPlayer playback, loopback external inputs and the in-process system Now Playing record. It tests PocketRadio's output extensions, not upstream-only podcast behavior or head-unit rendering.
+
+- [Harness operation and manual simulator setup](../../pocket-radio-ios/PocketCastsTests/Tests/CarPlayOutput/Harness/README.md)
+- [Shared Now Playing contracts](../../contracts/features/README.md)
+- [ADR 0003: test boundary and rejected alternatives](adr/0003-carplay-output-test-boundary.md)
+- Open defects: [stale metadata/artwork](bugs/bug_4.md), [artwork lost on rebuild](bugs/bug_5.md), [late artwork crossing playback identities](bugs/bug_6.md), and [manual CarPlay policy discrepancies](bugs/bug_7.md)
+
+A separate [harness reliability issue](bugs/bug_8.md) retains the intermittent initial-artwork setup failure and its passing reruns; its cause is unresolved.
+
+Passing flag-controlled policy tests does not certify real CarPlay scene connectivity. Lyric retrieval/synchronization remains deferred. Device harness runs require separate consent because they replace playback and clear local Up Next.
+
+## Roadmap
+
+| Milestone | Delivers | User checkpoint | State |
+|---|---|---|---|
+| [M13](milestones/milestone_13.md) | CarPlay output feasibility experiments | Accept real ICY inputs, in-process Swift and the minimal feature runner | Extraction review pending; close after children |
+| [M13.1](milestones/milestone_13.1.md) | Reusable output harness | Repeated smoke runs and fault reporting; accepted with two clean device runs, not Wi-Fi-off | Merged; extraction review pending |
+| [M13.2](milestones/milestone_13.2.md) | Fifteen individually selectable output scenarios | Strict known failures and manual real-radio CarPlay exercise with discrepancies retained | Merged; intermittent setup failure unresolved |
+| [M14](milestones/milestone_14.md) | KCRW playback alignment port | Prove the iPhone playback clock before changing publication | Proposed; not started |
+
+Close milestones through the shell's `close-milestone` skill. Replace each closed roadmap link with its `archive/ios-m<id>` tag after extracting durable knowledge and obtaining deletion approval.

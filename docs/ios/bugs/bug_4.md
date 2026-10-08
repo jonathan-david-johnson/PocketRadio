@@ -2,7 +2,7 @@
 
 **Status:** Open — reproduced in the M13 test harness (2026-10-04); not yet observed on a device. Not fixed.
 
-Found by M13 E7 (H1). Evidence: [2026-10-04_m13_e7](../experiments/2026-10-04_m13_e7.md), the original `@h1` draft in `contracts/features/now_playing/carplay_artwork.feature`. M13.2 replaces that draft with named scenarios; its [unmarked baselines](../experiments/2026-10-07_m13_2_baselines.md) reproduce stale artwork and a wrong album when the new ICY song has no album.
+Found by M13 E7 (H1). Evidence: `archive/ios-m13:docs/ios/experiments/2026-10-04_m13_e7.md`, the original `@h1` draft in `contracts/features/now_playing/carplay_artwork.feature`. M13.2 replaces that draft with named scenarios; its unmarked baselines (`archive/ios-m13.2:docs/ios/experiments/2026-10-07_m13_2_baselines.md`) reproduce stale artwork and a wrong album when the new ICY song has no album.
 
 ---
 
@@ -46,8 +46,8 @@ How often a real KCRW user meets it. It depends on whether the real tracklist us
 
 ## Harness update — 2026-10-08 UTC
 
-[Final M13.2 verification](../experiments/2026-10-08_m13_2_verification.md) passes
-three full 128-test runs with three strict bug-4 output checks:
+The accepted baseline verification (`archive/ios-m13.2:docs/ios/experiments/2026-10-08_m13_2_verification.md`) records
+three full 128-test passes with three strict bug-4 output checks:
 
 - Closed detail: `display.artwork.station-logo`.
 - One-song-behind feed: `display.album.not-equal` and `display.artwork.station-logo`.

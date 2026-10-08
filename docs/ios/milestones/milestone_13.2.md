@@ -1,6 +1,6 @@
 # iOS M13.2 — CarPlay Now Playing output suite
 
-**Status**: IN PROGRESS — automated verification passed and user CarPlay observations recorded (2026-10-08 UTC); user accepted the recorded discrepancies and approved baseline commits. iOS baseline committed as `12c3cfb60`; not merged. Both approved hooks are implemented. No app-bug fixes or device runs. S1–S7 remain approved as proposed on 2026-10-04.
+**Status**: MERGED — iOS baseline `12c3cfb60` is in `trunk` (2026-10-08). The user accepted the recorded manual discrepancies and authorized integration/closure preparation. Original automated verification passed; fresh integration runs had one ordinary artwork-setup failure, then isolated/full passes without changes. Its cause remains unresolved ([bug 8](../bugs/bug_8.md)). The user approved extraction/deletion and deferred investigation of bug 8 on 2026-10-08. Both approved hooks are implemented. No app-bug fixes or expanded-suite device runs. S1–S7 remain approved as proposed on 2026-10-04.
 **Depends on**: M13.1
 **Required by**: `fix/stream-presentation`. That branch removes the
 expected-failure markers when it fixes each bug.
@@ -16,7 +16,7 @@ proposes provider-local **Sol 6.1 / Luna** assignments for the active
 | | |
 |---|---|
 | Plan | Shell `main`: this file, plus bug docs in `docs/ios/bugs/` |
-| Code | `pocket-radio-ios-carplay/`, branch `feature/carplay-harness`, baseline commit `12c3cfb60` on `2358aab83`; not merged to `trunk` |
+| Code | `pocket-radio-ios-carplay/`, branch `feature/carplay-harness`, baseline commit `12c3cfb60` on `2358aab83`; merged to `trunk` |
 | Worktree | `PocketRadio/pocket-radio-ios-carplay/` |
 | Shell changes | Additive, committed straight to `main`: new `.feature` files under `contracts/features/now_playing/` |
 
@@ -37,7 +37,8 @@ retains the earlier ordering/sleep failures; it is not the final sign-off.
 - Reset now waits for cache completion and drains queued main callbacks. No final-run reset failures occurred, but this cannot prove all unobservable global startup work finished.
 - The user observed four real KCRW songs / three transitions. [Manual evidence](../experiments/2026-10-08_m13_2_manual_carplay.md) records expected simulator cover omission, changing background colors, roughly 10-second tracklist lag, a lyric-policy counterexample and control-state discrepancies. Lyric synchronization stays deferred.
 - **Approval:** the user explicitly approved committing this test/docs baseline with the discrepancies deferred. iOS commit: `12c3cfb60`. Existing Makefile spike-cleanup edits were excluded and preserved uncommitted.
-- **Remaining:** integration/merge authorization and later milestone closure. No push, merge, app fix or device test is authorized by the baseline commit approval.
+- **Integration update:** the user authorized review corrections, integration and closure preparation. `trunk` was fast-forwarded to the harness branch; unrelated local changes were preserved byte-for-byte. The first fresh 128-test run had one ordinary initial-artwork failure with a loopback connection error. The isolated scenario and a second full 128-test run then passed without changes; those reruns do not erase the failed full run or establish its cause. See the final verification report's integration section.
+- **Closure approval:** the user approved the extraction table and deletion, deferring the intermittent setup failure as open bug 8. Proceed through child-before-parent archival; no push, app fix or device test is authorized.
 
 ## Goal
 
@@ -169,7 +170,7 @@ This simulator omits visible covers and uses background gradients; that alone is
 not missing artwork. Carnival visibly contains a lyric in the CarPlay third line,
 contrary to S7. Connection-state/scene behavior remains unresolved; lyric timing
 is explicitly deferred. The user accepted this baseline and explicitly approved
-commits on 2026-10-08. Do not claim the discrepancies fixed, merge, or close yet.
+commits on 2026-10-08. The user subsequently approved integration and closure with the discrepancies and intermittent setup failure retained as open follow-ups. Do not claim them fixed.
 
 ## Docs impact
 

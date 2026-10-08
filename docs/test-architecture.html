@@ -119,6 +119,10 @@
       <span class="pill med">Spike, uncommitted</span>
       <span class="pill good">Planned</span>
       <span class="pill none">None</span></p>
+    <div class="callout warn">
+      <strong class="lead">Historical survey, not the current CarPlay operating guide</strong>
+      <p>The counts, spike commands and planned work below describe 2026-10-04. The maintained CarPlay harness and output suite are now merged to iOS <code>trunk</code>. Use the <a href="../pocket-radio-ios/PocketCastsTests/Tests/CarPlayOutput/Harness/README.md">harness README</a> for current commands, manual simulator setup and evidence limits, and the <a href="ios/README.md">iOS roadmap</a> for closure state. Do not use the old spike commands as current instructions.</p>
+    </div>
   </section>
 
   <section id="summary">
@@ -597,8 +601,8 @@ make roku-deploy</code></pre>
     <table>
       <tr><th>Topic</th><th>Document</th></tr>
       <tr><td>Repo layout and doc conventions</td><td><a href="REPO_STRUCTURE.md"><code>docs/REPO_STRUCTURE.md</code></a></td></tr>
-      <tr><td>iOS CarPlay harness: plan and decisions</td><td><a href="ios/milestones/milestone_13.md">M13</a>, <a href="ios/milestones/milestone_13.1.md">M13.1</a>, <a href="ios/milestones/milestone_13.2.md">M13.2</a></td></tr>
-      <tr><td>Harness experiment reports</td><td><a href="ios/experiments/2026-10-04_m13_e1.md">E1</a> · <a href="ios/experiments/2026-10-04_m13_e2.md">E2</a> · <a href="ios/experiments/2026-10-04_m13_e3.md">E3</a> · <a href="ios/experiments/2026-10-04_m13_e4.md">E4</a> · <a href="ios/experiments/2026-10-04_m13_e5.md">E5</a> · <a href="ios/experiments/2026-10-04_m13_e6.md">E6</a> · <a href="ios/experiments/2026-10-04_m13_e7.md">E7</a></td></tr>
+      <tr><td>iOS CarPlay harness: operation and decisions</td><td><a href="../pocket-radio-ios/PocketCastsTests/Tests/CarPlayOutput/Harness/README.md">Harness README</a>, <a href="ios/adr/0003-carplay-output-test-boundary.md">Test boundary ADR</a>, <a href="ios/README.md">iOS roadmap</a></td></tr>
+      <tr><td>Historical harness experiment reports E1–E7</td><td>Archive <code>archive/ios-m13</code>. Read E1 with <code>git show archive/ios-m13:docs/ios/experiments/2026-10-04_m13_e1.md</code>; replace <code>e1</code> with <code>e2</code> through <code>e7</code> for the other reports.</td></tr>
       <tr><td>Bugs the harness found</td><td><a href="ios/bugs/bug_4.md">iOS bug 4</a>, <a href="ios/bugs/bug_5.md">iOS bug 5</a></td></tr>
       <tr><td>Why a review proposed the event model</td><td><a href="ios/architecture/reviews/stream-monitoring-review-2026-09-16.md">Stream monitoring review</a></td></tr>
       <tr><td>iOS alignment port (planned)</td><td><a href="ios/milestones/milestone_14.md">iOS M14</a></td></tr>

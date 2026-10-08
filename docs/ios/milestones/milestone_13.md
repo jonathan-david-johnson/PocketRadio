@@ -19,6 +19,12 @@
 | Worktree | `PocketRadio/pocket-radio-ios-carplay/` (sibling of `pocket-radio-ios/`, so `../contracts` and `../.githooks` resolve) |
 | Shell changes | Docs only. A draft `.feature` file for E6 stays uncommitted until D3. |
 
+## Superseding checkpoint and integration
+
+The user rejected the original Wi-Fi-off checkpoint on 2026-10-07 and accepted two clean device runs of the M13.1 harness instead. Leave Wi-Fi unchanged; offline operation was not validated and is not a remaining acceptance requirement.
+
+The maintained M13.1 harness and M13.2 suite are merged into iOS `trunk` at `52dd7c1f7` (2026-10-08). The original spike was disposable, uncommitted experiment code; `spike/carplay-harness` has no unique commits beyond its original base. It is not the maintained implementation or a branch whose spike code must be merged. The original experiment plan/progress below is historical. The user approved extraction/deletion on 2026-10-08, deferring the intermittent setup failure. Close the child milestones before this parent.
+
 ## Test boundary
 
 The suite tests **our extensions** to Pocket Casts: radio playback, stream
@@ -32,7 +38,7 @@ the path to our output. Scenarios never assert upstream-only behavior.
 | Milestone | Delivers | Gate |
 |---|---|---|
 | **M13** (this) | Evidence that an in-process, hermetic CarPlay-output test is viable; baseline of suspected bugs | User makes decisions D1–D4 |
-| [M13.1](milestone_13.1.md) | Reusable harness: fake station world, network guard, reset seams, Now Playing probe, runner | Smoke scenario green 20× offline |
+| [M13.1](milestone_13.1.md) | Reusable harness: fake station world, network guard, reset seams, Now Playing probe, runner | Smoke scenario green 20× on the dedicated simulator; replacement device sign-off accepted |
 | [M13.2](milestone_13.2.md) | CarPlay Now Playing scenario suite; known bugs as strict expected failures | User approves spec S1–S7 first |
 
 If E1–E5 pass cleanly, merge M13.1 and M13.2 into one milestone. They are
@@ -137,10 +143,7 @@ step is the decision gate below. Bugs found: [bug 4](../bugs/bug_4.md) (H1) and
 
 ### Open items
 
-- **Wi-Fi was on for every run.** The E3 guard blocks `URLSession.shared` and Kingfisher
-  traffic regardless, but the "Wi-Fi off" run the user checkpoint asks for has not been
-  done. It is a manual step. I did not turn Wi-Fi off from the agent session, because
-  that would cut the session's own connection.
+- **Wi-Fi was on for every experiment run.** Offline operation was not validated. The user later rejected the Wi-Fi-off checkpoint and accepted two clean device runs instead; no Wi-Fi change remains required.
 - **KCRW's real stream is HLS and AAC.** Everything so far used MP3 over ICY. The HLS path
   is untested in this harness. It matters most for the alignment work in M14.
 - **Full and mini players** run their own artwork resolution and were not covered by E7.
@@ -157,11 +160,7 @@ four design decisions before any harness code is kept.
 
 ## User checkpoint
 
-You run one Make target against a dedicated simulator with Wi-Fi off. A spike
-test plays a fake KCRW station from localhost and changes song twice. After
-each change it prints the title, artist, and album from `nowPlayingInfo`, plus
-the sampled colour of the artwork. You then read the experiment reports and
-make decisions D1–D4.
+The experiment checkpoint is complete: real localhost playback and Now Playing readback were proven, and the user accepted real ICY inputs, in-process Swift, the minimal runner and the proposed output policies. The original Wi-Fi-off requirement was rejected on 2026-10-07. Do not repeat it; the maintained harness and its accepted device sign-off are recorded in [M13.1](milestone_13.1.md).
 
 ---
 

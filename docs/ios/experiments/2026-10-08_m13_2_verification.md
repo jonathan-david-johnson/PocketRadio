@@ -1,12 +1,12 @@
 # M13.2 — final automated verification
 
-**Status:** Automated verification passed; manual exercise performed with discrepancies. The user accepted the recorded limitations and approved baseline commits on 2026-10-08. See [manual observations](2026-10-08_m13_2_manual_carplay.md).
+**Status:** Original baseline verification passed; manual exercise performed with discrepancies. The user accepted the recorded limitations and approved baseline commits on 2026-10-08. The baseline is now merged. Fresh integration verification had one ordinary setup failure, followed by an isolated pass and a full pass; its cause remains unresolved. See [integration verification](#integration-verification) and [manual observations](2026-10-08_m13_2_manual_carplay.md).
 **Date:** 2026-10-08 UTC.
 **Code:** Tested as uncommitted changes on `2358aab83` in `pocket-radio-ios-carplay/`, `feature/carplay-harness`; subsequently committed as `12c3cfb60` after user approval. Executable source/feature behavior was unchanged during final reconciliation.
 **Shell:** `main`, HEAD `8752ff8` at verification capture, with uncommitted feature specs and docs. That hash alone does not pin the tested contract changes.
 **Decision record:** [CarPlay output test boundary](../adr/0003-carplay-output-test-boundary.md).
 
-This supersedes the partial checkpoint in [the unmarked baseline report](2026-10-07_m13_2_baselines.md). No app defects were fixed and no device run occurred. Baseline commits were explicitly approved after the manual exercise. No push, merge or closure is authorized.
+This supersedes the partial checkpoint in [the unmarked baseline report](2026-10-07_m13_2_baselines.md). No app defects were fixed and no expanded-suite device run occurred. Baseline commits were explicitly approved after the manual exercise. The user subsequently authorized integration and closure preparation; the user subsequently approved extraction/deletion and deferred the intermittent setup failure on 2026-10-08. No push, app fix or device test is authorized.
 
 ## Final checks
 
@@ -86,6 +86,24 @@ control glyphs and uncertain fallback artwork also limit sign-off. No causes or
 fixes were established. The user deferred lyric synchronization work. The manual
 exercise is done; the user subsequently accepted the discrepancies as follow-up
 work and approved the baseline commits. Integration/closure remains separate.
+
+## Integration verification
+
+The user authorized the external review's documentation corrections, integration and milestone closure preparation. iOS `trunk` was fast-forwarded to `feature/carplay-harness` at `52dd7c1f7`, including the durable manual simulator procedure. Byte-for-byte comparison of the main checkout's working diff before/after integration confirmed its unrelated local Xcode/instruction edits were preserved.
+
+Verification used the existing dedicated CarPlay worktree at the same committed revision to avoid those unrelated main-checkout Xcode edits. Its pre-existing Makefile spike cleanup does not change the harness target or selection. Normal real-radio playback was terminated first; no physical-device test was run.
+
+| Check | Result |
+|---|---|
+| First fresh full run | **128 tests, 1 ordinary failure**, 443.903 s; `CarPlayArtworkTests.scenario_L58_ios_carplay_a_song_without_artwork_anywhere_shows_the_logo` failed at the initial red-artwork precondition, before the no-art Song B transition |
+| Isolated failing scenario | **1 test, 0 failures**, 17.464 s; initial red art and the subsequent logo transition both observed |
+| Follow-up full run | **128 tests, 0 failures**, 440.734 s; no source, fixture, timeout or marker changes |
+
+The failed request was `http://127.0.0.1:57621/art/red-large.png?song=…`, with URLSession error −1005 at 12:01:38.518 EDT. The last display snapshot retained the station logo. Scenario teardown began at 12:01:55.996, so normal teardown of that scenario does not explain the earlier connection loss. No host sleep was found during the run.
+
+A focused read-only review could not establish the cause. The server's cancel-after-send pattern and a stale-world URL/late background work remain hypotheses, not findings. The request's current-world identity and server-event timeline were not captured in the failure. The isolated pass does not prove suite-order independence or erase the full-run failure. The user approved milestone closure with this failure deferred as an open follow-up. The subsequent full pass also does not identify the first failure's cause. No production code, fixture code, timeout or expected-failure marker was changed. The unresolved fixture/setup failure is retained in [bug 8](../bugs/bug_8.md).
+
+Logs: `/tmp/m13-integration-test.log`, `/tmp/m13-integration-focused.log`, and `/tmp/m13-integration-test-2.log`. The built-app lookup in the new manual procedure was also checked: it resolves an existing StagingDebug `podcasts.app` with bundle ID `com.jdj.pocketradio`.
 
 ## Workstation-local logs
 

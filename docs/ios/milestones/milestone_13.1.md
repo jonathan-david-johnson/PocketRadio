@@ -1,6 +1,6 @@
 # iOS M13.1 — CarPlay output harness
 
-**Status**: COMMITTED (2026-10-07). `pocket-radio-ios-carplay/`, branch `feature/carplay-harness`, commit `2358aab83`, not pushed and not merged to `trunk`. Sign-off was two clean device runs instead of the Wi-Fi-off check. See [Progress](#progress).
+**Status**: MERGED (2026-10-08). Baseline `2358aab83` from `feature/carplay-harness` is now in iOS `trunk`, together with M13.2. Not pushed. Sign-off was two clean device runs instead of the rejected Wi-Fi-off check. The user approved extraction/deletion on 2026-10-08. See [Progress](#progress).
 **Depends on**: M13 (complete). D1 real ICY stream, D2 in-process Swift, D3 minimal parser.
 **Required by**: M13.2
 **Model**: **Sonnet** for the servers, fixtures, and probe. **Opus** reviews
@@ -50,8 +50,7 @@ Not done, by design or by your checkpoint:
 - **Wi-Fi-off run.** Skipped by choice. The device run covered the real-network-present case: the guard saw and blocked everything unexpected.
 - **Phone UI state helper** (`StationDetailViewController`). Deferred to M13.2.
 - **HLS/AAC fake station.** Still ICY over MP3 only.
-- **Commit.** Nothing is committed in `pocket-radio-ios`, per its `AGENTS.md`.
-- **Spike folder** `CarPlayOutputSpike/` is untouched. Delete it once you accept the harness.
+The baseline was subsequently committed as `2358aab83` and merged to `trunk`. The maintained tree has no `CarPlayOutputSpike/` folder. Unrelated Makefile spike-cleanup edits remain uncommitted and are not part of this closure.
 
 Review findings fixed before this checkpoint: stale delayed responses no longer cross scenarios, the harness refuses to run outside `make test_carplay`, teardown order, a fixture class that could break a whole-target run, and a few weak tests. Known remaining notes are in the plan's outcome section.
 

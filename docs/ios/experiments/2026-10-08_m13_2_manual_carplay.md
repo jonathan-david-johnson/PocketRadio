@@ -45,6 +45,4 @@ Lyric retrieval/synchronization and the -37-second adjustment remain deferred at
 
 After the observations were documented, the user explicitly approved committing
 the regression baseline with these limitations deferred. iOS baseline commit:
-`12c3cfb60`. No app fix, test weakening, device run, push, merge or milestone
-closure was approved. The discrepancies still require separately scoped follow-up;
-this is not a clean app-output sign-off.
+`12c3cfb60`. The user subsequently approved integration and milestone closure while retaining the discrepancies as open follow-ups. No app fix, test weakening, device run or push was approved. This is not a clean app-output sign-off.

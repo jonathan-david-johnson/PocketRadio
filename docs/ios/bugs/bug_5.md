@@ -2,7 +2,7 @@
 
 **Status:** Open — reproduced in the M13 test harness (2026-10-04); not yet observed on a device. Not fixed.
 
-Found by M13 E4 and E7 (H2). Evidence: [E4](../experiments/2026-10-04_m13_e4.md) and [E7](../experiments/2026-10-04_m13_e7.md); the original `@h2` draft in `contracts/features/now_playing/carplay_artwork.feature`. M13.2's named lifecycle scenarios and [unmarked baseline report](../experiments/2026-10-07_m13_2_baselines.md) reproduce A and C, and expose nondeterministic startup ordering for B.
+Found by M13 E4 and E7 (H2). Evidence: `archive/ios-m13:docs/ios/experiments/2026-10-04_m13_e4.md` and `archive/ios-m13:docs/ios/experiments/2026-10-04_m13_e7.md`; the original `@h2` draft in `contracts/features/now_playing/carplay_artwork.feature`. M13.2's named lifecycle scenarios and unmarked baseline report (`archive/ios-m13.2:docs/ios/experiments/2026-10-07_m13_2_baselines.md`) reproduce A and C, and expose nondeterministic startup ordering for B.
 
 The symptoms share one cause, so they are lettered under one doc.
 
@@ -16,7 +16,7 @@ Harness timeline: `+8.95 pause()`, `+10.51 play()`, `+10.66 artwork` changes fro
 
 ## Symptom B — Artwork resolved before the first full rebuild can be lost at playback start
 
-The tracklist response and the first `setAllNowPlayingInfo` rebuild race. If the artwork resolves first, the rebuild overwrites it with the logo. It is seen once in an undelayed run: red at +0.10 s, logo at +0.20 s, never restored, even after Song A's ICY title arrived. A cached tracklist (second start of the station in one app session) makes this order likely. In M13.2, warming the cache through a real fetch produced a passing run followed by a failing independent repeat (red at +0.43 s, logo at +0.92 s). A strict expected-failure marker would therefore be flaky. After simulator restart, two clean awake runs again showed red at about +0.43–0.44 s and the logo at +0.53 s. Sleep is not the cause of those failures, but the earlier passing outcome still makes a strict marker unsafe without further ordering control. Deterministic coverage is blocked pending a separately approved startup barrier or explicit deferral.
+The tracklist response and the first `setAllNowPlayingInfo` rebuild race. If the artwork resolves first, the rebuild overwrites it with the logo. It is seen once in an undelayed run: red at +0.10 s, logo at +0.20 s, never restored, even after Song A's ICY title arrived. A cached tracklist (second start of the station in one app session) makes this order likely. In M13.2, warming the cache through a real fetch produced a passing run followed by a failing independent repeat (red at +0.43 s, logo at +0.92 s). A strict expected-failure marker would therefore be flaky. After simulator restart, two clean awake runs again showed red at about +0.43–0.44 s and the logo at +0.53 s. Sleep is not the cause of those failures, but the earlier passing outcome still makes a strict marker unsafe without further ordering control. The user subsequently approved a DEBUG-only startup barrier, which now establishes the required ordering for the strict regression checks. Ordinary production startup scheduling remains uncontrolled.
 
 ## Symptom C — Stopping and replaying the same song skips artwork resolution
 
@@ -44,7 +44,7 @@ coverage block described under B, not the app defect. Three independent unmarked
 runs prove actual red artwork publication while the real initial rebuild is held,
 then release that unchanged rebuild and observe the station logo.
 
-[Final verification](../experiments/2026-10-08_m13_2_verification.md) includes four
+The accepted baseline verification (`archive/ios-m13.2:docs/ios/experiments/2026-10-08_m13_2_verification.md`) includes four
 strict bug-5 output checks across three scenarios:
 
 - A, pause/resume: `display.title-artwork.artwork`.

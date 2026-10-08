@@ -1,9 +1,9 @@
 # iOS M14 — KCRW playback alignment (port from menubar)
 
-**Status**: PROPOSED, decisions D1–D5 made 2026-10-04. Not started: M13 finishes first. `current_milestone.md` stays on M13 until then.
-**Depends on**: Menubar M11-A/M11-B/M12, accepted. Core and adapter at menubar `main` `8838df5`. iOS base is `trunk` `0751918f8`.
+**Status**: PROPOSED, decisions D1–D5 made 2026-10-04. Not started: M13 closes first. Repointing `current_milestone.md` during closure does not authorize implementation or physical-device testing.
+**Depends on**: Menubar M11-A/M11-B/M12, accepted. Core and adapter accepted at menubar `main` `8838df5`; verify the current dependency before implementation. Branch from current iOS `trunk`, which now includes the CarPlay harness and output suite.
 **Required by**: The later stream-presentation work in the [stream-monitoring review](../architecture/reviews/stream-monitoring-review-2026-09-16.md) §6 steps 2 and 5.
-**Related**: [M13](milestone_13.md) (CarPlay output harness). M14 can start without it. M13.2 gives M14 its strongest output test, so see decision D2.
+**Related**: [CarPlay output test boundary](../adr/0003-carplay-output-test-boundary.md) and the [maintained harness](../../../pocket-radio-ios/PocketCastsTests/Tests/CarPlayOutput/Harness/README.md). The accepted order is to close M13 first, then use its output suite for 14.2 and 14.4.
 
 ## Where the work happens
 
@@ -11,7 +11,7 @@
 |---|---|
 | Plan and reports | Shell `main`: this file, `docs/ios/experiments/`, `docs/ios/bugs/` |
 | Code | `pocket-radio-ios`, branch `feature/kcrw-alignment` from `trunk` |
-| Worktree | `pocket-radio-ios-alignment/`, sibling of `pocket-radio-ios/`, so `../contracts` and `../.githooks` resolve. The M13 spike worktree `pocket-radio-ios-carplay/` stays untouched. |
+| Worktree | `pocket-radio-ios-alignment/`, sibling of `pocket-radio-ios/`, so `../contracts` and `../.githooks` resolve. The maintained CarPlay harness worktree `pocket-radio-ios-carplay/` stays separate. |
 | Shell changes | Docs only, unless D1 moves the shared core into the shell |
 
 **Goal:** On iPhone, an eligible KCRW Eclectic24 station shows the song that is audible, not the feed's newest row. Lock screen, Bluetooth, CarPlay, the full and mini players, station detail, and live lyrics all follow the player's own clock. The port reuses the menubar's selection core unchanged and adds iOS adapters. Other stations and podcasts keep today's behavior.
@@ -103,7 +103,7 @@ Tests use the `PocketCastsTests` host. Inject the clock, feed, lyrics, and publi
 | # | Decision | Options | Recommendation |
 |---|---|---|---|
 | D1 | Where the shared core lives | (a) Path dependency on `../pocket-radio-menubar/Packages/StreamSession`. (b) Move it to a shared location in the shell. (c) Copy it into iOS. | **(a)** for 14.1 to 14.2. It needs no move, and a fix lands in one place. Revisit before merging to `trunk`. A path outside the iOS repo is awkward for a fork, and a move to a shared location is easy then. Avoid (c): the copies will drift. |
-| D2 | Order relative to M13 | (a) Start M14.1 now, in parallel. (b) Finish M13.1 and M13.2 first. | **(a).** 14.1 and 14.2 need only device checks. Use M13.2 for 14.2 and 14.4 only if it is ready. Do not block on it. |
+| D2 | Order relative to M13 | (a) Start M14.1 in parallel. (b) Finish M13.1 and M13.2 first. | **(b), accepted 2026-10-04.** Close M13 first so the output suite is available for 14.2 and 14.4. |
 | D3 | Does the iOS player stay on the feed-driven design for non-KCRW stations? | Leave as is, or apply the single-writer adapter to all stations later. | Leave as is now. Treat the adapter as ready for reuse. |
 | D4 | Trace and replay on iOS | (a) `FileLog` lines only. (b) Port the bounded JSONL recorder and replay. | **(a).** M11-B and M12 were accepted on listener reports, and the offset is a feed-to-stream property. Do (b) only if 14.1 shows the iOS offset differs. |
 | D5 | Carry the menubar bugs 2 and 3 into the port | Fix on menubar first, or design the iOS behavior around them. | Design iOS around bug 2 (behavior 6). Bug 3 is menubar UI and does not apply. Fix both on menubar separately. |

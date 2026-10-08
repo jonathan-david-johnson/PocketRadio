@@ -1,7 +1,7 @@
 # Bug 6 — Late radio artwork overwrites the display after an episode switch
 
 **Status:** Open. Reproduced in M13.2's real-playback simulator harness on 2026-10-07. No fix or device observation.
-**Evidence:** [M13.2 unmarked baselines](../experiments/2026-10-07_m13_2_baselines.md#late-artwork-races), `carplay_races.feature` scenarios “Switching stations prevents the old station's artwork from publishing” and “Switching to a podcast prevents radio artwork from publishing over it”.
+**Evidence:** `archive/ios-m13.2:docs/ios/experiments/2026-10-07_m13_2_baselines.md`, “Late artwork races” section, `carplay_races.feature` scenarios “Switching stations prevents the old station's artwork from publishing” and “Switching to a podcast prevents radio artwork from publishing over it”.
 
 ## Symptom
 
@@ -14,7 +14,7 @@ Individual harness observations, relative to the old artwork request:
 | Another local station | +7.748 s | +20.011 s | +20.049 s |
 | Local podcast episode | +7.768 s | +20.009 s | +20.046 s |
 
-The output step failed with diagnostic `display.race.no-red-artwork`. Both individual runs proved the delayed request and changed playback identity before observing its response and polling through callback delivery. A later combined run had an unrelated readiness timeout; suite-level stability is not yet established.
+The output step failed with diagnostic `display.race.no-red-artwork`. Both individual runs proved the delayed request and changed playback identity before observing its response and polling through callback delivery. A historical combined run had an unrelated readiness timeout during host sleep. Subsequent accepted baseline verification passed three full runs with the strict markers described below; the original timeout is not an expected app-output defect.
 
 ## Cause
 
@@ -30,7 +30,7 @@ The harness reads `MPNowPlayingInfoCenter`, not CarPlay rendering. The podcast f
 
 ## Next step
 
-Keep fixes in `fix/stream-presentation`. Before shipping an iOS expected-failure entry, repeat the unmarked station/podcast scenarios under stable host conditions, then associate only their designated no-stale-art assertion with this bug. Never suppress readiness or network failures.
+Keep fixes in `fix/stream-presentation`. The strict expected-failure entries are implemented after stable unmarked reproduction. When fixing this defect, remove only the corresponding no-stale-art markers and retain the assertions. Never suppress readiness or network failures.
 
 ## Harness update — 2026-10-08 UTC
 
@@ -40,7 +40,7 @@ failures remain ordinary. Completion evidence includes the old request, new
 identity, delayed server response, downloaded client-cache entry and a callback
 hold after completion.
 
-[Final verification](../experiments/2026-10-08_m13_2_verification.md) records three
+The accepted baseline verification (`archive/ios-m13.2:docs/ios/experiments/2026-10-08_m13_2_verification.md`) records three
 consecutive full 128-test passes, with both designated defects reproduced in each
 and no host sleep. This establishes observed suite stability under those conditions,
 not a proof against unsampled transient writes. The stale-callback bug is not fixed.
