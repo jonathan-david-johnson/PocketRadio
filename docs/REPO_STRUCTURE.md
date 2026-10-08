@@ -6,7 +6,9 @@ shared top-level shell for orchestration and docs.
 
 This file owns the **conventions**: layout, formats, and rules. The
 `meta-repo` skill owns the **procedures** (step-by-step tasks) and points
-here for every convention.
+here for every convention. Milestone procedures are project skills in this
+shell's `.agents/skills/`: `new-milestone`, `close-milestone`, and
+`subagent-plan`.
 
 ## Layout
 
@@ -18,7 +20,8 @@ project/                           # shell repo, always on `main`
 ├── contracts/                     # cross-platform contracts
 │   ├── <area>/*.json              #   golden fixtures, e.g. contracts/remote/
 │   └── features/<area>/*.feature  #   shared Gherkin specs; steps live per platform
-├── tools/                         # shell-level diagnostic scripts
+├── .agents/skills/                # milestone skills; .claude/skills links here
+├── tools/                         # shell-level scripts, incl. docs_check.py
 ├── supabase/                      # shared backend
 ├── docs/
 │   ├── REPO_STRUCTURE.md          # this file
@@ -27,7 +30,7 @@ project/                           # shell repo, always on `main`
 │   ├── todo.md
 │   ├── security_concerns.md
 │   ├── <platform_a>/              # one dir per platform implementation
-│   │   ├── README.md
+│   │   ├── README.md              # includes the roadmap, one row per milestone
 │   │   ├── CONTEXT.md             # optional: persistent architecture notes
 │   │   ├── current_milestone.md   # symlink -> active milestones/milestone_N.md
 │   │   ├── adr/                   # architecture decision records (optional)
@@ -37,11 +40,10 @@ project/                           # shell repo, always on `main`
 │   │   │   └── bug_1.md
 │   │   ├── experiments/           # dated experiment reports (optional)
 │   │   │   └── traces/            #   raw evidence the reports cite
-│   │   └── milestones/
-│   │       ├── milestone_0.md
-│   │       ├── milestone_1.md
-│   │       ├── milestone_1_handoff.md
-│   │       └── ...
+│   │   └── milestones/            # open milestones only; closing deletes them
+│   │       ├── milestone_7.md
+│   │       ├── milestone_7_handoff.md
+│   │       └── milestone_8.md
 │   └── <platform_b>/ ...          # same shape
 ├── <platform_a_dir>/              # nested git repo (own .git, own Makefile)
 ├── <platform_a_dir>-<topic>/      # optional: worktree of platform_a for parallel work
@@ -160,14 +162,16 @@ Several sessions share one shell checkout, and so one staging area.
     to be worth doing" section.
   - Multi-symptom bugs get lettered symptoms (A, B, ...) under one doc if
     they were diagnosed/fixed together.
-- Bug docs are append-only history: change the status and add sections; don't
-  delete past symptoms once fixed.
+- While a bug is open, its doc is append-only: change the status and add
+  sections, but don't delete past symptoms. Once the bug is fixed, the doc is
+  closed out and deleted. See [Lifecycle and cleanup](#lifecycle-and-cleanup).
 
 ## Milestones
 
 `docs/<platform>/milestones/milestone_N.md`, with `current_milestone.md` as a
-symlink to the active one. **Never edit through the symlink** — when a
-milestone completes, create `milestone_N+1.md` and repoint the symlink.
+symlink to the active one. Open milestones with the `new-milestone` skill and
+close them with `close-milestone`. **Never write through the symlink**, because
+that overwrites the milestone it points at. Repoint it with `ln -sfn`.
 
 Numbering:
 
@@ -175,7 +179,7 @@ Numbering:
 - `milestone_Na.md`, `milestone_Nb.md` — sibling slices of N (menubar uses
   this). Either is fine; stay consistent within a platform.
 - Handoff notes: `milestone_<id>_handoff.md` next to the milestone they
-  belong to.
+  belong to. They are deleted when that milestone closes.
 
 ### Milestone doc shape
 
@@ -217,7 +221,27 @@ done — a concrete, demoable scenario, not an implementation detail.
 ## Out of scope
 
 - What's explicitly deferred, and to which milestone.
+
+## Docs impact
+
+- **Docs this changes or makes stale:** <paths, or "none — <reason>">
+- **Questions this must settle:** <open decisions whose answers may become
+  ADRs, or "none — <reason>">
+
+## Hand-performed interactions
+
+- [ ] <gesture> — <what should happen>
 ```
+
+Fill in **Docs impact** when the milestone opens, with only what is knowable
+then. `close-milestone` decides where each answer goes.
+
+Keep **Hand-performed interactions** only for UI driven by gestures. The human
+ticks each line, and the milestone can't close while a line is unticked.
+Gesture handling is often unreachable from tests: iOS M12.2 shipped a dead
+drag-to-reorder with twelve passing tests.
+
+At close, each **Behaviors to test** item names the test that covers it.
 
 ### Experiment milestones
 
@@ -231,8 +255,12 @@ building, replace **Behaviors to test** with:
   which experiment supplies the evidence for each.
 
 Record each result in `docs/<platform>/experiments/YYYY-MM-DD_<topic>.md`,
-with raw evidence under `experiments/traces/`. See
-`docs/ios/milestones/milestone_13.md` and `docs/menubar/milestones/milestone_10.md`.
+with raw evidence under `experiments/traces/`. Worked examples: iOS M13 and
+menubar M10. While they're open they live in `docs/<platform>/milestones/`.
+Once closed, they're under the tags `archive/ios-m13` and
+`archive/menubar-m10`.
+Reports and traces are deleted at close-out. Their conclusions, negative ones
+included, go to an ADR that cites the report by archive tag.
 
 ### Sub-agent fan-out
 
@@ -250,7 +278,85 @@ Each numbered item should be:
 When a milestone needs cross-cutting handoff notes (partial progress, open
 questions for the next session/agent), add a handoff file alongside the
 milestone file rather than editing the milestone doc's scope after work
-has started.
+has started. Handoffs and subagent plans are deleted when the milestone
+closes.
+
+## Lifecycle and cleanup
+
+Milestones, handoffs, subagent plans, experiment reports, and fixed bug docs
+are working state. When a milestone closes, its durable knowledge moves to a
+permanent home and the working files are deleted. Git keeps them under an
+archive tag.
+
+| Artifact | Lives until | Durable part goes to |
+|---|---|---|
+| Milestone | Its code is merged on the platform base branch | Tests, contracts, ADRs, README/CONTEXT |
+| Handoff, subagent plan | Its milestone closes | Nothing |
+| Experiment report | Its milestone closes | An ADR, including rejected alternatives |
+| Traces | Its milestone closes | The platform repo, if a tool or test replays them |
+| Bug doc | The bug is fixed | A regression test or verification note; ADR or CONTEXT for general lessons |
+| ADR, README, CONTEXT, architecture, contracts | Permanent | — |
+
+Permanent docs describe the current state. Edit them in place rather than
+appending history. To change a decision, write a new ADR and mark the old one
+`Superseded by NNNN`.
+
+### Opening and closing
+
+- `new-milestone` opens a milestone. It creates the file, drafts Docs impact,
+  repoints the symlink, and adds a roadmap row.
+- `close-milestone` closes one. It checks that the code is merged, extracts the
+  durable knowledge, tags, and deletes, all in one commit that you review.
+- No COMPLETE state stays on disk. A finished milestone is either being closed
+  or already gone.
+
+### Archive tags and citations
+
+- Tag: `archive/<platform>-m<id>`, on the last commit that contains the
+  milestone and its bundle.
+- Cite an archived file as `archive/<platform>-m<id>:<path>`. Read it with
+  `git show archive/ios-m13:docs/ios/milestones/milestone_13.md`.
+- The platform README roadmap keeps one row per milestone, and a closed row
+  names its tag. That table is the history.
+- A bug closed outside a milestone is cited as `<commit>:<path>`, using the
+  commit before the deletion.
+- Tags aren't pushed by default. Push them with `git push origin <tag>`.
+
+### What code may cite
+
+Code, meaning any non-markdown file in any repo, may cite ADRs, architecture
+docs, and contracts. It never cites milestones, handoffs, experiments, or bug
+docs, because those get deleted.
+
+### Enforcement
+
+`.githooks/pre-commit` runs `tools/docs_check.py --staged`. It checks only the
+commit's own changes, so another session's files can't block yours.
+
+- **Rule A, every repo:** added lines in non-markdown files may not cite
+  lifecycle docs.
+- **Rule B, shell only:** deleting a file under `docs/` fails while a tracked
+  file or a `current_milestone.md` symlink still links to it. Deleting a
+  milestone also requires an archive tag that contains the file, and a README
+  roadmap row that names the tag.
+
+`python3 tools/docs_check.py` prints an advisory report for the whole tree:
+finished milestones still on disk, milestones without a status line, orphaned
+handoffs, broken links, and code citations. Add `--strict` to exit non-zero.
+
+### Where the skills live
+
+Milestone skills live only in this shell's `.agents/skills/`, never in a
+platform repo. Pi discovers project skills from the working directory up to
+the nearest repository root. A session started inside a nested repo therefore
+doesn't see them. Run milestone work from the shell checkout.
+
+### Backlog
+
+Milestones written before this convention close the same way, with lighter
+extraction. Triage them by inbound references. If nothing but the roadmap cites
+a milestone and its code has shipped, extract nothing: tag it, repoint the
+roadmap row, and delete it.
 
 ## Contracts and shared specs
 

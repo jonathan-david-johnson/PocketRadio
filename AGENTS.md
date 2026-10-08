@@ -22,8 +22,16 @@ Monorepo shell. Each sub-project is its own nested git repo with its own
   All real content goes in `AGENTS.md`. Enforced by a pre-commit hook scoped to
   this repo and its nested repos; run `make hooks` after cloning.
 - **Write-through symlink trap:** `docs/<project>/current_milestone.md` →
-  `milestones/milestone_N.md`. Writing through it overwrites the previous
-  milestone's archive. Create a new numbered file and repoint the symlink.
+  `milestones/milestone_N.md`. Writing through it overwrites the milestone it
+  points at. Use the `new-milestone` skill, which repoints with `ln -sfn`.
+- **Milestones are deleted when they close.** Close one with the
+  `close-milestone` skill; never mark it complete by hand. Its durable
+  knowledge moves to ADRs, README/CONTEXT, tests, and contracts, and git keeps
+  the rest under `archive/<platform>-m<id>`. Code cites ADRs, never milestones,
+  experiments, or bug docs. The pre-commit hook enforces this. Details:
+  `docs/REPO_STRUCTURE.md` § Lifecycle and cleanup.
+- **Milestone skills live in the shell** (`.agents/skills/`), not in platform
+  repos. Start milestone sessions from the shell checkout so they're found.
 - **The shell stays on `main`; code happens on platform branches.** Commit
   docs and additive contracts straight to `main`. A parallel branch in the
   same platform goes in a sibling worktree, `pocket-radio-<platform>-<topic>/`,

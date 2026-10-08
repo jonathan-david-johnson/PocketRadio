@@ -10,6 +10,9 @@
 #   CLAUDE.md is a plain file containing exactly "@AGENTS.md", with a sibling
 #   AGENTS.md holding the real content. Never a symlink.
 #
+# Enforces the docs lifecycle (see docs/REPO_STRUCTURE.md § Lifecycle and
+# cleanup) through tools/docs_check.py --staged. Staged changes only.
+#
 # Nested repos point core.hooksPath at this same file via a relative path, so
 # there is one copy to maintain. Delegates to a repo's own .git/hooks/pre-commit
 # if present, so setting core.hooksPath does not silently disable local hooks.
@@ -59,6 +62,18 @@ if [ "$status" -ne 0 ]; then
 	echo "Convention: AGENTS.md holds the content; CLAUDE.md is a one-line pointer." >&2
 	echo "Bypass once with: git commit --no-verify" >&2
 	exit "$status"
+fi
+
+# --- Docs lifecycle --------------------------------------------------------
+# Nested repos run this file as ../.githooks/pre-commit, so resolve the shell
+# from $0, not from the working directory.
+
+docs_check="$(cd "$(dirname "$0")/.." && pwd -P)/tools/docs_check.py"
+if [ -f "$docs_check" ] && command -v python3 >/dev/null 2>&1; then
+	python3 "$docs_check" --staged || {
+		echo "Bypass once with: git commit --no-verify" >&2
+		exit 1
+	}
 fi
 
 # --- Delegate to the repo's own hook --------------------------------------
