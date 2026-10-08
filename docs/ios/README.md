@@ -21,7 +21,7 @@ Passing flag-controlled policy tests does not certify real CarPlay scene connect
 |---|---|---|---|
 | [M13](milestones/milestone_13.md) | CarPlay output feasibility experiments | Accept real ICY inputs, in-process Swift and the minimal feature runner | Extraction review pending; close after children |
 | M13.1 (`archive/ios-m13.1`) | Reusable output harness | Repeated smoke runs and fault reporting; accepted with two clean device runs, not Wi-Fi-off | Closed |
-| [M13.2](milestones/milestone_13.2.md) | Fifteen individually selectable output scenarios | Strict known failures and manual real-radio CarPlay exercise with discrepancies retained | Merged; intermittent setup failure unresolved |
+| M13.2 (`archive/ios-m13.2`) | Fifteen individually selectable output scenarios | Strict known failures and manual real-radio CarPlay exercise with discrepancies retained | Closed; bugs 7–8 deferred |
 | [M14](milestones/milestone_14.md) | KCRW playback alignment port | Prove the iPhone playback clock before changing publication | Proposed; not started |
 
 Close milestones through the shell's `close-milestone` skill. Replace each closed roadmap link with its `archive/ios-m<id>` tag after extracting durable knowledge and obtaining deletion approval.

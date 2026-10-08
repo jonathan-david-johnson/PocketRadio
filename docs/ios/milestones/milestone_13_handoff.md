@@ -34,19 +34,19 @@ No original app bugs were fixed. Leave bugs 4–8 in place. Preserve all unrelat
 
 ### M13.2 — `archive/ios-m13.2`
 
-- `docs/ios/milestones/milestone_13.2.md`
-- `docs/ios/milestones/milestone_13.2_subagent_plan.md`
-- `docs/ios/experiments/2026-10-07_m13_2_baselines.md`
-- `docs/ios/experiments/2026-10-08_m13_2_verification.md`
-- `docs/ios/experiments/2026-10-08_m13_2_manual_carplay.md`
-- `docs/ios/experiments/traces/2026-10-08_m13_2_manual/01-anyone-else-but-you.png`
-- `docs/ios/experiments/traces/2026-10-08_m13_2_manual/02-carnival.png`
-- `docs/ios/experiments/traces/2026-10-08_m13_2_manual/03-a-good-day.png`
-- `docs/ios/experiments/traces/2026-10-08_m13_2_manual/04-a-good-day-lyric-offset.png`
-- `docs/ios/experiments/traces/2026-10-08_m13_2_manual/05-simetachin.png`
-- `.pi/agents/m13-2-sol.md`
-- `.pi/agents/m13-2-luna.md`
-- `.pi/agents/m13-2-review.md`
+- `archive/ios-m13.2:docs/ios/milestones/milestone_13.2.md`
+- `archive/ios-m13.2:docs/ios/milestones/milestone_13.2_subagent_plan.md`
+- `archive/ios-m13.2:docs/ios/experiments/2026-10-07_m13_2_baselines.md`
+- `archive/ios-m13.2:docs/ios/experiments/2026-10-08_m13_2_verification.md`
+- `archive/ios-m13.2:docs/ios/experiments/2026-10-08_m13_2_manual_carplay.md`
+- `archive/ios-m13.2:docs/ios/experiments/traces/2026-10-08_m13_2_manual/01-anyone-else-but-you.png`
+- `archive/ios-m13.2:docs/ios/experiments/traces/2026-10-08_m13_2_manual/02-carnival.png`
+- `archive/ios-m13.2:docs/ios/experiments/traces/2026-10-08_m13_2_manual/03-a-good-day.png`
+- `archive/ios-m13.2:docs/ios/experiments/traces/2026-10-08_m13_2_manual/04-a-good-day-lyric-offset.png`
+- `archive/ios-m13.2:docs/ios/experiments/traces/2026-10-08_m13_2_manual/05-simetachin.png`
+- `archive/ios-m13.2:.pi/agents/m13-2-sol.md`
+- `archive/ios-m13.2:.pi/agents/m13-2-luna.md`
+- `archive/ios-m13.2:.pi/agents/m13-2-review.md`
 
 The screenshots are human evidence, not tool replay fixtures; retain them in the archive, not as live experiment files.
 

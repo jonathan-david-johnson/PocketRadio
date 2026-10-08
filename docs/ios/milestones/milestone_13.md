@@ -1,6 +1,6 @@
 # iOS M13 — CarPlay output harness: experiments
 
-**Status**: COMPLETE as an experiment milestone — E1–E7 done and D1–D4 decided (2026-10-04). Implementation checkpoints: `archive/ios-m13.1:docs/ios/milestones/milestone_13.1.md` and [M13.2](milestone_13.2.md). See [Progress](#progress).
+**Status**: COMPLETE as an experiment milestone — E1–E7 done and D1–D4 decided (2026-10-04). Implementation checkpoints: `archive/ios-m13.1:docs/ios/milestones/milestone_13.1.md` and `archive/ios-m13.2:docs/ios/milestones/milestone_13.2.md`. See [Progress](#progress).
 **Depends on**: M12.3 (`trunk` at `0751918f8`)
 **Required by**: M13.1 (harness), M13.2 (CarPlay output suite), and the later
 `fix/stream-presentation` branch proposed in the
@@ -39,7 +39,7 @@ the path to our output. Scenarios never assert upstream-only behavior.
 |---|---|---|
 | **M13** (this) | Evidence that an in-process, hermetic CarPlay-output test is viable; baseline of suspected bugs | User makes decisions D1–D4 |
 | M13.1 (`archive/ios-m13.1`) | Reusable harness: fake station world, network guard, reset seams, Now Playing probe, runner | Smoke scenario green 20× on the dedicated simulator; replacement device sign-off accepted |
-| [M13.2](milestone_13.2.md) | CarPlay Now Playing scenario suite; known bugs as strict expected failures | User approves spec S1–S7 first |
+| M13.2 (`archive/ios-m13.2`) | CarPlay Now Playing scenario suite; known bugs as strict expected failures | User approves spec S1–S7 first |
 
 If E1–E5 pass cleanly, merge M13.1 and M13.2 into one milestone. They are
 separate so the harness is proven reliable before scenarios pile onto it.
@@ -373,7 +373,7 @@ The user accepted the recommendations.
 | D1 Input tier | Real ICY stream for every scenario. A metadata-injection shortcut is allowed only for pure-logic scenarios. |
 | D2 Fake-world placement | In-process Swift (`NWListener`, `URLProtocol`, loopback art server). |
 | D3 Gherkin runner | Minimal in-bundle parser, promoted from the spike's `SpikeGherkin.swift`. |
-| D4 Spec | S1–S7 approved as proposed in [M13.2](milestone_13.2.md#spec-decisions-user-approves-before-any-scenario-is-written). Favourite and mute buttons (behavior 14) stay a stretch goal. |
+| D4 Spec | S1–S7 approved as proposed in `archive/ios-m13.2:docs/ios/milestones/milestone_13.2.md`. Favourite and mute buttons (behavior 14) stay a stretch goal. |
 
 M13.1 and M13.2 merge into one milestone on `feature/carplay-harness`, as this
 plan said they would if E1–E5 passed. They stay as two files so the harness
@@ -386,7 +386,7 @@ and the scenarios are reviewed as separate steps.
 | D1 Input tier | Real ICY stream for every scenario / real-stream smoke tests plus a metadata-injection seam | E2, E5 |
 | D2 Fake-world placement | In-process Swift (`NWListener`) / out-of-process Python | E2 |
 | D3 Gherkin runner | Minimal in-bundle parser / maintained Swift Cucumber library | E6 |
-| D4 Spec | Approve or change S1–S7 in [M13.2](milestone_13.2.md#spec-decisions-user-approves-before-any-scenario-is-written) | E7 |
+| D4 Spec | Approve or change S1–S7 in `archive/ios-m13.2:docs/ios/milestones/milestone_13.2.md` | E7 |
 
 ## Scope (spike code, disposable)
 
