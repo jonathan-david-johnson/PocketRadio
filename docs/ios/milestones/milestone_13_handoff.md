@@ -29,8 +29,8 @@ No original app bugs were fixed. Leave bugs 4–8 in place. Preserve all unrelat
 
 ### M13.1 — `archive/ios-m13.1`
 
-- `docs/ios/milestones/milestone_13.1.md`
-- `docs/ios/milestones/milestone_13.1_subagent_plan.md`
+- `archive/ios-m13.1:docs/ios/milestones/milestone_13.1.md`
+- `archive/ios-m13.1:docs/ios/milestones/milestone_13.1_subagent_plan.md`
 
 ### M13.2 — `archive/ios-m13.2`
 

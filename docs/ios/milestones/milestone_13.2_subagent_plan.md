@@ -22,7 +22,7 @@ This plan replaces M13.2's original Opus/Sonnet model assignments, not its behav
 | Existing edits | Both shell and iOS-worktree Makefiles have unrelated uncommitted edits. Preserve them. |
 | Active milestone pointer | `docs/ios/current_milestone.md` still points to M13 experiments. Repoint it to M13.2 when execution starts; do not overwrite its target. |
 
-The harness is committed but not merged to `trunk`. Continue in its worktree; do not branch from the main iOS checkout. The prior 20-run smoke check and device sign-off are recorded in [M13.1](milestone_13.1.md). Today's baseline is a simulator run, not a new offline or device check.
+The harness is committed but not merged to `trunk`. Continue in its worktree; do not branch from the main iOS checkout. The prior 20-run smoke check and device sign-off are recorded in `archive/ios-m13.1:docs/ios/milestones/milestone_13.1.md`. Today's baseline is a simulator run, not a new offline or device check.
 
 ## Execution checkpoint
 

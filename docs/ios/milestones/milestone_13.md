@@ -1,6 +1,6 @@
 # iOS M13 — CarPlay output harness: experiments
 
-**Status**: COMPLETE as an experiment milestone — E1–E7 done and D1–D4 decided (2026-10-04). Work continues in [M13.1](milestone_13.1.md) and [M13.2](milestone_13.2.md). See [Progress](#progress).
+**Status**: COMPLETE as an experiment milestone — E1–E7 done and D1–D4 decided (2026-10-04). Implementation checkpoints: `archive/ios-m13.1:docs/ios/milestones/milestone_13.1.md` and [M13.2](milestone_13.2.md). See [Progress](#progress).
 **Depends on**: M12.3 (`trunk` at `0751918f8`)
 **Required by**: M13.1 (harness), M13.2 (CarPlay output suite), and the later
 `fix/stream-presentation` branch proposed in the
@@ -38,7 +38,7 @@ the path to our output. Scenarios never assert upstream-only behavior.
 | Milestone | Delivers | Gate |
 |---|---|---|
 | **M13** (this) | Evidence that an in-process, hermetic CarPlay-output test is viable; baseline of suspected bugs | User makes decisions D1–D4 |
-| [M13.1](milestone_13.1.md) | Reusable harness: fake station world, network guard, reset seams, Now Playing probe, runner | Smoke scenario green 20× on the dedicated simulator; replacement device sign-off accepted |
+| M13.1 (`archive/ios-m13.1`) | Reusable harness: fake station world, network guard, reset seams, Now Playing probe, runner | Smoke scenario green 20× on the dedicated simulator; replacement device sign-off accepted |
 | [M13.2](milestone_13.2.md) | CarPlay Now Playing scenario suite; known bugs as strict expected failures | User approves spec S1–S7 first |
 
 If E1–E5 pass cleanly, merge M13.1 and M13.2 into one milestone. They are
@@ -160,7 +160,7 @@ four design decisions before any harness code is kept.
 
 ## User checkpoint
 
-The experiment checkpoint is complete: real localhost playback and Now Playing readback were proven, and the user accepted real ICY inputs, in-process Swift, the minimal runner and the proposed output policies. The original Wi-Fi-off requirement was rejected on 2026-10-07. Do not repeat it; the maintained harness and its accepted device sign-off are recorded in [M13.1](milestone_13.1.md).
+The experiment checkpoint is complete: real localhost playback and Now Playing readback were proven, and the user accepted real ICY inputs, in-process Swift, the minimal runner and the proposed output policies. The original Wi-Fi-off requirement was rejected on 2026-10-07. Do not repeat it; the maintained harness and its accepted device sign-off are recorded in `archive/ios-m13.1:docs/ios/milestones/milestone_13.1.md`.
 
 ---
 
