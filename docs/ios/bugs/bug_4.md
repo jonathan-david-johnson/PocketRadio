@@ -2,7 +2,7 @@
 
 **Status:** Open — reproduced in the M13 test harness (2026-10-04); not yet observed on a device. Not fixed.
 
-Found by M13 E7 (H1). Evidence: [2026-10-04_m13_e7](../experiments/2026-10-04_m13_e7.md), scenario `@h1` in `contracts/features/now_playing/carplay_artwork.feature` (uncommitted draft).
+Found by M13 E7 (H1). Evidence: [2026-10-04_m13_e7](../experiments/2026-10-04_m13_e7.md), the original `@h1` draft in `contracts/features/now_playing/carplay_artwork.feature`. M13.2 replaces that draft with named scenarios; its [unmarked baselines](../experiments/2026-10-07_m13_2_baselines.md) reproduce stale artwork and a wrong album when the new ICY song has no album.
 
 ---
 
@@ -21,6 +21,15 @@ All of these must hold:
 
 It does **not** happen when the new song is in the cached tracklist.
 
+## Additional M13.2 symptom — mismatched album
+
+When Song B's ICY frame supplies title and artist but no album, the cached top
+entry's Album A is published with Song B. `handleRadioTrackChanged` uses the
+cached first row to fill an absent ICY album without checking that it matches
+the current song. M13.2's one-song-behind scenario fails `display.album.not-equal`.
+This is the S2 violation in the same stale-feed condition; it is not an ICY
+fixture-album mismatch.
+
 ## Root cause (from code, confirmed by the harness)
 
 `TrackArtworkResolver.bestResolveEntry` falls back to the cached tracklist's top entry when the ICY artist and title match nothing. `PlaybackManager.resolveRadioArtworkForLockScreen` builds its dedupe key from that entry. The top entry is still the previous song, so the key equals `lastResolvedRadioKey` and the function returns early. The title and artist come from a separate write (`setRadioTrackInfo`), so they update while the artwork does not.
@@ -34,3 +43,15 @@ How to fix it. The M13 plan keeps fixes in `fix/stream-presentation`. Options in
 ## Open question
 
 How often a real KCRW user meets it. It depends on whether the real tracklist usually has the new song when the ICY title changes. Not measured.
+
+## Harness update — 2026-10-08 UTC
+
+[Final M13.2 verification](../experiments/2026-10-08_m13_2_verification.md) passes
+three full 128-test runs with three strict bug-4 output checks:
+
+- Closed detail: `display.artwork.station-logo`.
+- One-song-behind feed: `display.album.not-equal` and `display.artwork.station-logo`.
+
+The album check permits absent, empty or different albums; only borrowing Album A
+is the defect. Wrong song identity and input/readiness failures remain ordinary.
+The detail-open scenario passes unmarked. This adds regression targets, not a fix.

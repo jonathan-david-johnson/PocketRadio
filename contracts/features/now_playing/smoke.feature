@@ -9,6 +9,7 @@ Feature: The first song of a live radio station appears on the system now-playin
     Given the system now-playing display is empty
     And a station "KCRW Eclectic 24" that streams from the local test server
 
+  @ios @carplay @smoke
   Scenario: The first song shows its title, artist, album and artwork
     Given the station's tracklist lists only "Song 1" by "Artist 1" with red artwork
     # The tracklist arrives after playback has started. If it arrived first, iOS could lose the

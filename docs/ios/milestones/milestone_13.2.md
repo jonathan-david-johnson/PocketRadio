@@ -1,11 +1,13 @@
 # iOS M13.2 — CarPlay Now Playing output suite
 
-**Status**: PLANNED. S1–S7 approved as proposed on 2026-10-04. Revise scenario details after the M13.1 smoke.
+**Status**: IN PROGRESS — automated verification passed and user CarPlay observations recorded (2026-10-08 UTC); user accepted the recorded discrepancies and approved baseline commits. iOS baseline committed as `12c3cfb60`; not merged. Both approved hooks are implemented. No app-bug fixes or device runs. S1–S7 remain approved as proposed on 2026-10-04.
 **Depends on**: M13.1
 **Required by**: `fix/stream-presentation`. That branch removes the
 expected-failure markers when it fixes each bug.
-**Model**: **Opus** writes the spec and the scenario wording. **Sonnet**
-implements the step bodies.
+**Model**: Original assignment: **Opus** writes the spec and scenario wording;
+**Sonnet** implements the step bodies. The [subagent execution plan](milestone_13.2_subagent_plan.md)
+proposes provider-local **Sol 6.1 / Luna** assignments for the active
+`openai-codex` OAuth session. Budgeting is omitted at the user's request.
 
 ---
 
@@ -14,11 +16,28 @@ implements the step bodies.
 | | |
 |---|---|
 | Plan | Shell `main`: this file, plus bug docs in `docs/ios/bugs/` |
-| Code | `pocket-radio-ios`. If merged with M13.1, continue on `feature/carplay-harness`. Otherwise use `feature/carplay-suite` from `trunk` after M13.1 lands. |
+| Code | `pocket-radio-ios-carplay/`, branch `feature/carplay-harness`, baseline commit `12c3cfb60` on `2358aab83`; not merged to `trunk` |
 | Worktree | `PocketRadio/pocket-radio-ios-carplay/` |
 | Shell changes | Additive, committed straight to `main`: new `.feature` files under `contracts/features/now_playing/` |
 
-The [test boundary](milestone_13.md#test-boundary) from M13 applies.
+The durable [CarPlay output test boundary](../adr/0003-carplay-output-test-boundary.md) records the real-playback design, approved hooks and limitations.
+
+## Execution checkpoint
+
+See [final automated verification](../experiments/2026-10-08_m13_2_verification.md)
+for scenario outcomes, logs and remaining limits. The [unmarked baseline report](../experiments/2026-10-07_m13_2_baselines.md)
+retains the earlier ordering/sleep failures; it is not the final sign-off.
+
+- All **15 scenarios** are registered individually across five classes. Default selection includes 17 harness self-test classes.
+- **9 strict output-check markers across 7 scenarios** cover bugs 4, 5 and [6](../bugs/bug_6.md). Eight scenarios pass unmarked. Setup, wrong identity, network, reset and teardown failures remain ordinary.
+- The approved DEBUG startup barrier proves actual artwork before releasing the unchanged initial rebuild. Three independent unmarked baselines reproduced bug 5 B; no flaky timing marker was accepted.
+- The approved shared disconnect handler retains the existing body. S7 passes at the modeled connection/publishing boundary; a separate real-playback test proves restoration from a real pre-connect lyric. Manual Carnival output contains a lyric in CarPlay's third line: the full scene/connection path is not signed off.
+- Independent review found an overstrong S2 album assertion. It now accepts absent/empty/different albums and rejects only the borrowed album, with two additional self-tests. Follow-up review accepted the correction.
+- Formatting passed. Three final full runs each passed **128 tests, 0 failures**, with no host sleep. Ordinary invocation skipped 27 selected destructive tests. Release simulator build passed and excludes the startup hook.
+- Reset now waits for cache completion and drains queued main callbacks. No final-run reset failures occurred, but this cannot prove all unobservable global startup work finished.
+- The user observed four real KCRW songs / three transitions. [Manual evidence](../experiments/2026-10-08_m13_2_manual_carplay.md) records expected simulator cover omission, changing background colors, roughly 10-second tracklist lag, a lyric-policy counterexample and control-state discrepancies. Lyric synchronization stays deferred.
+- **Approval:** the user explicitly approved committing this test/docs baseline with the discrepancies deferred. iOS commit: `12c3cfb60`. Existing Makefile spike-cleanup edits were excluded and preserved uncommitted.
+- **Remaining:** integration/merge authorization and later milestone closure. No push, merge, app fix or device test is authorized by the baseline commit approval.
 
 ## Goal
 
@@ -41,7 +60,7 @@ so a fix can't land without its marker being removed.
 
 The user approved S1–S7 as written. E7 results against them:
 
-| Rule | Today's app (E7) |
+| Rule | Original E7 evidence |
 |---|---|
 | S1, S2 | Broken: [bug 4](../bugs/bug_4.md) |
 | S3 | Broken: [bug 5](../bugs/bug_5.md), symptoms A and B |
@@ -82,7 +101,7 @@ Existing unit tests that contradict an approved rule get updated in
   new phrases.
 - `docs/ios/bugs/bug_N.md`: one per reproduced bug, if E7 didn't already
   create it.
-- No production code changes.
+- No production code changes except the two approved narrow testability exceptions above.
 
 ## Behaviors to test (one scenario each)
 
@@ -116,11 +135,10 @@ Phone UI state is noted where it changes the code path.
     `CPNowPlayingTemplate` state is readable). The radio button set appears
     while a station plays.
 
-Behaviors that E7 reproduced as bugs run as
-`XCTExpectFailure(strict: true)`, with the bug ID in the message. The
-marker lives in an iOS-side known-bugs table that maps scenario name to bug
-ID, not in a tag on the shared `.feature` file. A bug on iOS says nothing
-about another platform, so it doesn't belong in the shared spec.
+Only designated, evidenced output checks run inside strict `XCTExpectFailure`,
+with the bug ID in the message. The iOS table matches exact scenario name,
+output-step text and classified diagnostic. A passing marked check fails the run;
+later unrelated checks remain visible. No marker lives in shared feature tags.
 
 ## Out of scope
 
@@ -136,10 +154,29 @@ about another platform, so it doesn't belong in the shared spec.
 ## Verification
 
 ```bash
-cd pocket-radio-ios
+cd pocket-radio-ios-carplay
 make format
 make test_carplay
 ```
 
-Manual: run the CarPlay-simulator check above once, and record the result in
-this file.
+Automated result: three consecutive **128-test** passes after review correction;
+Release build and ordinary-run skip checks passed. See the final report above.
+
+Manual result: **performed with discrepancies**, not a clean all-policy pass.
+The user supplied five screenshots across four songs / three transitions on
+2026-10-08. See [manual observations](../experiments/2026-10-08_m13_2_manual_carplay.md).
+This simulator omits visible covers and uses background gradients; that alone is
+not missing artwork. Carnival visibly contains a lyric in the CarPlay third line,
+contrary to S7. Connection-state/scene behavior remains unresolved; lyric timing
+is explicitly deferred. The user accepted this baseline and explicitly approved
+commits on 2026-10-08. Do not claim the discrepancies fixed, merge, or close yet.
+
+## Docs impact
+
+| Document | Update |
+|---|---|
+| `docs/ios/adr/0003-carplay-output-test-boundary.md` | Durable real-playback boundary, hooks, alternatives and evidence limits |
+| `contracts/features/README.md` | Current five-file suite, vocabulary and strict marker policy |
+| Worktree `CarPlayOutput/Harness/README.md` | Enablement, destructive reset, selection, implementation and limitations |
+| Bugs 4, 5 and 6 | Reproduction evidence and narrow iOS output-check mappings; all remain open |
+| Final experiment report, manual report/screenshots and subagent plan | Automated results, manual discrepancies and explicit baseline commit approval |

@@ -1,42 +1,69 @@
-# DRAFT (M13 E6/E7 baseline for iOS bugs 4 and 5). D3 is decided; M13.2 will rewrite this as the scenario suite.
-# Steps used here that the iOS harness does not define yet: the pause/resume and slow-download steps.
-# Platform-neutral wording: "the system now-playing display" is MPNowPlayingInfoCenter on iOS.
-@ios @carplay
-Feature: Artwork on the system now-playing display for a live radio station
-  The display shows the title, artist, album and artwork of the song that is playing.
-  A station has a tracklist that is fetched once, when playback starts.
+Feature: Artwork on the system now-playing display for live radio
+  The current song never borrows another song's album or artwork.
 
   Background:
     Given the system now-playing display is empty
     And a station "KCRW Eclectic 24" that streams from the local test server
 
-  @h1
-  Scenario: A song missing from the stale tracklist does not keep the previous song's artwork
-    Given the station's tracklist lists only "Song A" by "Artist A" with red artwork
+  @ios @carplay
+  Scenario: A second song without station detail does not keep the previous artwork
+    Given the station's tracklist lists only "Song A" by "Artist A" from album "Album A" with red artwork
     And the station's tracklist takes 2 seconds to arrive
     When the listener starts the station
-    And the stream announces "Song A" by "Artist A"
+    And the stream announces "Song A" by "Artist A" from album "Album A"
     Then the display shows the title "Song A" with red artwork
     When the stream announces "Song B" by "Artist B"
     Then the display shows the title "Song B"
-    And the display does not show red artwork
+    And the display shows the station logo
 
-  @h2
-  Scenario: Pausing and resuming keeps the current song's artwork
+  @ios @carplay
+  Scenario: A second song with station detail open shows its matching artwork
     Given the station's tracklist lists only "Song A" by "Artist A" with red artwork
     And the station's tracklist takes 2 seconds to arrive
     When the listener starts the station
-    And the stream announces "Song A" by "Artist A"
+    And the stream announces "Song A" by "Artist A" from album "Album A"
     Then the display shows the title "Song A" with red artwork
-    When the listener pauses and resumes
-    Then the display shows the title "Song A" with red artwork
+    When the listener opens station detail
+    And the station's tracklist lists only "Song B" by "Artist B" from album "Album B" with green artwork
+    And the stream announces "Song B" by "Artist B" from album "Album B"
+    Then the station's tracklist has refreshed for "Song B"
+    And the display shows the title "Song B", the artist "Artist B" and the album "Album B"
+    And the display shows green artwork
 
-  @h3
-  Scenario: Slow artwork for an earlier song never replaces the current song's artwork
-    Given the station's tracklist lists "Song A" by "Artist A" with red artwork that takes 25 seconds to download
-    And the station's tracklist also lists "Song B" by "Artist B" with green artwork
+  @ios @carplay
+  Scenario: A tracklist one song behind lends neither its album nor its artwork
+    Given the station's tracklist lists only "Song A" by "Artist A" from album "Album A" with red artwork
+    And the station's tracklist takes 2 seconds to arrive
     When the listener starts the station
-    And the stream announces "Song A" by "Artist A"
+    And the stream announces "Song A" by "Artist A" from album "Album A"
+    Then the display shows the title "Song A", the artist "Artist A" and the album "Album A"
+    And the display shows red artwork
+    When the stream announces "Song B" by "Artist B" without an album
+    Then the display shows the title "Song B"
+    And the display does not show the album "Album A"
+    And the display shows the station logo
+
+  @ios @carplay
+  Scenario: A matching track without artwork uses the iTunes fallback
+    Given the station's tracklist lists only "Song A" by "Artist A" from album "Album A" without artwork
+    And iTunes finds blue artwork for "Song A" by "Artist A"
+    And the station's tracklist takes 2 seconds to arrive
+    When the listener starts the station
+    And the stream announces "Song A" by "Artist A" from album "Album A"
+    Then the display shows the title "Song A", the artist "Artist A" and the album "Album A"
+    And the display shows blue artwork
+    And the iTunes lookup for "Song A" by "Artist A" was served
+
+  @ios @carplay
+  Scenario: A song without artwork anywhere shows the logo instead of previous artwork
+    Given the station's tracklist lists only "Song A" by "Artist A" with red artwork
+    And the station's tracklist takes 2 seconds to arrive
+    When the listener starts the station
+    And the stream announces "Song A" by "Artist A" from album "Album A"
+    Then the display shows the title "Song A" with red artwork
+    When the station's tracklist lists only "Song B" by "Artist B" without artwork
+    And the station's refreshed tracklist has arrived
     And the stream announces "Song B" by "Artist B"
-    Then the display shows the title "Song B" with green artwork
-    And after 14 seconds the display still shows green artwork
+    Then the display shows the title "Song B"
+    And the iTunes lookup for "Song B" by "Artist B" was served
+    And the display shows the station logo
