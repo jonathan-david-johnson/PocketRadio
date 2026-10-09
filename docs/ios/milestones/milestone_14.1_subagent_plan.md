@@ -1,6 +1,6 @@
 # iOS M14.1 subagent plan — KCRW playback clock feasibility
 
-**Status**: IN PROGRESS — approved 2026-10-09 (UTC). Slices 0–4 and gate G1 are done, plus a slice 3 fix. Slices 5–7 remain. Actual usage is not yet totalled; slice reports show no budget stop.
+**Status**: IN PROGRESS — approved 2026-10-09 (UTC). Slices 0–5 and gate G1 are done, plus a slice 3 fix. Slices 6–7 remain. Actual usage is not yet totalled; slice reports show no budget stop.
 **Scope**: [M14.1](milestone_14.1.md). Decisions D6–D8 are approved there.
 **Route**: Anthropic only, matching the active session (`PI_PROVIDER=anthropic`, `PI_MODEL=claude-sonnet-5-5`).
 
