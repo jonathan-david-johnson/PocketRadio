@@ -1,6 +1,6 @@
 # iOS M14.2 — KCRW aligned titles and Now Playing
 
-**Status**: PLANNED — opened 2026-10-09. Draft scope. D10 decided (a). D9 and D11 are being clarified.
+**Status**: PLANNED — opened 2026-10-09. Decisions D9–D11 made 2026-10-09. Implementation approved.
 **Depends on**: [M14](milestone_14.md); M14.1 closed (`archive/ios-m14.1`) with the Observe-only session on `trunk`; [ADR 0004](../adr/0004-kcrw-playback-clock-on-ios.md).
 **Required by**: M14.3 (lyrics on the media clock) and M14.4 (routes and background).
 
@@ -19,13 +19,13 @@
 
 ## Scope
 
-- **Mode.** Extend the Debug switch from Off / Observe to Off / Observe / Apply (D9). Observe stays a comparison mode that publishes nothing.
+- **Mode.** Replace the Observe toggle with one Debug picker, Off / Observe / Apply, stored under one key (`PocketRadio.alignment.mode`, launch argument `-PocketRadio.alignment.mode apply`) (D9). Observe stays a comparison mode that publishes nothing.
 - **Publication adapter** (new, `podcasts/Main/Alignment/`). Turns a session decision into radio title, artist, album and artwork for `NowPlayingHelper`. It publishes only from a player-sample decision for the session's own item and generation, as the menubar's `RadioApplySelection` gate does. A feed receipt alone never publishes.
 - **One writer.** For an eligible station in Apply, the radio writes from `RadioMetadataObserver` (ICY), `ACRFingerprinter`, and the feed-top paths in `PlaybackManager` and `StationDetailViewController` are skipped. Today's writers to check: `NowPlayingHelper.setRadioTrackInfo`, `setRadioAlbumTitle`, `setRadioArtwork`, `PlaybackManager.resolveRadioArtworkForLockScreen`, and the `radioStationNowPlayingDidChange` notification path.
 - **Artwork** for the selected song only (D10). A full Now Playing rebuild keeps the selected artwork instead of reverting to the logo. Late artwork for an earlier song, item or station is rejected.
 - **Unavailable state.** When the session has no selection, show the station name and no song. Never fall back to the feed's newest row. Show it only while this station is the active, playing item (menubar bug 2).
 - **UI consumers.** Full player, mini player and station detail read the session snapshot. Station detail keeps feed order and highlights the selected song, not row zero. It no longer needs its own poll while Apply is on.
-- **Lyrics** in 14.2: per D11. The media-clock lyrics are 14.3.
+- **Lyrics** in 14.2 (D11 b′): today's lyrics stay in the app, but in Apply their album-field write (`StationDetailViewController` → `NowPlayingHelper.setRadioAlbumTitle`) is skipped. The media-clock lyrics are 14.3.
 - **Endpoint.** Unchanged from 14.1: the measured HLS endpoint is used only for an eligible station with Observe or Apply on.
 
 ## Behaviors to test (red -> green, one at a time)
@@ -54,9 +54,9 @@ Tests use the `PocketCastsTests` host. Inject the clock, feed, and publication b
 
 | # | Question | Options | Recommendation |
 |---|---|---|---|
-| D9 | How is Apply turned on in 14.2? | **(a)** A third Debug mode, Off by default; making it ordinary playback is decided after 14.4 has validated routes. **(b)** Ordinary playback for eligible stations once 14.2 is accepted, as the menubar did in M12. | **(a).** Lock screen behavior on Bluetooth and CarPlay is unproven until 14.4, and Debug gating keeps Release unchanged until then. The cost is that only a Debug build shows aligned titles for now. |
+| D9 (**decided: a, as one Off / Observe / Apply picker**) | How is Apply turned on in 14.2? | **(a)** A third Debug mode, Off by default; making it ordinary playback is decided after 14.4 has validated routes. **(b)** Ordinary playback for eligible stations once 14.2 is accepted, as the menubar did in M12. | **(a).** Lock screen behavior on Bluetooth and CarPlay is unproven until 14.4, and Debug gating keeps Release unchanged until then. The cost is that only a Debug build shows aligned titles for now. |
 | D10 (**decided 2026-10-09: a**) | Where does the selected song's artwork come from? | **(a)** The selected row's KCRW artwork, then the existing iTunes resolver keyed on the selected title and artist, then the station logo. **(b)** Station logo only in 14.2. | **(a).** It matches today's look, and the guard against late artwork for an earlier song makes it safe. |
-| D11 | What do live lyrics do in Apply before 14.3? | **(a)** Hide live lyrics for the station while Apply is on. **(b)** Leave today's wall-clock lyrics, which follow the feed and will disagree with the aligned title. | **(a).** Showing lyrics for a different song than the title is worse than none, and 14.3 restores them on the right clock. |
+| D11 (**decided: b′**) | What do live lyrics do in Apply before 14.3? | **(a)** Hide live lyrics for the station while Apply is on. **(b)** Leave today's wall-clock lyrics, which follow the feed and will disagree with the aligned title. **(b′)** Keep today's lyrics in the app, but in Apply they do not write the lock screen's album field; the adapter owns it. | **(b′)**, chosen by the user. Today's lyrics stay; the lock screen never shows lyrics from a different song than its title. |
 
 ## Docs impact
 
