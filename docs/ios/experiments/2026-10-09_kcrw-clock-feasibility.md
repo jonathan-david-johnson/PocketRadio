@@ -22,6 +22,17 @@
 - No stop line was in the log. The last lines were flushed at the buffer threshold; the item had not been torn down.
 - Locked-screen behavior, the feed poller, and background suspension are **not** tested here.
 
+## Automated regression with Observe off (slice 7)
+
+Run 2026-10-09 on `feature/kcrw-alignment` after the review fixes, iOS repo uncommitted, shell `main` at `3e8c47f`.
+
+| Suite | Command | Result |
+|---|---|---|
+| Full unit suite | `make test_staging ONLY_TESTING=PocketCastsTests` (iPhone 17 simulator) | 1,080 tests, 0 failures, 101 skipped (harness tests skip outside `make test_carplay`) |
+| M13.2 CarPlay output suite | `make test_carplay` (dedicated "PocketRadio CarPlay Tests" simulator) | 128 tests, 0 unexpected failures |
+
+Behavior 10 (default-Off regression) passes on the simulator. E4 checks it on the device.
+
 ## Decision
 
 Proceed with slices 2–5 of the [subagent plan](../milestones/milestone_14.1_subagent_plan.md).
