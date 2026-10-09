@@ -15,6 +15,10 @@ A separate [harness reliability issue](bugs/bug_8.md) retains the intermittent i
 
 Passing flag-controlled policy tests does not certify real CarPlay scene connectivity. Lyric retrieval/synchronization remains deferred. Device harness runs require separate consent because they replace playback and clear local Up Next.
 
+## KCRW alignment
+
+KCRW Eclectic24 alignment uses the player's program-date clock on the measured HLS endpoint and the shared `StreamSession` core. It is Debug Observe only today: Settings > Developer > KCRW alignment (Observe). See [ADR 0004](adr/0004-kcrw-playback-clock-on-ios.md).
+
 ## Roadmap
 
 | Milestone | Delivers | User checkpoint | State |
@@ -23,6 +27,6 @@ Passing flag-controlled policy tests does not certify real CarPlay scene connect
 | M13.1 (`archive/ios-m13.1`) | Reusable output harness | Repeated smoke runs and fault reporting; accepted with two clean device runs, not Wi-Fi-off | Closed |
 | M13.2 (`archive/ios-m13.2`) | Fifteen individually selectable output scenarios | Strict known failures and manual real-radio CarPlay exercise with discrepancies retained | Closed; bugs 7–8 deferred |
 | [M14](milestones/milestone_14.md) | KCRW playback alignment port | Prove the iPhone playback clock before changing publication | In progress |
-| [M14.1](milestones/milestone_14.1.md) | KCRW playback clock feasibility | Observe-only readout; clock valid, 30 minutes locked, native speed on the iPhone | Gates G1–G3 passed; awaiting commit and close |
+| M14.1 (`archive/ios-m14.1`) | KCRW playback clock feasibility | Observe-only readout; clock valid, 30 minutes locked, native speed on the iPhone | Closed |
 
 Close milestones through the shell's `close-milestone` skill. Replace each closed roadmap link with its `archive/ios-m<id>` tag after extracting durable knowledge and obtaining deletion approval.
