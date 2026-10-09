@@ -23,6 +23,6 @@ Passing flag-controlled policy tests does not certify real CarPlay scene connect
 | M13.1 (`archive/ios-m13.1`) | Reusable output harness | Repeated smoke runs and fault reporting; accepted with two clean device runs, not Wi-Fi-off | Closed |
 | M13.2 (`archive/ios-m13.2`) | Fifteen individually selectable output scenarios | Strict known failures and manual real-radio CarPlay exercise with discrepancies retained | Closed; bugs 7–8 deferred |
 | [M14](milestones/milestone_14.md) | KCRW playback alignment port | Prove the iPhone playback clock before changing publication | In progress |
-| [M14.1](milestones/milestone_14.1.md) | KCRW playback clock feasibility | Observe-only readout; clock valid, 30 minutes locked, native speed on the iPhone | Planned; decisions D6–D8 approved |
+| [M14.1](milestones/milestone_14.1.md) | KCRW playback clock feasibility | Observe-only readout; clock valid, 30 minutes locked, native speed on the iPhone | In progress; G1 passed, G2 and G3 open |
 
 Close milestones through the shell's `close-milestone` skill. Replace each closed roadmap link with its `archive/ios-m<id>` tag after extracting durable knowledge and obtaining deletion approval.

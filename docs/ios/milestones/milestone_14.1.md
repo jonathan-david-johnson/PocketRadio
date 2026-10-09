@@ -1,6 +1,6 @@
 # iOS M14.1 — KCRW playback clock feasibility
 
-**Status**: PLANNED — plan prepared 2026-10-08. The plan is not approved yet, and no code exists. D6, D7, and D8 approved 2026-10-08. Implementation may start.
+**Status**: IN PROGRESS — updated 2026-10-09. Plan and decisions D6–D8 approved; subagent plan approved. Gate **G1 passed** on the iPhone ([report](../experiments/2026-10-09_kcrw-clock-feasibility.md)). Done: probe, feed decoder and client, monitor summary (slices 0–3), all on `feature/kcrw-alignment` in `pocket-radio-ios-alignment/`, uncommitted pending your approval. Remaining: session and poller (slice 4), Debug readout and switch (slice 5), review (slice 6), then E1–E4 on the device including 30 minutes locked (G2, G3).
 **Depends on**: [M14](milestone_14.md) (D1–D5 decided); iOS M13 closed; menubar `main` core verified on 2026-10-08 (see "Verified starting point").
 **Required by**: M14.2 (titles and Now Playing). M14.2 starts only if this milestone's gate passes.
 
