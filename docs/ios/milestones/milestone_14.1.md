@@ -1,6 +1,6 @@
 # iOS M14.1 — KCRW playback clock feasibility
 
-**Status**: IN PROGRESS — updated 2026-10-09. Plan and decisions D6–D8 approved; subagent plan approved. Gate **G1 passed** on the iPhone ([report](../experiments/2026-10-09_kcrw-clock-feasibility.md)). Done: probe, feed decoder and client, monitor summary with the gap and re-sync fixes, session and poller wired into `DefaultPlayer`, and the Debug switch and readout in Settings > Developer > **KCRW alignment (Observe)** (slices 0–5). All on `feature/kcrw-alignment` in `pocket-radio-ios-alignment/`, uncommitted pending your approval. Remaining: review (slice 6), then E1–E4 on the device including 30 minutes locked (G2, G3).
+**Status**: IN PROGRESS — updated 2026-10-09. Plan and decisions D6–D8 approved; subagent plan approved. Gate **G1 passed** on the iPhone ([report](../experiments/2026-10-09_kcrw-clock-feasibility.md)). Slices 0–6 done: probe, feed decoder and client, monitor summary, session and poller in `DefaultPlayer`, Debug switch and readout (Settings > Developer > **KCRW alignment (Observe)**), and an independent review with its five should-fix items applied. All on `feature/kcrw-alignment` in `pocket-radio-ios-alignment/`, uncommitted pending your approval. Remaining (slice 7): full unit and M13.2 CarPlay regression with Observe off, then E1–E4 on the device including 30 minutes locked (G2, G3).
 **Depends on**: [M14](milestone_14.md) (D1–D5 decided); iOS M13 closed; menubar `main` core verified on 2026-10-08 (see "Verified starting point").
 **Required by**: M14.2 (titles and Now Playing). M14.2 starts only if this milestone's gate passes.
 
@@ -50,14 +50,14 @@ Checked 2026-10-08 from the shell checkout.
 
 All new code is `#if !os(watchOS) && !APPCLIP && !os(tvOS)`. Edits to existing files stay a few lines each.
 
-- **Core dependency (D1).** Add local package `../pocket-radio-menubar/Packages/StreamSession` to the app target only.
+- **Core dependency (D1).** Add local package `../pocket-radio-menubar/Packages/StreamSession` to the app target only. Done through the app's `Modules/Package.swift` (`XcodeTarget_podcasts` dependencies), so `project.pbxproj` is unchanged.
 - **Eligibility.** New `KCRWAlignmentConfiguration`: port of `StreamExperimentConfiguration` (`ineligibilityReason`, `measuredEndpoint`, selection, history, and clock policies), taking a `RadioStation`'s `title` and `streamUrl`.
 - **Endpoint override.** In `PlaybackItem.createPlayerItem`, use the measured endpoint when the episode is an eligible `RadioStation` **and** Observe is on (D6). Leave `EpisodeManager.urlForEpisode` alone so Cast and chapters are untouched. Never rewrite the saved URL.
 - **Feed client and decoder.** New iOS feed client with the body, row, and timeout limits from the menubar client, no cookies, no cache. It returns `OccurrenceInput` rows including breaks and ids.
 - **Session.** New iOS `RadioPlaybackSession`: one `AVPlayerItem`, a generation id, a same-item guard, a periodic time observer (1 s, main queue) for paired samples, and one in-flight 30 s feed poller owned by the session. `DefaultPlayer` creates it for an eligible station in Observe mode and calls `stop()` wherever it tears down the item. The session has no publishing dependency: it cannot write `MPNowPlayingInfoCenter` or any title.
 - **Monitor log (D4).** `FileLog` lines prefixed `[align]`: session start/stop with generation, a sample line every second (changed from every 10 s on 2026-10-09 so the locked-run gaps can be rechecked from the raw log), every feed poll result, every clock-validity change, every stall or rate change, and a run summary on stop. Log the host and path of the endpoint, never credentials or query strings.
 - **Monitor summary.** A pure function over the recorded samples that reports: samples, first-valid-clock delay, longest gap between samples, longest gap between polls, clock-invalid intervals, min/max rate, and media-seconds-per-wall-second per 5-minute window excluding stalls. The readout and the stop-time log line both use it.
-- **Observe readout and switch.** A Debug-only panel for the eligible station: Off / Observe switch, plus the live fields (clock state, program date, media time, rate, last poll, feed top, candidate selection, reason). Place it where the diff is smallest (D8). The switch is stored in an injected `UserDefaults(suiteName:)`-backed store, defaulting to Off.
+- **Observe readout and switch.** A Debug-only panel (Settings > Developer > **KCRW alignment (Observe)**): Off / Observe switch, a poll-driver picker (timer or playback ticks, for the G2 fallback), plus the live fields (clock state, program date, media time, rate, last poll, feed top, candidate selection, reason). Place it where the diff is smallest (D8). The switch defaults to Off and lives in `UserDefaults.standard` so a launch argument can set it; under XCTest the store is an emptied private suite, because the test host is the app.
 
 ## Order of work inside this milestone
 
@@ -93,6 +93,10 @@ Run on "Jonathan iPhone", StagingDebug build, Observe on, KCRW Eclectic24 playin
 | E4 | Is the default path unchanged? | Switch off, play KCRW and one other station; check lock screen title. | Same title behavior as `trunk`. | Regression |
 
 Not measured here, on purpose: whether `+160s` is right on iOS (14.2), route latency (14.4), and Bluetooth or CarPlay behavior.
+
+### Reading the E2 result
+
+The session writes a summary and a `[align] verdict … kind=` line every 300 s (`checkpoint`), at the first pause after playback (`at-pause`), and at teardown (`stop`). For E2, the deciding line is the `at-pause` verdict when you pause after unlocking; the readout at unlock is the cross-check. Checkpoint verdicts before 30 minutes fail on the poll-attempt count by design.
 
 ## Decision gate
 
