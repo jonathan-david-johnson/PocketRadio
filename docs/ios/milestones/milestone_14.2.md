@@ -1,6 +1,6 @@
 # iOS M14.2 — KCRW aligned titles and Now Playing
 
-**Status**: PLANNED — opened 2026-10-09. Draft scope; decisions D9–D11 below need your answer before implementation.
+**Status**: PLANNED — opened 2026-10-09. Draft scope. D10 decided (a). D9 and D11 are being clarified.
 **Depends on**: [M14](milestone_14.md); M14.1 closed (`archive/ios-m14.1`) with the Observe-only session on `trunk`; [ADR 0004](../adr/0004-kcrw-playback-clock-on-ios.md).
 **Required by**: M14.3 (lyrics on the media clock) and M14.4 (routes and background).
 
@@ -55,7 +55,7 @@ Tests use the `PocketCastsTests` host. Inject the clock, feed, and publication b
 | # | Question | Options | Recommendation |
 |---|---|---|---|
 | D9 | How is Apply turned on in 14.2? | **(a)** A third Debug mode, Off by default; making it ordinary playback is decided after 14.4 has validated routes. **(b)** Ordinary playback for eligible stations once 14.2 is accepted, as the menubar did in M12. | **(a).** Lock screen behavior on Bluetooth and CarPlay is unproven until 14.4, and Debug gating keeps Release unchanged until then. The cost is that only a Debug build shows aligned titles for now. |
-| D10 | Where does the selected song's artwork come from? | **(a)** The selected row's KCRW artwork, then the existing iTunes resolver keyed on the selected title and artist, then the station logo. **(b)** Station logo only in 14.2. | **(a).** It matches today's look, and the guard against late artwork for an earlier song makes it safe. |
+| D10 (**decided 2026-10-09: a**) | Where does the selected song's artwork come from? | **(a)** The selected row's KCRW artwork, then the existing iTunes resolver keyed on the selected title and artist, then the station logo. **(b)** Station logo only in 14.2. | **(a).** It matches today's look, and the guard against late artwork for an earlier song makes it safe. |
 | D11 | What do live lyrics do in Apply before 14.3? | **(a)** Hide live lyrics for the station while Apply is on. **(b)** Leave today's wall-clock lyrics, which follow the feed and will disagree with the aligned title. | **(a).** Showing lyrics for a different song than the title is worse than none, and 14.3 restores them on the right clock. |
 
 ## Docs impact
