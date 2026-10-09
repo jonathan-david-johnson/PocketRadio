@@ -1,6 +1,6 @@
 # iOS M14 — KCRW playback alignment (port from menubar)
 
-**Status**: PROPOSED, decisions D1–D5 made 2026-10-04. Not started: M13 closes first. Repointing `current_milestone.md` during closure does not authorize implementation or physical-device testing.
+**Status**: IN PROGRESS — step 14.1 is planned in [milestone_14.1.md](milestone_14.1.md) (2026-10-08); decisions D1–D5 made 2026-10-04, M13 closed. 14.1 decisions D6–D8 approved 2026-10-08. Physical-device testing is limited to the 14.1 experiments.
 **Depends on**: Menubar M11-A/M11-B/M12, accepted. Core and adapter accepted at menubar `main` `8838df5`; verify the current dependency before implementation. Branch from current iOS `trunk`, which now includes the CarPlay harness and output suite.
 **Required by**: The later stream-presentation work in the [stream-monitoring review](../architecture/reviews/stream-monitoring-review-2026-09-16.md) §6 steps 2 and 5.
 **Related**: [CarPlay output test boundary](../adr/0003-carplay-output-test-boundary.md) and the [maintained harness](../../../pocket-radio-ios/PocketCastsTests/Tests/CarPlayOutput/Harness/README.md). The accepted order is to close M13 first, then use its output suite for 14.2 and 14.4.
