@@ -55,8 +55,12 @@ Recomputing gaps, rates, poll count and the overall speed ratio from the raw `pr
 - **Pausing radio tears the session down.** The `stop` verdict one second after the pause fails with "audio stopped", by design; the `at-pause` verdict decides E2.
 - **Checkpoint summaries count an in-flight poll as a failure.** The first checkpoint showed `pollFailures=1`; later summaries show 0 after the response arrived. Cosmetic.
 - **Selection timing is qualitative.** Eleven song changes were selected. The user heard the first change land at the right time; the `+160 s` offset is checked formally in 14.2.
-- Not yet observed: E3's podcast-speed check and E4 (Observe off on the device).
+
+## E3 podcast speed and E4 Observe off
+
+- **E3:** the user set a podcast to 1.5× before the radio run. After the run, the podcast still played at 1.5×. Radio ran at 1.00 throughout (above). **Pass.**
+- **E4:** with Observe off, the user started KCRW Eclectic 24 fresh and played one other station. Both behaved as before this work, with song titles in the player. **Pass** (user report). No `[align]` lines appear in the flushed log after the E2 session stopped.
 
 ## Decision
 
-Proceed with slices 2–5 of the [subagent plan](../milestones/milestone_14.1_subagent_plan.md).
+G1 (clock), G2 (30 minutes locked) and G3 (native speed) all pass on the iPhone. M14.1's decision gate allows M14.2 to start, subject to your approval.

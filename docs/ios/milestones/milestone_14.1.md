@@ -1,6 +1,6 @@
 # iOS M14.1 — KCRW playback clock feasibility
 
-**Status**: IN PROGRESS — updated 2026-10-09. Plan and decisions D6–D8 approved; subagent plan approved. Gate **G1 passed** on the iPhone ([report](../experiments/2026-10-09_kcrw-clock-feasibility.md)). Slices 0–6 done: probe, feed decoder and client, monitor summary, session and poller in `DefaultPlayer`, Debug switch and readout (Settings > Developer > **KCRW alignment (Observe)**), and an independent review with its five should-fix items applied. All on `feature/kcrw-alignment` in `pocket-radio-ios-alignment/`, uncommitted pending your approval. Remaining (slice 7): full unit and M13.2 CarPlay regression with Observe off, then E1–E4 on the device including 30 minutes locked (G2, G3).
+**Status**: IN PROGRESS — updated 2026-10-09. **All gates passed on the iPhone: G1, G2, G3; E1–E4 pass** ([report](../experiments/2026-10-09_kcrw-clock-feasibility.md)). Slices 0–7 done. Code on `feature/kcrw-alignment` in `pocket-radio-ios-alignment/`, uncommitted, awaiting your approval to commit. Then close with `close-milestone`.
 **Depends on**: [M14](milestone_14.md) (D1–D5 decided); iOS M13 closed; menubar `main` core verified on 2026-10-08 (see "Verified starting point").
 **Required by**: M14.2 (titles and Now Playing). M14.2 starts only if this milestone's gate passes.
 
@@ -136,8 +136,8 @@ Per `pocket-radio-ios/AGENTS.md`, nothing is committed to the iOS repo until the
 
 ## Hand-performed interactions
 
-- [ ] Connect and unlock "Jonathan iPhone"; `xcrun devicectl list devices` shows it available.
-- [ ] E1: five minutes on screen, readout shows a valid clock.
-- [ ] E2: 30 minutes locked, audio keeps playing, log copied after unlock.
-- [ ] E3: podcast speed set to a non-1× value before the radio run; radio reads 1.0 and the podcast speed is intact afterward.
-- [ ] E4: switch off; KCRW and one other station behave as on `trunk`.
+- [x] Connect and unlock "Jonathan iPhone"; `xcrun devicectl list devices` shows it available.
+- [x] E1: five minutes on screen, readout shows a valid clock.
+- [x] E2: 30 minutes locked, audio keeps playing, log copied after unlock.
+- [x] E3: podcast speed set to a non-1× value before the radio run; radio reads 1.0 and the podcast speed is intact afterward.
+- [x] E4: switch off; KCRW and one other station behave as on `trunk`.
