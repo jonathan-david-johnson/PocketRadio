@@ -46,6 +46,24 @@ The relay (`pc-relay`) lives in the meta repo at `supabase/functions/pc-relay/`;
 
 See HANDOFF §3. Top hazards: all network I/O on `Task` nodes; protobuf is binary so use file-based POST/GET (string methods corrupt bytes ≥0x80); radio-browser requires `User-Agent: PocketRadio/1.0`.
 
+Lessons from building the channel on the device:
+
+- **Relay design.** What the relay does and why is in [ADR 0001](./adr/0001-relay-owns-protobuf-fan-out-and-ordering.md).
+- **Remote-key testing.** ECP `/keypress` doesn't reach the channel while the device's "Control by mobile apps" network setting is restrictive. Test keys on the physical remote. `launch/dev` and the telnet console still work.
+- **Scope.** Globals in `source/` aren't visible in component scope. Include them with `<script uri="pkg:/source/...">`. `source/secrets.brs` is gitignored, is required to run, and `make build` zips it in.
+- **Tasks.** Create a fresh `Task` node for every call. Don't re-run a task from its own observer.
+- **Registry.** `source/registry.brs` coerces `invalid` values to empty strings before writing, then calls `.Flush()`. Keep both: a non-string write can abort before the flush.
+- **`streamformat`.** A wrong value gives silence with no error. Infer it per stream: `hls` for `.m3u8`, else the station's `codec` (`aac` or `mp3`). Never assume `mp3`.
+- **Live versus seekable.** `m.audio.duration` of 0 or indefinite means live: no scrub, play/pause only. Skip and FF/REW check `m.isCurrentlyLive`.
+- **Tracklist polling.** The 30 s KCRW/KEXP poll must stop when the stream changes or stops. Otherwise it leaks and shows the wrong station's tracks.
+- **MarkupGrid focus.** Don't call `setFocus(true)` on the grid. Once it has OS focus it swallows Back, and the scene never sees the key. `MainScene` keeps focus and drives the D-pad itself through `m.gridIdx` and `focusGridItem`. Set `drawFocusFeedback="false"`, and `numRows="2"` to show two rows.
+- **Tile data contract.** Every tile's `ContentNode` carries `title`, `HDPosterUrl`, and a `description` field holding JSON. Episodes put `uuid`, `podcast`, `podcastName`, `playedUpTo` and `duration` in it. Stations put `stationuuid`, `codec`, `bitrate`, `display` and `isStation: true`. Focus reads that JSON to fill the top panel, so it makes no network calls. After loading a section, call `jumpToItem = 0` and then set focus.
+- **Now Playing state.** `m.nowPlayingActive` locks the top panel to the playing item while the user browses. The full-screen Now Playing overlay opens with Up from the nav bar.
+
+### Known gaps
+
+- Channel icons and splash are still placeholders. Finished artwork is in progress in `pocket-radio-roku/images/`.
+
 ---
 
 ## Spikes (de-risk first)
@@ -57,15 +75,15 @@ Before milestones, [`spikes.md`](./spikes.md) settles the pivotal unknown: **can
 | Milestone | What | User Checkpoint |
 |-----------|------|-----------------|
 | [Spikes](./spikes.md) ✅ | De-risk protobuf — native-vs-relay decision | DONE → relay (pc-relay) proven E2E |
-| [M1](./milestones/milestone_1.md) | Skeleton + audio — plays hardcoded KCRW stream | Channel installs → launch → hear audio |
-| [M2](./milestones/milestone_2.md) | Login + persistence (via relay) | Log in → relaunch → still logged in |
-| [M3](./milestones/milestone_3.md) | Radio favorites + Browse/Search (tracer bullet) | See favorites → play → add/remove → search |
-| [M4](./milestones/milestone_4.md) | Up Next — list + play + resume + position save | See queue → play → resumes + syncs position |
-| [M5](./milestones/milestone_5.md) | Up Next lifecycle + New Releases + detail | Finish→advance, playNow; last-14d list; show notes |
-| [M6](./milestones/milestone_6.md) | Polish — skip settings, scrub, tracklist, Now Playing | Scrub seekable, tracklist shows, artwork/title |
-| [M7](./milestones/milestone_7.md) ✅ | UI scaffold — 3-section layout, nav bar, MarkupGrid | Nav bar tabs, grid scrolls, focus moves |
-| [M8](./milestones/milestone_8.md) ✅ | Bug fixes — nav, grid rows, backdrop, layout | Back works, 2 rows visible, backdrop shows |
-| [M9](./milestones/milestone_9.md) ✅ | Now Playing panel — progress, backdrop fade, NOW badge | Progress bar updates, backdrop fades, NOW badge shows |
+| M1 (`archive/roku-m1`) | Skeleton + audio — plays hardcoded KCRW stream | Channel installs → launch → hear audio |
+| M2 (`archive/roku-m2`) | Login + persistence (via relay) | Log in → relaunch → still logged in |
+| M3 (`archive/roku-m3`) | Radio favorites + Browse/Search (tracer bullet) | See favorites → play → add/remove → search |
+| M4 (`archive/roku-m4`) | Up Next — list + play + resume + position save | See queue → play → resumes + syncs position |
+| M5 (`archive/roku-m5`) | Up Next lifecycle + New Releases + detail | Finish→advance, playNow; last-14d list; show notes |
+| M6 (`archive/roku-m6`) | Polish — skip settings, scrub, tracklist, Now Playing | Scrub seekable, tracklist shows, artwork/title |
+| M7 (`archive/roku-m7`) | UI scaffold — 3-section layout, nav bar, MarkupGrid | Nav bar tabs, grid scrolls, focus moves |
+| M8 (`archive/roku-m8`) | Bug fixes — nav, grid rows, backdrop, layout | Back works, 2 rows visible, backdrop shows |
+| M9 (`archive/roku-m9`) | Now Playing panel — progress, backdrop fade, NOW badge | Progress bar updates, backdrop fades, NOW badge shows |
 | [M10](./milestones/milestone_10.md) | Tile redesign — episode metadata + progress strip | Progress strip per tile, podcast name, time-left |
 | [M11](./milestones/milestone_11.md) | Polish — nav animation, error states, fav dialog, debug cleanup | Underline slides, errors graceful, browse fav dialog |
 

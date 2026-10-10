@@ -43,9 +43,9 @@ Roku system fonts only.
 
 | Zone | Y | Height | Notes |
 |------|---|--------|-------|
-| Top panel | 0 | ~380 | Artwork + metadata + progress/controls |
-| Nav bar | ~390 | 60 | Horizontal section tabs |
-| Tile grid | ~470 | ~560 | MarkupGrid, scrollable |
+| Top panel | 0 | ~370 | Artwork + metadata + progress/controls |
+| Nav bar | 370 | 60 | Horizontal section tabs |
+| Tile grid | 450 | ~480 | MarkupGrid, two rows visible (`numRows="2"`) |
 | Key hint bar | 1020 | 60 | Static, always visible |
 
 | Zone | X | Width | Notes |
@@ -66,14 +66,14 @@ Roku system fonts only.
 <Rectangle id="bg" width="1920" height="1080" translation="[0,0]" color="0x0D0E10FF" />
 
 <!-- Backdrop poster: artwork at low opacity, full bleed, behind top panel -->
-<Poster id="backdrop" width="1920" height="380" translation="[0,0]"
-        loadDisplayMode="scaleToZoom" opacity="0.2" />
+<Poster id="backdrop" width="1920" height="390" translation="[0,0]"
+        loadDisplayMode="scaleToZoom" opacity="0.0" />
 
 <!-- Scrim over backdrop for readability -->
-<Rectangle id="scrim" width="1920" height="380" translation="[0,0]" color="0x000000CC" />
+<Rectangle id="scrim" width="1920" height="390" translation="[0,0]" color="0x000000AA" />
 ```
 
-Backdrop crossfade on focus change: Animation 0.3s `inOutQuad` on `backdrop.opacity` 0→0.2.
+Backdrop crossfade on focus change: a 150 ms debounce timer (`focusTimer`), then a 0.3 s `inOutQuad` animation on `backdrop.opacity`, 0→0.2. A faster D-pad move restarts the timer, so the backdrop doesn't flicker.
 
 ---
 
@@ -116,7 +116,8 @@ Tabs: `[ Up Next ]  [ New Releases ]  [ Radio Favs ]  [ Browse ]`
 
 ```xml
 <MarkupGrid id="tileGrid"
-            translation="[80, 470]"
+            translation="[80, 450]"
+            numRows="2"
             itemSize="[270, 200]"
             itemSpacing="[20, 20]"
             numColumns="6"

@@ -1,4 +1,4 @@
-# M10: UI Rebuild — Polish + Error States
+# M11: UI Rebuild — Polish + Error States
 
 **Status**: NOT STARTED
 
