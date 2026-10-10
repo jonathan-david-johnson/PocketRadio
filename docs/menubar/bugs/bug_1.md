@@ -1,8 +1,8 @@
 # Bug 1 — CFNetworkDownload temp files accumulate indefinitely, ~24 GB leaked
 
 **Status:** Open (found 2026-09-13, via an unrelated borg backup investigation —
-see [`TIMEMACHINE_TO_BORG_SPEC.md`](../../../../pop/TIMEMACHINE_TO_BORG_SPEC.md)
-in the `pop` repo for the context that surfaced this).
+see `TIMEMACHINE_TO_BORG_SPEC.md`
+in the separate `pop` repo for the context that surfaced this).
 
 Found, not fixed. Root cause is a reasonable hypothesis grounded in the code
 below, not a confirmed diagnosis — no repro has been run against a debug build
