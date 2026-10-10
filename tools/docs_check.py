@@ -4,6 +4,7 @@
   python3 tools/docs_check.py            advisory report for the whole tree; exits 0
   python3 tools/docs_check.py --strict   same report; exits 1 if it lists anything
   python3 tools/docs_check.py --staged   pre-commit rules; staged changes only
+  make docs-check                        the advisory report (add STRICT=1 for --strict)
 
 --staged runs from .githooks/pre-commit in the shell and in every nested repo.
 It looks only at what the commit changes, so another session's stale files
@@ -177,12 +178,44 @@ def milestone_findings():
             head = f.read_text(errors="replace").splitlines()[:20]
             status = next((l for l in head if re.match(r"^\**status\**\s*:", l, re.I)), None)
             if (head and "✓" in head[0]) or (
-                status and re.search(r"\b(done|complete|completed|shipped)\b", status, re.I)
+                status and re.search(r"\b(done|complete|completed|shipped|accepted|merged)\b", status, re.I)
             ):
                 finished.append(rel(f))
             elif status is None:
                 no_status.append(rel(f))
     return finished, no_status, orphans
+
+
+# A status that claims no work has started. IN PROGRESS is not drift, since
+# commits are expected then.
+UNSTARTED = re.compile(r"\b(planned|not started|proposed|draft|todo)\b", re.I)
+
+
+def status_drift():
+    """Milestones whose status claims no work, while the platform's code repo has
+    commits that name them ("M6.2: ...", "feat(x): M5 ..."). The status is
+    probably stale. Heuristic: it reads commit subjects on the repo's HEAD."""
+    found = []
+    for d in sorted(SHELL.glob("docs/*/milestones")):
+        repo = SHELL / f"pocket-radio-{d.parent.name}"
+        if not (repo / ".git").exists():
+            continue
+        log = git("log", "--format=%h %s", cwd=repo) or ""
+        subjects = log.splitlines()
+        for f in sorted(d.glob("*.md")):
+            m = MILESTONE.match(f.name)
+            if not m:
+                continue
+            head = f.read_text(errors="replace").splitlines()[:20]
+            status = next((l for l in head if re.match(r"^\**status\**\s*:", l, re.I)), None)
+            if status is not None and not UNSTARTED.search(status):
+                continue
+            name = re.compile(r"(?<![\w.])M" + re.escape(m.group(1)) + r"(?![\w]|\.\d)")
+            hits = [s for s in subjects if name.search(s)]
+            if hits:
+                label = status.strip() if status else "no Status line"
+                found.append(f"{rel(f)}: {label[:50]} | {len(hits)} commit(s) in {repo.name}, e.g. {hits[-1][:70]}")
+    return found
 
 
 def broken_links():
@@ -233,6 +266,7 @@ def report(strict):
         ("Finished milestones still on disk. Close them with close-milestone", finished),
         ("Milestones with no Status line", no_status),
         ("Handoffs or subagent plans whose milestone is gone", orphans),
+        ("Status says no work, but the code repo has commits that name the milestone. Check the status", status_drift()),
         ("Broken relative links in shell markdown", broken_links()),
         ("Code citing lifecycle docs. Repoint to an ADR", code_citation_findings()),
     ]

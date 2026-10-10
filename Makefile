@@ -19,7 +19,7 @@ ROKU_STICK_HOST ?= 10.99.99.54
 ANDROID_TV_SERIAL     ?=
 ANDROID_MOBILE_SERIAL ?=
 
-.PHONY: help checkout upstream-remote hooks hooks-check status run_sim ios-test-carplay menubar menubar-build menubar-run menubar-kill menubar-log menubar-test run_menubar menubar-release install console console-build console-run console-run_upnext console-run_kcrw console-debug console-debug_upnext console-debug_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run roku-deploy-stick roku-install-stick android android-build android-test android-tv android-mobile android-log android-lint android-clean
+.PHONY: help checkout upstream-remote hooks hooks-check docs-check status run_sim ios-test-carplay menubar menubar-build menubar-run menubar-kill menubar-log menubar-test run_menubar menubar-release install console console-build console-run console-run_upnext console-run_kcrw console-debug console-debug_upnext console-debug_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run roku-deploy-stick roku-install-stick android android-build android-test android-tv android-mobile android-log android-lint android-clean
 
 .DEFAULT_GOAL := help
 
@@ -32,6 +32,7 @@ help:
 	@echo "    upstream-remote  Add the Automattic upstream remote to $(IOS_DIR)"
 	@echo "    hooks            Point this repo + all nested repos at .githooks/"
 	@echo "    hooks-check      Verify every repo resolves to .githooks/pre-commit"
+	@echo "    docs-check       Report stale milestones, status drift, broken links (STRICT=1 to fail)"
 	@echo ""
 	@echo "  Repo status"
 	@echo "    status           Show branch and sync status for root, nested repos, and worktrees"
@@ -143,6 +144,9 @@ hooks:
 		echo "  $$repo -> $$rel"; \
 	done
 	@echo "Done. Verify with: make hooks-check"
+
+docs-check:
+	@python3 tools/docs_check.py $(if $(STRICT),--strict)
 
 hooks-check:
 	@fail=0; \
