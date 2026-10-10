@@ -1,11 +1,19 @@
-# Manual CarPlay output disagrees with the modeled lyric policy
+# Live lyric text can appear in CarPlay Now Playing
 
-**Status:** Open. Observed on 2026-10-08 in the normal app on the signed-out CarPlay simulator; cause unresolved. No production fix or physical-car verification.
+**Status:** Open. Observed on 2026-10-08 in the normal app on the signed-out CarPlay simulator; source path investigated, connection-state cause unresolved. No production fix or physical-car verification.
 **Evidence:** `archive/ios-m13.2:docs/ios/experiments/2026-10-08_m13_2_manual_carplay.md` and the screenshots under `archive/ios-m13.2:docs/ios/experiments/traces/2026-10-08_m13_2_manual/`.
 
 ## Observed behavior
 
-During real KCRW Eclectic 24 playback, CarPlay displayed Carnival / Natalie Merchant with a lyric sentence in the third line rather than the album Tigerlily. The user heard playback and completed four songs / three transitions. The normal app had no harness enablement.
+During real KCRW Eclectic 24 playback, CarPlay displayed Carnival / Natalie Merchant with a lyric sentence in the third line rather than the album Tigerlily. The user heard playback and completed four songs / three transitions. The normal app had no harness enablement. This violates Apple's CarPlay Developer Guide, page 4, “Additional guidelines for CarPlay audio apps,” rule 1: “Never show song lyrics on the CarPlay screen.” It also violates the app's lyric-suppression policy.
+
+## Code path
+
+Live lyric lines are emitted by `LyricSyncController.tick(at:)` in `pocket-radio-ios/podcasts/Radio/LyricSyncController.swift`. For each current lyric line it calls the delegate's `didUpdateNowPlayingAlbum` callback with `line.text`. `StationDetailViewController` implements that callback in `pocket-radio-ios/podcasts/Radio/StationDetailViewController.swift` and forwards the text to `NowPlayingHelper.setRadioAlbumTitle`.
+
+`NowPlayingHelper.setRadioAlbumTitle` in `pocket-radio-ios/podcasts/NowPlayingHelper.swift` writes the lyric text to `MPNowPlayingInfoCenter.default().nowPlayingInfo[MPMediaItemPropertyAlbumTitle]`. Its only CarPlay protection is an early return when `CarPlaySceneDelegate.isConnected` is true. The system Now Playing record is shared with CarPlay, so if that guard is missed, the lyric becomes the car's album/third line.
+
+`CarPlaySceneDelegate` sets that flag in the CarPlay scene's `didConnect` callback and clears it during `handleDisconnect()`. Existing unit and output-policy tests exercise the writer with the flag manually set (`CarPlayConnectionStateTests.testAlbumTitleSuppressedWhenConnected`) and the shared disconnect path (`CarPlayPolicyTests` / `carplay_policy.feature`). They do not establish that Apple's real scene lifecycle callbacks always keep the flag synchronized with CarPlay's visible connection state. The most likely failure boundary is therefore connection-state/lifecycle synchronization, but the manual observation did not capture the flag or callback timeline, so the precise cause remains unproven.
 
 The accepted publication policy forbids lyric album writes while CarPlay is connected. Automated `CarPlayPolicyTests` pass at the modeled connection flag and real publishing boundary; `PolicyStepsTests` also exercises the shared disconnect cleanup with a genuinely published pre-connect lyric. Neither proves that system scene callbacks keep the app's flag in agreement with visible CarPlay activity.
 
