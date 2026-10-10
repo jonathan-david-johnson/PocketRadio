@@ -2,7 +2,7 @@
 
 **Status:** Open, in two parts. Reported by the user on 2026-10-10 during the device checkpoint for Apply mode ([ADR 0005](../adr/0005-kcrw-aligned-now-playing-single-writer.md)).
 - **Mini player:** a fix is built and unit-tested in the `pocket-radio-ios-alignment` worktree, uncommitted. It waits for a device check. The cause below is read from the code and not yet confirmed on the phone.
-- **Widget:** not a regression. It has never shown album art. Showing it is new work and needs a decision. See *Investigation, 2026-10-10*.
+- **Widget:** not a regression. It has never shown album art. On 2026-10-10 the user chose to add it: the app stores the song's art as a small JPEG in the App Group and the widget loads that file. Built and unit-tested in the `pocket-radio-ios-alignment` worktree, uncommitted, waiting for a device check. See *Investigation, 2026-10-10*.
 **Evidence:** Two user screenshots, not stored in the repo. (1) iPhone, 8:36, Streams tab (Favorites), KCRW Eclectic 24 playing. The mini player at the bottom shows the KCRW logo and the title "KCRW Eclectic 24". (2) 8:38, home screen: the PocketStreams widget shows the aligned song, "Simetachin (featuring Deri…)" by Cut Chemist, next to the KCRW logo instead of album art. The Dynamic Island also shows the KCRW logo.
 
 ## Symptom
@@ -42,3 +42,6 @@ The home-screen widget has the same difference: it shows the current song's titl
 - To show album art, the app must download the image into the App Group, as it does for podcast episodes (`widget_images/`), and the widget must load it from that file. That is also a contract change for `WidgetLiveTrack`.
 
 **Dynamic Island.** Not investigated. It is probably the system Now Playing artwork, which ADR 0005 sets to the station logo until the song's art arrives. Whether it later switches to the song's art is unconfirmed.
+
+**Widget fix, uncommitted.** `WidgetHelper.publishPocketRadioLiveTrack` resolves the song's art URL (the entry's own, else the iTunes fallback the players use), downloads it once per song, scales it to 300 px and stores it through `WidgetLiveArtworkStore` in the App Group folder `widget_radio_art`. The live-track snapshot names the file in `artworkFileName`, and the widget shows it instead of the logo. A slow download for an earlier song is dropped. Stations with no art keep the logo. Tests: `WidgetLiveArtworkStoreTests`.
+**Check on the phone:** with KCRW playing, add the PocketStreams widget. It should show the song's art next to the aligned title, and change on the next song.

@@ -19,7 +19,7 @@
 
 ## Scope
 
-- **Position source.** For a station in Apply, lyric position is `songSeconds` from the session's selected occurrence, not `Date() − playedAt + saved offset`. The station's session already carries `songSeconds`, `mediaSeconds` and `programDate` in `RadioAlignmentSnapshot`. The adapter that publishes the song (`AlignedNowPlayingState`) gains a read for "song seconds now". Between player samples it advances only while the player is playing, so a pause holds the line. How to extrapolate between samples is decided in the first slice (Question 1 below).
+- **Position source.** For a station in Apply, lyric position is `songSeconds` from the session's selected occurrence, not `Date() − playedAt + saved offset`. The station's session already carries `songSeconds`, `mediaSeconds` and `programDate` in `RadioAlignmentSnapshot`. The adapter that publishes the song (`AlignedNowPlayingState`) gains a read for "song seconds now". Between player samples it advances only while the player is playing, so a pause holds the line. Between samples the position is extrapolated from the last sample while the player is playing (decided 2026-10-10).
 - **One clock, one index.** `LyricSyncController` (station detail) and `LyricsViewController` (full screen) both read that position. A shared function turns a position and a lyric list into a line index. Equal timestamps pick one line. The full-screen view's own timer and its `initialOffset` reconstruction go away for an applying station.
 - **Correction** (the `−` and `+` buttons). In Apply it is held in memory, keyed to the current occurrence. It resets for a new occurrence and for a station change. It does not read the saved `lyric_offsets` values and does not write them (M14 scope).
 - **Navigation.** Pushing full-screen lyrics calls station detail's `viewDidDisappear`, which stops `LyricSyncController` and zeroes its offset. In Apply that must neither reset the correction nor the clock, and the full-screen buttons must adjust the same correction as station detail.
@@ -54,9 +54,9 @@ Tests use the `PocketCastsTests` host. Inject the clock, the lyric loader and th
 
 | # | Question | Options | Recommendation |
 |---|---|---|---|
-| D12 | Where does the lyric position come from for consumers? | **(a)** A read on `AlignedNowPlayingState`, which the Apply session keeps current. **(b)** Each screen subscribes to session snapshots itself. | **(a).** One owner, and screens only sample it. It matches the review's rule that a screen never starts or stops the monitor. |
-| D13 | Who owns live-lyric state? | **(a)** It stays in `StationDetailViewController` (today), with the clock moved to the session. **(b)** A session-level lyric controller that lives while the station plays, and screens only display it. | **(a).** It is the smaller change. The reset bug comes from the clock and the correction, not from who owns the fetch. Revisit (b) if 14.4 shows leaving station detail still drops lyrics. |
-| D14 | How do saved `lyric_offsets` behave in Apply? | **(a)** Ignored and never written (M14 scope). **(b)** Read as a starting correction. | **(a).** The saved values compensate for the old wall-clock error and would double-correct. Confirm by ear in the checkpoint. |
+| D12 (**decided 2026-10-10: a**) | Where does the lyric position come from for consumers? | **(a)** A read on `AlignedNowPlayingState`, which the Apply session keeps current. **(b)** Each screen subscribes to session snapshots itself. | **(a).** One owner, and screens only sample it. It matches the review's rule that a screen never starts or stops the monitor. |
+| D13 (**decided 2026-10-10: a**) | Who owns live-lyric state? | **(a)** It stays in `StationDetailViewController` (today), with the clock moved to the session. **(b)** A session-level lyric controller that lives while the station plays, and screens only display it. | **(a).** It is the smaller change. The reset bug comes from the clock and the correction, not from who owns the fetch. Revisit (b) if 14.4 shows leaving station detail still drops lyrics. |
+| D14 (**decided 2026-10-10: a**) | How do saved `lyric_offsets` behave in Apply? | **(a)** Ignored and never written (M14 scope). **(b)** Read as a starting correction. | **(a).** The saved values compensate for the old wall-clock error and would double-correct. Confirm by ear in the checkpoint. |
 
 ## Docs impact
 
@@ -68,7 +68,7 @@ Tests use the `PocketCastsTests` host. Inject the clock, the lyric loader and th
   - The lyric-related sections of the [stream-monitoring review](../architecture/reviews/stream-monitoring-review-2026-09-16.md) that this resolves.
   - Code comments in `podcasts/Main/Alignment/` and the lyric files cite ADRs, never this file.
 - **Questions this must settle:**
-  1. How a consumer reads song seconds between player samples. Extrapolate from the last sample while playing, or wait for each sample.
+  1. How the extrapolation behaves at the edges: after a stall, a seek, and a clock discontinuity. (It extrapolates from the last sample while playing; decided 2026-10-10.)
   2. Whether the saved-offset values are ever useful in Apply (D14, by ear).
   3. Whether the lyrics for an applying station should survive leaving station detail (D13).
   4. Whether the correction should persist for the next song once the clock proves accurate, or always start at zero.
