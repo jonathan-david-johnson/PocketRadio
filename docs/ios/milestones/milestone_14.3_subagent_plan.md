@@ -1,6 +1,6 @@
 # iOS M14.3 subagent plan — KCRW lyrics on the media clock
 
-**Status**: PLANNED — written 2026-10-10 (UTC). Not approved. Nothing starts until you approve it.
+**Status**: IN PROGRESS — approved 2026-10-10 (UTC). Slice 0 done: the pending iOS work is committed and on `trunk`, and `feature/kcrw-lyrics` exists.
 **Scope**: [M14.3](milestone_14.3.md), with decisions D12–D14 and extrapolation made on 2026-10-10.
 **Route**: Anthropic only (`PI_PROVIDER=anthropic`, `PI_MODEL=claude-sonnet-5-5`, reasoning high). The rate snapshot in the `subagent-plan` skill is dated 2026-10-04, six days old, so it is fresh. Billing mode is unknown, so the costs below are API list-price references and the quota impact is unknown. Both model IDs were used for M14.1 and M14.2; I haven't re-verified access today.
 **Agents** (new, `.pi/agents/`, briefs name the 14.3 files): `m143-sonnet-high` (implementation, `anthropic/claude-sonnet-5-5:high`) and `m143-opus` (read-only review, `anthropic/claude-opus-5-5:high`). The M14.1 agents are not reused, because their briefs forbid lyric and Now Playing work.

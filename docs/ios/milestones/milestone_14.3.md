@@ -1,7 +1,7 @@
 # iOS M14.3 — KCRW lyrics on the media clock
 
 **Status**: PLANNED
-**Depends on**: [M14](milestone_14.md); M14.2 closed (`archive/ios-m14.2`, [ADR 0005](../adr/0005-kcrw-aligned-now-playing-single-writer.md)) and merged to `trunk`. [Bug 9](../bugs/bug_9.md) is a separate fix and does not block this.
+**Depends on**: [M14](milestone_14.md); M14.2 closed (`archive/ios-m14.2`, [ADR 0005](../adr/0005-kcrw-aligned-now-playing-single-writer.md)) and merged to `trunk`. The mini player, widget art, clock-fault hold and lock-screen Stop fixes are committed on `trunk`.
 **Required by**: M14.4 (routes and background), which checks lyrics on each route.
 
 ## Where the work happens
@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | Plan and reports | Shell `main`: this file, `docs/ios/experiments/`, `docs/ios/bugs/` |
-| Code | `pocket-radio-ios`, branch `feature/kcrw-lyrics` from `trunk`. Create it after the bug 9 fix is committed, so the two don't mix. |
+| Code | `pocket-radio-ios`, branch `feature/kcrw-lyrics` from `trunk`. Created after those fixes were committed, so the two don't mix. |
 | Worktree | `pocket-radio-ios-alignment/`, reused. Credentials and generated files are already copied. |
 | Shell changes | Docs only |
 
@@ -45,7 +45,7 @@ Tests use the `PocketCastsTests` host. Inject the clock, the lyric loader and th
 ## Out of scope
 
 - Bluetooth and CarPlay display of lyrics, background polling, and route delay (14.4).
-- Bug 7 (lyric text reaching CarPlay Now Playing) and bug 9 (artwork on the mini player and widget).
+- Bug 7 (lyric text reaching CarPlay Now Playing).
 - Making Apply the default, and removing the `−` / `+` buttons. Hide them only after multi-route validation, per the review.
 - Other stations and lyric lookup quality (version matching, search fallback).
 - Showing lyrics outside station detail and full-screen lyrics.
