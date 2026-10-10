@@ -1,6 +1,6 @@
 # iOS M14.2 — KCRW aligned titles and Now Playing
 
-**Status**: PLANNED — opened 2026-10-09. Decisions D9–D11 made 2026-10-09. Implementation approved.
+**Status**: IN PROGRESS — updated 2026-10-09. Decisions D9–D11 made. Slices 1–3 done (mode picker and adapter; consumers follow the aligned song; Opus review with its should-fix items applied, including the CarPlay-disconnect album). Full unit suite (1,133) and CarPlay output suite (128) pass with the mode Off. Code on `feature/kcrw-apply` in `pocket-radio-ios-alignment/`, uncommitted. Next: device checkpoint by ear.
 **Depends on**: [M14](milestone_14.md); M14.1 closed (`archive/ios-m14.1`) with the Observe-only session on `trunk`; [ADR 0004](../adr/0004-kcrw-playback-clock-on-ios.md).
 **Required by**: M14.3 (lyrics on the media clock) and M14.4 (routes and background).
 
@@ -15,7 +15,7 @@
 
 **Goal:** For an eligible KCRW Eclectic24 station with Apply on, everything that shows the current song follows the player's clock: the lock screen, the full and mini players, and station detail. One adapter writes the radio fields of the system Now Playing record, from the selected song only. ICY, ACR and the feed's newest row can no longer overwrite it. Other stations, podcasts and the Off and Observe modes keep today's behavior.
 
-**User checkpoint:** Play KCRW with Apply on. With the phone on the speaker, the lock screen title and artwork change when you hear the song change. The full player, mini player and station detail show the same song, and station detail highlights it in the history. Pause and resume, and the title is right again within a few seconds.
+**User checkpoint:** Play KCRW with Apply on. With the phone on the speaker, the lock screen title and artwork change when you hear the song change. The full player, mini player and station detail show the same song, and station detail highlights it in the history. Pause and resume from the lock screen, and the title stays right; stop and restart, and it is right again within a few seconds.
 
 ## Scope
 
@@ -38,7 +38,7 @@ Tests use the `PocketCastsTests` host. Inject the clock, feed, and publication b
 4. **One writer.** In Apply, ICY titles, ACR results and feed-top updates do not reach the radio fields of the Now Playing record. In Off and Observe they still do, unchanged.
 5. **Artwork follows the selection.** Title, artist, album and artwork come from one song. A full rebuild keeps the selected artwork.
 6. **Unavailable is explicit.** No clock or no history publishes the station name with no song, and no feed-top fallback; nothing is shown for a station that is not the active, playing item.
-7. **Lifecycle.** Pause tears the session down; resume starts a new generation and clock, and the first valid sample republishes. Station and podcast switches stop publication for the old station.
+7. **Lifecycle.** A plain pause keeps the session, its clock and the published song (`testPausedSampleKeepsThePublishedSong`). Stopping or reloading the station tears the session down; the next session starts a new generation and clock, and its first valid sample republishes. Station and podcast switches stop publication for the old station.
 8. **UI consumers.** Full player, mini player and station detail show the selected song; station detail highlights it in feed order.
 9. **Regression.** Full unit suite and the CarPlay output suite pass with the mode Off. Tests that require feed-top fallback on ICY mismatch change only for the eligible station in Apply.
 
@@ -67,6 +67,7 @@ Tests use the `PocketCastsTests` host. Inject the clock, feed, and publication b
 
 - [ ] Apply on, speaker, screen locked: the lock screen title and artwork change when the song audibly changes, for at least two transitions.
 - [ ] Full player, mini player and station detail show the same song; station detail highlights it.
-- [ ] Pause, wait, resume: the title is correct again within a few seconds.
+- [ ] Pause from the lock screen, wait, resume: the title stays correct.
+- [ ] Stop (or Pause then Play in station detail), then play again: the title shows the station name briefly, then the correct song within a few seconds.
 - [ ] Switch to another station and to a podcast: their titles behave as before.
 - [ ] Apply off: KCRW behaves as before.

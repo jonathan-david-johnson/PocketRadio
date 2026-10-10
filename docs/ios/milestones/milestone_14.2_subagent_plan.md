@@ -1,6 +1,6 @@
 # iOS M14.2 subagent plan — KCRW aligned titles and Now Playing
 
-**Status**: IN PROGRESS — approved 2026-10-09 (UTC) with "go" after D9–D11.
+**Status**: IN PROGRESS — approved 2026-10-09 (UTC). Slices 1–3 done; slice 1 was aborted once and resumed. Lead applied review fixes. Slice 4 (device checkpoint) remains.
 **Scope**: [M14.2](milestone_14.2.md).
 **Route**: Anthropic only (`PI_PROVIDER=anthropic`, `PI_MODEL=claude-sonnet-5-5`). Rate snapshot 2026-10-04 is fresh. Billing mode unknown: costs are API list-price references, quota impact unknown. Agents `.pi/agents/m14-sonnet-high.md` and `m14-opus.md` are reused; their briefs name the 14.2 files.
 
