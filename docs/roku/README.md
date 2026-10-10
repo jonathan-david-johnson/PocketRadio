@@ -23,10 +23,10 @@ pocket-radio-roku/
 ### Data Flow
 
 1. **Auth**: email/password → relay `login` → Bearer token + userId → `roRegistrySection`
-2. **Up Next**: token → relay `upNext` → episodes (JSON); fill playedUpTo/duration via relay `podcastEpisodes`
-3. **Position sync**: relay `updateEpisode` every ~30s + on pause/stop; on finish → completed + relay `upNextChange` (remove)
+2. **Up Next**: token → relay `upNext` → episodes (JSON) with `playedUpTo` and `duration` already filled in by the relay
+3. **Position sync**: relay `updateEpisode` every ~30s + on pause/stop; on finish → relay `finishEpisode` (completed, then remove)
 4. **Favorites**: userId → `x-user-uuid` header → Supabase `radio_favorites` (direct) → resolve via radio-browser.info (direct)
-5. **Playback**: `Audio` SceneGraph node — seek to `playedUpTo` for podcasts; play/pause-only for live streams
+5. **Playback**: `Audio` SceneGraph node — resume at `playedUpTo` (`PlayStart`) for podcasts; play/pause-only for live streams
 6. **Tracklist**: poll KCRW/KEXP APIs while their stream is active (direct)
 
 The relay (`pc-relay`) lives in the meta repo at `supabase/functions/pc-relay/`; it ports the manual-protobuf wire logic from menubar `APIService.swift` into Deno.
