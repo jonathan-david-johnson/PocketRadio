@@ -154,10 +154,10 @@ at a runnable checkpoint.
 
 | # | Milestone | User checkpoint |
 |---|-----------|-----------------|
-| [M0](./milestones/milestone_0.md) | Spike: mpv IPC + Go skeleton | `pocket-radio --spike <url>` plays audio and prints live position |
-| [M1](./milestones/milestone_1.md) | Auth + config + mini-mode podcast | `pocket-radio up_next` plays your top podcast with a live one-line status |
-| [M2](./milestones/milestone_2.md) | Mini-mode radio + arg resolver + tracklist | `pocket-radio kcrw` plays the station and the one line shows the current track |
-| [M3](./milestones/milestone_3.md) | Podcast position fidelity | Quit mid-episode, replay, it resumes; finishing advances + removes from your phone's Up Next |
+| M0 (`archive/console-m0`) | Spike: mpv IPC + Go skeleton | `pocket-radio --spike <url>` plays audio and prints live position |
+| M1 (`archive/console-m1`) | Auth + config + mini-mode podcast | `pocket-radio up_next` plays your top podcast with a live one-line status |
+| M2 (`archive/console-m2`) | Mini-mode radio + arg resolver + tracklist | `pocket-radio kcrw` plays the station and the one line shows the current track |
+| M3 (`archive/console-m3`) | Podcast position fidelity | Quit mid-episode, replay, it resumes; finishing advances + removes from your phone's Up Next |
 | [M4](./milestones/milestone_4.md) | Full TUI shell + now-playing **with art** | `pocket-radio` opens a menubar-like TUI; album art renders; controls work |
 | [M5](./milestones/milestone_5.md) | Lists: Up Next, New Releases, Browse/Favorites | Navigate lists, fav/unfav, browse, reorder, open detail + show-notes panes |
 | [M6](./milestones/milestone_6.md) | Lyrics + ACR + polish | Lyrics scroll on KCRW/KEXP; `i` runs ACR (or friendly no-op); refresh, logout, error states |
@@ -169,5 +169,26 @@ cd pocket-radio-console
 go build -o pocket-radio ./cmd/pocket-radio
 ./pocket-radio              # full TUI
 ./pocket-radio up_next      # mini mode
-go test ./...               # TDD suite
+go test ./...               # hermetic unit suite
+make test-integration       # also runs the real-mpv test
 ```
+
+## Testing
+
+`go test ./...` is hermetic. It needs no network, no mpv and no credentials.
+Each system boundary has one seam:
+
+| Boundary | Seam in tests |
+|---|---|
+| mpv | The `Player` interface (`internal/player`), with a fake. |
+| HTTP (Pocket Casts, Supabase, radio-browser, tracklists) | `httptest.Server`. |
+| Filesystem | A temp dir. |
+| Time | An injected `now func() time.Time`. |
+
+The few assertions that need a real mpv live in one test behind
+`//go:build integration`. Run them with `make test-integration`.
+
+Protobuf encoders are tested against golden bytes from the menubar app, which
+is the wire-format reference. Prefer behavior tests through the engine over
+tests of private helpers. The throttle and finish logic in the engine is the
+part most likely to regress.
