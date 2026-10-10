@@ -1,6 +1,6 @@
 # iOS M14 — KCRW playback alignment (port from menubar)
 
-**Status**: IN PROGRESS — updated 2026-10-09. 14.1 closed (`archive/ios-m14.1`): the clock, locked monitoring and native speed hold on the iPhone, and the Observe-only session is on `trunk` (`abc1b5063`). See [ADR 0004](../adr/0004-kcrw-playback-clock-on-ios.md). 14.2 is open as [milestone_14.2.md](milestone_14.2.md), awaiting decisions D9–D11. Decisions D1–D5 made 2026-10-04; M13 closed.
+**Status**: IN PROGRESS — updated 2026-10-10. 14.1 closed (`archive/ios-m14.1`, [ADR 0004](../adr/0004-kcrw-playback-clock-on-ios.md)). 14.2 closed (`archive/ios-m14.2`, [ADR 0005](../adr/0005-kcrw-aligned-now-playing-single-writer.md)): with Debug Apply, titles and Now Playing follow the audible song on the iPhone speaker; merged to `trunk` at `a8254b8c4`. Next: 14.3 (lyrics on the media clock). Decisions D1–D5 made 2026-10-04; M13 closed.
 **Depends on**: Menubar M11-A/M11-B/M12, accepted. Core and adapter accepted at menubar `main` `8838df5`; verify the current dependency before implementation. Branch from current iOS `trunk`, which now includes the CarPlay harness and output suite.
 **Required by**: The later stream-presentation work in the [stream-monitoring review](../architecture/reviews/stream-monitoring-review-2026-09-16.md) §6 steps 2 and 5.
 **Related**: [CarPlay output test boundary](../adr/0003-carplay-output-test-boundary.md) and the [maintained harness](../../../pocket-radio-ios/PocketCastsTests/Tests/CarPlayOutput/Harness/README.md). The accepted order is to close M13 first, then use its output suite for 14.2 and 14.4.
@@ -45,7 +45,7 @@ The iOS owners that the port touches:
 The menubar numbers came from macOS AVPlayer. Treat each as a hypothesis until a device run confirms it.
 
 1. **`AVPlayerItem.currentDate()` is non-nil on iOS for this HLS endpoint.** Proven in 14.1 ([ADR 0004](../adr/0004-kcrw-playback-clock-on-ios.md)).
-2. **The `+160s` offset transfers.** It relates feed time to stream program time, so it should not depend on the player. Buffer depth, output route, and iOS stall behavior might still change what the listener hears. Check by ear with the same Observe/Apply comparison used in M11-B.
+2. **The `+160s` offset transfers.** Confirmed by ear on the iPhone speaker in 14.2 ([ADR 0005](../adr/0005-kcrw-aligned-now-playing-single-writer.md)); routes remain for 14.4. It relates feed time to stream program time, so it should not depend on the player. Buffer depth, output route, and iOS stall behavior might still change what the listener hears. Check by ear with the same Observe/Apply comparison used in M11-B.
 3. **Polling survives lock, background, and route changes.** Lock proven in 14.1 for about 30 minutes on Wi-Fi ([ADR 0004](../adr/0004-kcrw-playback-clock-on-ios.md)). Background without lock and route changes remain for 14.4.
 4. **HLS gives no ICY titles.** On the aligned endpoint the feed is the only title source. Every ICY or feed-top title path must be off for an eligible station, or it will overwrite the aligned title.
 5. **Route latency is separate.** Bluetooth and CarPlay add output delay on top of player time. Measure it separately. Do not fold it into `+160s`.
@@ -68,7 +68,7 @@ New iOS code goes in `podcasts/Main/Alignment/`, a synchronized Xcode group ([AD
 | Step | Delivers | Gate |
 |---|---|---|
 | **14.1 Feasibility** — closed (`archive/ios-m14.1`) | Core wired in. Eligibility, endpoint override, session, and an Observe-only readout on device. Nothing is published. | Passed 2026-10-09; see [ADR 0004](../adr/0004-kcrw-playback-clock-on-ios.md). |
-| **14.2 Apply: titles and Now Playing** | Single publication adapter. Full player, mini player, detail, and lock screen follow the selected occurrence. ICY, ACR, and feed-top title paths are off for the station. | Listener confirms title changes match audio on the speaker and the lock screen. Pause and resume work. |
+| **14.2 Apply: titles and Now Playing** — closed (`archive/ios-m14.2`, ADR 0005) | Single publication adapter. Full player, mini player, detail, and lock screen follow the selected occurrence. ICY, ACR, and feed-top title paths are off for the station. | Listener confirms title changes match audio on the speaker and the lock screen. Pause and resume work. |
 | **14.3 Lyrics on the media clock** | Shared lyric index. Full-screen lyrics uses the session clock. Offset-reset bug fixed. | Highlighted line follows audio across a transition, a pause, and navigation in and out of full-screen lyrics. |
 | **14.4 Routes and background** | Validation on Bluetooth and CarPlay, with the screen locked and the app backgrounded. | Listener confirms titles and lyrics on each route. Route delay is recorded as its own number. |
 

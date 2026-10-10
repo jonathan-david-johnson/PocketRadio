@@ -1,6 +1,6 @@
 # Bug 6 — Late radio artwork overwrites the display after an episode switch
 
-**Status:** Open. Reproduced in M13.2's real-playback simulator harness on 2026-10-07. No fix or device observation.
+**Status:** Open. Reproduced in M13.2's real-playback simulator harness on 2026-10-07. No fix or device observation. For KCRW in Debug Apply mode only, the aligned artwork path avoids this (ADR 0005); the general path is unchanged.
 **Evidence:** `archive/ios-m13.2:docs/ios/experiments/2026-10-07_m13_2_baselines.md`, “Late artwork races” section, `carplay_races.feature` scenarios “Switching stations prevents the old station's artwork from publishing” and “Switching to a podcast prevents radio artwork from publishing over it”.
 
 ## Symptom

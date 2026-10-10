@@ -1,6 +1,6 @@
 # Bug 9 — Mini player and home-screen widget show the station logo instead of the song's album art
 
-**Status:** Open. Reported by the user on 2026-10-10 during the M14.2 device checkpoint. Not investigated.
+**Status:** Open. Reported by the user on 2026-10-10 during the device checkpoint for Apply mode ([ADR 0005](../adr/0005-kcrw-aligned-now-playing-single-writer.md)). Not investigated.
 **Evidence:** Two user screenshots, not stored in the repo. (1) iPhone, 8:36, Streams tab (Favorites), KCRW Eclectic 24 playing. The mini player at the bottom shows the KCRW logo and the title "KCRW Eclectic 24". (2) 8:38, home screen: the PocketStreams widget shows the aligned song, "Simetachin (featuring Deri…)" by Cut Chemist, next to the KCRW logo instead of album art. The Dynamic Island also shows the KCRW logo.
 
 ## Symptom
@@ -13,8 +13,8 @@ The home-screen widget has the same difference: it shows the current song's titl
 
 ## What is known
 
-- Observed on the M14.2 build (`feature/kcrw-apply`, uncommitted) with the alignment mode set to Apply. The user reported that title timing was correct in the same session.
-- Not yet known: whether mode Off (today's ICY path) shows the same difference, which would make this pre-existing rather than caused by M14.2.
+- Observed on the Apply-mode build (now `trunk` `a8254b8c4`) with the alignment mode set to Apply. The user reported that title timing was correct in the same session.
+- Not yet known: whether mode Off (today's ICY path) shows the same difference, which would make this pre-existing rather than caused by Apply mode.
 - Not yet known: whether the mini player stays on the logo for the whole song, or only until the next song change.
 
 ## Where to look

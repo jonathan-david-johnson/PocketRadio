@@ -1,6 +1,6 @@
 # Bug 5 — Resolved artwork is lost on a Now Playing rebuild and is not restored
 
-**Status:** Open — reproduced in the M13 test harness (2026-10-04); not yet observed on a device. Not fixed.
+**Status:** Open — reproduced in the M13 test harness (2026-10-04); not yet observed on a device. Not fixed. For KCRW in Debug Apply mode only, the aligned artwork path avoids this (ADR 0005); the general path is unchanged.
 
 Found by M13 E4 and E7 (H2). Evidence: `archive/ios-m13:docs/ios/experiments/2026-10-04_m13_e4.md` and `archive/ios-m13:docs/ios/experiments/2026-10-04_m13_e7.md`; the original `@h2` draft in `contracts/features/now_playing/carplay_artwork.feature`. M13.2's named lifecycle scenarios and unmarked baseline report (`archive/ios-m13.2:docs/ios/experiments/2026-10-07_m13_2_baselines.md`) reproduce A and C, and expose nondeterministic startup ordering for B.
 
