@@ -144,7 +144,7 @@
       <tr><th>Suite</th><th>Framework</th><th>Size</th><th>Run it with</th><th>Status</th></tr>
       <tr><td><strong>iOS app tests</strong><br><span class="small"><code>pocket-radio-ios/PocketCastsTests</code></span></td><td>XCTest; the app is the test host</td><td>124 files, about 850 tests. About 290 are ours (Radio, CarPlay, Widget, tab layout). The rest come from Automattic.</td><td><code>make test_staging ONLY_TESTING=PocketCastsTests</code></td><td><span class="pill low">In use</span></td></tr>
       <tr><td><strong>iOS module tests</strong><br><span class="small"><code>pocket-radio-ios/Modules/Tests</code></span></td><td>XCTest via SwiftPM</td><td>75 files, 5 test targets. Upstream's.</td><td><code>make test_staging ONLY_TESTING=PocketCastsDataModelTests</code> (and <code>…ServerTests</code>, <code>…UtilsTests</code>)</td><td><span class="pill low">In use</span></td></tr>
-      <tr><td><strong>iOS CarPlay harness</strong><br><span class="small">worktree <code>pocket-radio-ios-carplay/</code></span></td><td>XCTest, real <code>AVPlayer</code>, loopback fake servers</td><td>Experiments E1–E7, plus 3 Gherkin scenarios</td><td><code>make test_carplay_spike</code></td><td><span class="pill med">Spike, uncommitted</span></td></tr>
+      <tr><td><strong>iOS CarPlay harness</strong><br><span class="small"><code>pocket-radio-ios/PocketCastsTests/Tests/CarPlayOutput</code></span></td><td>XCTest, real <code>AVPlayer</code>, loopback fake servers</td><td>Experiments E1–E7, plus 3 Gherkin scenarios</td><td><code>make test_carplay</code></td><td><span class="pill good">Merged to trunk</span></td></tr>
       <tr><td><strong>Menubar app tests</strong><br><span class="small"><code>pocket-radio-menubar/PocketRadioTests</code></span></td><td>XCTest</td><td>30 tests. Two are Xcode template placeholders.</td><td><code>make menubar-test</code></td><td><span class="pill low">In use</span></td></tr>
       <tr><td><strong>StreamSession core</strong><br><span class="small"><code>Packages/StreamSession</code></span></td><td>XCTest via SwiftPM</td><td>23 tests</td><td><code>swift test --package-path pocket-radio-menubar/Packages/StreamSession</code></td><td><span class="pill low">In use</span></td></tr>
       <tr><td><strong>Stream Lab</strong><br><span class="small"><code>Tools/StreamLab</code></span></td><td>XCTest via SwiftPM</td><td>63 tests</td><td><code>swift test --package-path pocket-radio-menubar/Tools/StreamLab</code></td><td><span class="pill low">In use</span></td></tr>
@@ -581,9 +581,9 @@ make test_staging ONLY_TESTING=PocketCastsTests
 make test_staging ONLY_TESTING=PocketCastsTests/RadioTracklistServiceTests
 make test_staging ONLY_TESTING=PocketCastsDataModelTests
 
-# iOS CarPlay harness spike (from pocket-radio-ios-carplay/; keep the Mac awake)
-caffeinate -dimsu make test_carplay_spike
-caffeinate -dimsu make test_carplay_spike CARPLAY_TESTS=CarPlayArtworkFeatureTests
+# iOS CarPlay harness (from pocket-radio-ios/; the target keeps the Mac awake)
+make test_carplay
+make test_carplay CARPLAY_TESTS=CarPlayArtworkTests
 
 # Roku (device on the network)
 make roku-deploy</code></pre>

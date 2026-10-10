@@ -19,7 +19,7 @@ ROKU_STICK_HOST ?= 10.99.99.54
 ANDROID_TV_SERIAL     ?=
 ANDROID_MOBILE_SERIAL ?=
 
-.PHONY: help checkout upstream-remote hooks hooks-check status run_sim menubar menubar-build menubar-run menubar-kill menubar-log menubar-test run_menubar menubar-release install console console-build console-run console-run_upnext console-run_kcrw console-debug console-debug_upnext console-debug_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run roku-deploy-stick roku-install-stick android android-build android-test android-tv android-mobile android-log android-lint android-clean
+.PHONY: help checkout upstream-remote hooks hooks-check status run_sim ios-test-carplay menubar menubar-build menubar-run menubar-kill menubar-log menubar-test run_menubar menubar-release install console console-build console-run console-run_upnext console-run_kcrw console-debug console-debug_upnext console-debug_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run roku-deploy-stick roku-install-stick android android-build android-test android-tv android-mobile android-log android-lint android-clean
 
 .DEFAULT_GOAL := help
 
@@ -37,6 +37,7 @@ help:
 	@echo "    status           Show branch and sync status for root, nested repos, and worktrees"
 	@echo "  iOS app (delegates to $(IOS_DIR)/Makefile)"
 	@echo "    run_sim          Build, install, and launch on the simulator"
+	@echo "    ios-test-carplay Run the CarPlay output harness on the dedicated simulator"
 	@echo ""
 	@echo "  Console app (delegates to $(CONSOLE_DIR)/Makefile)"
 	@echo "    console          Build the console binary"
@@ -193,6 +194,11 @@ status:
 
 run_sim:
 	@$(MAKE) -C $(IOS_DIR) run_sim
+
+# Runs the CarPlay output harness (`test_carplay`) from the iOS checkout. See
+# pocket-radio-ios/PocketCastsTests/Tests/CarPlayOutput/Harness/README.md for setup and warnings.
+ios-test-carplay:
+	@$(MAKE) -C $(IOS_DIR) test_carplay
 
 # ── Console App ──────────────────────────────────────────────
 # Real targets live in $(CONSOLE_DIR)/Makefile; these delegate.

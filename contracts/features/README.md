@@ -63,4 +63,4 @@ Specs change additively. Rewording a step another platform implements is breakin
 
 `PocketCastsTests/Tests/CarPlayOutput/Harness/Gherkin/NowPlayingSteps*.swift` implements the steps. Five classes in `HarnessTests/` register smoke, artwork, lifecycle, race and policy scenarios.
 
-The runner locates contracts from the test file's path. The shell checkout must sit beside the iOS checkout/worktree so `../contracts/features/` resolves. Run `make test_carplay` in `pocket-radio-ios-carplay/`; see its `Harness/README.md` for opt-in and destructive-state warnings.
+The runner locates contracts from the test file's path. The shell checkout must sit beside the iOS checkout and any iOS worktree so `../contracts/features/` resolves. Run `make test_carplay` in `pocket-radio-ios/` (or `make ios-test-carplay` from the shell); see its `Harness/README.md` for opt-in and destructive-state warnings.

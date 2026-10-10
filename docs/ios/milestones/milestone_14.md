@@ -11,7 +11,7 @@
 |---|---|
 | Plan and reports | Shell `main`: this file, `docs/ios/experiments/`, `docs/ios/bugs/` |
 | Code | `pocket-radio-ios`, branch `feature/kcrw-alignment` from `trunk` |
-| Worktree | `pocket-radio-ios-alignment/`, sibling of `pocket-radio-ios/`, so `../contracts` and `../.githooks` resolve. The maintained CarPlay harness worktree `pocket-radio-ios-carplay/` stays separate. |
+| Worktree | `pocket-radio-ios-alignment/`, sibling of `pocket-radio-ios/`, so `../contracts` and `../.githooks` resolve. The CarPlay harness is on `trunk`, so its worktree is gone. |
 | Shell changes | Docs only, unless D1 moves the shared core into the shell |
 
 **Goal:** On iPhone, an eligible KCRW Eclectic24 station shows the song that is audible, not the feed's newest row. Lock screen, Bluetooth, CarPlay, the full and mini players, station detail, and live lyrics all follow the player's own clock. The port reuses the menubar's selection core unchanged and adds iOS adapters. Other stations and podcasts keep today's behavior.
