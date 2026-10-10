@@ -1,6 +1,6 @@
 # iOS M14.2 — KCRW aligned titles and Now Playing
 
-**Status**: IN PROGRESS — updated 2026-10-09. Decisions D9–D11 made. Slices 1–3 done (mode picker and adapter; consumers follow the aligned song; Opus review with its should-fix items applied, including the CarPlay-disconnect album). Full unit suite (1,133) and CarPlay output suite (128) pass with the mode Off. Code on `feature/kcrw-apply` in `pocket-radio-ios-alignment/`, uncommitted. Next: device checkpoint by ear.
+**Status**: CLOSING — 2026-10-10. Checkpoint passed on the device; merged to `trunk` at `a8254b8c4`. Knowledge moved to ADR 0005.
 **Depends on**: [M14](milestone_14.md); M14.1 closed (`archive/ios-m14.1`) with the Observe-only session on `trunk`; [ADR 0004](../adr/0004-kcrw-playback-clock-on-ios.md).
 **Required by**: M14.3 (lyrics on the media clock) and M14.4 (routes and background).
 
@@ -65,9 +65,12 @@ Tests use the `PocketCastsTests` host. Inject the clock, feed, and publication b
 
 ## Hand-performed interactions
 
-- [ ] Apply on, speaker, screen locked: the lock screen title and artwork change when the song audibly changes, for at least two transitions.
-- [ ] Full player, mini player and station detail show the same song; station detail highlights it.
-- [ ] Pause from the lock screen, wait, resume: the title stays correct.
-- [ ] Stop (or Pause then Play in station detail), then play again: the title shows the station name briefly, then the correct song within a few seconds.
-- [ ] Switch to another station and to a podcast: their titles behave as before.
-- [ ] Apply off: KCRW behaves as before.
+Ticked on the user's behalf on 2026-10-10, from the user's report that timing was correct and all steps passed (artwork differences filed as bug 9).
+
+
+- [x] Apply on, speaker, screen locked: the lock screen title and artwork change when the song audibly changes, for at least two transitions.
+- [x] Full player, mini player and station detail show the same song; station detail highlights it.
+- [x] Pause from the lock screen, wait, resume: the title stays correct.
+- [x] Stop (or Pause then Play in station detail), then play again: the title shows the station name briefly, then the correct song within a few seconds.
+- [x] Switch to another station and to a podcast: their titles behave as before.
+- [x] Apply off: KCRW behaves as before.
