@@ -122,7 +122,7 @@ checkout:
 	else \
 		echo "Cloning $(ANDROID_REPO)..."; \
 		git clone $(ANDROID_REPO) $(ANDROID_DIR) || \
-			echo "$(ANDROID_DIR) not created yet — see docs/android/milestones/milestone_0.md"; \
+			echo "$(ANDROID_DIR) not created yet — see docs/android/README.md"; \
 	fi
 
 upstream-remote:
@@ -285,7 +285,7 @@ install: menubar-kill menubar-release
 
 # ── Android Apps ─────────────────────────────────────────────
 # Real targets live in $(ANDROID_DIR)/Makefile; these delegate.
-# Repo not scaffolded yet — see docs/android/milestones/milestone_0.md.
+# Repo not scaffolded yet — see docs/android/README.md.
 
 android: android-build
 
