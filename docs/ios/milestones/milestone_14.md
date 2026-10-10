@@ -96,6 +96,28 @@ Tests use the `PocketCastsTests` host. Inject the clock, feed, lyrics, and publi
 - Replacing the whole artwork pipeline. Only the single-writer rule for the eligible station.
 - watchOS, tvOS, App Clip. Guard new code with `#if !os(watchOS) && !APPCLIP && !os(tvOS)`, as `DefaultPlayer` already does for the radio observer.
 
+## Docs impact
+
+Each sub-milestone has its own Docs impact section. This one covers what spans 14.2 to 14.4, or lands when M14 closes.
+
+- **Docs this changes or makes stale:**
+  - A shared KCRW alignment ADR for both platforms: the eligibility rule, the endpoint, the `+160 s` offset, single-writer publication, and route delay kept as its own number. Write it when M14 closes, after iOS has tested the policy. [ADR 0004](../adr/0004-kcrw-playback-clock-on-ios.md) narrows to the iOS clock and package-pin details, or a newer ADR supersedes it.
+  - The menubar M10–M12 bundle closes with M14 and feeds that ADR. The bundle is milestones 10, 11, 11a, 11b and 12, their handoffs and subagent plan, and the `docs/menubar/experiments/` reports. Traces that `Tools/StreamLab` replays move to the menubar repo; they aren't deleted. Until then, the cleanup leaves this bundle alone, because this port reads it.
+  - The "KCRW alignment" section of `docs/ios/README.md` changes from Debug Observe only to the shipped behavior.
+  - The `docs/menubar/README.md` roadmap rows for M10–M12 change to archive tags.
+  - The StreamSession and alignment rows in `docs/test-architecture.html`.
+  - The coverage map in the CarPlay harness README, if 14.2 or 14.4 adds aligned scenarios.
+  - Code comments in `podcasts/Main/Alignment/` cite ADRs, never this file. The pre-commit hook enforces that.
+- **Questions this must settle:**
+  - The remaining items in "What iOS must prove first":
+    - the offset by ear (14.2)
+    - every ICY, ACR and feed-top title path off for the station (14.2)
+    - polling in the background without lock, and across route changes (14.4)
+    - delay measured per route (14.4)
+  - Whether the StreamSession path dependency (D1) stays or moves to the shell, now that two platforms ship it.
+  - Whether the single-writer adapter should serve every station (D3).
+  - Whether the iOS offset differs enough to port the JSONL recorder (D4).
+
 ## Decisions (made 2026-10-04)
 
 **D1 path dependency on the menubar package; D2 finish M13 first; D3 leave non-KCRW as is; D4 `FileLog` only; D5 defer menubar bugs 2 and 3.** Detail below keeps the options considered. Consequences: M14.1 starts after M13 closes, so M13.2 is available for 14.2 and 14.4. The menubar bugs stay open and are not blockers; iOS still follows behavior 6.
