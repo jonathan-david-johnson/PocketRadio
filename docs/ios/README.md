@@ -29,5 +29,6 @@ KCRW Eclectic24 alignment uses the player's program-date clock on the measured H
 | [M14](milestones/milestone_14.md) | KCRW playback alignment port | Prove the iPhone playback clock before changing publication | In progress |
 | M14.1 (`archive/ios-m14.1`) | KCRW playback clock feasibility | Observe-only readout; clock valid, 30 minutes locked, native speed on the iPhone | Closed |
 | M14.2 (`archive/ios-m14.2`) | KCRW aligned titles and Now Playing | Lock screen and players follow the audible song with Apply on; pause and resume recover | Closed; bug 9 open |
+| [M14.3](milestones/milestone_14.3.md) | KCRW lyrics on the media clock *(planned)* | Highlighted line follows audio across a transition, a pause, and navigation into full-screen lyrics | Planned |
 
 Close milestones through the shell's `close-milestone` skill. Replace each closed roadmap link with its `archive/ios-m<id>` tag after extracting durable knowledge and obtaining deletion approval.
