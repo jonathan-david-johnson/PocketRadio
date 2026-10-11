@@ -66,6 +66,27 @@ The knob also works as a manual calibration: the user's 3 s lag would be correct
 
 How it tests the learner on the real stream: with ShazamKit anchors running, set the skew to +8. The learner should report a correction near `+8` more than before and settle there, and it should follow when the skew changes mid-stream.
 
+## Phase 0 and 1 results (2026-10-11, iPhone speaker, Apply)
+
+ShazamKit works for KCRW. The mic and the match request worked once the ShazamKit App Service was enabled for the App ID (the first anchors returned HTTP 401, "Missing entitlements"). Playback was not disturbed. Every anchor of 20 returned the right song (confidence 1.00). Anchors take 15 to 30 s each.
+
+`trueOffset` is the feed-to-program offset that would have made the app match the audio. It is independent of the Debug skew.
+
+| Session | Anchors | Skew | trueOffset | Notes |
+|---|---:|---|---|---|
+| `F662BE3E` (18:07) | 1 | −3 | 158.2 | The Governor's Waltz |
+| `A65113A5` (18:14 to 18:39) | 9 | −3 | 161.4 to 162.3, median 162.0 | 7 songs; spread 0.26 s; one 53 s outlier held back by the learner |
+| `1553837A` (18:44 to 19:02) | 9 | 0, +2, −3 | 156.3 to 157.0 | Skew changed three times in one session |
+
+- **Constant within a session.** The standard deviation within a session is about 0.3 s, against the 0.7 s pass line. That supports the user's hypothesis: a stream-to-tracklist latency, steady while a session runs.
+- **It differs between sessions.** 162.0 in `A65113A5`, about 157 in `1553837A`, 158.2 in `F662BE3E`. `A65113A5` and `1553837A` were four minutes apart, with a stop and restart between them. The spread is about 5 s. The frozen 160 s sits in the middle of it.
+- **The skew arithmetic holds.** In `1553837A` the offset that would have fixed it came out 156.3 to 157.0 at skew 0 (delta +3.7), at +2 (delta +5.0 to +5.7) and at −3 (delta +0.1). Delta moved with the skew and `trueOffset` did not.
+- **Titles at skew 0.** The user judged the title changes "perfect" at 160 s, where the anchors say the audio was 3.7 s ahead of the app. A title flipping a few seconds late at a crossfade is hard to hear. A lyric line is not, which is why the lag showed first in the lyrics (3 s late at 160 s, fixed by −3 s). Skews of +2 and −3 both visibly moved the title.
+- **The one bad anchor** (a 53 s miss near the end of a song) is a ShazamKit match to an earlier section of the same song. The learner holds it back as an outlier. Replaying the real anchors through the learner: after three anchors it reports −2.2 s in `A65113A5` and about −3.1 s in `1553837A`, relative to the frozen offset.
+- **Not yet known.** Why the offset differs between sessions (join-time differences in the HLS stream's program dates, or the feed). Whether a fixed per-device value would do (the sessions span about 6 s, so no). Whether Bluetooth or CarPlay differ: the mic can't measure them.
+
+Conclusion so far: the learner is worth building. Within a session the error is steady and a few anchors find it, and it differs between sessions by more than a fixed constant can cover.
+
 ## Guardrails
 
 - Debug only, behind its own picker. Off is today's behavior. Release is always Off.
