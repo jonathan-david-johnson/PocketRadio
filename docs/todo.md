@@ -57,3 +57,9 @@ Still worth a quick scan before M6 to check:
 
 Decision: fork (unlikely), use for inspiration (maybe), or confirm ignore.
 Do before starting M6 menubar work.
+
+# Web
+
+- [ ] Move iOS, the menubar, and the console to read the Supabase `curated_stations` table (created in web M2), then delete their `curated_stations.json` copies. The shell copy and the iOS copy have already drifted.
+- [ ] iOS: run the shared `contracts/nav_layout/` render fixtures (web M2) and editor fixtures (web M7) in `PocketCastsTests`, so both ports follow one contract.
+- [ ] Global: remote control and presence over private Realtime channels with server-minted tokens, so the web player can join `remote:{userId}` safely. Also closes the existing exposure that anyone holding the anon key and a user id can join. See `docs/global/remote-presence-asymmetry.md` for the open presence bug.

@@ -1,145 +1,106 @@
-# M1 — Spike: PC auth + Vite/React scaffold + radio favorites parity
+# Web M1 — Prove pairing, the stream relay, and the Cloudflare deploy
 
-**Goal:** De-risk the auth/hosting plumbing before building any UI. Prove the
-PC-account-as-identity model works end-to-end (browser → PC API → Edge
-Function → Supabase, with `x-user-uuid` set only server-side), and stand up
-the repo with radio-only feature parity to console/menubar (curated stations,
-favorites). Listen-time is out of scope for M1.
+**Status**: PLANNED
+**Depends on**: Web ADRs 0001–0005 (planning session 2026-10-11)
+**Required by**: Web M2–M7
 
-**User checkpoint:** deployed Vercel preview where a user logs in with their
-Pocket Casts account, sees curated stations, can favorite/unfavorite, and
-favorites sync to `radio_favorites` (visible in iOS app too).
+## Where the work happens
 
-## Spikes 0 + 1 — resolved 2026-08-23
+| | |
+|---|---|
+| Plan | Shell `main`: this file, experiment reports in `docs/web/experiments/` |
+| Code | `pocket-radio-web`, branch `feature/m1-spikes` from the first `main` commit (empty project setup: Vite + React + TS, Pages Functions, Vitest, Makefile, `AGENTS.md`, one-line `CLAUDE.md`) |
+| Worktree | `pocket-radio-web/` |
+| Shell changes | Additive: a `supabase/migrations/` file for the web-only secret tables, `web-*` delegating targets in the top-level `Makefile` |
 
-Resolved via a captured HAR of `pocketcasts.com`'s own web player (browser
-already logged in, refresh-token flow observed) plus a read of the iOS
-`PocketCastsServer` module. Findings:
+**Goal:** Prove the three things the web player can't work without, before
+building any screens. Pairing must sign a browser in to Pocket Casts through
+our Worker. The stream relay must play a continuous radio stream to an
+`https://` page and report its track titles. Pages must deploy the page and
+its server code together on one origin, with a session cookie that works in
+Safari. Each experiment confirms or overturns an accepted ADR.
 
-- **Spike 0 (PC token → `user_uuid`): confirmed, endpoint exists.**
-  `POST https://api.pocketcasts.com/user/token`, body
-  `{"grantType":"refresh_token","refreshToken":"<jwt>"}`. Response includes a
-  stable `uuid` field (matched the `_ui=` param on every analytics beacon in
-  the same capture) — same identity iOS reads as `ServerSettings.userId`.
-  Both refresh and access tokens are JWTs carrying a `pc:uuid` claim in the
-  payload, so `user_uuid` is derivable client-side from a decoded token
-  without an extra round trip. Initial credential login is
-  `POST /user/login` (same host — confirmed via iOS `TokenHelper.swift:154`,
-  not independently captured in the HAR since the browser session was
-  already authenticated).
-- **Spike 1 (CORS): confirmed, and it forecloses "direct fetch."**
-  `api.pocketcasts.com` responds with
-  `Access-Control-Allow-Origin: https://pocketcasts.com` (exact-match
-  allowlist, not a wildcard or reflected origin) +
-  `Access-Control-Allow-Credentials: true`. A Vercel-hosted origin will not
-  be on that allowlist. **"Direct browser fetch to PC login endpoint" is no
-  longer a live option for M1** — drop it from the design space rather than
-  spiking it further. The Edge Function proxy is required for login
-  transport, not only for the Supabase write path.
-- **Wire format: iOS and web hit identical paths on the same host with
-  different bodies.** iOS sends `application/octet-stream` +
-  serialized protobuf (`Api_UserLoginRequest`, `Api_UserTokenLogin`, per
-  `Modules/Sources/PocketCastsServer/Private/Protobuffer/api.pb.swift` in
-  `pocket-radio-ios`). The captured web traffic sends
-  `application/json` to `user/token`, `user/podcast/list`, ... and gets
-  JSON back — `api.pocketcasts.com` already speaks JSON natively for the
-  web client on the paths actually observed. `user/login` was **not** in
-  the capture (see Spike 0 above); JSON support there is inferred from
-  parity with `/user/token`, not confirmed. **The Edge Function does
-  not need `pc-relay`'s protobuf↔JSON translation** (`supabase/functions/pc-relay/protobuf.ts`)
-  for the confirmed paths; treat `/user/login` as unconfirmed until the
-  first real call. It's a plain JSON reverse-proxy that adds session-token
-  issuance and sets `x-user-uuid` server-side — materially simpler than
-  `pc-relay`.
-- **Not yet resolved:** how subsequent authenticated calls attach the access
-  token (Authorization header presumed — `tokenType: "Bearer"` in the
-  `/user/token` response — but the captured HAR had Authorization/Cookie
-  headers stripped by Chrome's HAR export privacy redaction on every
-  endpoint after `/user/token`). Re-capture with "include sensitive data"
-  checked before writing the Edge Function's forwarding logic, or just
-  assume standard `Authorization: Bearer <accessToken>` and confirm on
-  first real call.
-
-## Security model (non-negotiable)
-
-Current Supabase RLS is **header-trust, not auth**: policies match
-`user_uuid` against the client-supplied `x-user-uuid` header
-(`20260512000005_reenable_rls.sql`). iOS tolerates this (anon key buried in
-a binary). A browser ships the anon key in plaintext and can set any
-`x-user-uuid` from devtools → **any user can read/write any user's rows.**
-For web, therefore:
-
-- **All identity-bearing Supabase access routes through a Supabase Edge
-  Function.** The browser never reads/writes `user_uuid`-scoped tables
-  directly. The Edge Function sets `x-user-uuid` from a server-validated
-  token; the browser cannot forge it.
-- **No "direct" fallback.** Even if the CORS spike succeeds, direct
-  browser→Supabase with a browser-set `x-user-uuid` is forbidden — zero
-  access control. CORS result decides PC-login *transport* only, never
-  whether the proxy exists.
-- **Token storage:** Edge Function issues a short-lived session token
-  (httpOnly cookie preferred over localStorage to limit XSS). Raw PC token
-  never persisted in JS-readable storage.
+**User checkpoint:** Open the `*.pages.dev` address in Safari and in Chrome.
+Scan the QR code with the PocketRadio iPhone app and approve. The page now
+shows your Pocket Casts email. Start a plain `http://` station that sends ICY
+titles (for example SomaFM Groove Salad's `http://` MP3 stream). It plays
+through the relay, and the title on the page changes when the song changes.
+Reload: you are still signed in.
 
 ## Scope
 
-- Repo init: `pocket-radio-web` (own git repo), Vite + React, deployed to
-  Vercel (preview deploys per PR).
-- ~~Spike 0 — PC token → `user_uuid`~~ and ~~Spike 1 — CORS~~: **resolved,
-  see "Spikes 0 + 1 — resolved" above.** `POST /user/token` confirmed
-  reachable and JSON-speaking; `POST /user/login` inferred from parity,
-  unconfirmed until first real call; direct browser fetch is CORS-blocked
-  for a non-`pocketcasts.com` origin, so login goes through the Edge
-  Function too.
-- Auth: PC account login only (no separate Supabase Auth). Edge Function
-  validates the PC token, derives `user_uuid`, issues a short-lived session
-  token, and is the sole setter of `x-user-uuid` on Supabase calls.
-- Supabase: reuse `radio_favorites` table/schema from iOS. Verify the
-  header-based RLS policy is satisfiable *only* via the Edge Function path
-  (browser anon key must not match arbitrary uuids).
-- **Curated stations source of truth — resolve now, not "TBD":** promote
-  `curated_stations.json` to a Supabase table (single source for
-  iOS/menubar/console/web) OR explicitly accept a 4th duplicated copy with
-  a tracked debt item. Default: Supabase table. No silent drift.
-- **Stream URLs — mixed-content audit:** many radio streams are plain
-  `http://`; browsers block http media on an https (Vercel) page with no
-  override. Audit `curated_stations.json` for http URLs; per URL plan
-  https upgrade or an Edge Function / relay proxy. Can break `<audio>`
-  playback for a chunk of stations — resolve before the checkpoint.
-- UI: curated stations list, play via `<audio>` (https streams only — see
-  audit), favorite/unfavorite toggle, favorites list.
-- Add `pocket-radio-web/` to top-level Makefile (`checkout`, `status`,
-  `web-*` delegated targets) and `docs/web/`.
+- **Repo setup (`main`, before the branch).** `pocket-radio-web` has no
+  commits. First commit: Vite + React + TypeScript, `functions/` for Pages
+  Functions, Vitest, `wrangler` config, a `Makefile` (`dev`, `test`, `deploy`),
+  `AGENTS.md`, and a `CLAUDE.md` containing only `@AGENTS.md`. Then `make hooks`
+  from the shell.
+- **Supabase (shell).** Migration for the web-only secret tables:
+  `web_sessions` (hashed session id, `user_uuid`, `expires_at`) and
+  `pc_tokens` (`user_uuid`, Pocket Casts refresh and access tokens, expiry).
+  RLS enabled with **no** anon-key policy (ADR 0002). The Worker uses the
+  service-role key, stored as a Cloudflare secret.
+- **Experiment code** lives in `functions/api/` and a bare test page. It is
+  spike-quality and may be rewritten in M2. Its findings outlive it.
 
-## Behaviors to test (red → green, one at a time)
+## Hypotheses (not yet observed)
 
-0. PC token → `user_uuid`: `POST /user/token` (refresh-token grant) resolves
-   to a stable `user_uuid`, matching iOS `ServerSettings.userId` — confirmed
-   via HAR capture (see "Spikes 0 + 1 — resolved"); write a regression test
-   against the real endpoint from the Edge Function, not a fresh spike.
-1. Edge Function ↔ PC JSON round trip: Edge Function forwards `/user/token`
-   as JSON and gets JSON back — no protobuf translation needed (confirmed).
-   Assert the same for `/user/login` — this is the test that confirms the
-   inferred-from-parity claim above, not a given. Confirm the Authorization
-   scheme for subsequent authenticated calls (presumed `Bearer
-   <accessToken>`, unconfirmed — see "Not yet resolved" above) on first
-   real call.
-2. PC login form → authenticated session via Edge Function; short-lived
-   session token (httpOnly) survives reload; raw PC token not in JS storage.
-3. Curated stations list renders from the chosen source of truth (Supabase
-   table by default — see scope; not a 4th JSON copy unless debt-tracked).
-4. Station playback via `<audio>` for an **https** stream — play/pause.
-   Confirm a known `http://` stream is blocked (drives the proxy decision).
-5. Favorite toggle writes to `radio_favorites` via Edge Function with the
-   server-derived `user_uuid`.
-6. **Security: forged-header write rejected.** Direct browser→Supabase write
-   with anon key + arbitrary `x-user-uuid` must NOT land another user's row
-   (proves header-trust is closed on the web path).
-7. Favorite added on web appears in iOS app (and vice versa) — cross-platform
-   sync check.
-8. Vercel preview deploy works from a PR (CI smoke).
+- H1. `device/authorize` and the device-code `user/token` grant accept
+  `application/json` from a Worker. The response includes `user_code`,
+  `verification_uri_complete`, and, after approval, tokens whose `uuid`
+  matches iOS `ServerSettings.userId`.
+- H2. The fork's `DeviceApproveView` can be reached from a QR code through the
+  fork's `pktc://` scheme, routed by JLRoutes `/pair`. A `pocketcasts.com`
+  universal link would open Automattic's app or website instead.
+- H3. Authenticated Pocket Casts calls from a Worker take
+  `Authorization: Bearer <access token>` and speak JSON on the paths M2–M6
+  need.
+- H4. A Worker can relay an `http://` ICY stream for 60 minutes or more without
+  being cut off. Piping uses well under the Workers CPU limit, and ICY
+  stripping adds no audible glitches.
+- H5. A first-party, httpOnly, `SameSite=Lax` session cookie set by a Pages
+  Function survives reload in Safari and Chrome.
+
+## Experiments
+
+Record each result in `docs/web/experiments/YYYY-MM-DD_<topic>.md`.
+
+| # | Question | Method | Pass criterion | Feeds |
+|---|---|---|---|---|
+| E1 | Can a Worker complete Pairing? | `POST /api/pair/start` calls `device/authorize` with JSON; the page shows a QR code of `pktc://pair?user_code=…` and the human-readable code; `GET /api/pair/poll` polls the device-code grant until approved | Worker holds Pocket Casts tokens, and the derived `uuid` equals the iPhone's `ServerSettings.userId` | ADR 0003 stands, or fall back to email/password |
+| E2 | Does the fork approve from a QR code? | Scan with the iPhone camera, with and without Automattic's app installed; also try `verification_uri_complete` | Fork's approval screen opens with the code pre-filled and approval completes | QR format; whether ADR 0003 needs a manual-entry path |
+| E3 | Which Pocket Casts calls work as JSON with a bearer token? | From the Worker call `up_next/sync` (or the web player's equivalent), `user/podcast/list`, `user/podcast/episodes`, `user/playlist/list`, `sync/update_episode`, `user/named_settings` | Each returns usable JSON, or the report names which need protobuf (reuse `supabase/functions/pc-relay/protobuf.ts`) | M5 and M6 API client design |
+| E4 | Can the relay play a station for an hour and report titles? | `GET /api/relay/:stationId` resolves the URL server-side (ADR 0004), sends `Icy-MetaData: 1`, strips metadata blocks, and pushes titles over Server-Sent Events. Run 60+ minutes on an `http://` station, then on an `https://` station | No disconnect, no audible glitch at metadata boundaries, CPU per request recorded and under the plan limit, titles correct | ADR 0004 stands; Workers Free or Paid plan |
+| E5 | Is relaying audio allowed? | Read Cloudflare's current Service-Specific Terms and Workers terms on proxying audio | A cited clause permits it, or a named risk with a fallback | ADR 0004 stands, or narrows to `http://` only |
+| E6 | Does the session work on our own origin? | Pages Function sets the session cookie after E1; reload; Sign out; Sign out everywhere; a forged `x-user-uuid` request with the anon key against `pc_tokens` | Signed in after reload in Safari and Chrome; both sign-outs work; forged read returns zero rows | ADR 0002's single-origin and secret-table claims |
+
+## Decision gate
+
+| Decision | Evidence |
+|---|---|
+| Keep Pairing as the only sign-in (ADR 0003), or add email/password | E1, E2 |
+| QR payload: `pktc://` link, Pocket Casts URL, or code only | E2 |
+| JSON-only API client, or JSON plus a protobuf codec | E3 |
+| Keep relaying every station (ADR 0004), or relay `http://` only | E4, E5 |
+| Cloudflare plan: Free or Workers Paid | E4 |
+| Session design holds (ADR 0002) | E6 |
 
 ## Out of scope
 
-Podcast/episode playback, PC subscriptions/library, listen-time sync, queue,
-Remix/SSR, Electron parity.
+- Every screen, the Layout, Streams UI, lyrics, podcasts, and playlists (M2–M7).
+- KCRW alignment, ACRCloud, remote control, and smart playlists (later; see
+  `docs/web/README.md`).
+- A custom domain.
+
+## Docs impact
+
+- **Docs this changes or makes stale:** `docs/web/README.md` (repo no longer
+  "not scaffolded"); shell `AGENTS.md` platform table (web row);
+  `docs/security_concerns.md` (web secret tables, relay); top-level `Makefile`
+  web section; web ADRs 0002–0004 if any experiment fails.
+- **Questions this must settle:** the six decisions in the Decision gate.
+
+## Hand-performed interactions
+
+- [ ] Scan the QR code with the iPhone camera — the fork's approval screen opens with the code filled in
+- [ ] Approve on the phone — the browser signs in within a few seconds
+- [ ] Listen through one song change on the relay — no audible gap, and the title updates

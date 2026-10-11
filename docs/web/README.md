@@ -1,28 +1,63 @@
 # PocketRadio Web
 
-Browser companion to PocketRadio. Vite + React SPA, hosted on Vercel.
-Backend: Supabase (RLS keyed by Pocket Casts `user_uuid`).
+PocketRadio's own web player for a Pocket Casts account: podcasts, Up Next,
+playlists, and radio Streams with live Track titles and lyrics. Navigation
+follows the Layout the user sets on iOS. Terms are defined in
+[CONTEXT.md](CONTEXT.md).
 
-## Auth model
+## Architecture
 
-Single login = Pocket Casts account (no separate Supabase Auth signup). A
-Supabase Edge Function validates the PC-issued token and maps it to
-`user_uuid`, then is the **sole setter** of the `x-user-uuid` header on
-Supabase calls.
+| Piece | Where | Decision |
+|---|---|---|
+| App | Vite + React + TypeScript, React Router, TanStack Query | Our own app, not a fork or extension of Pocket Casts' proprietary web player ([ADR 0001](adr/0001-own-web-player-not-fork-or-extension.md)) |
+| Hosting and server code | Cloudflare Pages and Pages Functions, one origin | [ADR 0002](adr/0002-cloudflare-hosts-web-player-supabase-is-database.md) |
+| Database | Supabase, the same tables as iOS where data is shared | [ADR 0002](adr/0002-cloudflare-hosts-web-player-supabase-is-database.md) |
+| Sign-in | Pairing: approve a QR code in the PocketRadio iOS app | [ADR 0003](adr/0003-sign-in-by-phone-pairing.md) |
+| Radio playback | Every station through the Stream relay, which also reports Track titles | [ADR 0004](adr/0004-every-station-plays-through-the-stream-relay.md) |
+| Navigation | Sidebar that mirrors the iOS tab settings list, with the Bar line | [ADR 0005](adr/0005-sidebar-mirrors-the-ios-tab-settings-list.md) |
+| Tests | Vitest, Wrangler local runtime, Playwright; shared fixtures in `contracts/nav_layout/` | — |
 
-Unlike iOS — which sets `x-user-uuid` client-side and gets away with it
-because the anon key is buried in a binary — the browser exposes the anon
-key and can forge any header. So web **never** talks to `user_uuid`-scoped
-tables directly: all such access is proxied through the Edge Function. The
-existing header-based RLS is not auth on its own; the proxy is what makes it
-safe. See `milestones/milestone_1.md` § Security model.
+## Security model
+
+Supabase RLS on shared tables trusts the `x-user-uuid` header, and the anon key
+is extractable from the iOS binary. So:
+
+- The browser never talks to Supabase or Pocket Casts directly. Workers set
+  `x-user-uuid` from the session. The browser holds neither the anon key nor
+  the user's id.
+- The session is a first-party, httpOnly cookie, rolling 90 days, with
+  **Sign out** and **Sign out everywhere**.
+- Pocket Casts tokens and sessions live in tables with no anon-key policy.
+  Only the Worker reaches them, with the service-role key.
+- The Stream relay accepts a station or episode id, never a URL.
 
 ## Repo
 
-`pocket-radio-web/` — own git repo (`jonathan-david-johnson/pocket-radio-web`),
-not yet scaffolded.
+`pocket-radio-web/` — own git repo (`jonathan-david-johnson/pocket-radio-web`).
+No commits yet; M1 creates the project.
 
 ## Milestones
 
-See `current_milestone.md` (symlink → `milestones/`). M1 is radio-only,
-parity with console/menubar.
+| Milestone | What | User checkpoint |
+|-----------|------|-----------------|
+| [M1](./milestones/milestone_1.md) | Prove pairing, the stream relay, and the Cloudflare deploy *(planned)* | Pair from the phone, play an `http://` station through the relay, see its title change |
+| [M2](./milestones/milestone_2.md) | App shell and navigation from the synced Layout *(planned)* | Sidebar matches the iPhone's tabs and More, with the Bar line |
+| [M3](./milestones/milestone_3.md) | Streams, the player, and the installable app *(planned)* | Install, play a favorite, control it from media keys and Now Playing |
+| [M4](./milestones/milestone_4.md) | Lyrics for radio Tracks *(planned)* | Lyrics follow KEXP; a nudge survives reload |
+| [M5](./milestones/milestone_5.md) | Podcasts, Up Next, and episode playback *(planned)* | Pause on the web, resume on the phone where it stopped |
+| [M6](./milestones/milestone_6.md) | Playlists and playlist tabs *(planned)* | New Releases, Tech, and News open as lists or Smart playlist placeholders |
+| [M7](./milestones/milestone_7.md) | Edit the Layout from the Sidebar *(planned)* | Reorder on the web; the iPhone's tab bar matches |
+| [M8](./milestones/milestone_8.md) | Discover and Profile *(planned; scope open)* | — |
+
+M1–M7 are the first release.
+
+### Later, not yet numbered
+
+- Smart playlist evaluation. Start by checking whether Pocket Casts' own web
+  player gets New Releases and In Progress from the server.
+- KCRW media-clock alignment: port menubar M12 using HLS program date-time
+  (`hls.js` or Safari's native HLS).
+- Remote control and presence: a global milestone that moves iOS, the menubar,
+  and the web player to private Realtime channels.
+- ACRCloud Track identification.
+- Chapters, transcripts, bookmarks, starring, archiving.
