@@ -1,6 +1,6 @@
 # Experiment: can ShazamKit anchor and self-heal KCRW's feed-to-audio offset?
 
-**Status**: PLANNED — 2026-10-10. Not started. Belongs to [M14](../milestones/milestone_14.md); found while closing 14.3 ([ADR 0008](../adr/0008-kcrw-lyrics-follow-the-media-clock-in-apply.md)). The outcome decides what 14.4 does about timing.
+**Status**: IN PROGRESS — 2026-10-10. The learner and the test knob are built and tested in simulation; the ShazamKit anchor spike (Phase 0) is next. Belongs to [M14](../milestones/milestone_14.md); found while closing 14.3 ([ADR 0008](../adr/0008-kcrw-lyrics-follow-the-media-clock-in-apply.md)). The outcome decides what 14.4 does about timing.
 **Question**: On the phone, the aligned title and the lyric line run about 3 s behind the audio (user, 2026-10-10: `+3` in full-screen lyrics brings them into sync). The core uses a frozen `+160 s` feed-to-program offset, measured on the Mac. Is the phone's real offset a stable stream property, and can ShazamKit measure it well enough that the app corrects itself?
 
 ## Hypothesis
@@ -35,6 +35,36 @@ Definitions, so the numbers mean one thing:
 | 3. Reliability | Leave-one-out against later anchors, a route switch, an app restart, a 1 hour run | Worst residual error and flip-flop count | Residual under 1 s, no oscillation, and Off restores today's behavior exactly |
 
 If Phase 1 shows a spread above 1.5 s or a drift, the hypothesis is wrong. Then a per-song anchor is the only automatic fix, and this experiment stops there with a report.
+
+## Built so far
+
+### The learner, tested in simulation (`OffsetLearner`)
+
+A pure type: anchors in, one correction out. It keeps the last 7 anchors and reports their median, clamped to ±10 s. An anchor more than 2 s from the median is held back as an outlier. Three held-back anchors in a row that agree within 1 s replace the window, which is how it follows a real change in the feed's latency. It reports nothing until three anchors have arrived, then never goes back to nil: the last value is held through a long gap. One learner per output route.
+
+`SimulatedWorld` runs it against scripted worlds with a seeded random generator, so every run is the same. The sweep (`OFFSET_SWEEP=1`, `testParameterSweep`) tried window 3, 5, 7 and 9, outlier threshold 1, 1.5, 2 and 3 s, and step run 2, 3 and 4, over four hours of anchors every 2 minutes. p95 absolute error after the first 12 minutes, with the defaults chosen (window 7, threshold 2.0, run 3):
+
+| World | p95 error | worst | Visible lurches |
+|---|---:|---:|---:|
+| Constant offset, noise 0.5 s | 0.42 s | 0.75 s | 0 |
+| Step from 3 s to 8 s at one hour | 0.63 s | 4.93 s | 0 |
+| 20 % wrong-song anchors (8 to 20 s off) | 0.28 s | 0.48 s | 0 |
+| Noisy anchors, noise 1.0 s | 0.88 s | 1.27 s | 0 |
+| Drift of 0.3 s per 10 minutes | 0.68 s | 0.94 s | 0 |
+
+- **The step's worst case is the lag.** It takes three agreeing anchors, about 6 minutes at one anchor per 2 minutes, to follow a real step. During that time the error is the size of the step. Two anchors would follow faster but flip on noise (2 lurches at threshold 1 s).
+- **Window size.** A window of 3 is noisy. A window of 9 is smoother but slows a drift slightly. 7 is the middle.
+- **What this does not tell us.** The simulation assumes anchor noise of 0.4 to 1.0 s, wrong matches that are far off, and an offset that is constant per route. Real ShazamKit noise and wrong-match behavior are the open questions for Phase 0 and Phase 1.
+
+### The test knob: feed skew
+
+A Debug-only stepper, "Feed skew", in the alignment screen, from −15 to +15 s in 0.5 s steps. It adds to the `+160 s` offset on the running session at its next sample, so titles and lyrics shift with it. It also reads `-PocketRadio.alignment.feedSkew 5` at launch. A line `[align] policy offset=165.0 s (feed skew +5.0 s)` is logged at the first sample and on every change. Release ignores it.
+
+To make the shared selector accept a new offset mid-session, `SessionState` in the menubar's `StreamSession` package gained `updateSelectionPolicy(_:)`, an additive change with a test.
+
+The knob also works as a manual calibration: the user's 3 s lag would be corrected by a skew of −3 s.
+
+How it tests the learner on the real stream: with ShazamKit anchors running, set the skew to +8. The learner should report a correction near `+8` more than before and settle there, and it should follow when the skew changes mid-stream.
 
 ## Guardrails
 
