@@ -1,6 +1,6 @@
 # Experiment: can ShazamKit anchor and self-heal KCRW's feed-to-audio offset?
 
-**Status**: PLANNED — 2026-10-10. Not started. Belongs to [M14.3](../milestones/milestone_14.3.md); the outcome decides what 14.4 does about timing.
+**Status**: PLANNED — 2026-10-10. Not started. Belongs to [M14](../milestones/milestone_14.md); found while closing 14.3 ([ADR 0008](../adr/0008-kcrw-lyrics-follow-the-media-clock-in-apply.md)). The outcome decides what 14.4 does about timing.
 **Question**: On the phone, the aligned title and the lyric line run about 3 s behind the audio (user, 2026-10-10: `+3` in full-screen lyrics brings them into sync). The core uses a frozen `+160 s` feed-to-program offset, measured on the Mac. Is the phone's real offset a stable stream property, and can ShazamKit measure it well enough that the app corrects itself?
 
 ## Hypothesis

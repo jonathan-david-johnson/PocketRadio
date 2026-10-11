@@ -1,6 +1,6 @@
 # iOS M14.3 — KCRW lyrics on the media clock
 
-**Status**: PLANNED
+**Status**: CLOSING — 2026-10-10. All eight checks passed on the device; merged to `trunk` at `e550b26b9`. Knowledge moved to ADR 0008.
 **Depends on**: [M14](milestone_14.md); M14.2 closed (`archive/ios-m14.2`, [ADR 0005](../adr/0005-kcrw-aligned-now-playing-single-writer.md)) and merged to `trunk`. The mini player, widget art, clock-fault hold and lock-screen Stop fixes are committed on `trunk`.
 **Required by**: M14.4 (routes and background), which checks lyrics on each route.
 
@@ -75,11 +75,13 @@ Tests use the `PocketCastsTests` host. Inject the clock, the lyric loader and th
 
 ## Hand-performed interactions
 
-- [ ] Apply on, speaker: during a song with synced lyrics, the highlighted line follows the audio for the whole song.
-- [ ] Across a song change: the next song's lyrics start at the right place within a few seconds.
-- [ ] Pause for 15 seconds, then resume: the highlighted line is still right.
-- [ ] Open full-screen lyrics from the current song's row, tap `+` once, go back and return: the line is still right and the nudge is kept.
-- [ ] Let the song change with a nudge applied: the next song starts at zero correction.
-- [ ] Leave station detail and come back mid-song: the line is still right.
-- [ ] Apply off: KCRW lyrics behave as before, including the saved offset.
-- [ ] Another station and a podcast: lyrics and artwork behave as before.
+Ticked on the user's behalf on 2026-10-10, from the user's report that all eight steps pass. Item 1 passed with the lyric line about 3 s behind the audio; a `+3` nudge brought it into sync. That offset is the ShazamKit experiment's question, not a defect in the lyric clock.
+
+- [x] Apply on, speaker: during a song with synced lyrics, the highlighted line follows the audio for the whole song.
+- [x] Across a song change: the next song's lyrics start at the right place within a few seconds.
+- [x] Pause for 15 seconds, then resume: the highlighted line is still right.
+- [x] Open full-screen lyrics from the current song's row, tap `+` once, go back and return: the line is still right and the nudge is kept.
+- [x] Let the song change with a nudge applied: the next song starts at zero correction.
+- [x] Leave station detail and come back mid-song: the line is still right.
+- [x] Apply off: KCRW lyrics behave as before, including the saved offset.
+- [x] Another station and a podcast: lyrics and artwork behave as before.

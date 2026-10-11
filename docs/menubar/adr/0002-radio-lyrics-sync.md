@@ -60,7 +60,7 @@ For the eligible KCRW AAC/HLS stream, normal playback now selects the
 occurrence from the player's own clock and a feed-to-program offset, instead
 of a hand-tuned lyric offset. That policy belongs to the KCRW alignment work
 (menubar M10–M12, iOS M14). Its ADR is written when M14 closes, and it should
-supersede the offset paragraph above for that station.
+supersede the offset paragraph above for that station. The iOS app already positions lyrics from the player's clock in Apply: [iOS ADR 0008](../../ios/adr/0008-kcrw-lyrics-follow-the-media-clock-in-apply.md).
 
 Evidence: `archive/menubar-m7:docs/menubar/milestones/milestone_7_lyrics.md`
 and `archive/menubar-m9:docs/menubar/milestones/milestone_9.md`.
