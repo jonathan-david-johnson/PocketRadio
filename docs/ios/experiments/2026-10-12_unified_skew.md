@@ -1,6 +1,6 @@
 # Experiment: can one per-station skew replace the +160 constant, the Debug skew, and the lyric nudge?
 
-**Status**: PLANNED — 2026-10-12. Nothing built. Follows the [ShazamKit offset experiment](2026-10-10_shazamkit_offset_anchor.md), which showed the offset is steady within a session (stdev about 0.3 s) and that ShazamKit can measure it. Belongs to [M14](../milestones/milestone_14.md). Work happens on a branch, `experiment/unified-skew`, in a sibling worktree `pocket-radio-ios-skew/`. It merges to `trunk` only if the pass criteria below hold.
+**Status**: IN PROGRESS — 2026-10-12. Phases 0 and 1 are built and pass in simulation and unit tests. Phase 2 (device) is next. Nothing is committed yet: the iOS rule is to test on the phone first. Follows the [ShazamKit offset experiment](2026-10-10_shazamkit_offset_anchor.md), which showed the offset is steady within a session (stdev about 0.3 s) and that ShazamKit can measure it. Belongs to [M14](../milestones/milestone_14.md). Work happens on a branch, `experiment/unified-skew`, in the existing `pocket-radio-ios-alignment/` worktree. It includes the heal button and the ACR removal ([ADR 0009](../adr/0009-acr-identify-button-removed-for-timing-recalibration.md)), which were never committed separately. It merges to `trunk` only if the pass criteria below hold.
 **Question**: Timing today comes from three places: a frozen `+160 s` in code, a Debug feed skew, and a per-song lyric nudge that moves only the lyrics. Can one number per station, the **skew**, drive title, artwork, song position, lyrics, lock screen and widget, be measured by one heal, be fine-tuned by hand, and still work for a station the app has never seen?
 
 ## Definitions
@@ -46,7 +46,7 @@ The mic works only where it hears the audio: the phone's speaker, or a car cabin
 - Observe mode, the Self-heal picker (Off, Measure, Apply), the automatic 3-minute loop, the Debug feed-skew picker, and the poll-driver setting. One Alignment switch, Off or On, is left.
 - The per-song, lyric-only nudge, including its saved per-station lyric offsets (`LyricOffsetStore`, `RadioFavoritesManager.upsertLyricOffset`). In Off the `+` and `−` are hidden. The `lyricOffsets` table in Supabase is untouched. I did not check what else reads it.
 
-`+` and `−` stay where they are on the lyrics page. They now add 0.5 s to the skew. Which direction a tap moves is pinned by a test against the labels the page has today ("Nudge lyrics earlier", "Nudge lyrics later").
+`+` and `−` stay where they are on the lyrics page, 0.5 s per tap. **`+` still moves the song position forward**, as it did, so it lowers the skew by 0.5 s (a larger skew means the song started later in the stream, so an earlier position). The label under them now reads `Skew 157.5 s`. Tests pin the direction.
 
 ## Phases
 
@@ -76,3 +76,34 @@ The mic works only where it hears the audio: the phone's speaker, or a car cabin
 - **Other stations lose the lyric nudge.** Alignment is eligible only for KCRW today (`KCRWEligibility`). After this change, a station that has lyrics but is not aligned has no way to adjust them. The branch merges only if that is acceptable, or if Phase 4 brings a second station in.
 - **Alignment On is Debug-only today.** Making it the default is a separate decision, not part of this experiment.
 - If it succeeds, an ADR replaces the frozen-offset parts of [ADR 0004](../adr/0004-kcrw-playback-clock-on-ios.md) and [ADR 0008](../adr/0008-kcrw-lyrics-follow-the-media-clock-in-apply.md). The shared KCRW ADR waits for M14 to close.
+
+## Built
+
+- `AlignmentSkewStore`: one skew per station in `UserDefaults`, a seed (KCRW 160, anything else 0) when nothing is saved, ±600 s limit, values rounded to 0.1 s, a notification on change. A saved 0 counts as saved, so a heal from skew 0 does not fall back to the seed.
+- `RadioPlaybackSession` reads the skew each sample and selects with it. A change takes an immediate sample, so the title and lyric line move at once. The poll-driver setting, the Observe mode and the session's mode are gone; `startsPoller` is a test seam, not a setting.
+- `SkewSolver` (pure), `ShazamAnchorProbe` (listen once, return a measurement), `SkewHealer` (three anchors within 1 s of their median, then save). Out-of-range results change nothing.
+- One Alignment switch, Off or On. The Debug screen shows the skew, buttons to set 0, ±60 and the seed (to start a heal from a wrong value), and "Heal now". Self-heal modes, the 3-minute loop and the feed-skew picker are removed.
+- The old lyric nudge, its Supabase save and `LyricOffsetStore` are removed. In Off the `+` and `−` are hidden.
+
+## Phase 0 results (simulation, 40 seeded runs per row unless noted)
+
+The simulated station stamps songs 150 to 400 s long, plays them `trueSkew` seconds later, and returns ShazamKit positions with Gaussian noise. The microphone listens 7 s per anchor. Error is `|saved skew − true skew|`.
+
+| Case | Within 1 s | p95 | Worst | Anchors used | Gave up |
+|---|---:|---:|---:|---:|---:|
+| Start 0, true 158.2, noise 0.4 s | 100 % | 0.4 s | 0.6 s | 3.0 | 0 |
+| Start 160 (seed) | 100 % | 0.4 s | 0.6 s | | 0 |
+| Start 100, 220, −60 | 100 % | 0.4 s | 0.6 s | | 0 |
+| True skew 0, 25, 90, 320 | 100 % | | 0.6 s | | 0 |
+| 20 % wrong-section anchors (60 runs) | 98.3 % | 0.5 s | 0.6 s | 3.6 | 1 |
+| Noise 0.8 s | 97.5 % | 1.0 s | 1.5 s | 3.5 | 0 |
+| Song repeats every 3 rows, start 160 or 0 | 100 % | | 0.6 s | | 0 |
+| Song repeats, start 600 (far side) | 25 % | | 0.3 s | | 30 of 40 |
+
+- **Pass for Phase 0.** From any starting skew the heal ends within 1 s, and a wrong-section anchor never moved a result. A song missing from the feed gives a message and no change, after 8 tries.
+- **The far-start repeat case fails closed.** The nearest-row rule picks the wrong play, the result lands outside the agreement or the limit, and the heal gives up with a message. It never saved a wrong skew in these runs. A start that far from the truth is not a case the app produces.
+- **What the simulation does not tell us.** It assumes ShazamKit's noise is Gaussian and unbiased, and that the feed's stamps are exact. The device runs decide that.
+
+## Next
+
+Phase 2, on the device: `make build_device`, install with the user's choice of USB or network, launch with `-PocketRadio.alignment.mode on`. Set the skew to 0 from the Debug screen, play KCRW on the speaker, tap the heal button, and compare by ear. Log: `[anchor]`, `[heal]` and `[align] skew` lines.
