@@ -1,6 +1,6 @@
 # Experiment: can ShazamKit anchor and self-heal KCRW's feed-to-audio offset?
 
-**Status**: IN PROGRESS — 2026-10-10. The learner and the test knob are built and tested in simulation; the ShazamKit anchor spike (Phase 0) is next. Belongs to [M14](../milestones/milestone_14.md); found while closing 14.3 ([ADR 0008](../adr/0008-kcrw-lyrics-follow-the-media-clock-in-apply.md)). The outcome decides what 14.4 does about timing.
+**Status**: IN PROGRESS — 2026-10-12. Phases 0 to 2 done on the device: ShazamKit anchors work, the offset is steady within a session, and the self-healing learner corrected it, including after a ±10 s injected error. Phase 3 (reliability) and a decision on shipping it remain. Belongs to [M14](../milestones/milestone_14.md); found while closing 14.3 ([ADR 0008](../adr/0008-kcrw-lyrics-follow-the-media-clock-in-apply.md)). The outcome decides what 14.4 does about timing.
 **Question**: On the phone, the aligned title and the lyric line run about 3 s behind the audio (user, 2026-10-10: `+3` in full-screen lyrics brings them into sync). The core uses a frozen `+160 s` feed-to-program offset, measured on the Mac. Is the phone's real offset a stable stream property, and can ShazamKit measure it well enough that the app corrects itself?
 
 ## Hypothesis
@@ -86,6 +86,30 @@ ShazamKit works for KCRW. The mic and the match request worked once the ShazamKi
 - **Not yet known.** Why the offset differs between sessions (join-time differences in the HLS stream's program dates, or the feed). Whether a fixed per-device value would do (the sessions span about 6 s, so no). Whether Bluetooth or CarPlay differ: the mic can't measure them.
 
 Conclusion so far: the learner is worth building. Within a session the error is steady and a few anchors find it, and it differs between sessions by more than a fixed constant can cover.
+
+## Phase 2 results: self-healing on the device (2026-10-12, iPhone speaker)
+
+Self-heal in Apply mode: the learner restarts at each session start, takes about three anchors 5 to 10 s apart, then re-anchors every 3 minutes and moves the session's offset by the learned correction.
+
+| Event | What happened |
+|---|---|
+| Session `653B0969`, skew 0 | True offset 159.1 to 159.3 (delta +0.7 to +0.9). Under the 1 s dead band, so nothing was applied. |
+| Skew moved to +10 | Delta +10.9, true offset 159.1. The learner reset and calibrated again, as designed. |
+| Station restart, new session `56B2678F` | True offset **157.9**, 1.3 s from the previous session. The session started from zero correction. |
+| Skew +10, correction applied | The learner asked for +12.1 s (the 2 s the stream needs plus the 10 s injected). The clamp is ±10 s, so it applied +10.0 and left 2.5 to 2.7 s of residual. |
+| Skew moved to −9 mid-session | The held +10 s correction made the offset 141 s: delta −16.3 on the first anchors. After three anchors, **28 s** later, it applied −6.3 s and the offset landed on **157.3 s**, exactly the true offset the anchors measured. |
+
+- **Accuracy.** After recovery the applied offset equals the measured true offset (157.3 s) to the tenth of a second.
+- **Speed.** About 30 s from a bad state to a corrected offset, because calibration anchors run back to back.
+- **Outliers.** Two of 29 anchors across all runs were ShazamKit matches to a repeated earlier section of the song, 53 s off (`Mockingbird`, `Talk It Over`). The learner held them back. The 05:21 one came first in a calibration, and the median of three outvoted it.
+- **Session to session.** True offsets across the sessions measured so far: 158.2, 162.0, about 157, 159.2, 157.9. The range is about 5 s, and the frozen 160 s is not at its center. The within-session drift was about 0.6 s over 10 minutes (157.9 to 157.3).
+- **Two faults found and fixed.**
+  1. The ±10 s clamp is on the total correction against the skewed model, so a +10 s skew (which needs 12 s) hit the clamp. The Debug controller now allows ±20 s. A real offset needs about 2 to 5 s, so the real clamp stays ±10 s.
+  2. An anchor that finished after the station had restarted set a correction for the old session. It is now discarded, and the new session starts clean.
+- **Open.**
+  - A skew change keeps the old correction until three new anchors arrive, so a big swing costs about 30 s of larger error. A real feed step would behave the same.
+  - The mic hears only the phone's speaker or a car cabin. Headphones and Bluetooth can't be calibrated by this.
+  - Cost and consent: the mic is open for 15 to 30 s per anchor, about every 3 minutes, and ShazamKit sends an audio signature to Apple.
 
 ## Guardrails
 
