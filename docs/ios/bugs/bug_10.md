@@ -1,7 +1,7 @@
 # Bug 10 — Station detail buttons shift when the Identify button comes and goes, and "Pause" is really a stop
 
-**Status:** Open. Reported by the user on 2026-10-10 on the device. Not fixed. The layout cause is read from the code and not yet seen in a debugger. Deferred: "down the road".
-**Evidence:** `pocket-radio-ios/podcasts/Radio/StationDetailViewController.swift` (`setupLayout`, `updateIdentifyButton`, `updatePlayButton`, `togglePlay`). The user wrote "song id (ADR?)": it is the ACR **Identify** button, the `music.note.list` icon that listens to the stream and identifies the song.
+**Status:** Open. Symptom A (the spacing) is fixed in the recalibrate-button change (2026-10-12): the row is a packed, centered cluster with `.fill` distribution, so hiding a button no longer spreads the others to the edges. Symptom B ("Pause" is a stop) is not fixed. Reported by the user on 2026-10-10 on the device. The layout cause is read from the code and not yet seen in a debugger. Deferred: "down the road".
+**Evidence:** `pocket-radio-ios/podcasts/Radio/StationDetailViewController.swift` (`setupLayout`, `updateIdentifyButton`, `updatePlayButton`, `togglePlay`). The user wrote "song id (ADR?)": it is the ACR **Identify** button, the `music.note.list` icon. It was removed on 2026-10-12 ([ADR 0009](../adr/0009-acr-identify-button-removed-for-timing-recalibration.md)); its slot now holds the recalibrate button.
 
 ## Symptom A — the Play/Pause and heart buttons are spaced oddly, and it changes
 
