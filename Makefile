@@ -21,6 +21,8 @@ ANDROID_MOBILE_SERIAL ?=
 
 .PHONY: help checkout upstream-remote hooks hooks-check docs-check status run_sim ios-test-carplay menubar menubar-build menubar-run menubar-kill menubar-log menubar-test run_menubar menubar-release install console console-build console-run console-run_upnext console-run_kcrw console-debug console-debug_upnext console-debug_kcrw console-test console-vet roku-build roku-deploy roku-install roku-telnet roku-killtelnet roku-screenshot roku-run roku-deploy-stick roku-install-stick android android-build android-test android-tv android-mobile android-log android-lint android-clean
 
+.PHONY: web-dev web-test web-typecheck web-build web-deploy
+
 .DEFAULT_GOAL := help
 
 # Show this help.
@@ -75,7 +77,12 @@ help:
 	@echo "    android-lint     ktlint + android lint"
 	@echo "    android-clean    Gradle clean"
 	@echo ""
-	@echo "  Web app (delegates to $(WEB_DIR)/Makefile — not yet scaffolded, see docs/web)"
+	@echo "  Web app (delegates to $(WEB_DIR)/Makefile)"
+	@echo "    web-dev          Build and serve the local HTTPS experiment page + Functions + relay Worker"
+	@echo "    web-test         Run unit, isolated SQL, and offline Worker/Pages integration tests"
+	@echo "    web-typecheck    Check browser, server, configs, and UI tests"
+	@echo "    web-build        Bundle locally; relay Worker dry-run only"
+	@echo "    web-deploy       Verify and deploy Pages (requires approval; relay Worker must exist first)"
 	@echo ""
 	@echo "  Roku channel (delegates to $(ROKU_DIR)/Makefile; needs ROKU_PASS env)"
 	@echo "    roku-build       Package channel sources into channel.zip"
@@ -282,6 +289,24 @@ install: menubar-kill menubar-release
 	echo "Installed. Next steps:" ; \
 	echo "  open /Applications/PocketRadio.app   # first launch (Gatekeeper may prompt)" ; \
 	echo "  Then: System Settings -> General -> Login Items -> Open at Login -> + PocketRadio"
+
+# ── Web App ─────────────────────────────────────────────────
+# Real targets live in $(WEB_DIR)/Makefile; these only delegate.
+
+web-dev:
+	@$(MAKE) -C $(WEB_DIR) dev
+
+web-test:
+	@$(MAKE) -C $(WEB_DIR) test
+
+web-typecheck:
+	@$(MAKE) -C $(WEB_DIR) typecheck
+
+web-build:
+	@$(MAKE) -C $(WEB_DIR) build
+
+web-deploy:
+	@$(MAKE) -C $(WEB_DIR) deploy
 
 # ── Android Apps ─────────────────────────────────────────────
 # Real targets live in $(ANDROID_DIR)/Makefile; these delegate.

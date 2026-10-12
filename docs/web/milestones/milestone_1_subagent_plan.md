@@ -1,6 +1,7 @@
 # Web M1 subagent plan
 
-**Status:** APPROVED TO EXECUTE — user requested plan, commit, then execution.
+**Status:** LOCAL IMPLEMENTATION VERIFIED — code and automated tests are ready;
+external experiments and the decision gate remain pending (2026-10-12).
 **Scope:** [M1 feasibility experiments](milestone_1.md), not the first-release UI.
 **Route:** `openai-codex/gpt-6.1-sol:high`, Codex OAuth. The active session
 establishes model access; `pi auth check --provider openai-codex --json
@@ -101,6 +102,28 @@ within this plan; provider changes or scope expansion require the user.
 8. **Lead:** commit completed code and additive shell docs; record revisions,
    test counts, delegated usage when available, and external blockers in the
    M1 handoff. Do not push, merge, close M1, or mark manual checks complete.
+
+## Execution notes
+
+Setup landed on web `main` as `9ea6c56`, then work continued on
+`feature/m1-spikes`. The user authorized retry after an interrupted repair.
+All delegates stayed on the pinned Codex OAuth route. Exact aggregate usage
+was not available from the delegation reports; no measured quota/cost claim is
+made. Repair/re-review allocations added 1,300k input and 37k output to the
+initial soft forecasts, for 4,850k / 142k total forecast, not actual usage.
+
+Discovery required a separate SQLite Durable Object Worker, bound to Pages,
+while retaining the single browser origin. The lead assigned its implementation
+to the relay writer; no deployment occurred. Host restriction to two SomaFM
+upstreams is a fail-closed spike limit, not broad Browse support or an ADR change.
+
+Independent review found approval/sign-out races, a missing account revocation
+fence, refresh loss across single sign-out, active relay revocation/admission
+gaps, and a stale restoration-cookie race. Writers/lead fixed them with regression
+tests. Native workerd testing also exposed unsupported `redirect: "error"` in
+Worker fetch; manual handling fixed it. The focused final reviewer accepted the
+same-tab restoration serialization. See the [verification handoff](milestone_1_handoff.md)
+for commands, revisions and remaining limitations.
 
 ## Evidence checklist
 

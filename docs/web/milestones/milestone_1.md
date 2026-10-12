@@ -1,6 +1,6 @@
 # Web M1 — Prove pairing, the stream relay, and the Cloudflare deploy
 
-**Status**: PLANNED
+**Status**: IN PROGRESS — setup committed as web `9ea6c56`; M1 code on `feature/m1-spikes` (2026-10-11)
 **Depends on**: Web ADRs 0001–0005 (planning session 2026-10-11)
 **Required by**: Web M2–M7
 

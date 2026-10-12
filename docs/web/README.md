@@ -34,13 +34,21 @@ is extractable from the iOS binary. So:
 ## Repo
 
 `pocket-radio-web/` — own git repo (`jonathan-david-johnson/pocket-radio-web`).
-No commits yet; M1 creates the project.
+Scaffold committed on `main` as `9ea6c56`; M1 experiments live on
+`feature/m1-spikes`. Pairing, sessions, JSON probes, and the restricted relay
+have local automated coverage. Live approval, deployment, browser cookies,
+relay permission, and hour-long playback remain unverified.
+
+The relay uses a SQLite Durable Object deployed by a separate Worker and bound
+to Pages. Browser routes stay on the Pages origin. The spike restricts upstreams
+to two SomaFM hosts; curated-ID resolution and arbitrary Browse playback are
+not implemented. This is a test restriction, not a change to ADR 0004.
 
 ## Milestones
 
 | Milestone | What | User checkpoint |
 |-----------|------|-----------------|
-| [M1](./milestones/milestone_1.md) | Prove pairing, the stream relay, and the Cloudflare deploy *(planned)* | Pair from the phone, play an `http://` station through the relay, see its title change |
+| [M1](./milestones/milestone_1.md) | Prove pairing, the stream relay, and the Cloudflare deploy *(in progress; live checks pending)* | Pair from the phone, play an `http://` station through the relay, see its title change |
 | [M2](./milestones/milestone_2.md) | App shell and navigation from the synced Layout *(planned)* | Sidebar matches the iPhone's tabs and More, with the Bar line |
 | [M3](./milestones/milestone_3.md) | Streams, the player, and the installable app *(planned)* | Install, play a favorite, control it from media keys and Now Playing |
 | [M4](./milestones/milestone_4.md) | Lyrics for radio Tracks *(planned)* | Lyrics follow KEXP; a nudge survives reload |
