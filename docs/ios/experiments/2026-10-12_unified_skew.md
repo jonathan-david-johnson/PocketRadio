@@ -106,4 +106,23 @@ The simulated station stamps songs 150 to 400 s long, plays them `trueSkew` seco
 
 ## Next
 
+A follow-up stub asks whether the heal can read the stream's audio directly instead of the microphone: [direct stream heal](2026-10-14_direct_stream_heal.md). It is not ready to run.
+
 Phase 2, on the device: `make build_device`, install with the user's choice of USB or network, launch with `-PocketRadio.alignment.mode on`. Set the skew to 0 from the Debug screen, play KCRW on the speaker, tap the heal button, and compare by ear. Log: `[anchor]`, `[heal]` and `[align] skew` lines.
+
+## Phase 2 interim results (device, 2026-10-14, speaker, KCRW)
+
+Heal results and the user's fine-tune. Interim: more runs are in progress.
+
+- **First runs found two bugs, both fixed.** ShazamKit refuses a session opened straight after another closes, so the heal waits 5 s between listens. A feed title with a version word ("remix", "radio edit") against a plain ShazamKit title gave anchors off by 99 s (remix) and 8 s (radio edit). Anchors from the same edit agree with each other, so the three-agree rule can't catch it. Those anchors are now skipped.
+- **Anchors in one song are precise.** Three anchors on one song agreed within 0.1 s. Anchors spanning a song change can be 4 to 5 s off for the first one, and the three-agree rule rejected it.
+
+| Heal | Song | Started from | Heal result | Final | Note |
+|---|---|---:|---:|---:|---|
+| A | Congratulations To Me | 0 | 158.7 | 157.2 | user nudged −1.5 |
+| B | Runner, then Hold On | 157.2 | 158.0 | 157.5 | user nudged −0.5; ran across a song change |
+| C | Hold On, We're Going Home | 157.5 | 158.4 | 158.4? | no nudge in the log |
+| D | Budapest | 158.4 | 158.6 | 158.6? | no nudge in the log |
+
+- The heal's results span 0.7 s over four songs. The user's finals for A and B are 0.3 s apart, below the heal's own spread.
+- **Open:** whether C and D were left as healed. If so, a constant of −1.0 would be wrong. If they were moved to about 157.5, the constant fits. Decide after more runs, as planned in Questions above.
