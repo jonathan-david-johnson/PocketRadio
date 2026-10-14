@@ -1,6 +1,6 @@
 # Experiment: can one per-station skew replace the +160 constant, the Debug skew, and the lyric nudge?
 
-**Status**: IN PROGRESS — 2026-10-12. Phases 0 and 1 are built and pass in simulation and unit tests. Phase 2 (device) is next. Nothing is committed yet: the iOS rule is to test on the phone first. Follows the [ShazamKit offset experiment](2026-10-10_shazamkit_offset_anchor.md), which showed the offset is steady within a session (stdev about 0.3 s) and that ShazamKit can measure it. Belongs to [M14](../milestones/milestone_14.md). Work happens on a branch, `experiment/unified-skew`, in the existing `pocket-radio-ios-alignment/` worktree. It includes the heal button and the ACR removal ([ADR 0009](../adr/0009-acr-identify-button-removed-for-timing-recalibration.md)), which were never committed separately. It merges to `trunk` only if the pass criteria below hold.
+**Status**: DONE for KCRW on the speaker — 2026-10-14. The unified skew works, and the decisions are in [ADR 0010](../adr/0010-timing-is-one-skew-per-station-healed-with-shazamkit.md). Left open: Phase 4 (a second station), routes other than the speaker, a Release build, and the merge to `trunk`. Phases 0 and 1 pass in simulation and unit tests. Phases 2 and 3 were run on the phone. Follows the [ShazamKit offset experiment](2026-10-10_shazamkit_offset_anchor.md), which showed the offset is steady within a session (stdev about 0.3 s) and that ShazamKit can measure it. Belongs to [M14](../milestones/milestone_14.md). Work happens on a branch, `experiment/unified-skew`, in the existing `pocket-radio-ios-alignment/` worktree. It includes the heal button and the ACR removal ([ADR 0009](../adr/0009-acr-identify-button-removed-for-timing-recalibration.md)), which were never committed separately. It merges to `trunk` only if the pass criteria below hold.
 **Question**: Timing today comes from three places: a frozen `+160 s` in code, a Debug feed skew, and a per-song lyric nudge that moves only the lyrics. Can one number per station, the **skew**, drive title, artwork, song position, lyrics, lock screen and widget, be measured by one heal, be fine-tuned by hand, and still work for a station the app has never seen?
 
 ## Definitions
@@ -110,19 +110,43 @@ A follow-up stub asks whether the heal can read the stream's audio directly inst
 
 Phase 2, on the device: `make build_device`, install with the user's choice of USB or network, launch with `-PocketRadio.alignment.mode on`. Set the skew to 0 from the Debug screen, play KCRW on the speaker, tap the heal button, and compare by ear. Log: `[anchor]`, `[heal]` and `[align] skew` lines.
 
-## Phase 2 interim results (device, 2026-10-14, speaker, KCRW)
+## Phase 2 and 3 results (device, 2026-10-14, speaker, KCRW)
 
-Heal results and the user's fine-tune. Interim: more runs are in progress.
-
-- **First runs found two bugs, both fixed.** ShazamKit refuses a session opened straight after another closes, so the heal waits 5 s between listens. A feed title with a version word ("remix", "radio edit") against a plain ShazamKit title gave anchors off by 99 s (remix) and 8 s (radio edit). Anchors from the same edit agree with each other, so the three-agree rule can't catch it. Those anchors are now skipped.
-- **Anchors in one song are precise.** Three anchors on one song agreed within 0.1 s. Anchors spanning a song change can be 4 to 5 s off for the first one, and the three-agree rule rejected it.
+Heal results, and where the user left the skew:
 
 | Heal | Song | Started from | Heal result | Final | Note |
 |---|---|---:|---:|---:|---|
 | A | Congratulations To Me | 0 | 158.7 | 157.2 | user nudged −1.5 |
 | B | Runner, then Hold On | 157.2 | 158.0 | 157.5 | user nudged −0.5; ran across a song change |
-| C | Hold On, We're Going Home | 157.5 | 158.4 | 158.4? | no nudge in the log |
-| D | Budapest | 158.4 | 158.6 | 158.6? | no nudge in the log |
+| C | Hold On, We're Going Home | 157.5 | 158.4 | 158.4 | left as healed |
+| D | Budapest | 158.4 | 158.6 | 158.6 | left as healed |
+| E | Stratford & 52 | 158.6 | 156.8 | 156.8 | left as healed; user: lyric sync "dead on" |
+| F | Lucky Once | 156.8 | 155.8 | not applied | two good anchors, then the cancelled-heal bug below |
 
-- The heal's results span 0.7 s over four songs. The user's finals for A and B are 0.3 s apart, below the heal's own spread.
-- **Open:** whether C and D were left as healed. If so, a constant of −1.0 would be wrong. If they were moved to about 157.5, the constant fits. Decide after more runs, as planned in Questions above.
+- **Two bugs found and fixed on the device.**
+  - ShazamKit refuses a session opened right after another closes, so the heal now waits 5 s between listens.
+  - A feed title with a version word against a plain ShazamKit title gave anchors 99 s ("remix") and 8 s ("radio edit") off, and anchors from one song agree with each other. Those anchors are skipped. A later run on "Obrigado (e24 edit)" skipped all 8 anchors and said so.
+  - A third bug (heal F): leaving the station screen cancelled the heal, its waits returned at once, and the listens ran back to back and were refused. The heal no longer belongs to the screen, and a cancelled heal stops. The cause is inferred from the code.
+- **Anchors in one song are precise.** Three anchors on one song agree within 0.1 s. The first anchor after a song change can be 4 to 5 s off, and the three-agree rule rejected it.
+
+## Pass criteria, as met
+
+| Phase | Criterion | Result |
+|---|---|---|
+| 0 | From any starting skew the heal ends within 1 s; a wrong section never moves it by more than 1 s; a missing song changes nothing | **Met** in simulation |
+| 1 | Existing tests updated and pass; Off behaves like the old Off apart from the missing nudge; a skew moves title selection, lyrics and lock screen together | **Met** (unit tests; the full suite passes) |
+| 2 | After the heal the title, artwork and lyrics match the audio within about 2 s; a follow-up anchor shows a residual of 1.5 s or less; repeated from skew 0 in three sessions | **Partly met.** Titles and lyrics matched, and a later heal from a healed value moved by 0.2 to 1.8 s. Only one clean heal ran from skew 0 (A), because the first from 0 hit the version bug. The rest started from saved values |
+| 3 | A fine-tune survives relaunch and a station switch; a heal replaces it; every post-heal nudge is logged | **Mostly met.** It survives relaunch, a heal replaces it, and nudges are in the log. A station switch was not tried |
+
+## Questions answered
+
+1. **Does the heal have a constant bias?** No. Three of five heals the user judged were left as healed. A constant would have made them worse. The nudges on A and B look like taste or those songs' lyric files.
+2. **Does the skew survive across sessions?** Yes. It started within about 2 to 3 s of the next heal's result.
+3. **Does a route change the skew?** Not answered. The heal runs only on the speaker.
+4. **Is "stream-agnostic" real?** Not answered. Only KCRW was tried. The stub for the direct-stream heal is the next step.
+5. **New finding: the skew is not quite one constant.** Six songs gave 158.7, 158.0, 158.4, 158.6, 156.8 and 155.8. Anchors within a song agree within 0.1 s, so the spread is between songs, not noise. A heal on each song change would remove it, and the microphone can't do that quietly.
+
+## Next
+
+- [Direct stream heal](2026-10-14_direct_stream_heal.md) (stub, not ready to run): the same heal without the microphone, which could also run on every song change.
+- To merge to `trunk`: accept that other stations lose the lyric nudge or align a second station, run a Release build, and decide when alignment becomes the default.

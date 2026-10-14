@@ -22,6 +22,8 @@ What the microphone route costs:
 - ShazamKit's managed session refuses a session opened right after another closes (it answers "Missing entitlements"), so anchors need 5 s gaps.
 - It measures what reaches the room, which includes speaker delay. That is the right number for the ear and not necessarily for the app's model.
 
+- **The skew is not quite constant between songs.** Six KCRW songs gave results spanning 2.9 s, while anchors within one song agree within 0.1 s ([ADR 0010](../adr/0010-timing-is-one-skew-per-station-healed-with-shazamkit.md)). A heal on every song change would remove that. The microphone can't do it quietly; this idea could.
+
 ## The idea (a sketch, not a design)
 
 1. Get the stream's media playlist and fetch the last two or three segments, about 12 to 18 s of audio.
