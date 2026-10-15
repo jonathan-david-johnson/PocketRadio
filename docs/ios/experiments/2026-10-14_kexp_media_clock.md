@@ -29,6 +29,16 @@ The September menubar capture (zero `currentDate()` samples on KEXP; a 14 s ad p
 - **The version rule wrongly skipped the right song.** The feed wrote "TIME IS HAPPENING: MUSTAFA & JULIEN BAKER VERSION" and ShazamKit wrote "TIME IS HAPPENING (MUSTAFA & JULIEN BAKER VERSION)". The rule saw the version word only inside brackets.
   - **Fix:** a version word counts anywhere in the title. A word that both titles share is not a difference.
 
+## Tracing (added 2026-10-14)
+
+An aligned session now writes `[trace]` lines, for any stream, so a new station can be understood from one log:
+
+- `[trace] meta`: every timed metadata item the stream delivers (ICY `StreamTitle` and `StreamUrl`, ID3, ad markers), with the stream date it arrived at (`program=`) and the wall time.
+- `[trace] feed first poll` and `[trace] feed new`: the newest row's age on the first poll, and each new row with how long after its stamp the feed first listed it (`lag=`).
+- `[anchor]` lines now carry `at=`, `start=` (when the song began in the stream: the program date minus ShazamKit's position) and `stamp=`.
+
+`tools/stream-timeline.py <debug_log>` lines these up per song: the stamp, when the feed listed it, and when the stream's own title arrived, all against the measured start. That settles whether KEXP's ICY titles mark the audio boundary: if `icy-start` is within about 1 s, they do; if it is minutes, they don't.
+
 ## What this predicts (to check on the phone)
 
 1. **A play of KEXP needs a heal.** The skew holds this play's startup delay (a burst of audio at connect, or the pre-roll). The saved skew from the last play is only a guess.
