@@ -1,6 +1,6 @@
 # 0010 — Timing is one skew per station, set by a ShazamKit heal and fine-tuned by hand
 
-**Decision:** Accepted 2026-10-14 for the iOS `experiment/unified-skew` branch (not yet merged to `trunk`). KCRW Eclectic24 on the phone's speaker only. Replaces the frozen `+160 s` constant in [ADR 0004](0004-kcrw-playback-clock-on-ios.md) and the per-occurrence lyric nudge in [ADR 0008](0008-kcrw-lyrics-follow-the-media-clock-in-apply.md).
+**Decision:** Accepted 2026-10-14 for the iOS `experiment/unified-skew` branch (not yet merged to `trunk`). Proven on KCRW Eclectic24 on the phone's speaker. KEXP is built on the same design with a media-time clock and not yet tested on the phone (see [KEXP media clock](../experiments/2026-10-14_kexp_media_clock.md)). Replaces the frozen `+160 s` constant in [ADR 0004](0004-kcrw-playback-clock-on-ios.md) and the per-occurrence lyric nudge in [ADR 0008](0008-kcrw-lyrics-follow-the-media-clock-in-apply.md).
 
 ## What the device showed
 
@@ -19,20 +19,21 @@ Measured on "Jonathan iPhone" (iPhone 15), StagingDebug, KCRW on the phone's spe
 
 | Choice | Reason | Alternatives not selected |
 |---|---|---|
-| **One number per station, the skew:** a song the feed stamps at `T` starts in the stream at `T + skew`. Everything the aligned session shows reads it. Saved in `UserDefaults` on this device, with a seed (KCRW 160, anything else 0). A saved 0 counts as saved. | The title, artwork, song position, lyrics, lock screen and widget have to move together. The value depends on this device and speaker, so it is not shared across devices. | Keep three inputs (a constant, a Debug skew, a per-song nudge). Save to Supabase for all devices. |
+| **One number per stream, the skew:** a song the feed stamps at `T` starts in the stream at `T + skew`. Everything the aligned session shows reads it. Saved in `UserDefaults` on this device under the stream's key (`AlignmentProfile.key`), so every list entry for one stream shares it (the KCRW MP3 and AAC entries did not before: seen on the device). Seed: KCRW 160, anything else 0. A saved 0 counts as saved. | The title, artwork, song position, lyrics, lock screen and widget have to move together. The value depends on this device and speaker, so it is not shared across devices. | Keep three inputs (a constant, a Debug skew, a per-song nudge). Save to Supabase for all devices. |
 | **The heal solves the skew from the tracklist**: `skew = P − s − T`, where `P` is the stream's program date at the anchor, `s` is ShazamKit's position, and `T` is the matching row's stamp. | It works from any starting skew, so a new station needs no known constant. | Measure a delta against the song already selected, which needs the right song to be selected and a clamp of ±10 s. |
 | **Three anchors within 1 s of their median, then replace the skew.** A result beyond ±600 s changes nothing. A heal replaces a fine-tune. | A wrong-section match (seen 20 to 130 s off) can't get through. One number, one meaning. | Keep the fine-tune across a heal. Average all anchors. |
 | **Skip an anchor when the feed title has a version word (remix, mix, edit, version, live, acoustic, extended, instrumental, demo, reprise) that the heard title lacks.** "Clean", "explicit" and "remastered" don't count. | Seen on the device: 99 s and 8 s errors. The heal says it can't use an edit and tries again. | Use them at lower trust. Allow all. |
 | **Wait 5 s between listens, and stop when cancelled.** The heal belongs to the session, not the screen: leaving the station screen does not cancel it. | ShazamKit refuses back-to-back sessions. | Retry at once. Tie the heal to the screen. |
 | **No bias constant and no lead.** | The device data didn't support one (see above). | A constant of −1.0 s, or a 0.5 s lead. |
-| **One switch, Alignment Off or On.** Observe, the Self-heal picker, the automatic loop, the Debug feed skew and the poll-driver setting are removed. The `+` and `−` move the skew 0.5 s per tap (`+` lowers it, so the song position moves forward). The old per-song lyric nudge and its Supabase save are removed; in Off there is no nudge. | Fewer flags. The nudge is now the same thing as the skew. | Keep the old nudge in Off. |
+| **One switch, Alignment Off or On.** Observe, the Self-heal picker, the automatic loop, the Debug feed skew and the poll-driver setting are removed. The `+` and `−` move the skew 0.5 s per tap (`+` lowers it, so the song position moves forward). For an aligned station the nudge is the skew and the old per-song lyric nudge is gone. A station that is not aligned keeps the old whole-second saved lyric offset (restored 2026-10-14). | Fewer flags. For an aligned station the nudge is the same thing as the skew. | Remove the saved offset everywhere: it left KEXP, which has no skew, with no way to correct lyrics 10 s early. |
 
 ## Consequences
 
 - **Per-song spread remains.** After a heal the skew is right for the song heard. The next song can be about 1 to 1.5 s off. A heal on each song change would fix that. The microphone can't do that quietly, so the direct-stream idea (`docs/ios/experiments/2026-10-14_direct_stream_heal.md`, a stub) is the next step.
 - **Speaker only.** The heal needs the microphone to hear the audio. Headphones and Bluetooth can't be healed.
 - **KCRW only, Debug only.** Alignment is eligible for KCRW alone, and the switch and the heal button are Debug-only.
-- **Other stations lose the lyric nudge** on this branch, with nothing to replace it until they are aligned. The branch merges only if that is accepted or a second station is aligned.
+- **A station that is not aligned keeps the saved lyric offset**, so it loses nothing. KEXP is the second station: it aligns with a media-time clock instead of a program date, because its ICY stream has none. That is built, with unit tests, and not yet tested on the phone.
+- **A media-time stream needs a heal on each play.** The clock is the media position plus the wall time at which playback first advanced, so the skew also holds that play's startup delay. A pause in this app stops and restarts the stream, which is a new play. A stall does not move the skew, because media time stops with the audio.
 - The `lyric_offsets` table in Supabase is no longer read or written by iOS. What else uses it was not checked.
 - Not covered: a second station, a route other than the speaker, Release build, and CarPlay and Bluetooth with alignment on.
 

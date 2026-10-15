@@ -149,4 +149,6 @@ Heal results, and where the user left the skew:
 ## Next
 
 - [Direct stream heal](2026-10-14_direct_stream_heal.md) (stub, not ready to run): the same heal without the microphone, which could also run on every song change.
-- To merge to `trunk`: accept that other stations lose the lyric nudge or align a second station, run a Release build, and decide when alignment becomes the default.
+- [KEXP media clock](2026-10-14_kexp_media_clock.md): the second station, on a stream with no program date. Built, not yet run on the phone.
+- The saved lyric offset was restored for stations that are not aligned (2026-10-14), so merging no longer costs them their nudge.
+- To merge to `trunk`: run a Release build, decide when alignment becomes the default, and settle the KEXP result.
