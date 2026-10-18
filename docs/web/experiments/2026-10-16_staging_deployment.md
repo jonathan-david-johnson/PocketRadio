@@ -1,6 +1,6 @@
 # Private staging deployment — provisioning, privacy and first upload
 
-**Status: deployed behind Access; the user's browser checks passed on 2026-10-18 (user-reported).** On 2026-10-18 the staging app was uploaded to `pocket-radio-web-m1-staging` behind two email-only Access applications, with the staging database's secrets installed. Nothing has been exercised in a browser yet beyond seeing the placeholder page. Original provisioning was 2026-10-16 UTC: the user approved creating and deploying `pocket-radio-web-m1-staging` under these limits: private Pages access, a separate Free Supabase database, the web-only migration, server-only secrets, staging Pocket Casts (`.net`), no relay, no billing changes and no changes to the existing PocketRadio database.
+**Status: CLOSED 2026-10-18. Deployed behind Access, and the user's browser checks passed (user-reported).** On 2026-10-18 the staging app was uploaded to `pocket-radio-web-m1-staging` behind two email-only Access applications, with the staging database's secrets installed. Nothing has been exercised in a browser yet beyond seeing the placeholder page. Original provisioning was 2026-10-16 UTC: the user approved creating and deploying `pocket-radio-web-m1-staging` under these limits: private Pages access, a separate Free Supabase database, the web-only migration, server-only secrets, staging Pocket Casts (`.net`), no relay, no billing changes and no changes to the existing PocketRadio database.
 
 ## What was done on 2026-10-18
 
