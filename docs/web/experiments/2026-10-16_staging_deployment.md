@@ -1,6 +1,6 @@
 # Private staging deployment — provisioning, privacy and first upload
 
-**Status: deployed behind Access; browser checks pending.** On 2026-10-18 the staging app was uploaded to `pocket-radio-web-m1-staging` behind two email-only Access applications, with the staging database's secrets installed. Nothing has been exercised in a browser yet beyond seeing the placeholder page. Original provisioning was 2026-10-16 UTC: the user approved creating and deploying `pocket-radio-web-m1-staging` under these limits: private Pages access, a separate Free Supabase database, the web-only migration, server-only secrets, staging Pocket Casts (`.net`), no relay, no billing changes and no changes to the existing PocketRadio database.
+**Status: deployed behind Access; the user's browser checks passed on 2026-10-18 (user-reported).** On 2026-10-18 the staging app was uploaded to `pocket-radio-web-m1-staging` behind two email-only Access applications, with the staging database's secrets installed. Nothing has been exercised in a browser yet beyond seeing the placeholder page. Original provisioning was 2026-10-16 UTC: the user approved creating and deploying `pocket-radio-web-m1-staging` under these limits: private Pages access, a separate Free Supabase database, the web-only migration, server-only secrets, staging Pocket Casts (`.net`), no relay, no billing changes and no changes to the existing PocketRadio database.
 
 ## What was done on 2026-10-18
 
@@ -25,9 +25,24 @@ The Pages page no longer has "Enable access policy". It has **Restrict previews*
 
 Wrangler's OAuth login cannot hold Access scopes (`wrangler login --scopes-list` has none), so the Access applications were created with a user API token (`cloudflare_pi`): Access Apps and Policies Edit, Access Organizations/IdP/Groups Read, Cloudflare Pages Edit, one account, the user's IP only, expiring 2026-10-26. It is kept in the ignored `.wrangler/cf-token`. Wrangler needs `CLOUDFLARE_ACCOUNT_ID` set with this token, because it has no account-read scope. Delete the token when the work is done. The Cloudflare MCP server (`mcp.cloudflare.com`) is also configured in pi and its docs search works; its write scopes were not used.
 
-## Remaining browser checks (the user's)
+## Browser checks (user-reported, 2026-10-18)
 
-Pairing, email and reload, both sign-outs, cross-browser session revocation and direct HTTPS playback in Chrome and Safari on the deployed origin, signed in through Access. Record Free CPU/limit errors; do not upgrade automatically. Not tested: a signed-in request to any Function, since Access blocked all unauthenticated probes. Whether the one-time-PIN login method is on for the Zero Trust organization was not checked.
+On `https://pocket-radio-web-m1-staging.pages.dev/`, signed in through Access, the user reported all of these as passing:
+
+1. Pairing.
+2. Reload (session persists).
+3. Stop playback.
+4. Both sign-outs, each stopping the audio.
+5. HTTP-only station rejected.
+6. Cross-browser session revocation.
+7. Direct HTTPS playback of Radio Paradise Global (`566476bf-d03c-4cac-b5d3-468f99a874b8`, `https://stream.radioparadise.com/world-etc-320`, AAC 320).
+
+What this does and does not show:
+
+- These are the user's reports. No log, trace or screenshot was captured, and the browsers, versions and listening time were not recorded. The browsers are presumed to be Chrome and Safari as the plan said; that was not confirmed.
+- It is a short listen, not the 60-plus-minute endurance run (E4).
+- It is not a rights clearance for Radio Paradise: the stream is HTTPS and played, and its terms were not reviewed.
+- Still unchecked: a signed-in request to each Function from outside a browser, Free-plan CPU or limit errors (none reported), Linux, production `.com` behavior, whether the Zero Trust one-time-PIN login is enabled, and that the deployed code is uncommitted work (see above).
 
 ---
 
