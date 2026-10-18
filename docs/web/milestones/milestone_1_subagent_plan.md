@@ -1,5 +1,13 @@
 # Web M1 subagent plan
 
+**Playback scope superseded 2026-10-15:** the user chose direct HTTPS playback
+([ADR 0006](../adr/0006-direct-https-playback-without-an-audio-relay.md)). The
+original relay slice/ownership and acceptance checks below are historical.
+Current lead-owned wiring uses ID-only station resolution and native audio;
+normal build/dev has no relay Worker/DO. The active milestone defines the
+remaining direct-playback checks. Existing provider, ownership, secret handling
+and no-deployment boundaries remain in force.
+
 **Status:** LOCAL IMPLEMENTATION VERIFIED — code and automated tests are ready;
 external experiments and the decision gate remain pending (2026-10-12).
 **Scope:** [M1 feasibility experiments](milestone_1.md), not the first-release UI.

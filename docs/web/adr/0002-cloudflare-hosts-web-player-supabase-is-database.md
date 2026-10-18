@@ -3,6 +3,11 @@
 Status: accepted (2026-10-11). Supersedes the Vercel hosting and Edge Function
 proxy in the original web M1 plan.
 
+The audio-relay rationale below was superseded on 2026-10-15 by
+[ADR 0006](0006-direct-https-playback-without-an-audio-relay.md). Pages/Functions
+and Supabase remain the hosting/database choice; the browser now receives audio
+directly and no relay Worker or Durable Object is required.
+
 Cloudflare Pages serves the web player. Cloudflare Workers, on the same origin,
 run all of its server code: Pairing and sessions, Pocket Casts API calls, reads
 and writes of user rows, and the stream relay. For the web player, Supabase is

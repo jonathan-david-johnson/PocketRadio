@@ -4,6 +4,38 @@ The browser surface of PocketRadio: our own web player for the Pocket Casts
 account and radio domain shared with iOS, menubar, console, and Roku. Navigation
 terms follow the iOS tab bar glossary in `docs/ios/architecture/configurable-tab-bar.md`.
 
+## Playback decision
+
+[ADR 0006](adr/0006-direct-https-playback-without-an-audio-relay.md) selects direct
+HTTPS audio in the browser, without an audio relay or native helper. Standalone
+Linux browser installation remains a product requirement; PWA implementation is
+planned for M3. HTTP-only playback, generic ICY titles and lyrics are unavailable
+in the initial path. This supersedes the original all-station relay plan.
+
+## Shared behavior tests
+
+The existing behavior-driven development (BDD) suite is documented in
+[Shared feature specs](../../contracts/features/README.md). Its
+Given/When/Then Gherkin scenarios live in `contracts/features/now_playing/`.
+The iOS harness runs 15 individually selectable scenarios against real app
+playback, scripted local inputs, and the system Now Playing record. See the
+[iOS test-boundary decision](../ios/adr/0003-carplay-output-test-boundary.md)
+and [harness operation and safety requirements](../../pocket-radio-ios/PocketCastsTests/Tests/CarPlayOutput/Harness/README.md).
+Do not launch that harness as an ordinary documentation or web-test check;
+it replaces playback and clears local Up Next.
+
+The shared scenarios describe behavior; each platform supplies its own steps.
+Web M1's unit/UI, database, and Worker tests do **not** yet execute these
+Gherkin specs. Passing them is not evidence of shared BDD coverage or iOS parity.
+
+Navigation has a separate planned fixture contract: `contracts/nav_layout/`
+for rendering in web M2, and `contracts/nav_layout/editor/` for editing in M7.
+These JSON fixtures do not exist yet and are not Gherkin scenarios. Both web
+and iOS should eventually run the same cases; iOS adoption is tracked in the
+[shared-layout test backlog](../todo.md). See the
+[web roadmap](README.md#milestones) and
+[layout test plan](../ios/architecture/configurable-tab-bar.md#11-test-plan).
+
 ## Language
 
 **Web player**:
@@ -39,8 +71,8 @@ Pocket Casts account.
 _Avoid_: "tab config", "nav settings".
 
 **Stream relay**:
-Our server-side pass-through that every radio station plays through on the Web
-player. It forwards the audio and reports the track titles embedded in it.
+The superseded server-side audio path. It forwarded audio and reported embedded
+track titles. Current direct playback does not use or deploy it.
 _Avoid_: "proxy" alone (the API proxy is a different thing), "pc-relay" (the
 existing Roku Edge Function).
 

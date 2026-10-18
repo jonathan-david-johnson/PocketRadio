@@ -23,6 +23,11 @@ password also never passes through our server.
 
 ## Consequences
 
+- Device-code authorization, polling and refresh use the `tv` scope, matching
+  the fork's tvOS Pairing caller. The device authorization endpoint rejects the
+  password-login `mobile` scope with either JSON or protobuf. Local JSON code
+  issuance and pending polling work; approved identity, API permissions and
+  Cloudflare execution still require M1 validation.
 - The first sign-in, and each sign-in after the session expires, needs the
   phone. Sessions are rolling 90 days: each visit extends the expiry. The web
   player offers **Sign out** and **Sign out everywhere**; the latter ends every

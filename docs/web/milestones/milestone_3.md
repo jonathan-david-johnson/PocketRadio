@@ -1,7 +1,7 @@
 # Web M3 — Streams, the player, and the installable app
 
 **Status**: PLANNED
-**Depends on**: Web M1 (relay feasibility, Cloudflare plan), Web M2 (shell, `curated_stations`); web ADR 0004
+**Depends on**: Web M1 (direct HTTPS feasibility, Pages plan), Web M2 (shell, `curated_stations`); web ADR 0006
 **Required by**: Web M4, M5
 
 ## Where the work happens
@@ -14,28 +14,31 @@
 | Shell changes | None expected |
 
 **Goal:** Make Streams work and give the web player its player. Streams shows
-Favorites and Browse, as on iOS. Every station plays through the stream relay
-(ADR 0004), which also supplies live Track titles. A persistent player bar
-keeps playing across navigation. A Now Playing view shows the current Track
-and, for KCRW and KEXP, the station tracklist. Media keys and macOS Now Playing
-control playback, and the browser can install the web player as an app.
+Favorites and Browse, as on iOS. HTTPS stations play directly in the browser
+(ADR 0006), with HTTP-only entries clearly unsupported and no relay/native
+helper. A persistent player bar keeps playing across navigation. Now Playing
+shows station information; Track details/tracklists require a supported,
+permitted metadata source and must not pretend to observe the audio timeline.
+Media keys control playback, and supported browsers can install the web player,
+including Chromium-based browsers on Linux.
 
-**User checkpoint:** Install the web player from Chrome or Safari. Open
+**User checkpoint:** Install from Chromium on Linux without another package or
+helper, and check Safari installation separately on macOS. Open
 Streams, play a favorite, and leave the window in the background. Press the
 keyboard's play/pause key: it pauses. Control Center's Now Playing shows the
-station and Track. Search Browse for a station, favorite it, and see it in the
+station and any supported metadata. Search Browse for a station, favorite it, and see it in the
 iPhone's Streams Favorites.
 
 ## Scope
 
-- **Relay (`functions/api/relay/`).** Hardens the M1 spike. Takes a station
-  id, never a URL. Resolves curated ids from `curated_stations` and other ids
-  through radio-browser by UUID. Requires a session. Strips ICY metadata
-  blocks, and sends titles with the relay's byte position over Server-Sent
-  Events on a paired channel.
-- **Track timing (`src/player/trackClock.ts`).** Applies a received title
-  when the listener reaches it: `now + (audio.buffered.end − audio.currentTime)`
-  at receipt.
+- **Direct resolution/playback.** Harden M1's station-ID lookup; resolve future
+  curated IDs from the actual schema and other IDs through radio-browser.
+  Return validated public HTTPS URLs without server audio fetches, automatic
+  upgrades or relay fallbacks. Keep unsupported HTTP visible in Favorites/Browse.
+- **Metadata availability.** No generic ICY/title channel exists. Investigate
+  station-supported feeds only with verified permission and CORS. Label feed
+  observations separately from audio-aligned Track state; do not infer track
+  timing merely by adding the browser's buffered duration to feed arrival.
 - **Favorites (`functions/api/favorites`).** List, add, remove, and reorder if
   iOS stores an order, against `radio_favorites`, with the server-set user id.
   Station metadata comes from radio-browser in the browser (CORS allows any
@@ -45,8 +48,9 @@ iPhone's Streams Favorites.
   Favorite toggle on each row.
 - **Player (`src/player/`).** One `<audio>` element owned above the router.
   Player bar with artwork, Track or station, and play/pause. Now Playing view
-  with the Track and the KCRW/KEXP tracklist, fetched from the browser (CORS
-  allows any origin). Port the parsing from iOS `RadioTracklistService`.
+  with station information and optional supported metadata. KCRW/KEXP feeds need
+  permission/CORS checks and explicit availability/timing semantics before use;
+  port parsing fixtures from iOS `RadioTracklistService`, not timing assumptions.
 - **Media Session (`src/player/mediaSession.ts`).** Metadata (station, Track,
   artwork) and play/pause/stop handlers.
 - **Installable app.** Web app manifest, icons, and a service worker that
@@ -54,21 +58,21 @@ iPhone's Streams Favorites.
 
 ## Behaviors to test (red -> green, one at a time)
 
-1. ICY stripping: a fixture stream with known `icy-metaint` produces the exact
-   audio bytes and the titles in order, including a metadata block split
-   across chunks.
-2. The relay rejects a request without a session, an unknown station id, and
-   any URL-shaped id.
-3. A title received with N seconds buffered is applied N seconds later; a
-   newer title cancels a pending older one; a station change clears pending
-   titles.
+1. A validated HTTPS URL is the audio source; no server audio fetch, SSE,
+   metadata-only stream or relay fallback occurs. HTTP-only entries explain why
+   they cannot play. Stop/switch/sign-out/unmount release the old source.
+2. Resolution rejects missing sessions, unknown IDs, URL-shaped input and unsafe
+   initial stream addresses; DNS/redirect limitations remain explicit.
+3. Unsupported metadata shows station-only information and no lyrics. A station
+   change clears old metadata; late feed responses cannot revive it.
 4. Favorites add and remove round-trip through the Worker and are visible in a
    direct `radio_favorites` query for that user only.
 5. Navigating between Destinations doesn't interrupt playback.
 6. Media Session metadata updates on station and Track change; its play/pause
    handlers drive the player.
 7. The manifest and service worker pass an installability check (Playwright
-   plus a manifest audit); the service worker never responds to `/api/*`.
+   plus a manifest audit), including Chromium on Linux without a helper; the
+   service worker never caches/intercepts audio or responds to `/api/*`.
 8. KCRW and KEXP tracklist parsers match iOS `RadioTracklistService` on the
    same captured payloads.
 
@@ -84,12 +88,13 @@ iPhone's Streams Favorites.
 - **Docs this changes or makes stale:** `docs/web/README.md` (features);
   `docs/web/CONTEXT.md` (player terms such as Now Playing, if needed).
 - **Questions this must settle:** Does `radio_favorites` carry an order that
-  iOS respects? Does the web need it? Which radio-browser mirror does the
-  relay use, and what happens on failover?
+  iOS respects? Does the web need it? Which lookup mirror is used on failover?
+  Which browsers install on Linux, and which metadata sources are actually
+  permitted and available without an audio relay?
 
 ## Hand-performed interactions
 
 - [ ] Install from Chrome and from Safari ("Add to Dock") — the app opens in its own window
 - [ ] Press the keyboard play/pause key with the window in the background — playback toggles
-- [ ] Open Control Center Now Playing — station, Track, and artwork appear and its controls work
+- [ ] Open system Now Playing — station and available artwork/metadata appear; unsupported Track details are not invented
 - [ ] Toggle a favorite in Browse — it appears in Favorites, and on the iPhone after refresh

@@ -1,7 +1,7 @@
 # Web M5 — Podcasts, Up Next, and episode playback
 
 **Status**: PLANNED
-**Depends on**: Web M1 (E3: Pocket Casts JSON calls), Web M3 (player, relay)
+**Depends on**: Web M1 (E3: Pocket Casts JSON calls), Web M3 (direct HTTPS player)
 **Required by**: Web M6
 
 ## Where the work happens
@@ -33,9 +33,9 @@ and see it at the bottom of Up Next on the phone.
   (read and change), subscriptions, a podcast's episodes, show notes, episode
   position and played state, and skip settings. Use the JSON or protobuf
   decision from M1 E3. Tokens come from `pc_tokens`; refresh on 401.
-- **Episode audio.** `https://` enclosure URLs play directly. `http://` ones
-  go through the relay by episode UUID, and the Worker resolves the URL from
-  Pocket Casts (ADR 0004).
+- **Episode audio.** Validated `https://` enclosure URLs returned by Pocket
+  Casts play directly. `http://`-only audio is unsupported; explain this rather
+  than rewriting the scheme or invoking a relay (ADR 0006).
 - **Player (`src/player/`).** Seek bar, skip back and forward, speed, and
   remaining time. Saves position every 30 seconds while playing, plus on pause,
   seek, and page hide (`sendBeacon`). Media Session gains seek and skip
@@ -59,8 +59,8 @@ and see it at the bottom of Up Next on the phone.
    is marked played and removed.
 5. Skip intervals come from the user's Pocket Casts settings, with menubar
    defaults if they're missing.
-6. `http://` episode audio plays through the relay; a URL-shaped id is
-   rejected.
+6. HTTPS episode audio uses the enclosure directly; HTTP-only audio shows an
+   unsupported state with no backend fetch or relay fallback.
 7. An expired access token is refreshed once and the request retried; a failed
    refresh signs the user out with a message.
 8. Show notes render without running scripts or loading remote trackers.

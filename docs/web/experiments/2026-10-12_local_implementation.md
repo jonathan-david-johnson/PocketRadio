@@ -1,5 +1,11 @@
 # Web M1 local implementation evidence
 
+**Scope update, 2026-10-15:** [ADR 0006](../adr/0006-direct-https-playback-without-an-audio-relay.md)
+replaces the relay with direct HTTPS browser playback. Relay/DO/ICY evidence and
+instructions below are historical, not active capabilities or evidence of direct
+listening. Pairing/session/API findings remain applicable; the active milestone
+lists the new playback checks. No cloud deployment was performed.
+
 **Result:** local contracts and runtime integration pass. E1–E6 live acceptance
 and the milestone's decision gate remain open. No production deployment,
 Supabase migration application, live audio connection, or phone action occurred.

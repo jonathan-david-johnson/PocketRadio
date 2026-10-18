@@ -1,6 +1,8 @@
 # Every station plays through the stream relay
 
-Status: accepted (2026-10-11)
+Status: superseded (2026-10-15) by
+[ADR 0006 — direct HTTPS playback](0006-direct-https-playback-without-an-audio-relay.md).
+The text below preserves the original 2026-10-11 decision, not the current design.
 
 The web player plays every radio station through a Cloudflare Worker relay,
 including stations that already serve `https://`. The relay requests the

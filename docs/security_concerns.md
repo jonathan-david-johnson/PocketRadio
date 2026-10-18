@@ -14,12 +14,14 @@
 
 **Risk assessment**: Low. Exposed data is radio station favorites and self-reported donation amounts — not financial data, credentials, or PII beyond what PC already holds. Requires knowing a target's UUID (not publicly exposed).
 
-## Web credentials and relay
+## Web credentials and direct playback
 
 The web implementation follows [Web ADR 0002](web/adr/0002-cloudflare-hosts-web-player-supabase-is-database.md)
 and [Web ADR 0003](web/adr/0003-sign-in-by-phone-pairing.md). The additive migration
-`supabase/migrations/20261011000008_web_auth.sql` is written and tested in an
-isolated PostgreSQL/WASM database, **not applied to Supabase**.
+`supabase/migrations/20261011000008_web_auth.sql` was applied with user approval
+to the linked PocketRadio Supabase project on 2026-10-12. Live metadata checks
+confirmed RLS and revoked client privileges; forged anon-key reads against all
+five secret tables returned permission denied.
 
 - `pc_tokens`, `web_sessions`, `web_pairings`, `web_account_revocations`, and
   `web_relays` enable RLS without client policies. Table privileges and RPC
@@ -28,25 +30,43 @@ isolated PostgreSQL/WASM database, **not applied to Supabase**.
 - Workers keep tokens and device codes server-side. Sessions and browser-bound
   Pairing handles are hashed. Origin checks, poll leases, account revocation
   fences, and atomic sign-out protect approval and refresh races.
-- Pages and the separate relay Worker each need server-only database secrets.
-  Service-role compromise still exposes the secret tables. No keys are bundled
-  in the page; production secret configuration has not been verified.
-- Relay admission limits an account to two active relays and five starts per
-  minute. Nonrolling session checks fail closed and bound ongoing delivery
-  after revocation to 15 seconds in deterministic tests; deployed cancellation
-  and scheduling still need verification. Ended object state expires after
-  24 hours. These controls are not a global cost or denial-of-service guarantee.
-- The restricted spike resolves radio-browser UUIDs and accepts only exact
-  `ice1.somafm.com` / `ice2.somafm.com` hosts, with each redirect revalidated.
-  It trusts operator DNS, not general DNS/IP pinning. Arbitrary Browse hosts
-  must stay blocked until a reliable egress defense is approved.
-- Cloudflare's current terms do not explicitly establish permission for this
-  continuous third-party audio relay. Cloudflare clarification and station
-  redistribution rights are production gates, separate from implementation
-  tests. See [Web ADR 0004](web/adr/0004-every-station-plays-through-the-stream-relay.md).
+- Pages needs server-only database secrets. Service-role compromise still
+  exposes secret tables. No keys are bundled in the page (checked in the build
+  artifacts on 2026-10-18). The private staging Pages project has the staging
+  database's three secrets in its production environment only, behind email-only
+  Cloudflare Access; a production deployment's secrets have not been configured
+  or verified. Retained legacy Worker secrets are not
+  required or used by normal direct playback.
+- [ADR 0006](web/adr/0006-direct-https-playback-without-an-audio-relay.md) replaces
+  the audio relay with station-to-browser HTTPS playback. A bounded fixed
+  radio-browser lookup returns a public URL, never station audio. It does not
+  forward app credentials or arbitrary client-supplied URLs. Old relay/SSE/stop
+  routes return 410 without network or binding access; no DO binding remains.
+- Initial public-looking DNS URLs are checked in browser/server and restricted
+  to HTTPS/443, without credentials, literal IPs, local/reserved names or
+  fragments. This is not DNS pinning or validation of browser redirects.
+  The station sees the listener's IP. Browser network/security/codec rules still
+  apply. Suppress referrers and do not attach app secrets to media requests.
+- Stop/switch/error/local sign-out/unmount release the audio source. Global
+  session revocation does not revoke a public URL already playing in another
+  browser. Historical relay admission, 15-second revocation and lifetime
+  controls are not guarantees of the direct path.
+- The prior Cloudflare continuous-relay classification was unresolved, not a
+  finding that personal listening or every private relay is unlawful. That
+  question is no longer an audio deployment gate because this backend carries
+  no audio. It must be revisited if a relay is ever proposed again.
+- [SomaFM's terms](https://somafm.com/legal/tos.html) restrict new third-party
+  clients and embedding/restreaming. Direct playback is not an established
+  exemption from client/metadata terms; no permission has been obtained. Use
+  permitted test sources. The earlier relay smoke check proves no rights.
+- Cloud deployment remains separately gated on private access, an isolated
+  database and explicit approval. Secret tables are not environment-namespaced;
+  do not share staging/production token stores. No cloud resource or already
+  applied database relay table was deleted as part of the playback switch.
 
-The earlier shared-table discussion above describes the original MVP risk;
-web secret storage must never inherit that header-trust design. Migration
-`20260512000005_reenable_rls.sql` re-enables shared-table RLS in source, but
-still trusts the caller's UUID header. This document does not establish which
-migrations are deployed to the live database.
+The earlier shared-table discussion above describes the direct-client risk;
+web secret storage must never inherit that header-trust design. The linked
+project's migration history includes `20260512000005_reenable_rls.sql`, which
+still trusts the caller's UUID header. This does not establish that every
+shared-table policy is identical to source; the live privilege checks here
+were limited to the new web secret tables.

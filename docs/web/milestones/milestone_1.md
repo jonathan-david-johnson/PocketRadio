@@ -1,106 +1,161 @@
-# Web M1 — Prove pairing, the stream relay, and the Cloudflare deploy
+# Web M1 — Prove Pairing, direct playback and the Cloudflare deploy
 
-**Status**: IN PROGRESS — setup committed as web `9ea6c56`; M1 code on `feature/m1-spikes` (2026-10-11)
-**Depends on**: Web ADRs 0001–0005 (planning session 2026-10-11)
-**Required by**: Web M2–M7
+**Status:** IN PROGRESS — scope updated 2026-10-15 by the user's direct-playback
+decision ([ADR 0006](../adr/0006-direct-https-playback-without-an-audio-relay.md)).
+Setup is web `9ea6c56`; implementation is on `feature/m1-spikes`.
+**Depends on:** web ADRs 0001–0006, with 0006 superseding the relay decision.
+**Required by:** Web M2–M7.
 
 ## Where the work happens
 
-| | |
+| Work | Location |
 |---|---|
-| Plan | Shell `main`: this file, experiment reports in `docs/web/experiments/` |
-| Code | `pocket-radio-web`, branch `feature/m1-spikes` from the first `main` commit (empty project setup: Vite + React + TS, Pages Functions, Vitest, Makefile, `AGENTS.md`, one-line `CLAUDE.md`) |
-| Worktree | `pocket-radio-web/` |
-| Shell changes | Additive: a `supabase/migrations/` file for the web-only secret tables, `web-*` delegating targets in the top-level `Makefile` |
+| Plan, evidence, additive database contract | Shell `main`; `docs/web/` and the existing web migration |
+| Code | `pocket-radio-web/`, branch `feature/m1-spikes` |
+| Cloud operations | User approved private `pocket-radio-web-m1-staging` Pages/database setup and upload on Free only; no billing changes or existing database changes |
 
-**Goal:** Prove the three things the web player can't work without, before
-building any screens. Pairing must sign a browser in to Pocket Casts through
-our Worker. The stream relay must play a continuous radio stream to an
-`https://` page and report its track titles. Pages must deploy the page and
-its server code together on one origin, with a session cookie that works in
-Safari. Each experiment confirms or overturns an accepted ADR.
+## Goal and user checkpoint
 
-**User checkpoint:** Open the `*.pages.dev` address in Safari and in Chrome.
-Scan the QR code with the PocketRadio iPhone app and approve. The page now
-shows your Pocket Casts email. Start a plain `http://` station that sends ICY
-titles (for example SomaFM Groove Salad's `http://` MP3 stream). It plays
-through the relay, and the title on the page changes when the song changes.
-Reload: you are still signed in.
+Prove browser-bound phone Pairing and sessions on one Pages origin, selected
+Pocket Casts API formats, and direct HTTPS station playback. Do not build M2–M7
+screens or require a native helper. Standalone Linux PWA installation remains
+M3 work, not an M1 claim.
+
+On the eventual approved Pages test site, pair from the phone, see the account
+email, reload, and exercise both sign-outs in Safari and Chrome. Load a permitted
+HTTPS station by ID and play it through the browser's native audio element.
+Confirm stop/switch/error cleanup. An HTTP-only station must show an unsupported
+message without fallback. No generic track title or lyrics are expected.
 
 ## Scope
 
-- **Repo setup (`main`, before the branch).** `pocket-radio-web` has no
-  commits. First commit: Vite + React + TypeScript, `functions/` for Pages
-  Functions, Vitest, `wrangler` config, a `Makefile` (`dev`, `test`, `deploy`),
-  `AGENTS.md`, and a `CLAUDE.md` containing only `@AGENTS.md`. Then `make hooks`
-  from the shell.
-- **Supabase (shell).** Migration for the web-only secret tables:
-  `web_sessions` (hashed session id, `user_uuid`, `expires_at`) and
-  `pc_tokens` (`user_uuid`, Pocket Casts refresh and access tokens, expiry).
-  RLS enabled with **no** anon-key policy (ADR 0002). The Worker uses the
-  service-role key, stored as a Cloudflare secret.
-- **Experiment code** lives in `functions/api/` and a bare test page. It is
-  spike-quality and may be rewritten in M2. Its findings outlive it.
+- Retain Vite/React/TypeScript and same-origin Pages Functions. Supabase remains
+  database-only. Secret tables have RLS and no client policies; only the server
+  holds Pocket Casts/database credentials.
+- Retain browser-bound expiring Pairing, rolling 90-day sessions, sign-out and
+  sign-out everywhere. Derive identity from verified Pocket Casts responses.
+- Resolve a radio-browser UUID server-side through the fixed, bounded metadata
+  endpoint. Return a validated public HTTPS URL; never open/probe audio from the
+  backend. The browser validates again and uses that URL as its audio source.
+- Do not upgrade HTTP blindly, attach a relay fallback, open a second metadata
+  stream or display guessed track titles. Current direct URL policy also
+  rejects credentials, local/literal-IP hosts, fragments and nondefault ports.
+- Retire relay HTTP/SSE/stop entry points with 410. Remove normal DO/Worker
+  bindings, build and dev wiring. Retain legacy offline fixtures and existing
+  applied SQL until deliberate cleanup; no database deletion is authorized.
+- Keep all experiments bounded and sanitized. Do not call write-capable sync
+  endpoints without approval.
 
-## Hypotheses (not yet observed)
+## Current evidence and its limits
 
-- H1. `device/authorize` and the device-code `user/token` grant accept
-  `application/json` from a Worker. The response includes `user_code`,
-  `verification_uri_complete`, and, after approval, tokens whose `uuid`
-  matches iOS `ServerSettings.userId`.
-- H2. The fork's `DeviceApproveView` can be reached from a QR code through the
-  fork's `pktc://` scheme, routed by JLRoutes `/pair`. A `pocketcasts.com`
-  universal link would open Automattic's app or website instead.
-- H3. Authenticated Pocket Casts calls from a Worker take
-  `Authorization: Bearer <access token>` and speak JSON on the paths M2–M6
-  need.
-- H4. A Worker can relay an `http://` ICY stream for 60 minutes or more without
-  being cut off. Piping uses well under the Workers CPU limit, and ICY
-  stripping adds no audible glitches.
-- H5. A first-party, httpOnly, `SameSite=Lax` session cookie set by a Pages
-  Function survives reload in Safari and Chrome.
+[Local results](../experiments/2026-10-12_live_pairing_setup.md) record successful
+staging phone approval, browser email/reload, both sign-outs, and three
+authenticated 200 / JSON-object probes. The phone uses `.net`; keep
+`PC_API_ENVIRONMENT=staging` while testing with it. UUID comparison with the
+phone, live refresh, full response schemas and production `.com` behavior remain
+open.
+
+[Direct implementation evidence](../experiments/2026-10-15_direct_playback.md)
+records passing unit/UI, SQL and offline Pages tests and a Pages-only local
+restart. The user subsequently reported “played” after receiving the Radio
+Paradise Global UUID: local direct playback has smoke evidence in **Chrome and
+Safari on macOS**, as confirmed by the user. The user also reported 20 minutes
+of successful playback; the browser for that run was not separately identified.
+Browser/OS versions, 60+ minute endurance, station-switch/error behavior and the
+remaining live checks are not established. The user confirmed that both
+**Stop playback** and local
+**Sign out / cancel Pairing** stop the audio. Reload after local sign-out showed
+**Ready to pair**, also confirmed by the user. The user reported all these
+checks passed in Safari on macOS as well; deployed-origin checks remain pending.
+
+**Deployed staging (2026-10-18).** The app is on the private `pocket-radio-web-m1-staging`
+Pages project behind two email-only Access applications, with the staging
+database's secrets installed (production environment only). The user reported
+Pairing, reload, Stop, both sign-outs, explicit HTTP-only rejection,
+cross-browser session revocation and Radio Paradise Global playback all passing
+there. These are user reports without a captured trace or browser/version
+record, on a short listen. Signed-in requests to each Function from outside a
+browser were not made, and the deployed code was uncommitted work when
+uploaded. See the [staging record](../experiments/2026-10-16_staging_deployment.md).
+
+The earlier user-reported relay audio/title smoke check is historical. It does
+not prove direct playback or rights to use that station. The
+[terms review](../experiments/2026-10-15_cloudflare_terms_and_deployment_plan.md)
+found SomaFM client/restreaming restrictions and an unresolved Cloudflare relay
+classification. Direct playback removes the server audio path, not station terms.
 
 ## Experiments
 
-Record each result in `docs/web/experiments/YYYY-MM-DD_<topic>.md`.
+Stable experiment IDs are retained so old evidence remains interpretable.
+E4/E5's former relay criteria are **replaced by the user decision**, not passed.
 
-| # | Question | Method | Pass criterion | Feeds |
-|---|---|---|---|---|
-| E1 | Can a Worker complete Pairing? | `POST /api/pair/start` calls `device/authorize` with JSON; the page shows a QR code of `pktc://pair?user_code=…` and the human-readable code; `GET /api/pair/poll` polls the device-code grant until approved | Worker holds Pocket Casts tokens, and the derived `uuid` equals the iPhone's `ServerSettings.userId` | ADR 0003 stands, or fall back to email/password |
-| E2 | Does the fork approve from a QR code? | Scan with the iPhone camera, with and without Automattic's app installed; also try `verification_uri_complete` | Fork's approval screen opens with the code pre-filled and approval completes | QR format; whether ADR 0003 needs a manual-entry path |
-| E3 | Which Pocket Casts calls work as JSON with a bearer token? | From the Worker call `up_next/sync` (or the web player's equivalent), `user/podcast/list`, `user/podcast/episodes`, `user/playlist/list`, `sync/update_episode`, `user/named_settings` | Each returns usable JSON, or the report names which need protobuf (reuse `supabase/functions/pc-relay/protobuf.ts`) | M5 and M6 API client design |
-| E4 | Can the relay play a station for an hour and report titles? | `GET /api/relay/:stationId` resolves the URL server-side (ADR 0004), sends `Icy-MetaData: 1`, strips metadata blocks, and pushes titles over Server-Sent Events. Run 60+ minutes on an `http://` station, then on an `https://` station | No disconnect, no audible glitch at metadata boundaries, CPU per request recorded and under the plan limit, titles correct | ADR 0004 stands; Workers Free or Paid plan |
-| E5 | Is relaying audio allowed? | Read Cloudflare's current Service-Specific Terms and Workers terms on proxying audio | A cited clause permits it, or a named risk with a fallback | ADR 0004 stands, or narrows to `http://` only |
-| E6 | Does the session work on our own origin? | Pages Function sets the session cookie after E1; reload; Sign out; Sign out everywhere; a forged `x-user-uuid` request with the anon key against `pc_tokens` | Signed in after reload in Safari and Chrome; both sign-outs work; forged read returns zero rows | ADR 0002's single-origin and secret-table claims |
+| ID | Question and method | Pass criterion |
+|---|---|---|
+| E1 | Complete phone Pairing through Pages, then verify server-derived identity | Approved grant creates one bound browser session; UUID comparison with iOS recorded without exposing it |
+| E2 | Scan with the fork, check prefill/cold/warm routing, and assess official-app scheme collisions/manual fallback | Actual tested routing behavior and limitations recorded |
+| E3 | Test read-only Pocket Casts responses and identify JSON/protobuf needs; keep sync writes separately approved | Status, format and needed schema/permission evidence per endpoint; live refresh separately demonstrated |
+| E4 | Resolve a permitted HTTPS station, use its URL directly in the browser, and observe 60+ minutes; test stop/switch/errors and HTTP rejection | Audio plays directly, cleanup works, HTTP is unsupported, and no server audio or title-subscription path exists; duration/codec/browser limitations recorded |
+| E5 | Verify the direct-only architecture and review station/client restrictions | No relay deployment/binding or fallback; no unsupported permission claims; permitted test source selected |
+| E6 | Validate Pages cookies in Safari/Chrome, reload, both sign-outs, forged headers and database client denial | Session behavior and denial evidence on the deployed isolated origin |
+
+Sign-out everywhere revokes web sessions, not the public station URL already
+loaded in another browser. Local sign-out must stop this tab's audio. Do not
+reuse relay delivery/revocation timing guarantees.
+
+## Deployment gate
+
+Keep a dedicated staging database and private Pages test project. The current
+direct design needs no relay Worker or DO; the prior plan's later relay/audio
+phase is superseded by ADR 0006. Confirm account, isolation, free capacity/costs,
+testers, secrets and the exact upload target before asking for scoped approval.
+Do not reset the existing PocketRadio database or silently switch its token
+store between `.net` and `.com`.
+
+The user approved the private Free-only setup and upload. New Pages and
+Supabase projects named `pocket-radio-web-m1-staging` now exist. Supabase's Free
+plan was verified; creation at `nano` was accepted, only web migration
+`20261011000008` was applied, and all five table/18 RPC anon-denial checks pass.
+The existing database was not changed. The app has **not** been uploaded and no
+Cloudflare secrets are installed.
+
+Wrangler OAuth lacks Access-management and billing-read permissions. Complete
+the dashboard privacy setup for primary and wildcard preview hosts and confirm
+Workers Free before uploading. Stop at any payment requirement. See
+[the staging provisioning checkpoint](../experiments/2026-10-16_staging_deployment.md)
+for completed actions and exact resume steps. No billing changes occurred.
 
 ## Decision gate
 
-| Decision | Evidence |
-|---|---|
-| Keep Pairing as the only sign-in (ADR 0003), or add email/password | E1, E2 |
-| QR payload: `pktc://` link, Pocket Casts URL, or code only | E2 |
-| JSON-only API client, or JSON plus a protobuf codec | E3 |
-| Keep relaying every station (ADR 0004), or relay `http://` only | E4, E5 |
-| Cloudflare plan: Free or Workers Paid | E4 |
-| Session design holds (ADR 0002) | E6 |
+- Pairing-only sign-in and its routing behavior: E1/E2.
+- JSON-only or mixed JSON/protobuf client: E3.
+- Direct HTTPS playback, unsupported HTTP and unavailable generic titles:
+  **user accepted**, ADR 0006; local implementation and user-reported playback
+  smoke verified, remaining E4 live checks pending.
+- Pages plan choice based on API usage/CPU, not audio proxy bandwidth or DOs.
+- Session/security design: E6.
+- Remaining risks and revised M3/M4/M5 expectations recorded before closure.
 
 ## Out of scope
 
-- Every screen, the Layout, Streams UI, lyrics, podcasts, and playlists (M2–M7).
-- KCRW alignment, ACRCloud, remote control, and smart playlists (later; see
-  `docs/web/README.md`).
-- A custom domain.
+M2–M7 screens, installable PWA implementation, a native helper, generic ICY
+extraction, metadata/lyrics integrations, a replacement audio relay, custom
+domains, KCRW alignment, ACRCloud and destructive schema cleanup.
 
 ## Docs impact
 
-- **Docs this changes or makes stale:** `docs/web/README.md` (repo no longer
-  "not scaffolded"); shell `AGENTS.md` platform table (web row);
-  `docs/security_concerns.md` (web secret tables, relay); top-level `Makefile`
-  web section; web ADRs 0002–0004 if any experiment fails.
-- **Questions this must settle:** the six decisions in the Decision gate.
+- **Docs this changes or makes stale:** `docs/web/README.md` (current state and roadmap rows), `docs/web/CONTEXT.md` (glossary), `docs/security_concerns.md` (web credentials and direct playback), web ADR 0004 (already marked superseded by 0006).
+- **Questions this must settle:** which stations the web player may play and under what terms (rights review, now only for the stations chosen for testing); the Pocket Casts schema and JSON-versus-protobuf decision (E3); whether production `.com` Pairing behaves like staging `.net`; how the phone's Pocket Casts account UUID is compared with the web session's without exposing it (E1). Each may become an ADR at close.
 
-## Hand-performed interactions
+## Hand-performed checks still to record
 
-- [ ] Scan the QR code with the iPhone camera — the fork's approval screen opens with the code filled in
-- [ ] Approve on the phone — the browser signs in within a few seconds
-- [ ] Listen through one song change on the relay — no audible gap, and the title updates
+- [x] Local direct HTTPS playback smoke after the switch — user reported “played”
+- [ ] Timed 60+ minute direct HTTPS playback
+- [x] Local **Stop playback** audibly stops the direct stream — user confirmed
+- [x] Local sign-out stops direct audio; reload remains signed out (**Ready to pair**) — user confirmed
+- [x] Explicit HTTP-only rejection on the deployed origin — user reported 2026-10-18
+- [ ] Station-switch and error behavior in the tested browsers
+- [x] Pairing, reload, both sign-outs and cross-browser session revocation on the deployed origin — user reported 2026-10-18 (which browsers and versions were not recorded; the plan was Safari and Chrome)
+
+Close this milestone only through the close-milestone skill after its remaining
+evidence and decision gate are accepted. The prior relay smoke check is not a
+substitute for the new direct-playback checks.

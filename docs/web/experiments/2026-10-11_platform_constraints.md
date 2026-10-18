@@ -1,8 +1,22 @@
 # Web M1 platform constraints — E2/E5 discovery
 
+**Scope update, 2026-10-15:** [ADR 0006](../adr/0006-direct-https-playback-without-an-audio-relay.md)
+replaces the relay with direct HTTPS browser playback. Relay/DO/ICY evidence and
+instructions below are historical, not active capabilities or evidence of direct
+listening. Pairing/session/API findings remain applicable; the active milestone
+lists the new playback checks. No cloud deployment was performed.
+
 **Status: source discovery complete; E2 camera behavior and E5 relay permission remain unresolved.** The fork contains the proposed Pairing route. Cloudflare supports a cross-isolate title channel through a Durable Object, but Pages must bind an object deployed by a separate Worker. Neither runtime capability nor general content-hosting language establishes permission for continuous third-party audio relaying.
 
 Access date for every public source below: **2026-10-11 UTC**. Scope: read-only inspection plus this report; no deployment, phone/app launch, audio connection, credentials, migration application, or ADR changes.
+
+**Follow-up, 2026-10-15:** [the later terms/deployment review](2026-10-15_cloudflare_terms_and_deployment_plan.md)
+adds explicit SomaFM restrictions and Cloudflare's proxy-service classification
+question. It also updates runtime-update draining to the current documented
+20-minute maximum and confirms the now-documented Pages `limits` setting. Use
+that review for deployment decisions; this report preserves the earlier findings.
+Local staging phone approval was subsequently confirmed in the
+[live results](2026-10-12_live_pairing_setup.md).
 
 ## E2: what the iOS source establishes
 
