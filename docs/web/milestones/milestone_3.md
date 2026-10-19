@@ -35,6 +35,9 @@ iPhone's Streams Favorites.
   curated IDs from the actual schema and other IDs through radio-browser.
   Return validated public HTTPS URLs without server audio fetches, automatic
   upgrades or relay fallbacks. Keep unsupported HTTP visible in Favorites/Browse.
+- **Listener-facing errors.** M1's station errors show developer text, for
+  example "Request failed (400). Check server bindings and the experiment
+  notes." Replace each with a message a listener can act on.
 - **Metadata availability.** No generic ICY/title channel exists. Investigate
   station-supported feeds only with verified permission and CORS. Label feed
   observations separately from audio-aligned Track state; do not infer track

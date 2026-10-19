@@ -20,7 +20,7 @@ follows the Layout the user sets on iOS. Terms are defined in
 | Navigation | Sidebar that mirrors the iOS tab settings list, with the Bar line | [ADR 0005](adr/0005-sidebar-mirrors-the-ios-tab-settings-list.md) |
 | Tests | Vitest, Wrangler local runtime, Playwright; shared fixtures in `contracts/nav_layout/` | — |
 
-How the pieces communicate, with a diagram: [architecture/communication.md](architecture/communication.md).
+How the pieces communicate, with a diagram: [architecture/communication.md](architecture/communication.md). The Pocket Casts calls: [architecture/pocket-casts-api.md](architecture/pocket-casts-api.md). Staging and deploying: [architecture/deployment.md](architecture/deployment.md).
 
 ## Security model
 
@@ -44,31 +44,39 @@ is extractable from the iOS binary. So:
 ## Repo
 
 `pocket-radio-web/` — own git repo (`jonathan-david-johnson/pocket-radio-web`).
-Scaffold committed on `main` as `9ea6c56`; M1 experiments live on
-`feature/m1-spikes`. Local staging Pairing, reload, both sign-outs and three
-JSON-object probes have user evidence. The direct HTTPS path replaces the
-historical relay smoke test; the user reported successful direct playback with
-the supplied Radio Paradise Global UUID. The app is deployed to a private
-staging Pages project (`pocket-radio-web-m1-staging`) behind email-only
-Cloudflare Access, with a separate Free staging database, and the user reported
-Pairing, both sign-outs, cross-browser revocation, HTTP rejection, a 25+ minute
-direct playback run and an invalid-ID error passing there. The user chose
-protobuf for Pocket Casts account data (ADR 0007); the list endpoints also
-answered JSON in M1 ([formats and terms](experiments/2026-10-18_api_formats_and_station_terms.md)).
-Production cookies, live token refresh and QR routing remain untested. Radio
-Paradise is the permitted test station; no written permission exists.
+M1 is merged into its `main` (Pairing, sessions, direct HTTPS playback). M2 is
+on `feature/m2-shell-nav`. A private staging Pages project
+(`pocket-radio-web-m1-staging`) runs behind email-only Cloudflare Access with a
+separate Free staging database; see [deployment](architecture/deployment.md).
+What M1 verified, and how, is in
+[Verified in M1](architecture/communication.md#verified-in-m1).
 
-Normal build/dev/Pages configuration has no relay Worker or Durable Object.
-Legacy relay entry routes return 410; retained relay source/tests are offline
-history, not a deployed capability. Existing database relay tables were not
-deleted. The authenticated station resolver uses radio-browser UUIDs;
-`curated_stations` and the finished Streams UI remain future work.
+Normal build/dev/Pages configuration has no relay Worker or Durable Object. The
+four old relay routes return 410. The relay's source and tests were deleted;
+its SQL tables remain in the applied migration. The authenticated station
+resolver uses radio-browser UUIDs; `curated_stations` and the finished Streams
+UI remain future work.
+
+## Known risks after M1
+
+M1's checks were mostly user-reported, with no browser versions recorded; see
+[Verified in M1](architecture/communication.md#verified-in-m1). Still untested:
+
+- Production `.com` Pairing, and the web UUID matching iOS's on `.com`.
+- Live token refresh against Pocket Casts.
+- QR routing: camera recognition of `pktc://`, prefill, and a collision with the
+  official Pocket Casts app.
+- Linux, and signed-in requests to each Function from outside a browser.
+- Protobuf calls from the Functions. M2's first read tests them.
+- Written permission from Radio Paradise. It publishes its stream URLs for
+  other players but shows no terms page.
+- Whether the staging deployment's bundle equals the committed code.
 
 ## Milestones
 
 | Milestone | What | User checkpoint |
 |-----------|------|-----------------|
-| [M1](./milestones/milestone_1.md) | Prove Pairing, direct HTTPS playback and Cloudflare deployment *(in progress)* | Pair, play a permitted HTTPS station directly, and reject HTTP without fallback |
+| M1 (`archive/web-m1`) | Prove Pairing, direct HTTPS playback and Cloudflare deployment | Pair, play a permitted HTTPS station directly, and reject HTTP without fallback |
 | [M2](./milestones/milestone_2.md) | App shell and navigation from the synced Layout *(in progress)* | Sidebar matches the iPhone's tabs and More, with the Bar line |
 | [M3](./milestones/milestone_3.md) | Streams, the player, and the installable app *(planned)* | Install, play a favorite, control it from media keys and Now Playing |
 | [M4](./milestones/milestone_4.md) | Lyrics for radio Tracks *(planned; metadata source/timing gate)* | A supported station has verified metadata/timing; lyric nudge survives reload |

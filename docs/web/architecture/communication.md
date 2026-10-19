@@ -70,6 +70,19 @@ holds the account, subscriptions, playlists, Up Next and playback positions.
 4. The Function polls Pocket Casts until it receives the tokens, stores them in
    Supabase, and sets the session cookie in the browser.
 
+## The QR payload and phone routing
+
+From the iOS source (not tested on a device): the fork declares the `pktc`
+scheme and routes `pktc://pair?user_code=<code>` to `DeviceApproveView`, which
+needs a signed-in account and also accepts the six-character code by hand. The
+QR carries only the user-facing code, never a device secret or token.
+
+Not established: camera recognition of the custom scheme, prefill in the
+installed build, which app wins if the official Pocket Casts app also claims
+`pktc`, and universal-link association for the fork. In M1 the user scanned
+fresh codes and reached approval on the staging build, and approved Pairing
+successfully, but these routing details were not examined (E2 accepted untested).
+
 ## Formats
 
 | Leg | Format |
@@ -79,6 +92,21 @@ holds the account, subscriptions, playlists, Up Next and playback positions.
 | Functions to Pocket Casts, account data | Protobuf (ADR 0007). Not yet run from the web; M2's first call confirms it |
 | Functions to Supabase | PostgREST over HTTPS |
 | Browser to station | Audio stream over HTTPS |
+
+## Verified in M1
+
+| What | How | Limit |
+|---|---|---|
+| Phone approval creates a bound session; reload keeps it; both sign-outs; cross-browser revocation | User-reported on local staging and again on the deployed site; a read-only database check confirmed the consumed Pairing and a live session | No trace or browser versions recorded |
+| Three read-only calls (`podcast/list`, `playlist/list`, `named_settings`) | User-reported: HTTP 200, a JSON object | Structure only; protobuf not run from the web |
+| The web session's UUID equals the one iOS writes Supabase rows under | Read-only query comparing hash prefixes (user-approved) | `.net` store only; the deployed database holds no iOS rows |
+| Direct HTTPS playback: play, Stop, switch between two different streams, local sign-out stops audio, HTTP-only rejected, invalid ID shows an error | User-reported in Chrome and Safari on macOS, local and deployed | 25+ minute run only; the error text is a developer string |
+| Secret tables and RPCs deny the anon key | SQL checks against the staging database: 5 tables, 18 RPCs | — |
+| Behavior in code | 159 unit/UI tests, 41 database/handler tests, an offline Pages runtime check (`tests/`) | Mocks and synthetic upstreams, not live Pocket Casts |
+
+Not verified: production `.com` Pairing, live token refresh, QR routing,
+Linux, signed-in calls from outside a browser, and Workers Free limits under
+load. See the known risks in the [web README](../README.md).
 
 ## Current state
 

@@ -25,7 +25,8 @@ confirmed field names, and unknown support on the write endpoints
 (`up_next/sync`, `sync/update_episode`). Protobuf is the same format the native
 clients rely on for every one of these endpoints, so it is the more stable
 choice and covers writes without a second format. Evidence:
-[E3 record](experiments/2026-10-18_api_formats_and_station_terms.md).
+[API reference](../architecture/pocket-casts-api.md) and
+`archive/web-m1:docs/web/experiments/2026-10-18_api_formats_and_station_terms.md`.
 
 ## Consequences
 

@@ -25,19 +25,21 @@ password also never passes through our server.
 
 - Device-code authorization, polling and refresh use the `tv` scope, matching
   the fork's tvOS Pairing caller. The device authorization endpoint rejects the
-  password-login `mobile` scope with either JSON or protobuf. Local JSON code
-  issuance and pending polling work; approved identity, API permissions and
-  Cloudflare execution still require M1 validation.
+  password-login `mobile` scope with either JSON or protobuf. M1 proved JSON
+  code issuance, approval, session creation and the three read-only list calls
+  on staging. The phone and the web must use the same Pocket Casts environment
+  (`PC_API_ENVIRONMENT`): the fork's staging build approves against `.net`, and
+  a web using `.com` makes the phone show "Your QR code expired" for any
+  `invalid_grant`. See `archive/web-m1:docs/web/experiments/2026-10-12_live_pairing_setup.md`.
 - The first sign-in, and each sign-in after the session expires, needs the
   phone. Sessions are rolling 90 days: each visit extends the expiry. The web
   player offers **Sign out** and **Sign out everywhere**; the latter ends every
   web session for the account.
-- Before building on pairing, a spike must confirm that:
-  - the fork completes approval from a QR code. Universal links on
-    `pocketcasts.com` belong to Automattic's app, so the QR code likely needs
-    the fork's `pktc://` scheme. The official app, if installed, may claim
-    that scheme too.
-  - `device/authorize` and the device-code `user/token` grant accept JSON
-    through our Worker. iOS sends protobuf.
+- M1 confirmed that `device/authorize` and the device-code `user/token` grant
+  accept JSON through our Worker, and that the fork approves a scanned code on
+  the staging build. Not examined: camera routing and prefill of the `pktc://`
+  scheme, and which app wins if the official Pocket Casts app is installed
+  (Universal links on `pocketcasts.com` belong to Automattic's app). See the
+  [communication doc](../architecture/communication.md).
 - The Worker stores the Pocket Casts tokens server-side and issues the
   web session. The browser never holds a Pocket Casts token.

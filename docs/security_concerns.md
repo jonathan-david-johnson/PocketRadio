@@ -62,8 +62,8 @@ five secret tables returned permission denied.
 - Radio Paradise is the M1 test station. It publishes its stream URLs for
   "WiFi Radios & other players" and shows no terms page, which is not a written
   grant. Direct playback of the public URL fits that; any public release needs
-  the station's written confirmation. See the
-  [2026-10-18 review](web/experiments/2026-10-18_api_formats_and_station_terms.md).
+  the station's written confirmation. Reviewed 2026-10-18 from the station's own
+  pages; see `archive/web-m1:docs/web/experiments/2026-10-18_api_formats_and_station_terms.md`.
 - Cloud deployment remains separately gated on private access, an isolated
   database and explicit approval. Secret tables are not environment-namespaced;
   do not share staging/production token stores. No cloud resource or already

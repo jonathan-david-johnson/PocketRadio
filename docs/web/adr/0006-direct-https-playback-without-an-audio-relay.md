@@ -58,6 +58,15 @@ mixed-content/CORS restrictions.
   particular, direct playback is not an established exception to SomaFM's
   published third-party-client restrictions. Use permitted sources for tests.
 
+## Evidence
+
+The relay worked locally. It was dropped because of cost and unresolved provider
+and station terms, not because it failed. The terms review and the relay's local
+evidence are in `archive/web-m1:docs/web/experiments/2026-10-15_cloudflare_terms_and_deployment_plan.md`
+and `archive/web-m1:docs/web/experiments/2026-10-12_live_pairing_setup.md`.
+Direct playback was verified in M1 on Radio Paradise and KEXP, including a
+25+ minute run; see [communication](../architecture/communication.md).
+
 ## Considered options
 
 - **Direct HTTPS playback (chosen):** standalone browser installation and no
