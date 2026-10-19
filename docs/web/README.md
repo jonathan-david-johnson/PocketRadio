@@ -20,6 +20,8 @@ follows the Layout the user sets on iOS. Terms are defined in
 | Navigation | Sidebar that mirrors the iOS tab settings list, with the Bar line | [ADR 0005](adr/0005-sidebar-mirrors-the-ios-tab-settings-list.md) |
 | Tests | Vitest, Wrangler local runtime, Playwright; shared fixtures in `contracts/nav_layout/` | — |
 
+How the pieces communicate, with a diagram: [architecture/communication.md](architecture/communication.md).
+
 ## Security model
 
 Supabase RLS on shared tables trusts the `x-user-uuid` header, and the anon key
