@@ -140,8 +140,10 @@ for completed actions and exact resume steps. No billing changes occurred.
 
 ## Decision gate
 
-- Pairing-only sign-in and its routing behavior: E1/E2. E2 was not tested;
-  the user chose to assume QR routing works.
+- Pairing-only sign-in and its routing behavior: E1/E2. E1 passed on
+  2026-10-18: the web-derived UUID matches the one iOS writes under, for this
+  account on `.net` ([record](../experiments/2026-10-18_api_formats_and_station_terms.md)).
+  E2 was not tested; the user chose to assume QR routing works.
 - JSON-only or mixed JSON/protobuf client: E3. Recommended: JSON for the
   read-only list endpoints through M4, protobuf-versus-JSON for sync writes
   decided in M5 ([E3 record](../experiments/2026-10-18_api_formats_and_station_terms.md)).

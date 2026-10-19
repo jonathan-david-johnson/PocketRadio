@@ -1,7 +1,27 @@
-# E3 and E5 — Pocket Casts response formats, and Radio Paradise's terms
+# E1, E3 and E5 — identity match, Pocket Casts response formats, and Radio Paradise's terms
 
-**Date:** 2026-10-18. **Status:** written for the M1 decision gate. E3 is partly
+**Date:** 2026-10-18. **Status:** written for the M1 decision gate. E1 passed (below). E3 is partly
 source-derived (labelled below); E5 is a public-page review, not legal advice.
+
+## E1 — the web session's UUID matches the one iOS writes under
+
+**Method (user-approved, read-only).** One script read `user_uuid` from the
+existing PocketRadio database with the local service key. It compared SHA-256
+hash prefixes, so no UUID or email was printed or recorded here. Nothing was
+written.
+
+**Result: match.** The one row in `pc_tokens` (made by the earlier local staging
+Pairing, so web-derived from Pocket Casts' own response) has the same UUID as
+rows the iOS app wrote to `radio_favorites` and `nav_layout`. That second table
+is the Layout M2 reads. The database also holds a second user in those two
+tables; the web token row is not that user.
+
+**What it shows.** For this account on the staging (`.net`) account store, the
+web session's UUID equals `ServerSettings.userId`, so the web player will find
+this user's `nav_layout` row. **What it doesn't show.** The deployed staging
+project's own database has no iOS rows, so this used the existing database's
+earlier local pairing. Production `.com` UUIDs were not compared. `listen_time`
+and `custom_streams` are empty, so they gave no evidence.
 
 ## E3 — which format the web client should use
 

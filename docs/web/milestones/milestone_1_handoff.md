@@ -6,7 +6,9 @@ The app is deployed to the private `pocket-radio-web-m1-staging` Pages project b
 
 Later on 2026-10-18 the user also reported a 25+ minute direct playback run (the bar was lowered from 60+), an invalid-ID error, and a station switch. The switch used two IDs that resolve to the same stream, so it was redone with Radio Paradise Global then KEXP, and the user reported that switch worked. E3 and E5 are written up in [formats and terms](../experiments/2026-10-18_api_formats_and_station_terms.md). The deployed code is now committed on `feature/m1-spikes` (`d885ea2`, `faf4fd7`).
 
-Still open for M1: E1 identity comparison with iOS, E2 QR routing (not tested; assumed fine by the user's choice), live token refresh and production `.com` (accepted as known risks), and the gate decision. M1 stays open until the user accepts the gate.
+E1 passed: the web-derived UUID matches the one iOS writes under (read-only query, hashes only, user-approved).
+
+Still open for M1: E2 QR routing (not tested; assumed fine by the user's choice), live token refresh and production `.com` (accepted as known risks), and the gate decision. M1 stays open until the user accepts the gate.
 
 ## Current playback scope — 2026-10-15
 
