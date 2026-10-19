@@ -22,8 +22,8 @@ the judgment: what is worth keeping, and where it goes.
 
 Stop at the first gate that fails, and tell the user why.
 
-- **The code is merged.** Read **Where the work happens** for the repo,
-  branch, and base. Check:
+- **The code is merged, or declared throwaway.** Read **Where the work
+  happens** for the repo, branch, and base. Check:
 
   ```bash
   git -C <repo> merge-base --is-ancestor <branch> <base> && echo merged
@@ -31,7 +31,16 @@ Stop at the first gate that fails, and tell the user why.
 
   If the branch is gone, ask for the merge commit. Unmerged work means the
   milestone is still the spec, so deleting it now would break the branch's
-  references.
+  references, unless the user declares the code throwaway.
+
+  **Throwaway.** An experimental milestone's code need not merge if its
+  learning is durable. The user must say so; don't infer it. Then:
+  - Tag the branch tip in the platform repo:
+    `git -C <repo> tag -a archive/<platform>-m<id>-code -m "<title> code" <branch>`.
+  - Extract the learning as in step 3. Nothing may be lost by not merging.
+  - Confirm no live branch or later milestone builds on the code. If one does
+    (for example, a later milestone's branch started from this one), it isn't
+    throwaway: merge it.
 - **Sub-milestones are closed.** To close M13, no `milestone_13.*.md` may
   remain. Close the children first.
 - **Hand-performed interactions are ticked**, if the milestone has that list.

@@ -290,7 +290,7 @@ archive tag.
 
 | Artifact | Lives until | Durable part goes to |
 |---|---|---|
-| Milestone | Its code is merged on the platform base branch | Tests, contracts, ADRs, README/CONTEXT |
+| Milestone | Its code is merged on the platform base branch, or declared throwaway (see below) | Tests, contracts, ADRs, README/CONTEXT |
 | Handoff, subagent plan | Its milestone closes | Nothing |
 | Experiment report | Its milestone closes | An ADR, including rejected alternatives |
 | Traces | Its milestone closes | The platform repo, if a tool or test replays them |
@@ -305,10 +305,20 @@ appending history. To change a decision, write a new ADR and mark the old one
 
 - `new-milestone` opens a milestone. It creates the file, drafts Docs impact,
   repoints the symlink, and adds a roadmap row.
-- `close-milestone` closes one. It checks that the code is merged, extracts the
-  durable knowledge, tags, and deletes, all in one commit that you review.
+- `close-milestone` closes one. It checks that the code is merged or declared
+  throwaway, extracts the durable knowledge, tags, and deletes, all in one
+  commit that you review.
 - No COMPLETE state stays on disk. A finished milestone is either being closed
   or already gone.
+
+### Throwaway code
+
+An experimental milestone's code need not merge if its learning is durable. The
+user declares the code throwaway at close time. Then the platform repo tags the
+branch tip `archive/<platform>-m<id>-code` so the code stays retrievable, and
+the learning moves to an ADR, README/CONTEXT, tests or contracts as usual. Code
+isn't throwaway if a live branch or a later milestone builds on it. That code
+merges.
 
 ### Archive tags and citations
 
