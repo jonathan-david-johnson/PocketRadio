@@ -1,6 +1,6 @@
 # Web M2 — App shell and navigation from the synced Layout
 
-**Status**: PLANNED
+**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`, branched from `feature/m1-spikes` (M1 is still open). Behavior 1 is green (web `3c71bf4`); the rest are not started.
 **Depends on**: Web M1 (Pairing, session, JSON API client decisions); web ADR 0005
 **Required by**: Web M3–M8
 
@@ -9,8 +9,8 @@
 | | |
 |---|---|
 | Plan | Shell `main`: this file |
-| Code | `pocket-radio-web`, branch `feature/m2-shell-nav` from `main` after M1 merges |
-| Worktree | `pocket-radio-web/` |
+| Code | `pocket-radio-web`, branch `feature/m2-shell-nav`, branched from `feature/m1-spikes` at `faf4fd7` because M1 has not merged. Rebase onto `main` once M1 merges |
+| Worktree | `pocket-radio-web-m2/` (the main checkout stays on `feature/m1-spikes` for M1's remaining checks). Its `node_modules` is a symlink to the main checkout's |
 | Shell changes | Additive: `contracts/nav_layout/` fixtures and README; a `supabase/migrations/` file creating and seeding `curated_stations`; iOS ADR 0002 consequence updated |
 
 **Goal:** Build the signed-in app shell and its navigation. The web player reads
@@ -61,7 +61,7 @@ on the iPhone, then focus the browser tab again: the Sidebar follows.
 ## Behaviors to test (red -> green, one at a time)
 
 1. Every `contracts/nav_layout` fixture produces its expected `bar`, `more`,
-   `sidebar`, and `bar_line_after`.
+   `sidebar`, and `bar_line_after`. **Green:** `tests/ui/nav-render.test.ts` (shell `98dd2f1`, web `3c71bf4`).
 2. Unknown ids and unavailable playlist slots are dropped without reordering
    the rest. Duplicates follow iOS `renderPlan`, which keeps them; whether they
    should render once is an open question in `contracts/nav_layout/README.md`.

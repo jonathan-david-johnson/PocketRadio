@@ -63,7 +63,7 @@ deleted. The authenticated station resolver uses radio-browser UUIDs;
 | Milestone | What | User checkpoint |
 |-----------|------|-----------------|
 | [M1](./milestones/milestone_1.md) | Prove Pairing, direct HTTPS playback and Cloudflare deployment *(in progress)* | Pair, play a permitted HTTPS station directly, and reject HTTP without fallback |
-| [M2](./milestones/milestone_2.md) | App shell and navigation from the synced Layout *(planned)* | Sidebar matches the iPhone's tabs and More, with the Bar line |
+| [M2](./milestones/milestone_2.md) | App shell and navigation from the synced Layout *(in progress)* | Sidebar matches the iPhone's tabs and More, with the Bar line |
 | [M3](./milestones/milestone_3.md) | Streams, the player, and the installable app *(planned)* | Install, play a favorite, control it from media keys and Now Playing |
 | [M4](./milestones/milestone_4.md) | Lyrics for radio Tracks *(planned; metadata source/timing gate)* | A supported station has verified metadata/timing; lyric nudge survives reload |
 | [M5](./milestones/milestone_5.md) | Podcasts, Up Next, and episode playback *(planned)* | Pause on the web, resume on the phone where it stopped |
