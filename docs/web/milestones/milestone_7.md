@@ -30,13 +30,16 @@ once. Relaunch Pocket Casts on the iPhone: its tab bar shows the same order.
 - **Editor (`src/nav/layoutEditor.ts`).** Port of iOS `TabLayoutEditor`: `bar`,
   `extras`, `rows`, `belowMore`, `needsMoreRow`, `barCapacity`, `canDelete`,
   `move(fromRows:toRow:)`, `moveBoundary`, `delete`, and `currentLayout`.
-  Core Destinations below the line are written as absences.
+  Core Destinations below the line are written as absences. Like iOS, it
+  removes duplicate slots when it opens, so saving cleans up a duplicated
+  Layout (the render rules show duplicates as stored; see
+  `contracts/nav_layout/README.md`).
 - **Editor fixtures (shell).** `contracts/nav_layout/editor/*.json`: a start
   Layout, an operation sequence, and the expected `slots`. Derived from the iOS
   `TabLayoutEditor` tests, so both ports can run them.
 - **Layout write (`functions/api/layout`).** `PUT {slots}` upserts with
-  `updated_at = now()` and the server-set user id. Refuses an empty slot list
-  and unknown ids.
+  `updated_at = now()` and the server-set user id. Refuses an empty slot list,
+  unknown ids and duplicate ids.
 - **UI (`src/nav/SidebarEditor.tsx`).** Edit and Done, keyboard-accessible
   drag (dnd-kit or similar), the Bar line drawn as a draggable row, an "Add
   playlist tab" picker, delete on extras, and a footer that names how many
@@ -51,7 +54,7 @@ once. Relaunch Pocket Casts on the iPhone: its tab bar shows the same order.
 3. Moving the Bar line promotes or demotes exactly the items it crosses.
 4. Items below the line can't be reordered among themselves.
 5. `PUT /api/layout` writes the row for the session's user only, stamps
-   `updated_at`, and rejects empty or unknown slots.
+   `updated_at`, and rejects empty, unknown or duplicate slots.
 6. A save after a remote change made during editing asks before overwriting.
 7. Cancelling Edit leaves the Layout and the Sidebar untouched.
 

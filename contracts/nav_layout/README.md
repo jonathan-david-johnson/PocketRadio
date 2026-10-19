@@ -48,15 +48,18 @@ The reference implementation is iOS `TabLayout.renderPlan(capacity:isAvailable:)
 | `more_than_five_slots.json` | Truncated slots come before the complement in More |
 | `unknown_future_id.json` | Unknown and malformed ids are dropped without reordering |
 | `deleted_playlist.json` | An unavailable playlist is dropped |
-| `duplicate_slots.json` | A repeated destination (open question below) |
+| `duplicate_slots.json` | A repeated destination renders as stored (decided below) |
 | `empty_slots.json` | An empty Layout (open question below) |
 | `fits_without_more.json` | No More tab, no Bar line |
 
-## Open questions
+## Decided: duplicates render as stored
 
-These fixtures record what iOS's tab bar does today, not a decision that it is right.
+A repeated slot renders as stored: `["podcasts","podcasts","streams"]` shows Podcasts twice, in the iOS tab bar and in the web Sidebar alike. The render rules do not remove duplicates. The user cleans them up by saving from the Layout editor, which removes duplicates when it opens (iOS `TabLayoutEditor`, and the web editor that ports it). Decided by the user on 2026-10-18.
 
-- **Duplicates.** iOS `renderPlan` keeps a repeated slot, so `["podcasts","podcasts","streams"]` shows Podcasts twice in the bar. iOS's settings screen (`TabLayoutEditor`) removes duplicates, and the web M2 milestone assumed "duplicates render once". If duplicates should render once everywhere, change iOS `renderPlan` and this fixture together.
+The iOS editor never writes a duplicate, so one only appears when something else wrote the `nav_layout` row: a hand edit, a script, or a bug in another writer. The web player's Layout write must not create one either.
+
+## Open question
+
 - **Empty Layout.** `[]` gives an empty bar and a More tab holding everything. iOS's settings screen would instead put Podcasts in the bar. Neither app writes an empty Layout today; the question is what to show if one is ever stored.
 
 ## Who uses these
