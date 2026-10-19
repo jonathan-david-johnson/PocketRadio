@@ -1,7 +1,7 @@
 # Web M2 — App shell and navigation from the synced Layout
 
 **Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`, branched from `feature/m1-spikes` (M1 is still open). Behavior 1 is green (web `3c71bf4`); the rest are not started.
-**Depends on**: Web M1 (Pairing, session, JSON API client decisions); web ADR 0005
+**Depends on**: Web M1 (Pairing, session, protobuf client decision, ADR 0007); web ADR 0005
 **Required by**: Web M3–M8
 
 ## Where the work happens
@@ -46,7 +46,7 @@ on the iPhone, then focus the browser tab again: the Sidebar follows.
   (ADR 0002). With no row, it returns iOS `TabLayout.default`. The client
   re-fetches on window focus and on visibility change.
 - **Playlist titles.** The Worker reads the user's playlists through the
-  M1-decided client, so `playlist:<uuid>` slots show the playlist's name, and
+  protobuf client (ADR 0007), so `playlist:<uuid>` slots show the playlist's name, and
   a playlist missing or deleted on the server counts as unavailable.
 - **Shell UI (`src/app/`).** React Router routes per Destination
   (`/podcasts`, `/playlists`, `/playlist/:uuid`, `/discover`, `/streams`,

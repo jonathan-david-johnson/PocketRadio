@@ -28,7 +28,7 @@ iPhone is listed, and each opens the same screen.
 ## Scope
 
 - **Playlist client (`functions/api/pc/playlists`).** Reads `user/playlist/list`
-  through the M1-decided client. It returns, per playlist, the uuid, title,
+  through the protobuf client (ADR 0007). It returns, per playlist, the uuid, title,
   icon, `manual`, `isDeleted`, rule fields, and for Manual playlists the
   episodes ordered by `episodeOrder`. Deleted playlists are dropped.
 - **Playlists UI (`src/playlists/`).** List screen, Manual playlist episode

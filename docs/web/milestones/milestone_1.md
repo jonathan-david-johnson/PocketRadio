@@ -144,10 +144,10 @@ for completed actions and exact resume steps. No billing changes occurred.
   2026-10-18: the web-derived UUID matches the one iOS writes under, for this
   account on `.net` ([record](../experiments/2026-10-18_api_formats_and_station_terms.md)).
   E2 was not tested; the user chose to assume QR routing works.
-- JSON-only or mixed JSON/protobuf client: E3. Recommended: JSON for the
-  read-only list endpoints through M4, protobuf-versus-JSON for sync writes
-  decided in M5 ([E3 record](../experiments/2026-10-18_api_formats_and_station_terms.md)).
-  Awaiting the user's acceptance.
+- JSON-only or mixed JSON/protobuf client: E3. **User decided protobuf**
+  for Pocket Casts account data on 2026-10-18
+  ([ADR 0007](../adr/0007-protobuf-for-pocket-casts-account-data.md),
+  [E3 record](../experiments/2026-10-18_api_formats_and_station_terms.md)).
 - Direct HTTPS playback, unsupported HTTP and unavailable generic titles:
   **user accepted**, ADR 0006; local implementation and user-reported playback
   smoke verified, remaining E4 live checks pending.

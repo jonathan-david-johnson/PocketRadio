@@ -1,7 +1,7 @@
 # Web M5 — Podcasts, Up Next, and episode playback
 
 **Status**: PLANNED
-**Depends on**: Web M1 (E3: Pocket Casts JSON calls), Web M3 (direct HTTPS player)
+**Depends on**: Web M1 (E3, ADR 0007: Pocket Casts protobuf calls), Web M3 (direct HTTPS player)
 **Required by**: Web M6
 
 ## Where the work happens
@@ -31,8 +31,8 @@ and see it at the bottom of Up Next on the phone.
 
 - **Pocket Casts client (`functions/api/pc/`).** Worker routes for Up Next
   (read and change), subscriptions, a podcast's episodes, show notes, episode
-  position and played state, and skip settings. Use the JSON or protobuf
-  decision from M1 E3. Tokens come from `pc_tokens`; refresh on 401.
+  position and played state, and skip settings. Use protobuf (ADR 0007).
+  Tokens come from `pc_tokens`; refresh on 401.
 - **Episode audio.** Validated `https://` enclosure URLs returned by Pocket
   Casts play directly. `http://`-only audio is unsupported; explain this rather
   than rewriting the scheme or invoking a relay (ADR 0006).

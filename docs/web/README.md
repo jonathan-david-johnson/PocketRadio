@@ -16,6 +16,7 @@ follows the Layout the user sets on iOS. Terms are defined in
 | Database | Supabase, the same tables as iOS where data is shared | [ADR 0002](adr/0002-cloudflare-hosts-web-player-supabase-is-database.md) |
 | Sign-in | Pairing: approve a QR code in the PocketRadio iOS app | [ADR 0003](adr/0003-sign-in-by-phone-pairing.md) |
 | Radio playback | Station → browser over HTTPS; no audio relay/native helper; HTTP-only and generic ICY titles unavailable | [ADR 0006](adr/0006-direct-https-playback-without-an-audio-relay.md), superseding ADR 0004 |
+| Pocket Casts data | Functions speak protobuf to the Pocket Casts server; the browser gets JSON from us | [ADR 0007](adr/0007-protobuf-for-pocket-casts-account-data.md) |
 | Navigation | Sidebar that mirrors the iOS tab settings list, with the Bar line | [ADR 0005](adr/0005-sidebar-mirrors-the-ios-tab-settings-list.md) |
 | Tests | Vitest, Wrangler local runtime, Playwright; shared fixtures in `contracts/nav_layout/` | — |
 
@@ -49,9 +50,9 @@ the supplied Radio Paradise Global UUID. The app is deployed to a private
 staging Pages project (`pocket-radio-web-m1-staging`) behind email-only
 Cloudflare Access, with a separate Free staging database, and the user reported
 Pairing, both sign-outs, cross-browser revocation, HTTP rejection, a 25+ minute
-direct playback run and an invalid-ID error passing there. The read-only list
-endpoints answer JSON; native clients use protobuf, and sync writes are
-undecided until M5 ([formats and terms](experiments/2026-10-18_api_formats_and_station_terms.md)).
+direct playback run and an invalid-ID error passing there. The user chose
+protobuf for Pocket Casts account data (ADR 0007); the list endpoints also
+answered JSON in M1 ([formats and terms](experiments/2026-10-18_api_formats_and_station_terms.md)).
 Production cookies, live token refresh and QR routing remain untested. Radio
 Paradise is the permitted test station; no written permission exists.
 

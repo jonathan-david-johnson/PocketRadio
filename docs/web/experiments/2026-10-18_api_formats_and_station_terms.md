@@ -79,13 +79,14 @@ M2 needs only each playlist's `uuid` and `title`, and whether it is deleted
 
 | Question | Answer | Basis |
 |---|---|---|
-| JSON or protobuf for M2? | **JSON.** | Observed 200 and a JSON object for the list endpoints M2 reads. |
+| JSON or protobuf for M2? | **Protobuf (user's choice).** JSON was the observed alternative. | JSON answered 200 and a JSON object on the list endpoints; native clients use protobuf for all of them. |
 | Is protobuf needed later? | **Probably, for M5 sync writes.** | `up_next/sync` and `sync/update_episode` are protobuf in both native clients. The web allowlist blocks them and they were never called, so JSON support is **unknown**. |
-| Confirm live key names | **First M2 step.** | M2's playlist-title code reads the live response. Log key names only (no values) the first time, then lock the alias list. |
+| Confirm protobuf works live | **First M2 step.** | Not yet run from the web. Make a read-only playlist-list call and record the outcome, no values. |
 
-Recommendation: record **JSON-only for read-only list endpoints in M1–M4**, and
-defer the protobuf-versus-JSON decision for sync writes to M5, where it can be
-tested with the user's approval.
+**Decision (user, 2026-10-18): protobuf** for Pocket Casts account data, recorded
+in [ADR 0007](../adr/0007-protobuf-for-pocket-casts-account-data.md). The
+JSON-only recommendation above is superseded. The table's last row is now M2's
+first step: a read-only protobuf call to confirm it works from the Function.
 
 ### Not covered (accepted by the user on 2026-10-18)
 
