@@ -175,7 +175,7 @@ domains, KCRW alignment, ACRCloud and destructive schema cleanup.
 - [x] Explicit HTTP-only rejection on the deployed origin — user reported 2026-10-18
 - [x] Station switch between two different streams (Radio Paradise Global, then KEXP `445cbb3a-1c4e-49aa-a268-f5b6acfa8f2e`) — user reported 2026-10-18 on the deployed site; browser not recorded
 - [x] Invalid station ID shows an error (HTTP 400, generic developer text) — user reported 2026-10-18
-- [ ] E2 QR routing — not tested; user chose to assume it works
+- [x] E2 QR routing — **accepted untested** by the user on 2026-10-18; not a pass, a decision to assume it works
 - [x] Pairing, reload, both sign-outs and cross-browser session revocation on the deployed origin — user reported 2026-10-18 (which browsers and versions were not recorded; the plan was Safari and Chrome)
 
 Close this milestone only through the close-milestone skill after its remaining
