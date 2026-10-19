@@ -1,6 +1,6 @@
 # Web M2 — App shell and navigation from the synced Layout
 
-**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`, branched from `feature/m1-spikes` (M1 is still open). Behavior 1 is green (web `3c71bf4`); the rest are not started.
+**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`, branched from `feature/m1-spikes` (M1 is still open). Behaviors 1–3 are green (web `cc273d3`); the rest are not started.
 **Depends on**: Web M1 (Pairing, session, protobuf client decision, ADR 0007); web ADR 0005
 **Required by**: Web M3–M8
 
@@ -64,9 +64,16 @@ on the iPhone, then focus the browser tab again: the Sidebar follows.
    `sidebar`, and `bar_line_after`. **Green:** `tests/ui/nav-render.test.ts` (shell `f00d2fc`, web `3c71bf4`).
 2. Unknown ids and unavailable playlist slots are dropped without reordering
    the rest. A duplicate slot renders as stored, as on iOS; the user cleans it
-   up from the editor (`contracts/nav_layout/README.md`).
+   up from the editor (`contracts/nav_layout/README.md`). **Green:** the
+   `unknown_future_id`, `deleted_playlist` and `duplicate_slots` cases in
+   `tests/ui/nav-render.test.ts`; behavior 1's suite already covers them.
 3. `GET /api/layout` returns the stored row for the session's user, returns
    the iOS default when no row exists, and returns 401 without a session.
+   **Green:** `tests/layout/handler.test.ts` (web `cc273d3`). The default's
+   `updated_at` is the epoch, as in iOS. A malformed row or a database failure
+   returns 502 without the data. The user id comes only from the session; a
+   client `x-user-uuid` header is ignored. Needs `SUPABASE_ANON_KEY` in the
+   server environment (503 without it).
 4. A request with no session can't reach `nav_layout` or `curated_stations`
    through the Worker. The browser bundle contains neither the anon key nor
    the user's id.
