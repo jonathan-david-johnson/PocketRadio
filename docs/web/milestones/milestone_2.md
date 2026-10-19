@@ -63,7 +63,8 @@ on the iPhone, then focus the browser tab again: the Sidebar follows.
 1. Every `contracts/nav_layout` fixture produces its expected `bar`, `more`,
    `sidebar`, and `bar_line_after`.
 2. Unknown ids and unavailable playlist slots are dropped without reordering
-   the rest; duplicates render once.
+   the rest. Duplicates follow iOS `renderPlan`, which keeps them; whether they
+   should render once is an open question in `contracts/nav_layout/README.md`.
 3. `GET /api/layout` returns the stored row for the session's user, returns
    the iOS default when no row exists, and returns 401 without a session.
 4. A request with no session can't reach `nav_layout` or `curated_stations`
@@ -92,7 +93,10 @@ on the iPhone, then focus the browser tab again: the Sidebar follows.
   (its "not readable by other surfaces" consequence); `docs/ios/architecture/configurable-tab-bar.md`
   §4 (one shared layout now spans web too); `contracts/README` index if one
   exists; `docs/web/CONTEXT.md` if new terms appear.
-- **Questions this must settle:** Should the narrow-window breakpoint follow
+- **Questions this must settle:** Do duplicate slots render once (iOS's
+  settings screen) or as stored (iOS's tab bar today), and what does an empty
+  Layout show? Both are recorded in `contracts/nav_layout/README.md`; the
+  answer changes iOS and the fixtures together. Should the narrow-window breakpoint follow
   the iPhone's capacity exactly, or allow more tabs on a tablet-width browser?
   (Default: exactly 5, per ADR 0005.)
 

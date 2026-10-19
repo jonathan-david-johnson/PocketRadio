@@ -1,0 +1,35 @@
+{
+  "description": "All six core destinations placed. The complement is empty, but six slots do not fit, so More holds the last two.",
+  "ios_test": "TabLayoutTests.testNeedsOverflowIsTrueWhenComplementIsEmptyButSlotsAreTruncated",
+  "slots": [
+    "podcasts",
+    "playlists",
+    "discover",
+    "streams",
+    "profile",
+    "upNext"
+  ],
+  "capacity": 5,
+  "available_playlists": [],
+  "expected": {
+    "bar": [
+      "podcasts",
+      "playlists",
+      "discover",
+      "streams"
+    ],
+    "more": [
+      "profile",
+      "upNext"
+    ],
+    "sidebar": [
+      "podcasts",
+      "playlists",
+      "discover",
+      "streams",
+      "profile",
+      "upNext"
+    ],
+    "bar_line_after": 4
+  }
+}

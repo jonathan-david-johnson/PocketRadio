@@ -1,0 +1,33 @@
+{
+  "description": "The same destination twice. iOS renderPlan does not remove duplicates, so the bar shows Podcasts twice. See README: open question.",
+  "slots": [
+    "podcasts",
+    "podcasts",
+    "streams"
+  ],
+  "capacity": 5,
+  "available_playlists": [],
+  "expected": {
+    "bar": [
+      "podcasts",
+      "podcasts",
+      "streams"
+    ],
+    "more": [
+      "playlists",
+      "discover",
+      "profile",
+      "upNext"
+    ],
+    "sidebar": [
+      "podcasts",
+      "podcasts",
+      "streams",
+      "playlists",
+      "discover",
+      "profile",
+      "upNext"
+    ],
+    "bar_line_after": 3
+  }
+}

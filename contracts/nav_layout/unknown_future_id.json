@@ -1,0 +1,33 @@
+{
+  "description": "A slot id this build does not know (written by a newer app) is dropped without reordering the rest. So is a playlist id with an empty UUID.",
+  "ios_test": "TabLayoutTests.testUnrecognisedSlotsAreDroppedFromTheRenderPlan",
+  "slots": [
+    "podcasts",
+    "from_the_future",
+    "playlist:",
+    "streams"
+  ],
+  "capacity": 5,
+  "available_playlists": [],
+  "expected": {
+    "bar": [
+      "podcasts",
+      "streams"
+    ],
+    "more": [
+      "playlists",
+      "discover",
+      "profile",
+      "upNext"
+    ],
+    "sidebar": [
+      "podcasts",
+      "streams",
+      "playlists",
+      "discover",
+      "profile",
+      "upNext"
+    ],
+    "bar_line_after": 2
+  }
+}

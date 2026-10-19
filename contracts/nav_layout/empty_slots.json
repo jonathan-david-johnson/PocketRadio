@@ -1,0 +1,26 @@
+{
+  "description": "No slots at all. Every core destination is in More and the bar is empty. See README: open question.",
+  "slots": [],
+  "capacity": 5,
+  "available_playlists": [],
+  "expected": {
+    "bar": [],
+    "more": [
+      "podcasts",
+      "playlists",
+      "discover",
+      "streams",
+      "profile",
+      "upNext"
+    ],
+    "sidebar": [
+      "podcasts",
+      "playlists",
+      "discover",
+      "streams",
+      "profile",
+      "upNext"
+    ],
+    "bar_line_after": 0
+  }
+}

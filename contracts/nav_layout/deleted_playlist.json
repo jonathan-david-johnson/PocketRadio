@@ -1,0 +1,36 @@
+{
+  "description": "A playlist slot whose playlist no longer exists is dropped, as iOS MainTabBarController does with isAvailable.",
+  "slots": [
+    "podcasts",
+    "playlist:11111111-1111-4111-8111-111111111111",
+    "streams",
+    "playlist:22222222-2222-4222-8222-222222222222"
+  ],
+  "capacity": 5,
+  "available_playlists": [
+    "22222222-2222-4222-8222-222222222222"
+  ],
+  "expected": {
+    "bar": [
+      "podcasts",
+      "streams",
+      "playlist:22222222-2222-4222-8222-222222222222"
+    ],
+    "more": [
+      "playlists",
+      "discover",
+      "profile",
+      "upNext"
+    ],
+    "sidebar": [
+      "podcasts",
+      "streams",
+      "playlist:22222222-2222-4222-8222-222222222222",
+      "playlists",
+      "discover",
+      "profile",
+      "upNext"
+    ],
+    "bar_line_after": 3
+  }
+}

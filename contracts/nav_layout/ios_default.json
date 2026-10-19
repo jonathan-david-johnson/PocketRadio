@@ -1,0 +1,33 @@
+{
+  "description": "iOS TabLayout.default, the layout a user who never edited the tab bar has (updated_at is the epoch).",
+  "ios_test": "TabLayoutTests.testDefaultLayoutRendersFourContentTabsAndMore",
+  "slots": [
+    "podcasts",
+    "playlists",
+    "discover",
+    "streams"
+  ],
+  "capacity": 5,
+  "available_playlists": [],
+  "expected": {
+    "bar": [
+      "podcasts",
+      "playlists",
+      "discover",
+      "streams"
+    ],
+    "more": [
+      "profile",
+      "upNext"
+    ],
+    "sidebar": [
+      "podcasts",
+      "playlists",
+      "discover",
+      "streams",
+      "profile",
+      "upNext"
+    ],
+    "bar_line_after": 4
+  }
+}

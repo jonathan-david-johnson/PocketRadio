@@ -1,0 +1,34 @@
+{
+  "description": "Capacity 6 with all six core placed: nothing left over, so there is no More tab and no Bar line. Capacity is 5 on every iOS device today; this case pins the rule, not a device.",
+  "ios_test": "TabLayoutTests.testNeedsOverflowIsFalseWhenComplementAndTruncationAreBothEmpty",
+  "slots": [
+    "podcasts",
+    "playlists",
+    "discover",
+    "streams",
+    "profile",
+    "upNext"
+  ],
+  "capacity": 6,
+  "available_playlists": [],
+  "expected": {
+    "bar": [
+      "podcasts",
+      "playlists",
+      "discover",
+      "streams",
+      "profile",
+      "upNext"
+    ],
+    "more": [],
+    "sidebar": [
+      "podcasts",
+      "playlists",
+      "discover",
+      "streams",
+      "profile",
+      "upNext"
+    ],
+    "bar_line_after": null
+  }
+}
