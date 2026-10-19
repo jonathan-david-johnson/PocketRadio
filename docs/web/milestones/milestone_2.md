@@ -61,7 +61,7 @@ on the iPhone, then focus the browser tab again: the Sidebar follows.
 ## Behaviors to test (red -> green, one at a time)
 
 1. Every `contracts/nav_layout` fixture produces its expected `bar`, `more`,
-   `sidebar`, and `bar_line_after`. **Green:** `tests/ui/nav-render.test.ts` (shell `98dd2f1`, web `3c71bf4`).
+   `sidebar`, and `bar_line_after`. **Green:** `tests/ui/nav-render.test.ts` (shell `f00d2fc`, web `3c71bf4`).
 2. Unknown ids and unavailable playlist slots are dropped without reordering
    the rest. A duplicate slot renders as stored, as on iOS; the user cleans it
    up from the editor (`contracts/nav_layout/README.md`).
