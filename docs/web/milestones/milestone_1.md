@@ -171,7 +171,7 @@ domains, KCRW alignment, ACRCloud and destructive schema cleanup.
 - [x] Local **Stop playback** audibly stops the direct stream — user confirmed
 - [x] Local sign-out stops direct audio; reload remains signed out (**Ready to pair**) — user confirmed
 - [x] Explicit HTTP-only rejection on the deployed origin — user reported 2026-10-18
-- [ ] Station switch between two *different* streams (the 2026-10-18 report used two IDs with the same stream; redo with Radio Paradise Global `566476bf-d03c-4cac-b5d3-468f99a874b8` then KEXP `445cbb3a-1c4e-49aa-a268-f5b6acfa8f2e`)
+- [x] Station switch between two different streams (Radio Paradise Global, then KEXP `445cbb3a-1c4e-49aa-a268-f5b6acfa8f2e`) — user reported 2026-10-18 on the deployed site; browser not recorded
 - [x] Invalid station ID shows an error (HTTP 400, generic developer text) — user reported 2026-10-18
 - [ ] E2 QR routing — not tested; user chose to assume it works
 - [x] Pairing, reload, both sign-outs and cross-browser session revocation on the deployed origin — user reported 2026-10-18 (which browsers and versions were not recorded; the plan was Safari and Chrome)
