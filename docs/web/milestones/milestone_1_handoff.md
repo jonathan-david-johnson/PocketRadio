@@ -4,7 +4,9 @@
 
 The app is deployed to the private `pocket-radio-web-m1-staging` Pages project behind two email-only Access applications, with the staging database's secrets installed. The user reported Pairing, reload, Stop, both sign-outs, HTTP rejection, cross-browser session revocation and direct HTTPS playback (Radio Paradise Global) all passing. These are user reports with no captured trace, a short listen, and no rights review. Details, two mistakes made during the upload, and what is still unchecked: [staging deployment](../experiments/2026-10-16_staging_deployment.md).
 
-Still open for M1: E1 identity comparison with iOS, E2 QR routing, E3 read-only endpoint schemas and live refresh, E4's 60+ minute run, and the gate decision. The deployed code is uncommitted working-tree changes on `feature/m1-spikes`. M1 stays open.
+Later on 2026-10-18 the user also reported a 25+ minute direct playback run (the bar was lowered from 60+), an invalid-ID error, and a station switch. The switch used two IDs that resolve to the same stream, so it must be redone with Radio Paradise Global then KEXP. E3 and E5 are written up in [formats and terms](../experiments/2026-10-18_api_formats_and_station_terms.md). The deployed code is now committed on `feature/m1-spikes` (`d885ea2`, `faf4fd7`).
+
+Still open for M1: a real station switch, E1 identity comparison with iOS, E2 QR routing (not tested; assumed fine by the user's choice), live token refresh and production `.com` (accepted as known risks), and the gate decision. M1 stays open until the user accepts the gate.
 
 ## Current playback scope — 2026-10-15
 

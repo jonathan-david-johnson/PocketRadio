@@ -28,10 +28,11 @@ The shared scenarios describe behavior; each platform supplies its own steps.
 Web M1's unit/UI, database, and Worker tests do **not** yet execute these
 Gherkin specs. Passing them is not evidence of shared BDD coverage or iOS parity.
 
-Navigation has a separate planned fixture contract: `contracts/nav_layout/`
-for rendering in web M2, and `contracts/nav_layout/editor/` for editing in M7.
-These JSON fixtures do not exist yet and are not Gherkin scenarios. Both web
-and iOS should eventually run the same cases; iOS adoption is tracked in the
+Navigation has a separate fixture contract: `contracts/nav_layout/` for
+rendering (eight JSON cases, web M2, see its README), and a planned
+`contracts/nav_layout/editor/` for editing in M7, which does not exist yet.
+These JSON fixtures are not Gherkin scenarios. The web port runs the render
+cases; iOS should run the same ones, but has not adopted them yet; iOS adoption is tracked in the
 [shared-layout test backlog](../todo.md). See the
 [web roadmap](README.md#milestones) and
 [layout test plan](../ios/architecture/configurable-tab-bar.md#11-test-plan).

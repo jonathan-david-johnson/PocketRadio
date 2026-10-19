@@ -61,8 +61,8 @@ restart. The user subsequently reported “played” after receiving the Radio
 Paradise Global UUID: local direct playback has smoke evidence in **Chrome and
 Safari on macOS**, as confirmed by the user. The user also reported 20 minutes
 of successful playback; the browser for that run was not separately identified.
-Browser/OS versions, 60+ minute endurance, station-switch/error behavior and the
-remaining live checks are not established. The user confirmed that both
+Browser/OS versions and the remaining live checks are not established here;
+see the 2026-10-18 deployed results below. The user confirmed that both
 **Stop playback** and local
 **Sign out / cancel Pairing** stop the audio. Reload after local sign-out showed
 **Ready to pair**, also confirmed by the user. The user reported all these
@@ -74,9 +74,23 @@ database's secrets installed (production environment only). The user reported
 Pairing, reload, Stop, both sign-outs, explicit HTTP-only rejection,
 cross-browser session revocation and Radio Paradise Global playback all passing
 there. These are user reports without a captured trace or browser/version
-record, on a short listen. Signed-in requests to each Function from outside a
-browser were not made, and the deployed code was uncommitted work when
-uploaded. See the [staging record](../experiments/2026-10-16_staging_deployment.md).
+record. Signed-in requests to each Function from outside a browser were not
+made. The code deployed then was uncommitted work; it is now committed on
+`feature/m1-spikes` as `d885ea2` and `faf4fd7`, though whether the uploaded
+bundle equals those commits was not verified. See the
+[staging record](../experiments/2026-10-16_staging_deployment.md).
+
+**Later the same day, on the deployed origin (user-reported).** The user
+reported a **25+ minute** direct playback run with no problem (browser and
+dropout detail not supplied), a station switch that worked, and, for a
+deliberately invalid station ID, the message *Request failed (400). Check
+server bindings and the experiment notes.* That message is correct as an error
+path but is a developer string, not a listener message; M3 must replace it. The
+second station ID offered for the switch turned out to resolve to the **same
+stream URL** as the first (both Radio Paradise Global, 320k AAC), so the switch
+report does not show a real change of stream. Redo it with KEXP (see the
+checklist). QR routing (E2) was **not tested**; the user directed that it be
+assumed fine, which is an assumption, not evidence.
 
 The earlier user-reported relay audio/title smoke check is historical. It does
 not prove direct playback or rights to use that station. The
@@ -94,7 +108,7 @@ E4/E5's former relay criteria are **replaced by the user decision**, not passed.
 | E1 | Complete phone Pairing through Pages, then verify server-derived identity | Approved grant creates one bound browser session; UUID comparison with iOS recorded without exposing it |
 | E2 | Scan with the fork, check prefill/cold/warm routing, and assess official-app scheme collisions/manual fallback | Actual tested routing behavior and limitations recorded |
 | E3 | Test read-only Pocket Casts responses and identify JSON/protobuf needs; keep sync writes separately approved | Status, format and needed schema/permission evidence per endpoint; live refresh separately demonstrated |
-| E4 | Resolve a permitted HTTPS station, use its URL directly in the browser, and observe 60+ minutes; test stop/switch/errors and HTTP rejection | Audio plays directly, cleanup works, HTTP is unsupported, and no server audio or title-subscription path exists; duration/codec/browser limitations recorded |
+| E4 | Resolve a permitted HTTPS station, use its URL directly in the browser, and observe 25+ minutes (lowered from 60+ by the user on 2026-10-18); test stop/switch/errors and HTTP rejection | Audio plays directly, cleanup works, HTTP is unsupported, and no server audio or title-subscription path exists; duration/codec/browser limitations recorded |
 | E5 | Verify the direct-only architecture and review station/client restrictions | No relay deployment/binding or fallback; no unsupported permission claims; permitted test source selected |
 | E6 | Validate Pages cookies in Safari/Chrome, reload, both sign-outs, forged headers and database client denial | Session behavior and denial evidence on the deployed isolated origin |
 
@@ -126,8 +140,12 @@ for completed actions and exact resume steps. No billing changes occurred.
 
 ## Decision gate
 
-- Pairing-only sign-in and its routing behavior: E1/E2.
-- JSON-only or mixed JSON/protobuf client: E3.
+- Pairing-only sign-in and its routing behavior: E1/E2. E2 was not tested;
+  the user chose to assume QR routing works.
+- JSON-only or mixed JSON/protobuf client: E3. Recommended: JSON for the
+  read-only list endpoints through M4, protobuf-versus-JSON for sync writes
+  decided in M5 ([E3 record](../experiments/2026-10-18_api_formats_and_station_terms.md)).
+  Awaiting the user's acceptance.
 - Direct HTTPS playback, unsupported HTTP and unavailable generic titles:
   **user accepted**, ADR 0006; local implementation and user-reported playback
   smoke verified, remaining E4 live checks pending.
@@ -149,11 +167,13 @@ domains, KCRW alignment, ACRCloud and destructive schema cleanup.
 ## Hand-performed checks still to record
 
 - [x] Local direct HTTPS playback smoke after the switch — user reported “played”
-- [ ] Timed 60+ minute direct HTTPS playback
+- [x] Timed direct HTTPS playback, **25+ minutes** (user lowered the bar from 60+ on 2026-10-18; user-reported on the deployed site, browser not recorded)
 - [x] Local **Stop playback** audibly stops the direct stream — user confirmed
 - [x] Local sign-out stops direct audio; reload remains signed out (**Ready to pair**) — user confirmed
 - [x] Explicit HTTP-only rejection on the deployed origin — user reported 2026-10-18
-- [ ] Station-switch and error behavior in the tested browsers
+- [ ] Station switch between two *different* streams (the 2026-10-18 report used two IDs with the same stream; redo with Radio Paradise Global `566476bf-d03c-4cac-b5d3-468f99a874b8` then KEXP `445cbb3a-1c4e-49aa-a268-f5b6acfa8f2e`)
+- [x] Invalid station ID shows an error (HTTP 400, generic developer text) — user reported 2026-10-18
+- [ ] E2 QR routing — not tested; user chose to assume it works
 - [x] Pairing, reload, both sign-outs and cross-browser session revocation on the deployed origin — user reported 2026-10-18 (which browsers and versions were not recorded; the plan was Safari and Chrome)
 
 Close this milestone only through the close-milestone skill after its remaining

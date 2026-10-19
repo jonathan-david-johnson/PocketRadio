@@ -48,9 +48,12 @@ historical relay smoke test; the user reported successful direct playback with
 the supplied Radio Paradise Global UUID. The app is deployed to a private
 staging Pages project (`pocket-radio-web-m1-staging`) behind email-only
 Cloudflare Access, with a separate Free staging database, and the user reported
-Pairing, both sign-outs, cross-browser revocation, HTTP rejection and playback
-passing there. Production cookies, live refresh, full response schemas and timed
-(60+ minute) direct playback remain pending.
+Pairing, both sign-outs, cross-browser revocation, HTTP rejection, a 25+ minute
+direct playback run and an invalid-ID error passing there. The read-only list
+endpoints answer JSON; native clients use protobuf, and sync writes are
+undecided until M5 ([formats and terms](experiments/2026-10-18_api_formats_and_station_terms.md)).
+Production cookies, live token refresh and QR routing remain untested. Radio
+Paradise is the permitted test station; no written permission exists.
 
 Normal build/dev/Pages configuration has no relay Worker or Durable Object.
 Legacy relay entry routes return 410; retained relay source/tests are offline
