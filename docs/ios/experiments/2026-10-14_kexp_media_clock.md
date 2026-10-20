@@ -1,6 +1,6 @@
 # Experiment: can KEXP, an ICY stream with no program date, align with the same skew and heal?
 
-**Status**: FIRST PHONE RUN — 2026-10-14. Built, unit tests pass, and one device run found two problems, both fixed (see "First device run"). The heal has not yet saved a KEXP skew. Follows the [unified skew experiment](2026-10-12_unified_skew.md) and [ADR 0010](../adr/0010-timing-is-one-skew-per-station-healed-with-shazamkit.md). Belongs to [M14](../milestones/milestone_14.md). This is Phase 4 of the unified skew plan, and the answer to the stream-agnostic question for a stream without HLS.
+**Status**: TWO PHONE RUNS — 2026-10-14 and 2026-10-20. Built, unit tests pass, and one device run found two problems, both fixed (see "First device run"). The heal has not yet saved a KEXP skew. Follows the [unified skew experiment](2026-10-12_unified_skew.md) and [ADR 0010](../adr/0010-timing-is-one-skew-per-station-healed-with-shazamkit.md). Belongs to [M14](../milestones/milestone_14.md). This is Phase 4 of the unified skew plan, and the answer to the stream-agnostic question for a stream without HLS.
 **Question**: KCRW's HLS stream gives the player a program date, so the heal can say where in the stream a song began. KEXP's ICY stream gives none. If the clock is the media position plus the wall time at which playback first advanced, does the same heal (three anchors, replaces the skew) put KEXP's titles and lyrics in time, and how stable is the skew from one play to the next?
 
 ## Why
@@ -28,6 +28,24 @@ The September menubar capture (zero `currentDate()` samples on KEXP; a 14 s ad p
   - **Fix:** a song the feed doesn't list yet is now waited for (20 s, up to 8 times) without using up the heal's attempts.
 - **The version rule wrongly skipped the right song.** The feed wrote "TIME IS HAPPENING: MUSTAFA & JULIEN BAKER VERSION" and ShazamKit wrote "TIME IS HAPPENING (MUSTAFA & JULIEN BAKER VERSION)". The rule saw the version word only inside brackets.
   - **Fix:** a version word counts anywhere in the title. A word that both titles share is not a difference.
+
+## Second device run (2026-10-20, headphones)
+
+- **The heal hears the phone's own audio, not the room.** With the phone in a drawer, then with the headphone volume at zero, the heal still matched the station's song (confidence 1.00). With a Mac playing Beck loudly beside the phone and Liz Phair on the headphones, it named Liz Phair. During the listen the audio session stayed on `Playback` with no input. A microphone check read −34 dBFS with headphones, speaker or silence (the office air conditioning and keyboard). See [ADR 0010](../adr/0010-timing-is-one-skew-per-station-healed-with-shazamkit.md). The "speaker" in this doc's first run was incidental.
+- **Per-song results.** The skew is the feed's stamp lead over the song's real start in the stream:
+
+| Song | Skew | Feed stamp vs real start | Feed listed it | ICY title arrived |
+|---|---:|---|---|---|
+| Hands All Up (Imperial Teen) | 22.9 | 22.9 s early | 0.8 s after the start | 11.3 s after the start |
+| How to Offer a Hand to Hold (Jennifur) | 22.8 | 22.8 s early | | |
+| Stigmata (Ministry), two heals | 9.3, 9.5 | 9.3 s early | | |
+| Supernova (Liz Phair) | | | | |
+
+  Supernova was skipped by the version rule: the feed said "Supernova (Edit)", ShazamKit said "Supernova".
+- **KEXP's stamps are early or late, by tens of seconds.** Across both nights the skews were 22.9, 22.8, 9.5, −28.3, −31.5 and −48.8. They are not a clock. Anchors within a song agree to 0.2 s, so each heal is right for its song and wrong for the next by up to about 70 s.
+- **The feed listed rows 24 to 72 s after their stamps** on 2026-10-20, not the 100 to 150 s of 2026-10-14. That lag varies.
+- **ICY is not a reliable boundary.** The one clean comparison has the title arriving 11 s after the song began. On 2026-10-14 it was minutes late. Keep collecting.
+- **Decision pending:** a per-song correction for stations whose stamps are this loose (the per-song heal described to the user on 2026-10-14). Not built.
 
 ## Tracing (added 2026-10-14)
 

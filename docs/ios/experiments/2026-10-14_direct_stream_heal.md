@@ -1,5 +1,7 @@
 # Experiment (STUB): can the heal read the stream's audio directly instead of the microphone?
 
+> **Correction, 2026-10-20: most of this stub's reasons no longer apply.** The existing heal already hears the phone's own playback, not the microphone (see [ADR 0010](../adr/0010-timing-is-one-skew-per-station-healed-with-shazamkit.md)), so it already works on headphones, Bluetooth and a muted phone, needs no quiet room, and takes about 3 s per anchor. The "What the microphone route costs" list below is wrong. What this idea could still add is a heal that doesn't use ShazamKit at all. Revisit before doing any of it.
+
 > **STUB. NOT READY TO EXECUTE.** This page records an idea and what is known about it. Every section marked **TBD** has to be filled in, and the open questions answered or explicitly accepted, before anyone writes code or runs a device test. Nothing here is a decision. The pass criteria are a proposal.
 
 **Status**: STUB — 2026-10-14. No code. Follows the [unified skew experiment](2026-10-12_unified_skew.md), whose heal listens to the speaker with ShazamKit's managed session. Belongs to [M14](../milestones/milestone_14.md).

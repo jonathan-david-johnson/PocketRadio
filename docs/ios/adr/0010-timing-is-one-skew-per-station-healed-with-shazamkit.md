@@ -1,10 +1,10 @@
 # 0010 — Timing is one skew per station, set by a ShazamKit heal and fine-tuned by hand
 
-**Decision:** Accepted 2026-10-14 for the iOS `experiment/unified-skew` branch (not yet merged to `trunk`). Proven on KCRW Eclectic24 on the phone's speaker. KEXP is built on the same design with a media-time clock and not yet tested on the phone (see [KEXP media clock](../experiments/2026-10-14_kexp_media_clock.md)). Replaces the frozen `+160 s` constant in [ADR 0004](0004-kcrw-playback-clock-on-ios.md) and the per-occurrence lyric nudge in [ADR 0008](0008-kcrw-lyrics-follow-the-media-clock-in-apply.md).
+**Decision:** Accepted 2026-10-14 for the iOS `experiment/unified-skew` branch (not yet merged to `trunk`). Proven on KCRW Eclectic24. KEXP is built on the same design with a media-time clock and not yet tested on the phone (see [KEXP media clock](../experiments/2026-10-14_kexp_media_clock.md)). Replaces the frozen `+160 s` constant in [ADR 0004](0004-kcrw-playback-clock-on-ios.md) and the per-occurrence lyric nudge in [ADR 0008](0008-kcrw-lyrics-follow-the-media-clock-in-apply.md).
 
 ## What the device showed
 
-Measured on "Jonathan iPhone" (iPhone 15), StagingDebug, KCRW on the phone's speaker, over about 6 hours. Evidence: `docs/ios/experiments/2026-10-12_unified_skew.md` (device logs, `[anchor]` and `[heal]` lines).
+Measured on "Jonathan iPhone" (iPhone 15), StagingDebug, KCRW on the phone's speaker, over about 6 hours. (The heal does not depend on the speaker: see the last row.) Evidence: `docs/ios/experiments/2026-10-12_unified_skew.md` (device logs, `[anchor]` and `[heal]` lines).
 
 | Question | Result |
 |---|---|
@@ -13,6 +13,7 @@ Measured on "Jonathan iPhone" (iPhone 15), StagingDebug, KCRW on the phone's spe
 | Does the heal have a constant bias against the user's ear? | No. Of five heals the user judged, three were left as healed, one of them "dead on". Two were nudged by −0.5 and −1.5. A constant would have made the three worse. |
 | Do wrong versions fool the heal? | Yes, before the fix. A feed title "(Liza Richardson remix)" against ShazamKit's plain title gave anchors 99 s off; "(radio edit - clean)" gave 8 s off. Anchors from one song agree with each other, so agreement can't catch it. |
 | Does ShazamKit accept back-to-back sessions? | No. A session opened right after another closes is refused with "Missing entitlements" (an inaccurate message), as it was when a cancelled heal ran its waits at once. |
+| Does the heal hear the room, or the phone's own audio? | The phone's own audio. On 2026-10-20 a heal on KEXP matched the station's song with the phone in a drawer, then with the headphone volume at zero (both confidence 1.00). With the phone playing Liz Phair on headphones and a Mac playing Beck loudly beside it, the heal named Liz Phair. During the listen the app's audio session stayed on `Playback` with no input. A microphone check in the same room read −34 dBFS whether headphones, speaker or silence, so the room's sound had no part in it. Apple's SDK interface says nothing about the source, so this is inferred from behavior, not documented. |
 | Does the skew survive a relaunch? | Yes. Sessions started at 159.0, 158.6 and 156.8 from the saved value. |
 
 ## Design choices
@@ -30,12 +31,12 @@ Measured on "Jonathan iPhone" (iPhone 15), StagingDebug, KCRW on the phone's spe
 ## Consequences
 
 - **Per-song spread remains.** After a heal the skew is right for the song heard. The next song can be about 1 to 1.5 s off. A heal on each song change would fix that. The microphone can't do that quietly, so the direct-stream idea (`docs/ios/experiments/2026-10-14_direct_stream_heal.md`, a stub) is the next step.
-- **Speaker only.** The heal needs the microphone to hear the audio. Headphones and Bluetooth can't be healed.
+- **The heal works on any output.** It hears the phone's own playback, so headphones, Bluetooth and a muted phone all work (checked on headphones). Because it hears the audio before the output, the skew leaves out the output's delay: a Bluetooth delay of a few tenths of a second, and AirPlay's about 2 s, are not in it. For headphone listeners the lyrics would run that much early. Not measured.
 - **KCRW only, Debug only.** Alignment is eligible for KCRW alone, and the switch and the heal button are Debug-only.
 - **A station that is not aligned keeps the saved lyric offset**, so it loses nothing. KEXP is the second station: it aligns with a media-time clock instead of a program date, because its ICY stream has none. That is built, with unit tests, and not yet tested on the phone.
 - **A media-time stream needs a heal on each play.** The clock is the media position plus the wall time at which playback first advanced, so the skew also holds that play's startup delay. A pause in this app stops and restarts the stream, which is a new play. A stall does not move the skew, because media time stops with the audio.
 - The `lyric_offsets` table in Supabase is no longer read or written by iOS. What else uses it was not checked.
-- Not covered: a second station, a route other than the speaker, Release build, and CarPlay and Bluetooth with alignment on.
+- Not covered: the size of a Bluetooth or AirPlay delay, a Release build, and CarPlay with alignment on.
 
 ## Verification
 
