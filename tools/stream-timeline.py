@@ -55,7 +55,7 @@ def main(argv):
                 heard = re.search(r'heard="(.*?) — (.*?)" ', line)
                 if heard and f.get("start"):
                     anchors.append((heard.group(1), heard.group(2), parse_time(f["start"]), parse_time(f.get("stamp")),
-                                    parse_time(f.get("at"))))
+                                    parse_time(f.get("at")), float(f["skew"]) if f.get("skew") else None, f.get("sid", "-")))
             elif "[trace] meta" in line:
                 f = fields(line)
                 # A title that arrives in the first seconds of a connection is the one the server announces on connect,
@@ -87,9 +87,9 @@ def main(argv):
         return 0
 
     by_song = {}
-    for title, artist, start, stamp, at in anchors:
-        by_song.setdefault((title, artist), []).append((start, stamp))
-    print(f"{'song':44} {'anchors':>7} {'stamp-start':>12} {'listed-start':>13} {'icy-start':>10}   (seconds)")
+    for title, artist, start, stamp, at, skew, sid in anchors:
+        by_song.setdefault((title, artist), []).append((start, stamp, skew, sid))
+    print(f"{'song':44} {'anchors':>7} {'stamp-start':>12} {'listed-start':>13} {'icy-start':>10} {'skew range':>14}  sids")
     for (title, artist), rows in by_song.items():
         start = datetime.fromtimestamp(median(r[0].timestamp() for r in rows), timezone.utc)
         stamp = next((r[1] for r in rows if r[1]), None)
@@ -103,10 +103,18 @@ def main(argv):
         def delta(t):
             return f"{(t - start).total_seconds():+.1f}" if t else "-"
 
-        print(f"{(title + ' — ' + artist)[:44]:44} {len(rows):>7} {delta(stamp):>12} {delta(listed):>13} {delta(icy):>10}")
+        skews = [r[2] for r in rows if r[2] is not None]
+        span = f"{min(skews):.1f}..{max(skews):.1f}" if skews else "-"
+        sids = sorted({r[3] for r in rows if r[3] != "-"})
+        print(f"{(title + ' — ' + artist)[:44]:44} {len(rows):>7} {delta(stamp):>12} {delta(listed):>13} {delta(icy):>10} {span:>14}  {','.join(sids) or '-'}")
         if show_all:
             print(f"    start {start.isoformat()}  anchors spread {max(r[0].timestamp() for r in rows) - min(r[0].timestamp() for r in rows):.1f} s")
     print()
+    jumps = [l.strip() for p in paths for l in open(p, errors="replace") if "[track] jump" in l]
+    if jumps:
+        print(f"\nJumps inside a song ({len(jumps)}), from the tracking loop:")
+        for line in jumps:
+            print("  " + line.split("[track] ", 1)[-1])
     print("stamp-start: the feed's stamp minus the song's real start. Negative: the feed stamps the song before it starts.")
     print("listed-start / icy-start: how long after the song really started the feed / the stream's title first said so.")
     return 0
