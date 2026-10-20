@@ -45,7 +45,16 @@ The September menubar capture (zero `currentDate()` samples on KEXP; a 14 s ad p
 - **KEXP's stamps are early or late, by tens of seconds.** Across both nights the skews were 22.9, 22.8, 9.5, −28.3, −31.5 and −48.8. They are not a clock. Anchors within a song agree to 0.2 s, so each heal is right for its song and wrong for the next by up to about 70 s.
 - **The feed listed rows 24 to 72 s after their stamps** on 2026-10-20, not the 100 to 150 s of 2026-10-14. That lag varies.
 - **ICY is not a reliable boundary.** The one clean comparison has the title arriving 11 s after the song began. On 2026-10-14 it was minutes late. Keep collecting.
-- **Decision pending:** a per-song correction for stations whose stamps are this loose (the per-song heal described to the user on 2026-10-14). Not built.
+- **Decision on a per-song correction: withdrawn.** It rested on "KEXP's stamps jitter by tens of seconds". The later data says otherwise (below).
+
+### Why the skews varied (2026-10-20 analysis)
+
+- **Eight heals today, by song:** 22.9, 22.8, 9.3 and 9.5 (Stigmata, two heals), 21.9, 13.3 and 21.6 (Spectral Eyes), 23.3. Five of eight sit within ±1 of 22.5. All songs were on one of two shows (The Morning Show, John Richards; The Midday Show, Greta Rose), so the show does not explain the outliers.
+- **The same song gave two answers 23 s apart.** Spectral Eyes (Blondie): 13.3 at 13:58:05 and 21.6 at 13:58:28. Media time ran continuously and the feed row did not change, but ShazamKit's estimate of the song's start moved by 8.3 s. Likely causes, not yet told apart: the broadcast is an edit with a cut in the middle (the reference position jumps by the length of the cut), or ShazamKit matched another recording of the song. Lyric files follow the studio recording, so following the reference position is right for lyrics.
+- **Three anchors did not catch it.** All three anchors of the first heal agreed on 13.3, because they matched the same reference. In 8 of 8 heals the first anchor was within 0.2 s of the last.
+- **Consequence:** the heal can be wrong for part of a song. The fix to test is re-measuring while the song plays, not a per-song constant.
+- **Added to find out:** each anchor now logs the recording ShazamKit matched (`sid=`, `isrc=`, `cands=`), and a Debug toggle "Track every 30 s (measure only)" anchors repeatedly and logs `[track] jump` when two anchors of one song differ by more than 1 s, with both recordings' IDs. It changes nothing.
+- **The heal rule changed:** one anchor if close to the skew in use, otherwise two that agree (ADR 0010).
 
 ## Tracing (added 2026-10-14)
 
