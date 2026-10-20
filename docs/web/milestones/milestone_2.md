@@ -1,6 +1,6 @@
 # Web M2 — App shell and navigation from the synced Layout
 
-**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`, branched from `feature/m1-spikes` (M1 is still open). Behaviors 1–3 are green (web `cc273d3`); the rest are not started.
+**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`, branched from `feature/m1-spikes` (M1 is still open). Behaviors 1–3 and 5–7 are green (web `8184456`); 4 and 6 are partly done; 8 and playlist names are not started.
 **Depends on**: Web M1 (Pairing, session, protobuf client decision, ADR 0007); web ADR 0005
 **Required by**: Web M3–M8
 
@@ -76,13 +76,25 @@ on the iPhone, then focus the browser tab again: the Sidebar follows.
    server environment (503 without it).
 4. A request with no session can't reach `nav_layout` or `curated_stations`
    through the Worker. The browser bundle contains neither the anon key nor
-   the user's id.
+   the user's id. **Partly done:** `/api/layout` makes no database call without
+   a session (`tests/layout/handler.test.ts`), and a manual scan of the built
+   bundle finds no `x-user-uuid`, anon-key, service-role or Supabase strings.
+   `curated_stations` doesn't exist yet, and the bundle scan isn't automated.
 5. Wide viewport renders the Sidebar with the Bar line in the right place.
-   Narrow viewport renders capacity-5 tabs with More last.
+   Narrow viewport renders capacity-5 tabs with More last. **Green:**
+   `tests/ui/shell.test.ts`. The breakpoint is 720px (`useNarrow`); capacity is
+   5 as in ADR 0005. `/more` lists the rest on a narrow window and redirects on
+   a wide one.
 6. Each Destination route renders its placeholder. An unknown `/playlist/:uuid`
-   shows "This playlist isn't available".
+   shows "This playlist isn't available". **Partly green:** `tests/ui/shell.test.ts`.
+   The routes and the unavailable message work against an injected playlist
+   list. The real list needs the protobuf playlist client, so until it exists
+   the shell passes `null`, shows a generic "Playlist" label and treats every
+   playlist slot as available.
 7. Focusing the window after a Layout change re-renders the Sidebar without a
-   reload, and keeps the selected Destination if it still exists.
+   reload, and keeps the selected Destination if it still exists. **Green:**
+   `tests/ui/shell.test.ts` (focus and `visibilitychange`; a failed refresh
+   keeps the last Layout).
 8. `GET /api/stations/curated` returns the seeded rows.
 
 ## Out of scope
