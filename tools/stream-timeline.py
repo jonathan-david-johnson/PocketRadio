@@ -71,8 +71,12 @@ def main(argv):
         for f in firsts:
             print(f"  newest={f.get('newest')!r} stamp={f.get('stamp')} age={f.get('age')} s")
     lags = [float(f[3]) for f in feeds if f[3] not in (None, "nil")]
+    live = [lag for lag in lags if 0 <= lag < 300]
     if lags:
-        print(f"Feed listed {len(lags)} new rows, lag after stamp: min {min(lags):.0f} s, median {median(lags):.0f} s, max {max(lags):.0f} s")
+        # A row listed long after its stamp may only mean the app was not polling (backgrounded, another station), so
+        # the summary counts only lags under 5 minutes.
+        print(f"Feed listed {len(lags)} new rows; {len(live)} within 5 minutes of their stamp"
+              + (f" (lag after stamp: min {min(live):.0f} s, median {median(live):.0f} s, max {max(live):.0f} s)" if live else ""))
     titles = [m for m in metas if "StreamTitle" in m[0] or m[0].endswith("title")]
     print(f"{len(metas)} timed metadata items ({len(titles)} titles). Songs with an anchor: ")
     if not anchors:
@@ -86,8 +90,12 @@ def main(argv):
     for (title, artist), rows in by_song.items():
         start = datetime.fromtimestamp(median(r[0].timestamp() for r in rows), timezone.utc)
         stamp = next((r[1] for r in rows if r[1]), None)
-        listed = next((f[2] for f in feeds if norm(f[0]) and (norm(f[0]) in norm(title) or norm(title) in norm(f[0]))), None)
-        icy = next((m[2] for m in titles if norm(title) and norm(title)[:14] in norm(m[1])), None)
+        def near(t):
+            # Only events within a few minutes of this song's start belong to it (the log spans sessions and days).
+            return t is not None and -120 <= (t - start).total_seconds() <= 600
+
+        listed = next((f[2] for f in feeds if near(f[2]) and norm(f[0]) and (norm(f[0]) in norm(title) or norm(title) in norm(f[0]))), None)
+        icy = next((m[2] for m in titles if near(m[2]) and norm(title) and norm(title)[:14] in norm(m[1])), None)
 
         def delta(t):
             return f"{(t - start).total_seconds():+.1f}" if t else "-"
