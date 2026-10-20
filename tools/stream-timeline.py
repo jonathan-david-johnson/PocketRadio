@@ -58,7 +58,10 @@ def main(argv):
                                     parse_time(f.get("at"))))
             elif "[trace] meta" in line:
                 f = fields(line)
-                if f.get("program") not in (None, "nil"):
+                # A title that arrives in the first seconds of a connection is the one the server announces on connect,
+                # not a song change, so it says nothing about when the song began.
+                applies = f.get("applies")
+                if f.get("program") not in (None, "nil") and not (applies not in (None, "nil") and float(applies) < 15):
                     metas.append((f.get("id", ""), f.get("value", ""), parse_time(f["program"]), parse_time(f.get("wall"))))
             elif "[trace] feed new" in line:
                 f = fields(line)
