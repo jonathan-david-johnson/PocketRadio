@@ -11,7 +11,7 @@ hosting decision is
 | Cloudflare Pages project `pocket-radio-web-m1-staging` | Direct upload, production branch `main`, behind Cloudflare Access |
 | Supabase project `pocket-radio-web-m1-staging` | Separate Free database (`us-east-1`, `nano`). Only web migration `20261011000008` applied |
 | Access | Two self-hosted applications, each with one Allow policy for the owner's email: the main host and the preview wildcard (`*.pocket-radio-web-m1-staging.pages.dev`). No Everyone or Bypass rule |
-| Pages secrets (production environment only) | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `PC_API_ENVIRONMENT=staging` |
+| Pages secrets (production environment only) | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `PC_API_ENVIRONMENT=staging`, `SHARED_SUPABASE_URL`, `SHARED_SUPABASE_ANON_KEY` |
 
 Since 2026-10-22 the staging site reads shared tables (`nav_layout`, which the
 phone writes, and `curated_stations`) from the main PocketRadio database. The
