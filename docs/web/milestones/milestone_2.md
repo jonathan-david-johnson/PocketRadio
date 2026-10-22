@@ -1,6 +1,6 @@
 # Web M2 — App shell and navigation from the synced Layout
 
-**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`. Behaviors 1–8 are green in local tests (web `dbf7759`). Playlist names come from the protobuf playlist list, which has not yet run against the live Pocket Casts server. The `curated_stations` migration is written but not applied. The web build uses pnpm since web `8e42079`.
+**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`. Behaviors 1–8 are green in local tests (web `dbf7759`). Playlist names come from the protobuf playlist list, which has not yet run against the live Pocket Casts server. The `curated_stations` migration was applied to the main PocketRadio database on 2026-10-22. Staging was deployed that day with the Layout read from that database (web `dbf7759`, pushed). The live `/api/playlists` check and the hand checks are pending. The web build uses pnpm since web `8e42079`.
 **Depends on**: Web M1 (Pairing, session, protobuf client decision, ADR 0007); web ADR 0005
 **Required by**: Web M3–M8
 
@@ -113,8 +113,8 @@ on the iPhone, then focus the browser tab again: the Sidebar follows.
    `supabase/migrations/20261021000009_curated_stations.sql` seeds the iOS
    list in its order; the PGlite test fails if the seed drifts from
    `curated_stations.json`. Client roles can read every row without
-   `x-user-uuid` and cannot write. The route sends no user id. Not applied to
-   any database yet.
+   `x-user-uuid` and cannot write. The route sends no user id. Applied to the main PocketRadio
+   database on 2026-10-22; the anon key reads the three rows and cannot write.
 
 ## Out of scope
 
