@@ -1,6 +1,6 @@
 # Web M2 — App shell and navigation from the synced Layout
 
-**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`. Behaviors 1–8 are green in local tests (web `007ede8`). Playlist names come from the protobuf playlist list, which has not yet run against the live Pocket Casts server. The `curated_stations` migration is written but not applied. The web build uses pnpm since web `8e42079`.
+**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`. Behaviors 1–8 are green in local tests (web `dbf7759`). Playlist names come from the protobuf playlist list, which has not yet run against the live Pocket Casts server. The `curated_stations` migration is written but not applied. The web build uses pnpm since web `8e42079`.
 **Depends on**: Web M1 (Pairing, session, protobuf client decision, ADR 0007); web ADR 0005
 **Required by**: Web M3–M8
 
@@ -39,12 +39,17 @@ on the iPhone, then focus the browser tab again: the Sidebar follows.
   `TabLayout.renderPlan(capacity:isAvailable:)`. It drops unresolvable and
   unavailable slots, applies the More rule, and derives the complement in core
   order `podcasts, playlists, discover, streams, profile, upNext`. It also
-  derives the Sidebar order and the Bar line index. Vitest loads
+  derives the Sidebar order and the Bar line index. When no slot is left, it
+  renders the default `podcasts, streams, playlists, discover` (web `dbf7759`). Vitest loads
   `../contracts/nav_layout/*.json`.
 - **Layout read (`functions/api/layout`).** `GET` returns `{slots, updated_at}`
   from `nav_layout`, using the anon key plus a server-set `x-user-uuid`
   (ADR 0002). With no row, it returns iOS `TabLayout.default`. The client
-  re-fetches on window focus and on visibility change.
+  re-fetches on window focus and on visibility change. The database is the
+  session database unless `SHARED_SUPABASE_URL` and `SHARED_SUPABASE_ANON_KEY`
+  name another one. Staging sets them to the main PocketRadio database, which
+  the phone writes to; sessions and tokens stay in the staging database (web
+  `c22f783`).
 - **Playlist titles.** The Worker reads the user's playlists through the
   protobuf client (ADR 0007), so `playlist:<uuid>` slots show the playlist's name, and
   a playlist missing or deleted on the server counts as unavailable.
@@ -126,10 +131,11 @@ on the iPhone, then focus the browser tab again: the Sidebar follows.
   (its "not readable by other surfaces" consequence); `docs/ios/architecture/configurable-tab-bar.md`
   §4 (one shared layout now spans web too); `contracts/README` index if one
   exists; `docs/web/CONTEXT.md` if new terms appear.
-- **Questions this must settle:** What does an empty Layout show? Recorded in
-  `contracts/nav_layout/README.md`; the answer changes iOS and the fixtures
-  together. (Duplicates were settled on 2026-10-18: they render as stored and
-  the editor cleans them up.) Should the narrow-window breakpoint follow
+- **Questions this must settle:** Settled: duplicates on
+  2026-10-18 (they render as stored and the editor cleans them up) and an empty
+  Layout on 2026-10-22 (it shows Podcasts, Streams, Playlists, Discover,
+  recorded in `contracts/nav_layout/README.md`; iOS still renders `[]` as an
+  empty bar until it adopts the fixtures). Should the narrow-window breakpoint follow
   the iPhone's capacity exactly, or allow more tabs on a tablet-width browser?
   (Default: exactly 5, per ADR 0005.)
 

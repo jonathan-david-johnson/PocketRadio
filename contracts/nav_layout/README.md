@@ -32,7 +32,7 @@ The reference implementation is iOS `TabLayout.renderPlan(capacity:isAvailable:)
 
 ## The rules, in brief
 
-1. Drop slots this build can't resolve (an unknown id, `playlist:` with no UUID) and unavailable playlists. Keep the rest in order.
+1. Drop slots this build can't resolve (an unknown id, `playlist:` with no UUID) and unavailable playlists. Keep the rest in order. If none is left, use the default `podcasts, streams, playlists, discover` instead (see *Decided: an empty Layout shows a default*).
 2. The complement is the core destinations (`podcasts, playlists, discover, streams, profile, upNext`, in that order) that have no slot.
 3. A More tab exists unless the complement is empty and every slot fits.
 4. With a More tab, the bar holds `capacity - 1` slots; without one, `capacity`.
@@ -49,7 +49,8 @@ The reference implementation is iOS `TabLayout.renderPlan(capacity:isAvailable:)
 | `unknown_future_id.json` | Unknown and malformed ids are dropped without reordering |
 | `deleted_playlist.json` | An unavailable playlist is dropped |
 | `duplicate_slots.json` | A repeated destination renders as stored (decided below) |
-| `empty_slots.json` | An empty Layout (open question below) |
+| `empty_slots.json` | An empty Layout shows the default |
+| `nothing_resolves.json` | Every slot dropped: the same default |
 | `fits_without_more.json` | No More tab, no Bar line |
 
 ## Decided: duplicates render as stored
@@ -58,9 +59,11 @@ A repeated slot renders as stored: `["podcasts","podcasts","streams"]` shows Pod
 
 The iOS editor never writes a duplicate, so one only appears when something else wrote the `nav_layout` row: a hand edit, a script, or a bug in another writer. The web player's Layout write must not create one either.
 
-## Open question
+## Decided: an empty Layout shows a default
 
-- **Empty Layout.** `[]` gives an empty bar and a More tab holding everything. iOS's settings screen would instead put Podcasts in the bar. Neither app writes an empty Layout today; the question is what to show if one is ever stored.
+When no slot is left to render, the bar shows `podcasts, streams, playlists, discover`, with `profile` and `upNext` in More. This is the Pocket Casts web menu's top group (Podcasts, Playlists, Discover) with Streams after Podcasts. It applies to a stored `[]` and to a Layout whose slots are all dropped (unknown ids, deleted playlists). Decided by the user on 2026-10-22.
+
+**The web player follows this; iOS does not yet.** iOS's `renderPlan` still renders `[]` as an empty bar. No app writes an empty Layout today, and the iOS editor does not save one, so the difference doesn't show. When iOS adopts these fixtures (`docs/todo.md`), it must adopt this rule too.
 
 ## Who uses these
 

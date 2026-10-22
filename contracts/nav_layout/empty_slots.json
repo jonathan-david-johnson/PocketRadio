@@ -1,26 +1,27 @@
 {
-  "description": "No slots at all. Every core destination is in More and the bar is empty. See README: open question.",
+  "description": "No slots at all. Nothing is stored to render, so the web default shows: Podcasts, Streams, Playlists, Discover in the bar, with Profile and Up Next in More. See README: Decided: an empty Layout shows a default.",
   "slots": [],
   "capacity": 5,
   "available_playlists": [],
   "expected": {
-    "bar": [],
-    "more": [
+    "bar": [
       "podcasts",
-      "playlists",
-      "discover",
       "streams",
+      "playlists",
+      "discover"
+    ],
+    "more": [
       "profile",
       "upNext"
     ],
     "sidebar": [
       "podcasts",
+      "streams",
       "playlists",
       "discover",
-      "streams",
       "profile",
       "upNext"
     ],
-    "bar_line_after": 0
+    "bar_line_after": 4
   }
 }

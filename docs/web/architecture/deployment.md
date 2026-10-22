@@ -13,8 +13,14 @@ hosting decision is
 | Access | Two self-hosted applications, each with one Allow policy for the owner's email: the main host and the preview wildcard (`*.pocket-radio-web-m1-staging.pages.dev`). No Everyone or Bypass rule |
 | Pages secrets (production environment only) | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `PC_API_ENVIRONMENT=staging` |
 
-The existing PocketRadio database is not used by the deployed site. Production
-has no deployment yet.
+The deployed site does not use the existing PocketRadio database yet. Web M2's
+staging plan: set `SHARED_SUPABASE_URL` and `SHARED_SUPABASE_ANON_KEY` to the
+main database so the site reads `nav_layout` (which the phone writes) and
+`curated_stations`. Sessions and tokens stay in the staging database, and the
+main database's service-role key is never given to the site. This needs the
+`curated_stations` migration applied to the main database, and a phone build
+on the same Pocket Casts server as `PC_API_ENVIRONMENT` (`StagingDebug`, `.net`).
+Production has no deployment yet.
 
 ## Rules learned the hard way
 
@@ -45,7 +51,7 @@ has no deployment yet.
 
 ## Resuming
 
-1. Check the Pages project has the three secrets and `PC_API_ENVIRONMENT=staging`.
+1. Check the Pages project has the three secrets and `PC_API_ENVIRONMENT=staging`, plus the two `SHARED_SUPABASE_*` secrets once the main database is set up.
 2. `make test typecheck build`, then check no secret appears in `dist/`.
 3. `PAGES_PROJECT=pocket-radio-web-m1-staging make deploy`, after reading the
    file list Wrangler prints.
