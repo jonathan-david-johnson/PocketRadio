@@ -51,6 +51,9 @@ reconcile on top.
   session. Resolved by applying a newer remote layout through the same
   controlled rebuild the settings screen uses, and only when every nav stack is
   at root with nothing presented modally.
-- The layout is not readable by the menubar, console, or Roku surfaces unless
-  they implement the same table. None of them have a bottom nav, so this is
-  latent, not a gap.
+- The web player reads the same `nav_layout` row (web M2, `GET /api/layout`).
+  Its Worker sets `x-user-uuid` from the signed-in session; the browser never
+  sees the anon key or the user id. The render rules are shared as fixtures in
+  `contracts/nav_layout/`, which iOS doesn't run yet (`docs/todo.md`).
+- The menubar, console and Roku surfaces don't read the layout. None of them
+  has a bottom nav, so this is latent, not a gap.

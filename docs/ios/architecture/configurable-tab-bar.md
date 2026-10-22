@@ -150,8 +150,11 @@ which throws `notLoggedIn` without `ServerSettings.userId`.
 - **Signed out** — local only, silent. Settings footer notes that layout syncs
   when signed in.
 
-One shared layout across all devices. Capacity differences are handled by
-truncation, so a layout written by a higher-capacity device degrades gracefully.
+One shared layout across all devices, including the web player, which reads
+the row through its Worker and shows it as a Sidebar with the Bar line (web
+ADR 0005). Capacity differences are handled by truncation, so a layout written
+by a higher-capacity device degrades gracefully. The render rules are shared as
+fixtures in `contracts/nav_layout/`.
 
 ---
 
