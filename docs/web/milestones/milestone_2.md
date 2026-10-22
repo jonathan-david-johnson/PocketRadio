@@ -1,6 +1,6 @@
 # Web M2 — App shell and navigation from the synced Layout
 
-**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`. Behaviors 1–3, 5, 7 and 8 are green (web `d8f3ac7`); 4 and 6 are partly done; playlist names are not started. The `curated_stations` migration is written but not applied. The web build uses pnpm since web `8e42079`.
+**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`. Behaviors 1–5, 7 and 8 are green (web `942ae1d`); 6 is partly done; playlist names are not started. The `curated_stations` migration is written but not applied. The web build uses pnpm since web `8e42079`.
 **Depends on**: Web M1 (Pairing, session, protobuf client decision, ADR 0007); web ADR 0005
 **Required by**: Web M3–M8
 
@@ -76,11 +76,13 @@ on the iPhone, then focus the browser tab again: the Sidebar follows.
    server environment (503 without it).
 4. A request with no session can't reach `nav_layout` or `curated_stations`
    through the Worker. The browser bundle contains neither the anon key nor
-   the user's id. **Partly done:** `/api/layout` and `/api/stations/curated`
+   the user's id. **Green:** `/api/layout` and `/api/stations/curated`
    return 401 and make no database call without a session, in unit tests and
-   in the local Pages runtime (`tests/pages-runtime.mjs`). A manual scan of the
-   built bundle finds no `x-user-uuid`, anon-key, service-role or Supabase
-   strings; the scan isn't automated.
+   in the local Pages runtime (`tests/pages-runtime.mjs`). `make test` builds
+   the bundle and fails if it contains `x-user-uuid`, user uuid fields,
+   anon-key, service-role, Supabase or `apikey` strings, a JWT, a Supabase API
+   key, or the value of a server secret in the environment or `.dev.vars`
+   (`tests/bundle-scan.mjs`, web `942ae1d`).
 5. Wide viewport renders the Sidebar with the Bar line in the right place.
    Narrow viewport renders capacity-5 tabs with More last. **Green:**
    `tests/ui/shell.test.ts`. The breakpoint is 720px (`useNarrow`); capacity is
