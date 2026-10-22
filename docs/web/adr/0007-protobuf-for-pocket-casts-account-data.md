@@ -34,7 +34,10 @@ choice and covers writes without a second format. Evidence:
   between hand-written encode/decode (as in the menubar's `APIService.swift`)
   and a generated TypeScript library is made in M2; no `.proto` file is in this
   repo, only iOS's generated `api.pb.swift`. Field numbers and names come from
-  that file.
+  that file. **Decided in M2 (2026-10-22): hand-written**, in
+  `functions/_lib/pocket-casts/protobuf.ts`. A generator would first need a
+  `.proto` rebuilt by hand from `api.pb.swift`, plus a Worker dependency, and
+  each message read so far needs only a few fields.
 - Keep all Pocket Casts protobuf code behind one Function module so the rest of
   the app sees plain typed objects.
 - Treat every field as optional: protobuf omits defaults, and wrapper types

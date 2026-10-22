@@ -19,7 +19,7 @@ between them.
 |---|---|---|
 | `device/authorize`, `user/token` | JSON, scope `tv` | Built and proven in staging (Pairing, polling, refresh code). Live refresh was never exercised. |
 | `user/podcast/list` | Protobuf (ADR 0007) | M1's JSON probe got HTTP 200 and a JSON object. Protobuf not yet run from the web. |
-| `user/playlist/list` | Protobuf (ADR 0007) | Same. M2's first read. |
+| `user/playlist/list` | Protobuf (ADR 0007) | Built in M2 (`GET /api/playlists`): request sets only `m: "mobile"`, as iOS does; reads `uuid`, `is_deleted` and `title`. Tested offline only; not yet run against the live server. |
 | `user/named_settings/update` | Protobuf (ADR 0007) | M1's JSON probe got HTTP 200 and a JSON object. |
 | `user/podcast/episodes` | Protobuf (ADR 0007) | Allowed by the probe allowlist; no result recorded. |
 | `up_next/sync`, `sync/update_episode` | Protobuf in both native clients | Blocked by the allowlist. Never called. Writes need user approval to test. |

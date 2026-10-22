@@ -1,6 +1,6 @@
 # Web M2 — App shell and navigation from the synced Layout
 
-**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`. Behaviors 1–5, 7 and 8 are green (web `942ae1d`); 6 is partly done; playlist names are not started. The `curated_stations` migration is written but not applied. The web build uses pnpm since web `8e42079`.
+**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`. Behaviors 1–8 are green in local tests (web `007ede8`). Playlist names come from the protobuf playlist list, which has not yet run against the live Pocket Casts server. The `curated_stations` migration is written but not applied. The web build uses pnpm since web `8e42079`.
 **Depends on**: Web M1 (Pairing, session, protobuf client decision, ADR 0007); web ADR 0005
 **Required by**: Web M3–M8
 
@@ -89,11 +89,15 @@ on the iPhone, then focus the browser tab again: the Sidebar follows.
    5 as in ADR 0005. `/more` lists the rest on a narrow window and redirects on
    a wide one.
 6. Each Destination route renders its placeholder. An unknown `/playlist/:uuid`
-   shows "This playlist isn't available". **Partly green:** `tests/ui/shell.test.ts`.
-   The routes and the unavailable message work against an injected playlist
-   list. The real list needs the protobuf playlist client, so until it exists
-   the shell passes `null`, shows a generic "Playlist" label and treats every
-   playlist slot as available.
+   shows "This playlist isn't available". **Green locally:** `tests/ui/shell.test.ts`,
+   `tests/playlists/handler.test.ts`, `tests/pocket-casts/protobuf.test.ts` and
+   the Pages runtime (web `490b10a`, `007ede8`). `GET /api/playlists` reads
+   `user/playlist/list` in protobuf and leaves out deleted playlists; a slot
+   whose playlist isn't listed is dropped. The shell reloads the list on focus
+   at most every 30 seconds, and at once (one time per set) when the Layout
+   names playlists it lacks. **Pending:** one read-only call against the live
+   server (ADR 0007): the request sets `m: "mobile"`, and the accepted response
+   content types are a guess.
 7. Focusing the window after a Layout change re-renders the Sidebar without a
    reload, and keeps the selected Destination if it still exists. **Green:**
    `tests/ui/shell.test.ts` (focus and `visibilitychange`; a failed refresh
