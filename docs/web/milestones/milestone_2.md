@@ -1,6 +1,6 @@
 # Web M2 — App shell and navigation from the synced Layout
 
-**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`, branched from `feature/m1-spikes` (M1 is still open). Behaviors 1–3 and 5–7 are green (web `8184456`); 4 and 6 are partly done; 8 and playlist names are not started.
+**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`. Behaviors 1–3, 5 and 7 are green (web `8184456`); 4 and 6 are partly done; 8 and playlist names are not started. The web build uses pnpm since web `8e42079`.
 **Depends on**: Web M1 (Pairing, session, protobuf client decision, ADR 0007); web ADR 0005
 **Required by**: Web M3–M8
 
@@ -9,8 +9,8 @@
 | | |
 |---|---|
 | Plan | Shell `main`: this file |
-| Code | `pocket-radio-web`, branch `feature/m2-shell-nav`, branched from `feature/m1-spikes` at `faf4fd7` because M1 has not merged. Rebase onto `main` once M1 merges |
-| Worktree | `pocket-radio-web-m2/` (the main checkout stays on `feature/m1-spikes` for M1's remaining checks). Its `node_modules` is a symlink to the main checkout's |
+| Code | `pocket-radio-web`, branch `feature/m2-shell-nav`. It branched from `feature/m1-spikes` at `faf4fd7`; M1 has since merged into `main`, and the branch merged `main` at `7a196bd` |
+| Worktree | `pocket-radio-web-m2/`, a git worktree of `pocket-radio-web/`, whose main checkout is on `main`. It has its own `node_modules`, installed by pnpm; the main checkout's is still npm's until M2 merges |
 | Shell changes | Additive: `contracts/nav_layout/` fixtures and README; a `supabase/migrations/` file creating and seeding `curated_stations`; iOS ADR 0002 consequence updated |
 
 **Goal:** Build the signed-in app shell and its navigation. The web player reads
