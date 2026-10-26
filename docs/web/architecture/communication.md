@@ -58,7 +58,10 @@ holds the account, subscriptions, playlists, Up Next and playback positions.
   They return plain JSON to the browser.
 - **iOS app.** Talks directly to Pocket Casts and to Supabase. Supabase rows are
   scoped by the `x-user-uuid` header, so the web player must use the same UUID
-  iOS uses. M1 checked that they match for the tested account (E1).
+  iOS uses. The web takes its UUID from the Pocket Casts token. iOS uses the
+  `ServerSettings.userId` it cached at sign-in, so the two match only when that
+  cache is current. Web M2 found a stale cache on the phone; signing out and back
+  in fixed it.
 
 ## Signing in (Pairing)
 
@@ -89,7 +92,7 @@ successfully, but these routing details were not examined (E2 accepted untested)
 |---|---|
 | Browser to Functions | JSON over HTTPS, with a cookie |
 | Functions to Pocket Casts, Pairing and tokens | JSON (proven in M1 staging) |
-| Functions to Pocket Casts, account data | Protobuf (ADR 0007). Not yet run from the web; M2's first call confirms it |
+| Functions to Pocket Casts, account data | Protobuf (ADR 0007). The playlist list ran live on staging in M2 (2026-10-23); the other messages have not |
 | Functions to Supabase | PostgREST over HTTPS |
 | Browser to station | Audio stream over HTTPS |
 
@@ -99,7 +102,7 @@ successfully, but these routing details were not examined (E2 accepted untested)
 |---|---|---|
 | Phone approval creates a bound session; reload keeps it; both sign-outs; cross-browser revocation | User-reported on local staging and again on the deployed site; a read-only database check confirmed the consumed Pairing and a live session | No trace or browser versions recorded |
 | Three read-only calls (`podcast/list`, `playlist/list`, `named_settings`) | User-reported: HTTP 200, a JSON object | Structure only; protobuf not run from the web |
-| The web session's UUID equals the one iOS writes Supabase rows under | Read-only query comparing hash prefixes (user-approved) | `.net` store only; the deployed database holds no iOS rows |
+| The web session's UUID equals the one iOS writes Supabase rows under | M1: read-only query comparing hash prefixes (user-approved), on the `.net` store, which held no iOS rows. M2, 2026-10-23: the phone's cached id differed from the token's UUID, so the Layout did not match until the user signed out and back in on the phone; then the web Sidebar followed phone reorders | `.net` (StagingDebug) only; not checked on `.com`. A stale iOS cache can break the match again |
 | Direct HTTPS playback: play, Stop, switch between two different streams, local sign-out stops audio, HTTP-only rejected, invalid ID shows an error | User-reported in Chrome and Safari on macOS, local and deployed | 25+ minute run only; the error text is a developer string |
 | Secret tables and RPCs deny the anon key | SQL checks against the staging database: 5 tables, 18 RPCs | — |
 | Behavior in code | 159 unit/UI tests, 41 database/handler tests, an offline Pages runtime check (`tests/`) | Mocks and synthetic upstreams, not live Pocket Casts |

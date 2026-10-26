@@ -1,6 +1,6 @@
 # Web M2 — App shell and navigation from the synced Layout
 
-**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`. Behaviors 1–8 are green in local tests (web `dbf7759`). Playlist names come from the protobuf playlist list, which has not yet run against the live Pocket Casts server. The `curated_stations` migration was applied to the main PocketRadio database on 2026-10-22. Staging was deployed that day with the Layout read from that database (web `dbf7759`, pushed). The live `/api/playlists` check and the hand checks are pending. The web build uses pnpm since web `8e42079`.
+**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`. Behaviors 1–8 are green in local tests, and the user's hand checks on the staging deployment passed on 2026-10-23 (deployment `5a84f6b6`, web `dbf7759`). Open: an unexplained missed refocus refresh, one skipped check (deleted playlist on the server), and merging the branch to web `main`; see *Manual results* below. The `curated_stations` migration was applied to the main PocketRadio database on 2026-10-22. The web build uses pnpm since web `8e42079`.
 **Depends on**: Web M1 (Pairing, session, protobuf client decision, ADR 0007); web ADR 0005
 **Required by**: Web M3–M8
 
@@ -100,9 +100,10 @@ on the iPhone, then focus the browser tab again: the Sidebar follows.
    `user/playlist/list` in protobuf and leaves out deleted playlists; a slot
    whose playlist isn't listed is dropped. The shell reloads the list on focus
    at most every 30 seconds, and at once (one time per set) when the Layout
-   names playlists it lacks. **Pending:** one read-only call against the live
-   server (ADR 0007): the request sets `m: "mobile"`, and the accepted response
-   content types are a guess.
+   names playlists it lacks. **Live:** on staging the Sidebar shows playlist
+   names from `/api/playlists` (user-reported, 2026-10-23), so the live request
+   (`m: "mobile"`) and the accepted response content types work. Not seen live: a
+   playlist deleted on the server (check B3.8, skipped).
 7. Focusing the window after a Layout change re-renders the Sidebar without a
    reload, and keeps the selected Destination if it still exists. **Green:**
    `tests/ui/shell.test.ts` (focus and `visibilitychange`; a failed refresh
@@ -141,5 +142,41 @@ on the iPhone, then focus the browser tab again: the Sidebar follows.
 
 ## Hand-performed interactions
 
-- [ ] Resize the window across the breakpoint — the Sidebar becomes the tab bar and back, keeping the current Destination
-- [ ] Click each Sidebar item and the More tab's rows — each opens its own URL and the browser Back button returns
+- [x] Resize the window across the breakpoint — the Sidebar becomes the tab bar and back, keeping the current Destination
+- [x] Click each Sidebar item and the More tab's rows — each opens its own URL and the browser Back button returns
+
+Both were done by the user on the staging deployment (B4, 2026-10-23).
+
+## Manual results
+
+The user ran these checks on `https://pocket-radio-web-m1-staging.pages.dev`
+(deployment `5a84f6b6`, web `dbf7759`) on 2026-10-23, with the StagingDebug phone
+build. All were reported by the user. No browser versions were recorded.
+
+| Check | Result |
+|---|---|
+| B1 Pairing, `/api/layout`, `/api/stations/curated`, sign-out gives 401 | Pass, after the phone fix below |
+| B2 Sidebar matches the phone; playlist tabs show names | Pass. This is the live `/api/playlists` read. |
+| B3 Reorder on the phone, refocus the browser: swap; move Streams first; move into More; add a fifth tab; remove a playlist tab; restore | Pass |
+| B3 Refocus after 2 minutes unfocused | Passed on retry. One earlier attempt did not refresh. |
+| B3.8 Delete a playlist on the server | Skipped |
+| B4 Narrow window, More, routes, Back, unknown playlist, account strip | Pass. On a wide window `/more` redirects to the first Sidebar item. |
+| B5 Landing page, signed out: no `supabase`, `x-user-uuid` or `uuid` in the bundle or responses | Pass |
+
+## Open notes
+
+- **Cause of the earlier Layout mismatch (settled).** The phone's cached
+  `ServerSettings.userId` (`c7a280aa`) differed from the account `uuid` in the
+  Pocket Casts token (`31159fb1`). The phone wrote `nav_layout` under its cached
+  id, and the web reads under the token's. After the user signed out and back in
+  on the phone, both matched. The web code was right: it stores the `uuid` field
+  of the server's response. How the phone's cached id went stale is not
+  established. iOS refreshes the id only when it is missing
+  (`AppDelegate+Analytics.swift`), so a wrong cached id stays until sign-out.
+- **Missed refocus refresh (unexplained).** One refocus after the browser tab
+  was unfocused did not update the Sidebar; the retry did. Not reproduced and not
+  investigated. Two untested possibilities: the phone's write had not landed yet
+  (iOS treats a failed push as non-fatal and retries on the next save), or the
+  browser did not fire the focus event.
+- **B3.8 skipped.** A playlist deleted on the server is dropped from the Sidebar
+  in unit and UI tests (`tests/ui/shell.test.ts`), not yet seen live.

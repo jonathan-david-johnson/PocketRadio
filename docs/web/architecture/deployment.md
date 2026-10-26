@@ -18,8 +18,14 @@ phone writes, and `curated_stations`) from the main PocketRadio database. The
 `SHARED_SUPABASE_URL` and `SHARED_SUPABASE_ANON_KEY` Pages secrets point at it;
 the `curated_stations` migration is applied there. Sessions and tokens stay in
 the staging database, and the main database's service-role key is never given
-to the site. The phone must be a build on the same Pocket Casts server as
-`PC_API_ENVIRONMENT` (`StagingDebug`, `.net`) for its user id to match.
+to the site. The Layout is keyed by user UUID. The web takes it from the Pocket Casts token.
+The phone writes under the `ServerSettings.userId` it cached at sign-in.
+Matching servers is necessary but not sufficient: the phone must be a build on
+the same server as `PC_API_ENVIRONMENT` (`StagingDebug`, `.net`) and its cached
+id must equal the account's UUID. If the Sidebar ignores phone reorders, compare
+the first 8 characters of the web session's UUID (staging `web_sessions`) with
+the phone's writer in `nav_layout`. On 2026-10-23 they differed because the
+phone's cached id was stale; signing out and back in on the phone fixed it.
 Production has no deployment yet.
 
 ## Rules learned the hard way

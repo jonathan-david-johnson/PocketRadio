@@ -42,9 +42,10 @@ choice and covers writes without a second format. Evidence:
   the app sees plain typed objects.
 - Treat every field as optional: protobuf omits defaults, and wrapper types
   (`BoolValue`, `Int32Value`) can be absent.
-- Protobuf from the web has **not** been run against the live server. The first
-  M2 use is the playlist list. Verify it with a read-only call before building on
-  it, and record the result.
+- The playlist list ran against the live server from the web on staging on
+  2026-10-23 (user-reported: playlist names appear in the Sidebar). Every other
+  message still needs a read-only call before anything builds on it, with the
+  result recorded.
 - The M1 JSON probe stays as historical evidence. It is not the production
   client.
 - The sync write endpoints stay un-called until the user approves a test.

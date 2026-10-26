@@ -62,12 +62,16 @@ UI remain future work.
 M1's checks were mostly user-reported, with no browser versions recorded; see
 [Verified in M1](architecture/communication.md#verified-in-m1). Still untested:
 
-- Production `.com` Pairing, and the web UUID matching iOS's on `.com`.
+- Production `.com` Pairing, and the web UUID matching iOS's on `.com`. On
+  staging (`.net`) the two matched after a phone sign-out and sign-in fixed a
+  stale cached id (M2, 2026-10-23). The match depends on that cache being
+  current, not only on the server.
 - Live token refresh against Pocket Casts.
 - QR routing: camera recognition of `pktc://`, prefill, and a collision with the
   official Pocket Casts app.
 - Linux, and signed-in requests to each Function from outside a browser.
-- Protobuf calls from the Functions. M2's first read tests them.
+- Protobuf calls from the Functions other than the playlist list. That read
+  ran live on staging in M2 (2026-10-23).
 - Written permission from Radio Paradise. It publishes its stream URLs for
   other players but shows no terms page.
 - Whether the staging deployment's bundle equals the committed code.
