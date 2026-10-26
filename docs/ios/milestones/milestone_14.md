@@ -1,6 +1,6 @@
 # iOS M14 — KCRW playback alignment (port from menubar)
 
-**Status**: IN PROGRESS — updated 2026-10-21. 14.1–14.3 are closed (`archive/ios-m14.1`, `archive/ios-m14.2`, `archive/ios-m14.3`; ADRs 0004, 0005 and 0008). 14.3 passed its device checkpoint on 2026-10-10 and merged to `trunk` at `e550b26b9`. Continue the later timing work on `experiment/unified-skew` at `4a51372d3`, as approved by the user on 2026-10-21. Current-branch verification found one reproducible navigation-lifetime test failure; diagnose it before proceeding to the prepared 14.4 route/background checkpoint below. M14 remains open.
+**Status**: IN PROGRESS — updated 2026-10-22. 14.1–14.3 are closed (`archive/ios-m14.1`, `archive/ios-m14.2`, `archive/ios-m14.3`; ADRs 0004, 0005 and 0008). 14.3 passed its device checkpoint on 2026-10-10 and merged to `trunk` at `e550b26b9`. Continue the later timing work on `experiment/unified-skew` at `eba2c9977`, as approved by the user on 2026-10-21. The navigation-lifetime failure is fixed and committed (`eba2c9977`, approved 2026-10-23); all 238 focused tests pass, and the Part A manual check passed on 2026-10-23. 14.4's Bluetooth/CarPlay/background plan is prepared but not run. M14 remains open.
 **Depends on**: Menubar M11-A/M11-B/M12, accepted. `Modules/Package.swift` still uses `../../pocket-radio-menubar/Packages/StreamSession`; dependency checkout verified at menubar `8f71eb484` on 2026-10-21, including the additive `updateSelectionPolicy` API. The iOS `trunk` checkout is at `b58d5a168` and includes the CarPlay harness and output suite.
 **Required by**: The later stream-presentation work in the [stream-monitoring review](../architecture/reviews/stream-monitoring-review-2026-09-16.md) §6 steps 2 and 5.
 **Related**: [CarPlay output test boundary](../adr/0003-carplay-output-test-boundary.md) and the [maintained harness](../../../pocket-radio-ios/PocketCastsTests/Tests/CarPlayOutput/Harness/README.md). The accepted order is to close M13 first, then use its output suite for 14.2 and 14.4.
@@ -10,8 +10,8 @@
 | | |
 |---|---|
 | Plan and reports | Shell `main`: this file, `docs/ios/experiments/`, `docs/ios/bugs/` |
-| Code | iOS repo, branch `experiment/unified-skew`, HEAD `4a51372d3c9437a4e905485beb41fb66a7f35e93`. This is the approved continuation; `feature/kcrw-alignment` is not a current local branch. |
-| Worktree | `/Users/jdj/code/PocketRadio/pocket-radio-ios-alignment/`, sibling of the main iOS checkout. `git worktree repair` from `pocket-radio-ios/` corrected the old `/Users/jdj/Documents/code/PocketRadio/` registration on 2026-10-21. HEAD and source files were preserved; the worktree is clean and no longer prunable. No branch was created or renamed. |
+| Code | iOS repo, branch `experiment/unified-skew`, HEAD `eba2c99772715193ad3faa189960e3a2ccea649f`. This is the approved continuation; `feature/kcrw-alignment` is not a current local branch. The lifetime fix (`eba2c9977`) is on top of `4a51372d3` and touches only `podcasts/Radio/StationDetailViewController.swift` and `PocketCastsTests/Tests/Radio/StationDetailLyricsTests.swift`. |
+| Worktree | `/Users/jdj/code/PocketRadio/pocket-radio-ios-alignment/`, sibling of the main iOS checkout. `git worktree repair` from `pocket-radio-ios/` corrected the old `/Users/jdj/Documents/code/PocketRadio/` registration on 2026-10-21. HEAD and source files were preserved; the worktree was clean after repair and is no longer prunable. No branch was created or renamed. |
 | Shell changes | Docs only, unless D1 moves the shared core into the shell |
 
 **Goal:** On iPhone, an eligible KCRW Eclectic24 station shows the song that is audible, not the feed's newest row. Lock screen, Bluetooth, CarPlay, the full and mini players, station detail, and live lyrics all follow the player's own clock. The port reuses the menubar's selection core unchanged and adds iOS adapters. Other stations and podcasts keep today's behavior.
@@ -93,13 +93,29 @@ The focused run used Xcode 27.1, scheme **Pocket Casts Staging**, `StagingDebug`
 | Failing test alone, without rebuilding | **Failed again**. Results: `/tmp/pocketradio-m14-navigation-reruns.E75Vwp/single.xcresult`. |
 | Entire station-detail lyric class, without rebuilding | **14 passed, 1 failed**. Results: `/tmp/pocketradio-m14-navigation-reruns.E75Vwp/class.xcresult`. |
 
-**Open verification failure:** `StationDetailLyricsTests.testStationDetailDeallocationStopsTheClock`, assertion at `PocketCastsTests/Tests/Radio/StationDetailLyricsTests.swift:270`. The fake tick scheduler remains running after the test releases its navigation container and yields. This reproduces outside the larger selection. It does **not** yet prove a production timer leak: the test does not first prove that UIKit released the controller. No source or test assertions were changed.
+**Failure reproduced on 2026-10-21:** `StationDetailLyricsTests.testStationDetailDeallocationStopsTheClock`, assertion then at `PocketCastsTests/Tests/Radio/StationDetailLyricsTests.swift:270`. The fake tick scheduler remained running after the test released its navigation container and yielded. This reproduced outside the larger selection. Those runs did **not** establish a production timer leak: the test did not first prove that UIKit released the controller. Those verification runs changed no source or test assertions.
 
-**Next action before 14.4:** Diagnose ownership/release timing in that test and `StationDetailViewController.deinit`; prove controller release with a weak reference before attributing the failure to timer cleanup. Keep the failing assertion. Re-run the focused selection after any approved fix. This does not undo 14.3's historical device acceptance, but the current branch is not fully verified.
+### Lifetime follow-up — 2026-10-22
+
+**Cause confirmed:** Weak references showed the navigation container was released but station detail was still alive. Temporary logging showed its favorites request was still pending. `loadFavoriteState` promoted `weak self` to a strong reference before awaiting the real favorites lookup, retaining the controller and its lyric timer until the request completed. The old test therefore depended on ambient account/network state. Its attempt to open full-screen lyrics was also a no-op: no tracklist row was seeded.
+
+**Fix (committed 2026-10-23 as `eba2c9977`):** `StationDetailViewController` captures the station id and lookup without retaining the controller across the await, then updates the UI weakly if still live. Deinitialization cancels the favorites task. A defaulted `FavoriteLookup` dependency lets the lyric tests supply immediate or suspended results without reading the real account or favorites service. Temporary diagnostic logging was removed.
+
+**Stronger tests:** The original deallocation test now seeds the selected track, proves full-screen lyrics actually opened, and asserts that both navigation and detail weak references become nil before checking timer cleanup. A new suspended-lookup regression proves controller release, lyric shutdown and task cancellation before allowing the lookup to return. The original timer assertion remains.
+
+| Run | Result |
+|---|---|
+| Suspended lookup before the production fix | New regression failed: controller retained, timer running and occurrence still set. The isolated, immediate-lookup/full-screen case passed. Evidence: `/tmp/pocketradio-m14-favorites-red.pwZzj5/results.xcresult`. |
+| Entire station-detail lyric class after the fix | **16 passed, 0 failed**. Evidence: `/tmp/pocketradio-m14-favorites-green.3iZak9/results.xcresult`. |
+| Original focused selection plus the new regression | **238 passed, 0 failed, no skips**, on the same pinned simulator, scheme and configuration. Evidence: `/tmp/pocketradio-m14-focused-fixed.lZ0ONC/results.xcresult`. |
+
+`make format` and `git diff --check` completed. Formatter-only edits outside the two patch files were excluded. No branch change was made while the 238-test run was recorded.
+
+**Part A manual check: passed 2026-10-23** on Jonathan iPhone, StagingDebug build, alignment On (build `4a51372d3` plus the uncommitted lifetime fix, installed over `localNetwork` at the user's request). The favorite heart loads and toggles. Full-screen lyrics open and go back. Five quick repeats of open and back worked. Reopening shows the current song. The user approved the iOS commit on 2026-10-23; it is `eba2c9977`, not pushed. The wider 14.4 device checkpoint and CarPlay regression preflight remain pending.
 
 ## 14.4 preparation — Bluetooth, CarPlay and background
 
-**State:** Plan prepared; no new route/device evidence collected. Resolve the verification failure above before starting the checkpoint. Continue in the existing `experiment/unified-skew` worktree; no branch creation, rename or merge is part of this plan.
+**State:** Plan prepared; no new route/device evidence collected. The focused-test blocker is cleared by the committed lifetime fix above (`eba2c9977`); its manual check passed on 2026-10-23. Continue in the existing `experiment/unified-skew` worktree; no branch creation, rename or merge is part of this plan.
 
 **Prerequisites and safety**
 
