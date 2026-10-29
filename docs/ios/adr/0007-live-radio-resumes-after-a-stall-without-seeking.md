@@ -25,7 +25,7 @@ The stall log line now records the buffer ahead, keep-up, buffer-empty and the p
 ## Consequences
 
 - A stall still costs the time to refill the buffer. It no longer rewinds the stream.
-- `preferredForwardBufferDuration` is still unset for live radio, so AVPlayer chooses the buffer. If dropouts remain after this change, raise it for live radio (about 30 s) and read the `buf=` series first.
+- `preferredForwardBufferDuration` is still unset for live radio, so AVPlayer chooses the buffer. On KCRW's HLS stream it already holds the whole advertised window (about 115 s), so raising the preference does not help. The remaining KCRW stalls come from segment requests reaching the wrong server; see [ADR 0011](0011-kcrw-hls-pins-each-session-to-its-server.md).
 - A stall is not a clock fault. The aligned clock stays valid through a stall that doesn't seek, so the title hold is not involved.
 
 ## Rejected alternatives

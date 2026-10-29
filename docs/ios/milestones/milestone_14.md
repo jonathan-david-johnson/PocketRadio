@@ -1,6 +1,6 @@
 # iOS M14 — KCRW playback alignment (port from menubar)
 
-**Status**: IN PROGRESS — updated 2026-10-22. 14.1–14.3 are closed (`archive/ios-m14.1`, `archive/ios-m14.2`, `archive/ios-m14.3`; ADRs 0004, 0005 and 0008). 14.3 passed its device checkpoint on 2026-10-10 and merged to `trunk` at `e550b26b9`. Continue the later timing work on `experiment/unified-skew` at `eba2c9977`, as approved by the user on 2026-10-21. The navigation-lifetime failure is fixed and committed (`eba2c9977`, approved 2026-10-23); all 238 focused tests pass, and the Part A manual check passed on 2026-10-23. 14.4's Bluetooth/CarPlay/background plan is prepared but not run. M14 remains open.
+**Status**: IN PROGRESS — updated 2026-10-29. 14.1–14.3 are closed (`archive/ios-m14.1`, `archive/ios-m14.2`, `archive/ios-m14.3`; ADRs 0004, 0005 and 0008). 14.3 passed its device checkpoint on 2026-10-10 and merged to `trunk` at `e550b26b9`. Continue the later timing work on `experiment/unified-skew` at `eba2c9977`, as approved by the user on 2026-10-21. The navigation-lifetime fix is committed (`eba2c9977`, approved 2026-10-23) and passed its manual check. The 14.4 preflight passed (238 focused tests; 128 CarPlay output tests with existing expected failures), but manual Bluetooth and speaker runs exposed stream stalls ([bug 15](../bugs/bug_15.md)). The cause is KCRW's two HLS servers behind rotating DNS; a Debug fix that pins each session to its server is committed at `56a7ecf21` ([ADR 0011](../adr/0011-kcrw-hls-pins-each-session-to-its-server.md)) and played about 21 minutes on the phone without a stall. Route acceptance can resume on that build; Bluetooth, wired CarPlay and background validation remain. M14 remains open.
 **Depends on**: Menubar M11-A/M11-B/M12, accepted. `Modules/Package.swift` still uses `../../pocket-radio-menubar/Packages/StreamSession`; dependency checkout verified at menubar `8f71eb484` on 2026-10-21, including the additive `updateSelectionPolicy` API. The iOS `trunk` checkout is at `b58d5a168` and includes the CarPlay harness and output suite.
 **Required by**: The later stream-presentation work in the [stream-monitoring review](../architecture/reviews/stream-monitoring-review-2026-09-16.md) §6 steps 2 and 5.
 **Related**: [CarPlay output test boundary](../adr/0003-carplay-output-test-boundary.md) and the [maintained harness](../../../pocket-radio-ios/PocketCastsTests/Tests/CarPlayOutput/Harness/README.md). The accepted order is to close M13 first, then use its output suite for 14.2 and 14.4.
@@ -10,7 +10,7 @@
 | | |
 |---|---|
 | Plan and reports | Shell `main`: this file, `docs/ios/experiments/`, `docs/ios/bugs/` |
-| Code | iOS repo, branch `experiment/unified-skew`, HEAD `eba2c99772715193ad3faa189960e3a2ccea649f`. This is the approved continuation; `feature/kcrw-alignment` is not a current local branch. The lifetime fix (`eba2c9977`) is on top of `4a51372d3` and touches only `podcasts/Radio/StationDetailViewController.swift` and `PocketCastsTests/Tests/Radio/StationDetailLyricsTests.swift`. |
+| Code | iOS repo, branch `experiment/unified-skew`, HEAD `56a7ecf21` (session pinning, on top of `eba2c99772715193ad3faa189960e3a2ccea649f`). This is the approved continuation; `feature/kcrw-alignment` is not a current local branch. The lifetime fix (`eba2c9977`) is on top of `4a51372d3` and touches only `podcasts/Radio/StationDetailViewController.swift` and `PocketCastsTests/Tests/Radio/StationDetailLyricsTests.swift`. |
 | Worktree | `/Users/jdj/code/PocketRadio/pocket-radio-ios-alignment/`, sibling of the main iOS checkout. `git worktree repair` from `pocket-radio-ios/` corrected the old `/Users/jdj/Documents/code/PocketRadio/` registration on 2026-10-21. HEAD and source files were preserved; the worktree was clean after repair and is no longer prunable. No branch was created or renamed. |
 | Shell changes | Docs only, unless D1 moves the shared core into the shell |
 
@@ -72,7 +72,7 @@ New iOS code goes in `podcasts/Main/Alignment/`, a synchronized Xcode group ([AD
 | **14.1 Feasibility** — closed (`archive/ios-m14.1`) | Core wired in. Eligibility, endpoint override, session, and an Observe-only readout on device. Nothing is published. | Passed 2026-10-09; see [ADR 0004](../adr/0004-kcrw-playback-clock-on-ios.md). |
 | **14.2 Apply: titles and Now Playing** — closed (`archive/ios-m14.2`, ADR 0005) | Single publication adapter. Full player, mini player, detail, and lock screen follow the selected occurrence. ICY, ACR, and feed-top title paths are off for the station. | Listener confirms title changes match audio on the speaker and the lock screen. Pause and resume work. |
 | **14.3 Lyrics on the media clock** — closed (`archive/ios-m14.3`, ADR 0008) | Shared lyric index. Full-screen lyrics uses the session clock. Offset-reset bug fixed. | Eight device checks accepted 2026-10-10; merged at `e550b26b9`. Current-branch regression results are below. |
-| **14.4 Routes and background** — prepared, not run | Validation on Bluetooth and CarPlay, with the screen locked and the app backgrounded. | Listener confirms titles and phone lyrics on each route. Route delay is recorded separately; preparation and the current verification blocker are below. |
+| **14.4 Routes and background** — started; stall fix in place | Automated preflight passed. Manual runs reproduced audio stalls (bug 15); session pinning (ADR 0011) fixed them in phone runs on speaker. Bluetooth, wired CarPlay and background checks remain. | Listener confirms titles and phone lyrics on each route. Route delay stays separate from skew. |
 
 Each step ends at a user checkpoint. Per `pocket-radio-ios/AGENTS.md`, nothing is committed until the user has tested it and approved. Acceptance is qualitative, as in M11-B and M12. Formal ±5 s title and ±2 s lyric targets stay unverified unless the user asks for them.
 
@@ -113,9 +113,39 @@ The focused run used Xcode 27.1, scheme **Pocket Casts Staging**, `StagingDebug`
 
 **Part A manual check: passed 2026-10-23** on Jonathan iPhone, StagingDebug build, alignment On (build `4a51372d3` plus the uncommitted lifetime fix, installed over `localNetwork` at the user's request). The favorite heart loads and toggles. Full-screen lyrics open and go back. Five quick repeats of open and back worked. Reopening shows the current song. The user approved the iOS commit on 2026-10-23; it is `eba2c9977`, not pushed. The wider 14.4 device checkpoint and CarPlay regression preflight remain pending.
 
-## 14.4 preparation — Bluetooth, CarPlay and background
+## 14.4 validation — Bluetooth, CarPlay and background
 
-**State:** Plan prepared; no new route/device evidence collected. The focused-test blocker is cleared by the committed lifetime fix above (`eba2c9977`); its manual check passed on 2026-10-23. Continue in the existing `experiment/unified-skew` worktree; no branch creation, rename or merge is part of this plan.
+**State:** Manual checks started 2026-10-27 and stopped for [bug 15: KCRW HLS stalls on Bluetooth and speaker](../bugs/bug_15.md). The stall fix is committed at `56a7ecf21` (below). Resume the matrix on that build, starting with Bluetooth.
+
+### Results — 2026-10-27
+
+| Check | Result |
+|---|---|
+| Focused selection | **238 passed, zero failures**, rerun at `eba2c9977` on the dedicated signed-out **PocketRadio CarPlay Tests** simulator. |
+| `make test_carplay` | **128 tests, zero unexpected failures** on that simulator, with the Mac kept awake. Nine existing known-failure scenario checks reproduced under their strict expected-failure markers. This is output regression evidence, not physical CarPlay certification. |
+| Initial speaker baseline | User reported title, artwork and lyrics matching within a couple of seconds at skew **155.6 s**. Only a short qualitative check; the later sustained speaker run stalled. |
+| IONIQ 5 Bluetooth, USB disconnected | “Moving to L.A.” appeared about **20 s late**; the next “Mama…” transition looked right, then audio remained silent for over a minute. Control Center showed Pause bars and IONIQ 5. Device logs show buffer starvation and terminal playback failure. **Not passed.** |
+| Speaker control, same skew | User reported a dropout around **18:21** and confirmed automatic audible recovery. Device logs show an empty buffer, recovery-time media/program-date rewind of about **66 s**, and later discontinuities. Audible replay of old audio was not confirmed. **Not passed.** |
+| Wired IONIQ 5 CarPlay; locked/background checks | **Not run** as acceptance checks. The user identified the same car and a wired CarPlay connection. |
+
+Alignment stayed **On**, Auto anchor **Off**, and skew **155.6 s** for the manual comparisons. Do not tune that skew to hide a stall or infer route delay from the late title. The app first observed the late song's feed row at estimated song position 23.4 s; provider availability versus polling phase remains unresolved.
+
+The speaker reproduction means the audio failure is not limited to Bluetooth. The existing no-seek recovery branch was selected, so do not assume the earlier saved-position seek bug has simply returned. Bug 15 retains the event times, uncertainties, raw-log locations and proposed diagnostics. The error after the user's later speaker pause is not counted as a second active-playback dropout.
+
+Preflight logs and focused result bundle: `/tmp/pocketradio-m14-4-preflight.QbOw0I/`; the CarPlay result-bundle path is printed in `carplay.log`. Raw device logs were copied over wired USB and remain local, not committed. No playback policy, timing value or app code was changed. Next recommended action: prepare narrowly scoped Debug media-access/error and seek diagnostics, then obtain approval for a diagnostic install and a single speaker control run before resuming route acceptance.
+
+### Stall fix — 2026-10-28 and 2026-10-29
+
+The cause and the measurements are in [ADR 0011](../adr/0011-kcrw-hls-pins-each-session-to-its-server.md). `streams.kcrw.com` rotates in DNS between two servers, a listening session lives on one, and AVPlayer's new connections could reach the other, which answers segments with `404`. The fix rewrites the master's variant URL to the session's own server, with an item replacement as a backstop. Debug only, KCRW HLS profile only.
+
+| Check | Result |
+|---|---|
+| Focused tests | **135 passed**: session pinning, the backstop watchdog and its budget, media diagnostics, stall recovery, the playback session, Now Playing and endpoint resolution. |
+| Mac AVPlayer, new connection forced on every request, 15 min, 12 DNS changes | Pinned: **0 errors**, buffer full throughout. Unpinned: 54 errors, buffer empty from minute 5. |
+| Phone, replacement backstop only (2026-10-28 afternoon) | Four replacements, each about 7 s of silence and about 7 s skipped, no replay. Each new session lost its loader again within 40–90 s. Not a fix on its own. |
+| Phone, pinned (2026-10-28 evening, 2026-10-29 morning), speaker | About **21 minutes** across three sessions: Wi-Fi, cellular, a pause and resume, and a live Wi-Fi to cellular switch. **0 errors, 0 stalls, 0 replacements**; buffer 107–122 s after start. The user heard no drops. |
+
+The build was installed over the local network at the user's request. Bluetooth, CarPlay, locked and background playback were not part of these runs.
 
 **Prerequisites and safety**
 
@@ -125,7 +155,7 @@ The focused run used Xcode 27.1, scheme **Pocket Casts Staging**, `StagingDebug`
 - Before the manual checkpoint, re-run the focused selection on its pinned simulator. Run `make test_carplay` separately on the dedicated, signed-out **PocketRadio CarPlay Tests** simulator, with the laptop awake. That suite covers MP3/ICY publication regressions, not aligned HLS transport or real scene connectivity (ADR 0003).
 - Do not run `make test_carplay_device` without separate explicit approval: it replaces playback, clears local Up Next and changes listening stats. Manual route playback is a different check. Leave host Wi-Fi unchanged.
 
-**Manual matrix** — record each row as pending, pass, fail or unavailable. Nothing below has passed in this session.
+**Manual matrix** — procedure for the remaining checkpoint. Record each row as pending, pass, fail or unavailable; actual results and the current blocker are above.
 
 | Check | Exercise | Evidence to record |
 |---|---|---|
