@@ -1,0 +1,25 @@
+{
+  "id": "iheart__empty_body",
+  "description": "iHeart: 200 with an empty body (no track). 'between'.",
+  "adapter": "iheart",
+  "params": {
+    "id": 5162
+  },
+  "now": 1793273912,
+  "raw": {
+    "live-meta/stream/5162": ""
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "between",
+    "item": null,
+    "show": null,
+    "provenance": {
+      "adapter": "iheart",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "none"
+    },
+    "pollAfterSec": 10
+  }
+}

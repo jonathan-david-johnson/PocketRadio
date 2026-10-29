@@ -1,0 +1,24 @@
+{
+  "id": "kexp__airbreak",
+  "description": "KEXP: newest row is an airbreak (no song). Shown as 'between'.",
+  "adapter": "kexp",
+  "params": {},
+  "now": 1793273912,
+  "raw": {
+    "https://api.kexp.org/v2/plays/": "{\"next\": \"https://api.kexp.org/v2/plays/?limit=2&offset=2\", \"previous\": null, \"results\": [{\"id\": 3725691, \"uri\": \"https://api.kexp.org/v2/plays/3725691/\", \"airdate\": \"2026-10-29T04:37:08-07:00\", \"show\": 68178, \"show_uri\": \"https://api.kexp.org/v2/shows/68178/\", \"image_uri\": \"https://coverartarchive.org/release/daa89cce-3e72-4e6a-a4dc-0337dee8f9cf/12882995749-500.jpg\", \"thumbnail_uri\": \"https://coverartarchive.org/release/daa89cce-3e72-4e6a-a4dc-0337dee8f9cf/12882995749-250.jpg\", \"song\": null, \"track_id\": null, \"recording_id\": \"fcf125bc-7497-4dd7-9f2c-edda0b3b02c0\", \"artist\": null, \"artist_ids\": [\"b66771cc-45fa-4a32-b14f-5337d7223d7a\", \"06c744b8-328d-46a3-96ea-7b98055c702f\"], \"album\": null, \"release_id\": null, \"release_group_id\": \"b3d96626-4d46-4012-b6cb-e8d8b192a4f1\", \"labels\": [\"RCA\"], \"label_ids\": [\"1ca5ed29-e00b-4ea5-b817-0bcca0e04946\"], \"release_date\": \"2014-12-15\", \"rotation_status\": null, \"is_local\": false, \"is_request\": false, \"is_live\": false, \"location\": 1, \"location_name\": \"Default\", \"play_type\": \"airbreak\"}, {\"id\": 3725690, \"uri\": \"https://api.kexp.org/v2/plays/3725690/\", \"airdate\": \"2026-10-29T04:33:51-07:00\", \"show\": 68178, \"show_uri\": \"https://api.kexp.org/v2/shows/68178/\", \"image_uri\": \"https://dn720908.ca.archive.org/0/items/mbid-48afd3df-fe49-41b6-8ff6-eb0324ad7879/mbid-48afd3df-fe49-41b6-8ff6-eb0324ad7879-44564877649_thumb500.jpg\", \"thumbnail_uri\": \"https://dn720908.ca.archive.org/0/items/mbid-48afd3df-fe49-41b6-8ff6-eb0324ad7879/mbid-48afd3df-fe49-41b6-8ff6-eb0324ad7879-44564877649_thumb250.jpg\", \"song\": \"Little Black Dress\", \"track_id\": \"a53fcdbe-7b49-4fbf-b88f-a696c4fe5b16\", \"recording_id\": \"02e6af57-36a9-4c85-870c-02275ee27a25\", \"artist\": \"Francis of Delirium\", \"artist_ids\": [\"4332dc29-35a4-406f-855f-8df891462993\"], \"album\": \"Run, Run Pure Beauty\", \"release_id\": \"48afd3df-fe49-41b6-8ff6-eb0324ad7879\", \"release_group_id\": \"6edd5d6c-aaa3-4bb8-a03e-6598949d8126\", \"labels\": [\"Dalliance Recordings\"], \"label_ids\": [\"2a2b9ea4-fd17-4659-a681-7a11806c78d2\"], \"release_date\": \"2026-05-29\", \"rotation_status\": \"R/N\", \"is_local\": false, \"is_request\": false, \"is_live\": false, \"location\": 1, \"location_name\": \"Default\", \"play_type\": \"trackplay\"}]}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "between",
+    "item": null,
+    "show": null,
+    "provenance": {
+      "adapter": "kexp",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "stamped",
+      "suppressed": "station_id"
+    },
+    "pollAfterSec": 10
+  }
+}

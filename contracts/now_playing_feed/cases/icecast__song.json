@@ -1,0 +1,35 @@
+{
+  "id": "icecast__song",
+  "description": "Icecast status page: plain 'Artist - Title' in one field.",
+  "adapter": "icecast",
+  "params": {
+    "origin": "http://icstream.rds.radio",
+    "path": "/ENI_S1_64"
+  },
+  "now": 1793273912,
+  "raw": {
+    "status-json.xsl": "{\"icestats\": {\"host\": \"icstream.rds.radio\", \"server_id\": \"Icecast 2.4.3\", \"source\": [{\"listenurl\": \"http://icstream.rds.radio:8000/ENI_S1_64\", \"title\": \"LABYRINTH - ELISA\", \"server_name\": \"Eni\", \"audio_info\": \"ice-samplerate=48000;ice-bitrate=63;ice-channels=2\"}]}}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "song",
+      "title": "ELISA",
+      "artist": "LABYRINTH",
+      "album": null,
+      "artworkUrl": null,
+      "startedAt": null,
+      "durationSec": null,
+      "endsAt": null
+    },
+    "show": null,
+    "provenance": {
+      "adapter": "icecast",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "observed"
+    },
+    "pollAfterSec": 10
+  }
+}

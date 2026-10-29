@@ -1,0 +1,25 @@
+{
+  "id": "icy__iheart_station_promo",
+  "description": "ICY block with automation attributes: song_spot=T is a station promo, not a song. Suppressed as station_id.",
+  "adapter": "icy",
+  "params": {
+    "block": "StreamTitle='NY's #1 Hit Music Station - text=\"Z100\" song_spot=\"T\" MediaBaseId=\"0\" amgArtworkURL=\"\" length=\"00:00:00\" unsID=\"0\" spotInstanceId=\"-1\"';",
+    "station_name": null
+  },
+  "now": 1793273912,
+  "raw": {},
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "between",
+    "item": null,
+    "show": null,
+    "provenance": {
+      "adapter": "icy",
+      "channel": "icy",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "observed",
+      "suppressed": "station_id"
+    },
+    "pollAfterSec": 10
+  }
+}

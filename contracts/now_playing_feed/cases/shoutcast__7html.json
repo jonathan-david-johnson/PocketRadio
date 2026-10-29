@@ -1,0 +1,34 @@
+{
+  "id": "shoutcast__7html",
+  "description": "SHOUTcast 7.html: a comma list; the last field is 'Artist - Title'.",
+  "adapter": "shoutcast",
+  "params": {
+    "origin": "http://usa10.fastcast4u.com:1680"
+  },
+  "now": 1793273912,
+  "raw": {
+    "7.html": "<html><body>20,1,33,10000,20,128,Barry Manilow - Ships</body></html>"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "song",
+      "title": "Ships",
+      "artist": "Barry Manilow",
+      "album": null,
+      "artworkUrl": null,
+      "startedAt": null,
+      "durationSec": null,
+      "endsAt": null
+    },
+    "show": null,
+    "provenance": {
+      "adapter": "shoutcast",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "observed"
+    },
+    "pollAfterSec": 10
+  }
+}

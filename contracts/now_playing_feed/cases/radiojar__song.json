@@ -1,0 +1,34 @@
+{
+  "id": "radiojar__song",
+  "description": "RadioJar: title and artist present; no start stamp, so timing is 'observed'.",
+  "adapter": "radiojar",
+  "params": {
+    "id": "5tyqrwpgpfeuv"
+  },
+  "now": 1793273912,
+  "raw": {
+    "radiojar.com/api": "{\"album\": \"Unknown\", \"sku\": \"\", \"thumb\": \"\", \"artist\": \"JID\", \"title\": \"Kody Blu 31\", \"show\": {}, \"buy_urls\": \"\", \"info_urls\": \"\", \"duration\": \"224\", \"guid\": \"af2a611c-2ac6-11ed-b354-fa163eab7d8a\"}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "song",
+      "title": "Kody Blu 31",
+      "artist": "JID",
+      "album": "Unknown",
+      "artworkUrl": null,
+      "startedAt": null,
+      "durationSec": 224,
+      "endsAt": null
+    },
+    "show": null,
+    "provenance": {
+      "adapter": "radiojar",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "observed"
+    },
+    "pollAfterSec": 10
+  }
+}

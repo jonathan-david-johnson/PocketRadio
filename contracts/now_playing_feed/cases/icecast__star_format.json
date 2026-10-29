@@ -1,0 +1,35 @@
+{
+  "id": "icecast__star_format",
+  "description": "Icecast status page: automation format 'Song*TITLE*ARTIST*YEAR*ID' split into fields.",
+  "adapter": "icecast",
+  "params": {
+    "origin": "http://icstream.rds.radio",
+    "path": "/ENI_S1_64"
+  },
+  "now": 1793273912,
+  "raw": {
+    "status-json.xsl": "{\"icestats\": {\"host\": \"icstream.rds.radio\", \"server_id\": \"Icecast 2.4.3\", \"source\": [{\"listenurl\": \"http://icstream.rds.radio:8000/ENI_S1_64\", \"title\": \"Song*I'M NOT IN LOVE*10 CC*1975*41\", \"server_name\": \"Eni\", \"audio_info\": \"ice-samplerate=48000;ice-bitrate=63;ice-channels=2\"}]}}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "song",
+      "title": "I'M NOT IN LOVE",
+      "artist": "10 CC",
+      "album": null,
+      "artworkUrl": null,
+      "startedAt": null,
+      "durationSec": null,
+      "endsAt": null
+    },
+    "show": null,
+    "provenance": {
+      "adapter": "icecast",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "observed"
+    },
+    "pollAfterSec": 10
+  }
+}

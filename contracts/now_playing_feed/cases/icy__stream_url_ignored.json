@@ -1,0 +1,33 @@
+{
+  "id": "icy__stream_url_ignored",
+  "description": "ICY block: StreamUrl holds junk (HTML); only StreamTitle is used.",
+  "adapter": "icy",
+  "params": {
+    "block": "StreamTitle='Whats going on';StreamUrl='<!DOCTYPE HTML PUBLIC';",
+    "station_name": null
+  },
+  "now": 1793273912,
+  "raw": {},
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "song",
+      "title": "Whats going on",
+      "artist": null,
+      "album": null,
+      "artworkUrl": null,
+      "startedAt": null,
+      "durationSec": null,
+      "endsAt": null
+    },
+    "show": null,
+    "provenance": {
+      "adapter": "icy",
+      "channel": "icy",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "observed"
+    },
+    "pollAfterSec": 10
+  }
+}

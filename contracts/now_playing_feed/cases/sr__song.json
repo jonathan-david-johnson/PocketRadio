@@ -1,0 +1,34 @@
+{
+  "id": "sr__song",
+  "description": "Sveriges Radio: /Date(ms)/ stamps.",
+  "adapter": "sr",
+  "params": {
+    "channel": 164
+  },
+  "now": 1793273874,
+  "raw": {
+    "api.sr.se": "{\"playlist\": {\"previoussong\": {\"title\": \"Storm II\", \"description\": \"Gener8ion & Yung Lean - Storm II\", \"artist\": \"Gener8ion & Yung Lean\", \"composer\": \"Benoit Heitz\", \"albumname\": \"Storm\", \"recordlabel\": \"\", \"starttimeutc\": \"/Date(1793273666000)/\", \"stoptimeutc\": \"/Date(1793273835000)/\"}, \"song\": {\"title\": \"Nicole Kidman\", \"description\": \"Adéla - Nicole Kidman\", \"artist\": \"Adéla\", \"composer\": \"Adéla Jergova  | Blake Slatkin  | Billy Walsh  | Julia Michaels  | Anna-Catherine Hartley  | Dylan Brady\", \"albumname\": \"Prima\", \"recordlabel\": \"Capitol Records\", \"starttimeutc\": \"/Date(1793273844000)/\", \"stoptimeutc\": \"/Date(1793274024000)/\"}, \"channel\": {\"id\": 164, \"name\": \"P3\"}}}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "song",
+      "title": "Nicole Kidman",
+      "artist": "Adéla",
+      "album": "Prima",
+      "artworkUrl": null,
+      "startedAt": "2026-10-29T11:37:24Z",
+      "durationSec": 180,
+      "endsAt": "2026-10-29T11:40:24Z"
+    },
+    "show": null,
+    "provenance": {
+      "adapter": "sr",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:37:54Z",
+      "timing": "stamped"
+    },
+    "pollAfterSec": 10
+  }
+}

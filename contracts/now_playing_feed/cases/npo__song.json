@@ -1,0 +1,32 @@
+{
+  "id": "npo__song",
+  "description": "NPO Radio 2: naive local times (Europe/Amsterdam); leading '#256:' removed from the title.",
+  "adapter": "npo",
+  "params": {},
+  "now": 1793273556,
+  "raw": {
+    "nporadio2.nl/api/tracks": "{\"data\": [{\"artist\": \"Take That\", \"title\": \"#248: Back For Good\", \"startdatetime\": \"2026-10-29T12:31:36\", \"enddatetime\": \"2026-10-29T12:35:39\", \"image_url_400x400\": \"https://npo-artistdb.b-cdn.net/images/1170d2f8-623d-4dd4-addd-866e327438b5__Back-For-Good.jpg?aspect_ratio=401%3A400&width=400&height=400\"}, {\"artist\": \"Youssou N'Dour & Neneh Cherry\", \"title\": \"#249: 7 Seconds\", \"startdatetime\": \"2026-10-29T12:25:42\", \"enddatetime\": \"2026-10-29T12:29:50\", \"image_url_400x400\": \"https://npo-artistdb.b-cdn.net/images/cf9fa160-ec00-42cd-84ea-cb1ef7a934ce__Seven-Seconds.jpg?aspect_ratio=401%3A400&width=400&height=400\"}, {\"artist\": \"Iggy Pop Ft. Kate Pierson\", \"title\": \"#250: Candy\", \"startdatetime\": \"2026-10-29T12:20:41\", \"enddatetime\": \"2026-10-29T12:24:57\", \"image_url_400x400\": \"https://npo-artistdb.b-cdn.net/images/21b5dced-74e7-4456-8026-c4b46d35f015__Candy.jpg?aspect_ratio=401%3A400&width=400&height=400\"}]}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "song",
+      "title": "Back For Good",
+      "artist": "Take That",
+      "album": null,
+      "artworkUrl": "https://npo-artistdb.b-cdn.net/images/1170d2f8-623d-4dd4-addd-866e327438b5__Back-For-Good.jpg?aspect_ratio=401%3A400&width=400&height=400",
+      "startedAt": "2026-10-29T11:31:36Z",
+      "durationSec": 243,
+      "endsAt": "2026-10-29T11:35:39Z"
+    },
+    "show": null,
+    "provenance": {
+      "adapter": "npo",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:32:36Z",
+      "timing": "stamped"
+    },
+    "pollAfterSec": 10
+  }
+}

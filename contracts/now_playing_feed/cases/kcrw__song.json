@@ -1,0 +1,34 @@
+{
+  "id": "kcrw__song",
+  "description": "KCRW: tracklist top entry with programme name.",
+  "adapter": "kcrw",
+  "params": {},
+  "now": 1793273912,
+  "raw": {
+    "tracklist-api.kcrw.com": "[{\"affiliateLinkiPhone\": \"https://itunes.apple.com/WebObjects/MZStore.woa/wa/search?at=1010l3dvo&media=music&term=%22Automatic%22+%22Calling+It+%28Peaking+Lights+Remix%29%22\", \"affiliateLinkiTunes\": \"https://itunes.apple.com/WebObjects/MZStore.woa/wa/search?at=1010l3dvo&media=music&term=%22Automatic%22+%22Calling+It+%28Peaking+Lights+Remix%29%22\", \"affiliateLinkSpotify\": \"spotify:search:Automatic+Calling+It+%28Peaking+Lights+Remix%29\", \"affiliateLinkAmazon\": \"http://www.amazon.com/exec/obidos/external-search?keyword=Automatic+Calling+It+%28Peaking+Lights+Remix%29&mode=digital-music&tag=kcco04-20\", \"itunes_id\": null, \"itunes_time\": null, \"itunes_url\": null, \"spotify_id\": null, \"spotify_preview\": null, \"program_id\": \"e24\", \"program_start\": \"03:00\", \"program_end\": \"06:00\", \"program_title\": \"Eclectic 24\", \"host\": \"\", \"credits\": null, \"guest\": null, \"title\": \"Calling It (Peaking Lights Remix)\", \"artist\": \"Automatic\", \"album\": \"Calling It\", \"label\": \"Stones Throw\", \"albumImage\": null, \"albumImageLarge\": null, \"year\": null, \"artist_url\": \"\", \"artist_bandcamp_url\": \"https://automatic-band.bandcamp.com/\", \"qobuz_url\": null, \"channel\": \"Music\", \"offset\": 5693, \"time\": \"04:34 AM\", \"date\": \"2026-10-29\", \"datetime\": \"2026-10-29T04:34:53-07:00\", \"comments\": \"\", \"play_id\": 1155393}, {\"affiliateLinkiPhone\": \"https://itunes.apple.com/WebObjects/MZStore.woa/wa/search?at=1010l3dvo&media=music&term=%22Fontaines+D.C.%22+%22Tongue+%5BClean+Edit%5D%22\", \"affiliateLinkiTunes\": \"https://itunes.apple.com/WebObjects/MZStore.woa/wa/search?at=1010l3dvo&media=music&term=%22Fontaines+D.C.%22+%22Tongue+%5BClean+Edit%5D%22\", \"affiliateLinkSpotify\": \"spotify:search:Fontaines+D.C.+Tongue+%5BClean+Edit%5D\", \"affiliateLinkAmazon\": \"http://www.amazon.com/exec/obidos/external-search?keyword=Fontaines+D.C.+Tongue+%5BClean+Edit%5D&mode=digital-music&tag=kcco04-20\", \"itunes_id\": null, \"itunes_time\": null, \"itunes_url\": null, \"spotify_id\": null, \"spotify_preview\": null, \"program_id\": \"e24\", \"program_start\": \"03:00\", \"program_end\": \"06:00\", \"program_title\": \"Eclectic 24\", \"host\": \"\", \"credits\": null, \"guest\": null, \"title\": \"Tongue [Clean Edit]\", \"artist\": \"Fontaines D.C.\", \"album\": \"Dopamine Chamber\", \"label\": \"XL Recordings\", \"albumImage\": \"https://i.scdn.co/image/ab67616d00001e02a01e49054c2135f979e06de0\", \"albumImageLarge\": \"https://i.scdn.co/image/ab67616d0000b273a01e49054c2135f979e06de0\", \"year\": null, \"artist_url\": \"https://fontainesdc.com/\", \"artist_bandcamp_url\": \"https://fontainesdc.bandcamp.com/\", \"qobuz_url\": null, \"channel\": \"Music\", \"offset\": 5501, \"time\": \"04:31 AM\", \"date\": \"2026-10-29\", \"datetime\": \"2026-10-29T04:31:41-07:00\", \"comments\": \"\", \"play_id\": 1155392}]"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "song",
+      "title": "Calling It (Peaking Lights Remix)",
+      "artist": "Automatic",
+      "album": "Calling It",
+      "artworkUrl": null,
+      "startedAt": "2026-10-29T11:34:53Z",
+      "durationSec": null,
+      "endsAt": null
+    },
+    "show": {
+      "title": "Eclectic 24"
+    },
+    "provenance": {
+      "adapter": "kcrw",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "stamped"
+    },
+    "pollAfterSec": 10
+  }
+}

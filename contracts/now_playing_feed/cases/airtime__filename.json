@@ -1,0 +1,26 @@
+{
+  "id": "airtime__filename",
+  "description": "Airtime Pro: file name and no tag metadata. Suppressed.",
+  "adapter": "airtime",
+  "params": {
+    "host": "dublab.airtime.pro"
+  },
+  "now": 1793273912,
+  "raw": {
+    "dublab.airtime.pro": "{\"station\": {\"env\": \"production\", \"schedulerTime\": \"2026-10-29 04:38:36\", \"source_enabled\": \"Scheduled\", \"timezone\": \"America/Los_Angeles\", \"AIRTIME_API_VERSION\": \"1.1\"}, \"tracks\": {\"previous\": {\"starts\": \"2026-10-29 04:33:36\", \"ends\": \"2026-10-29 04:36:49\", \"type\": \"track\", \"name\": \"Hakushi Hasegawa, HaHa And The Hairpins - Grace\", \"metadata\": {\"track_title\": \"Grace\", \"artist_name\": \"Hakushi Hasegawa, HaHa And The Hairpins\", \"album_title\": \"Honest Feeling Album\", \"genre\": \"Alternative\"}}, \"current\": {\"starts\": \"2026-10-29 04:36:49\", \"ends\": \"2026-10-29 04:39:55\", \"type\": \"track\", \"name\": \" - 26_Q4_Good_English_Billboard_Style_Meloxicam.mp3\", \"media_item_played\": true, \"metadata\": {}, \"record\": \"0\", \"album_artwork_image\": \"https://dublab.airtime.pro/api/album-artwork?id=63357\"}, \"next\": {\"starts\": \"2026-10-29 04:39:55\", \"ends\": \"2026-10-29 04:42:48\", \"type\": \"track\", \"name\": \"DJ_Dave - Next to U\", \"metadata\": {\"track_title\": \"Next to U\", \"artist_name\": \"DJ_Dave\", \"album_title\": \"Hardcore Software\", \"genre\": \"Electronic\"}}}, \"shows\": {\"previous\": [], \"current\": {\"name\": \"sounds of NOW\", \"description\": \"\", \"genre\": \"\", \"id\": 23729, \"instance_id\": 45284, \"record\": 0, \"url\": \"\", \"image_path\": \"\", \"image_cloud_file_id\": null, \"auto_dj\": true, \"starts\": \"2026-10-29 04:00:00\", \"ends\": \"2026-10-29 06:00:00\"}, \"next\": [{\"name\": \"sounds of NOW\", \"description\": \"\", \"genre\": \"\", \"id\": 23730, \"instance_id\": 45285, \"record\": 0, \"url\": \"\", \"image_path\": \"\", \"image_cloud_file_id\": null, \"auto_dj\": true, \"starts\": \"2026-10-29 06:00:00\", \"ends\": \"2026-10-29 08:00:00\"}, {\"name\": \"Kim Zumpfe – Voidwave\", \"description\": \"\", \"genre\": \"\", \"id\": 23719, \"instance_id\": 45274, \"record\": 0, \"url\": \"\", \"image_path\": \"\", \"image_cloud_file_id\": null, \"auto_dj\": false, \"starts\": \"2026-10-29 10:00:00\", \"ends\": \"2026-10-29 12:00:00\"}, {\"name\": \"NIGELTHREETIMES – guest session\", \"description\": \"\", \"genre\": \"\", \"id\": 23647, \"instance_id\": 45202, \"record\": 0, \"url\": \"\", \"image_path\": \"\", \"image_cloud_file_id\": null, \"auto_dj\": false, \"starts\": \"2026-10-29 12:00:00\", \"ends\": \"2026-10-29 13:00:00\"}, {\"name\": \"The Koreatown Oddity + Friends\", \"description\": \"\", \"genre\": \"\", \"id\": 23706, \"instance_id\": 45261, \"record\": 0, \"url\": \"\", \"image_path\": \"\", \"image_cloud_file_id\": null, \"auto_dj\": false, \"starts\": \"2026-10-29 13:00:00\", \"ends\": \"2026-10-29 17:00:00\"}]}}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "between",
+    "item": null,
+    "show": null,
+    "provenance": {
+      "adapter": "airtime",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "stamped",
+      "suppressed": "placeholder"
+    },
+    "pollAfterSec": 10
+  }
+}

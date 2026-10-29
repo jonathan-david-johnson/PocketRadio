@@ -1,0 +1,25 @@
+{
+  "id": "icy__ad_marker",
+  "description": "ICY block: automation ad marker. Suppressed.",
+  "adapter": "icy",
+  "params": {
+    "block": "StreamTitle=' - text=\"Spot Block End\" amgTrackId=\"9876543\" length=\"00:00:00\"';",
+    "station_name": null
+  },
+  "now": 1793273912,
+  "raw": {},
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "between",
+    "item": null,
+    "show": null,
+    "provenance": {
+      "adapter": "icy",
+      "channel": "icy",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "observed",
+      "suppressed": "ad"
+    },
+    "pollAfterSec": 10
+  }
+}

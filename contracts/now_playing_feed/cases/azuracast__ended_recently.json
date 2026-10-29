@@ -1,0 +1,27 @@
+{
+  "id": "azuracast__ended_recently",
+  "description": "AzuraCast (duration set to 214 s by hand): the song ended 5 minutes ago and nothing newer is listed. 'between', not the old title.",
+  "adapter": "azuracast",
+  "params": {
+    "api": "https://stream.radios.bzh/api/nowplaying",
+    "shortcode": "rkb"
+  },
+  "now": 1793272179,
+  "raw": {
+    "/api/nowplaying/rkb": "{\"station\": {\"id\": 7, \"name\": \"Radio Kreizh Breizh\", \"shortcode\": \"rkb\", \"listen_url\": \"https://stream.radios.bzh/listen/rkb/radio.mp3\"}, \"listeners\": {\"total\": 18, \"unique\": 15, \"current\": 18}, \"live\": {\"is_live\": true, \"streamer_name\": \"Studio\", \"broadcast_start\": 1792615205, \"art\": null}, \"now_playing\": {\"sh_id\": 5303541, \"played_at\": 1793271665, \"duration\": 214, \"playlist\": \"\", \"playlist_chain\": null, \"playlist_source\": null, \"streamer\": \"Studio\", \"is_request\": false, \"song\": {\"id\": \"6c832f0b6aad0e9fa7e533b990b3047b\", \"art\": \"https://stream.radios.bzh/static/vite_dist/assets/generic_song-7JSFKOXX.jpg\", \"custom_fields\": [], \"text\": \"RKB - La petite lanterne\", \"artist\": \"RKB\", \"title\": \"La petite lanterne\", \"album\": \"\", \"genre\": \"\", \"isrc\": \"\", \"lyrics\": \"\"}, \"elapsed\": 214, \"remaining\": 0}}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "between",
+    "item": null,
+    "show": null,
+    "provenance": {
+      "adapter": "azuracast",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:09:39Z",
+      "timing": "stamped",
+      "suppressed": "ended"
+    },
+    "pollAfterSec": 10
+  }
+}

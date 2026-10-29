@@ -1,0 +1,34 @@
+{
+  "id": "radiofrance__song",
+  "description": "Radio France: a tree of steps; choose the song step that spans now.",
+  "adapter": "radiofrance",
+  "params": {
+    "id": 7
+  },
+  "now": 1793273912,
+  "raw": {
+    "livemeta/pull/7": "{\"stationId\": 7, \"steps\": {\"cc203ca8-7d93-47c8-b489-c26281555e89_7\": {\"title\": \"Humble\", \"start\": 1793273802, \"end\": 1793273988, \"embedType\": \"song\", \"authors\": \"Vin's Da Cuero\", \"titreAlbum\": \"No more words vol.2\", \"visual\": \"https://www.radiofrance.fr/s3/cruiser-production-eu3/2026/04/e981ae23-b311-47b4-b72d-560eac4cbef7/400x400_sc_rf_omm_0004029184_dnc.0144023204.jpg\", \"stationId\": 7}, \"a25a3ad4-36d0-4cc9-86d0-e2d84fd4af51_7\": {\"title\": \"Vein melter\", \"start\": 1793272896, \"end\": 1793273444, \"embedType\": \"song\", \"authors\": \"Herbie Hancock\", \"titreAlbum\": \"Head hunters\", \"visual\": \"https://www.radiofrance.fr/s3/cruiser-production/2019/12/d0589a8a-66e7-4e91-ad80-b95f61bb2be5/400x400_rf_omm_0001520029_dnc.0068364596.jpg\", \"stationId\": 7}, \"f2de6ede-989a-47c2-bf7a-f379c44e6200_7\": {\"title\": \"Am I going through this on my own\", \"start\": 1793273432, \"end\": 1793273643, \"embedType\": \"song\", \"authors\": \"Penelope Isles & Jack Wolter & Peter Fletcher & Lily Wolter\", \"titreAlbum\": \"3\", \"visual\": \"https://www.radiofrance.fr/s3/rf-cruiser-embed-production/2026/09/0c08a896-9878-492d-86f1-9dee34cf3b36/400x400_sc_rf_omm_ddf226ff-e1dc-4ac9-a18d-4e970455c208.0163416397.jpg\", \"stationId\": 7}}}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "song",
+      "title": "Humble",
+      "artist": "Vin's Da Cuero",
+      "album": "No more words vol.2",
+      "artworkUrl": "https://www.radiofrance.fr/s3/cruiser-production-eu3/2026/04/e981ae23-b311-47b4-b72d-560eac4cbef7/400x400_sc_rf_omm_0004029184_dnc.0144023204.jpg",
+      "startedAt": "2026-10-29T11:36:42Z",
+      "durationSec": 186,
+      "endsAt": "2026-10-29T11:39:48Z"
+    },
+    "show": null,
+    "provenance": {
+      "adapter": "radiofrance",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "stamped"
+    },
+    "pollAfterSec": 10
+  }
+}

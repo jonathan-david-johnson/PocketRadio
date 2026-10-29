@@ -1,0 +1,34 @@
+{
+  "id": "triton__song",
+  "description": "Triton: XML, epoch milliseconds for start and duration.",
+  "adapter": "triton",
+  "params": {
+    "mount": "SRGSTR07AAC"
+  },
+  "now": 1793273912,
+  "raw": {
+    "np.tritondigital.com": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><nowplaying-info-list><nowplaying-info mountName=\"SRGSTR07AAC\" timestamp=\"1793273790\" type=\"track\"><property name=\"cue_time_duration\"><![CDATA[209240]]></property><property name=\"cue_time_start\"><![CDATA[1793273790533 ]]></property><property name=\"cue_title\"><![CDATA[Stole The Show]]></property><property name=\"track_artist_name\"><![CDATA[Kygo Ft Parson James]]></property><property name=\"track_id\"><![CDATA[SEBGA1500071]]></property></nowplaying-info></nowplaying-info-list>"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "song",
+      "title": "Stole The Show",
+      "artist": "Kygo Ft Parson James",
+      "album": null,
+      "artworkUrl": null,
+      "startedAt": "2026-10-29T11:36:30Z",
+      "durationSec": 209,
+      "endsAt": "2026-10-29T11:39:59Z"
+    },
+    "show": null,
+    "provenance": {
+      "adapter": "triton",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "stamped"
+    },
+    "pollAfterSec": 10
+  }
+}

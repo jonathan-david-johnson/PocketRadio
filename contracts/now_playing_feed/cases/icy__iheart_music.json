@@ -1,0 +1,33 @@
+{
+  "id": "icy__iheart_music",
+  "description": "ICY block with automation attributes (iHeart): song_spot=M is a song; text is the title, the prefix is the artist, amgArtworkURL is the artwork, length is the duration.",
+  "adapter": "icy",
+  "params": {
+    "block": "StreamTitle='Tame Impala / Jennie - text=\"Dracula\" song_spot=\"M\" MediaBaseId=\"3164232\" itunesTrackId=\"0\" amgTrackId=\"-1\" TAID=\"0\" amgArtworkURL=\"https://i.iheart.com/v3/catalog/track/377776484?ops=fit(200,200),format(%22jpeg%22)\" length=\"00:03:23\" unsID=\"-1\" spotInstanceId=\"-1\"';",
+    "station_name": null
+  },
+  "now": 1793273912,
+  "raw": {},
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "song",
+      "title": "Dracula",
+      "artist": "Tame Impala / Jennie",
+      "album": null,
+      "artworkUrl": "https://i.iheart.com/v3/catalog/track/377776484?ops=fit(200,200),format(%22jpeg%22)",
+      "startedAt": null,
+      "durationSec": 203,
+      "endsAt": null
+    },
+    "show": null,
+    "provenance": {
+      "adapter": "icy",
+      "channel": "icy",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "observed"
+    },
+    "pollAfterSec": 10
+  }
+}

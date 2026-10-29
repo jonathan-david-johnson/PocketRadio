@@ -1,0 +1,26 @@
+{
+  "id": "radiojar__dash_title",
+  "description": "RadioJar: title is just '-'. 'between'.",
+  "adapter": "radiojar",
+  "params": {
+    "id": "x"
+  },
+  "now": 1793273912,
+  "raw": {
+    "radiojar.com/api": "{\"album\": \"\", \"sku\": \"\", \"thumb\": \"\", \"artist\": \"\", \"title\": \"-\", \"show\": {}, \"buy_urls\": \"\", \"info_urls\": \"\", \"duration\": \"0\", \"guid\": null}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "between",
+    "item": null,
+    "show": null,
+    "provenance": {
+      "adapter": "radiojar",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "observed",
+      "suppressed": "placeholder"
+    },
+    "pollAfterSec": 10
+  }
+}

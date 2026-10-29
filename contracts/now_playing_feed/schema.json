@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NowPlaying record",
+  "description": "What every surface shows for a station. Produced by an adapter plus the shared rules in README.md.",
+  "type": "object",
+  "required": ["stationId", "status", "item", "show", "provenance", "pollAfterSec"],
+  "additionalProperties": false,
+  "properties": {
+    "stationId": { "type": "string" },
+    "status": {
+      "enum": ["playing", "between", "stale", "unsupported", "unavailable"],
+      "description": "playing: item is current. between: the source has nothing current (ad, slate, ended, empty). stale: the newest item is far too old. unsupported: no adapter. unavailable: the source failed."
+    },
+    "item": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["kind", "title", "artist", "album", "artworkUrl", "startedAt", "durationSec", "endsAt"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "enum": ["song", "show"] },
+            "title": { "type": "string" },
+            "artist": { "type": ["string", "null"] },
+            "album": { "type": ["string", "null"] },
+            "artworkUrl": { "type": ["string", "null"], "pattern": "^https://" },
+            "startedAt": { "type": ["string", "null"], "format": "date-time", "description": "UTC, from the source's own stamp. null when the source gives none." },
+            "durationSec": { "type": ["integer", "null"] },
+            "endsAt": { "type": ["string", "null"], "format": "date-time", "description": "startedAt + durationSec, when both are known." }
+          }
+        }
+      ]
+    },
+    "show": {
+      "oneOf": [{ "type": "null" }, { "type": "object", "required": ["title"], "properties": { "title": { "type": "string" } } }]
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["adapter", "channel", "observedAt", "timing"],
+      "properties": {
+        "adapter": { "type": "string" },
+        "channel": { "enum": ["api", "icy", "hls-id3"] },
+        "observedAt": { "type": "string", "format": "date-time" },
+        "timing": {
+          "enum": ["stamped", "observed", "none"],
+          "description": "stamped: the source gave a start time. observed: we saw the change at observedAt. none: neither. A start time is the station's clock, not the listener's audio position."
+        },
+        "suppressed": {
+          "enum": ["ad", "station_id", "placeholder", "unknown", "ended", "stale"],
+          "description": "Why item is null. Present only when item is null."
+        }
+      }
+    },
+    "pollAfterSec": { "type": "integer", "minimum": 1 }
+  }
+}

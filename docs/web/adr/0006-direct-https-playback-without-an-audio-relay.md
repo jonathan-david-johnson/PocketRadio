@@ -40,6 +40,8 @@ mixed-content/CORS restrictions.
   merely to collect metadata. Station-supported metadata feeds or browser-side
   ICY parsing may be investigated later, subject to permission, CORS and playback
   support. Feed observation time is not the listener's audio position.
+  [ADR 0008](0008-now-playing-comes-from-a-server-side-resolver.md) now defines how
+  station metadata feeds reach the page; it still bars reading the audio URL.
 - The station receives the listener's IP and may apply its own cookies and
   browser policies. Suppress the app's referrer. Our host-only app cookies and
   server-held tokens must not be sent as station request headers.

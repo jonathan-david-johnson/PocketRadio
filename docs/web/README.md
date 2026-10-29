@@ -82,6 +82,7 @@ M1's checks were mostly user-reported, with no browser versions recorded; see
 |-----------|------|-----------------|
 | M1 (`archive/web-m1`) | Prove Pairing, direct HTTPS playback and Cloudflare deployment | Pair, play a permitted HTTPS station directly, and reject HTTP without fallback |
 | [M2](./milestones/milestone_2.md) | App shell and navigation from the synced Layout *(in progress)* | Sidebar matches the iPhone's tabs and More, with the Bar line |
+| [M3a](./milestones/milestone_3a.md) | Now Playing resolver *(planned; precedes M3's Now Playing card)* | Open `/api/now-playing` for KEXP, KCRW and an AzuraCast station; titles match the iPhone, and an ended song shows `between` |
 | [M3](./milestones/milestone_3.md) | Streams, the player, and the installable app *(planned)* | Install, play a favorite, control it from media keys and Now Playing |
 | [M4](./milestones/milestone_4.md) | Lyrics for radio Tracks *(planned; metadata source/timing gate)* | A supported station has verified metadata/timing; lyric nudge survives reload |
 | [M5](./milestones/milestone_5.md) | Podcasts, Up Next, and episode playback *(planned)* | Pause on the web, resume on the phone where it stopped |

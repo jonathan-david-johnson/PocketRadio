@@ -1,0 +1,27 @@
+{
+  "id": "azuracast__placeholder",
+  "description": "AzuraCast: station slate ('technical problem') from a real station. Must not reach the UI as a song.",
+  "adapter": "azuracast",
+  "params": {
+    "api": "https://stream.radios.bzh/api/nowplaying",
+    "shortcode": "rcf"
+  },
+  "now": 1792615270,
+  "raw": {
+    "/api/nowplaying/rcf": "{\"station\": {\"id\": 9, \"name\": \"RCF Alpha\", \"shortcode\": \"rcf\", \"listen_url\": \"https://stream.radios.bzh/listen/rcf/radio.mp3\"}, \"listeners\": {\"total\": 0, \"unique\": 0, \"current\": 0}, \"live\": {\"is_live\": false, \"streamer_name\": \"\", \"broadcast_start\": null, \"art\": null}, \"now_playing\": {\"sh_id\": 5269204, \"played_at\": 1792615210, \"duration\": 300, \"playlist\": \"default\", \"playlist_chain\": null, \"playlist_source\": \"songs\", \"streamer\": \"\", \"is_request\": false, \"song\": {\"id\": \"37d3f270cf5218da7031c70d55ce22fa\", \"art\": \"https://stream.radios.bzh/api/station/rcf/art/85b2d369fee31d8c5eddeb80\", \"custom_fields\": [], \"text\": \"Problème technique - Nous revenons rapidement\", \"artist\": \"Problème technique\", \"title\": \"Nous revenons rapidement\", \"album\": \"\", \"genre\": \"Erreur\", \"isrc\": \"\", \"lyrics\": \"\"}, \"elapsed\": 300, \"remaining\": 0}}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "between",
+    "item": null,
+    "show": null,
+    "provenance": {
+      "adapter": "azuracast",
+      "channel": "api",
+      "observedAt": "2026-10-21T20:41:10Z",
+      "timing": "stamped",
+      "suppressed": "placeholder"
+    },
+    "pollAfterSec": 10
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "radioco__slate",
+  "description": "Radio.co: automation slate 'Unknown Artist - XYZ_ID6'. Suppressed.",
+  "adapter": "radioco",
+  "params": {
+    "sid": "s78f983952"
+  },
+  "now": 1793273912,
+  "raw": {
+    "public.radio.co": "{\"status\": \"online\", \"source\": {\"type\": \"automated\", \"collaborator\": null, \"relay\": null}, \"collaborators\": [], \"relays\": [], \"current_track\": {\"title\": \"Unknown Artist - XYZ_ID6\", \"start_time\": \"2026-10-29T11:37:10+00:00\", \"artwork_url\": \"https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/b2/d2/aa/b2d2aa3d-9ca3-9d82-6bd3-02769c723b03/source/100x100bb.jpg\", \"artwork_url_large\": \"https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/b2/d2/aa/b2d2aa3d-9ca3-9d82-6bd3-02769c723b03/source/600x600bb.jpg\"}, \"history\": [{\"title\": \"Bon Jovi - Living On A Prayer\"}, {\"title\": \"Jingle 07 - Tribalizeaza-te... Radio Trib\"}, {\"title\": \"Zennyth - Mai Spala-te\"}], \"logo_url\": \"https://images.radio.co/station_logos/s78f983952.20180427101826.png\", \"streaming_hostname\": \"streams.radio.co\", \"outputs\": [{\"name\": \"listen\", \"format\": \"MP3\", \"bitrate\": 128}], \"accepting_requests\": true}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "between",
+    "item": null,
+    "show": null,
+    "provenance": {
+      "adapter": "radioco",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "stamped",
+      "suppressed": "placeholder"
+    },
+    "pollAfterSec": 10
+  }
+}

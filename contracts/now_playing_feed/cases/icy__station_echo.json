@@ -1,0 +1,25 @@
+{
+  "id": "icy__station_echo",
+  "description": "ICY block: the title is the station name (VRT Radio 1). Suppressed.",
+  "adapter": "icy",
+  "params": {
+    "block": "StreamTitle='VRT Radio 1';",
+    "station_name": "VRT Radio 1"
+  },
+  "now": 1793273912,
+  "raw": {},
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "between",
+    "item": null,
+    "show": null,
+    "provenance": {
+      "adapter": "icy",
+      "channel": "icy",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "observed",
+      "suppressed": "station_id"
+    },
+    "pollAfterSec": 10
+  }
+}

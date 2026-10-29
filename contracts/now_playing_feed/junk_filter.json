@@ -1,0 +1,173 @@
+{
+  "description": "Junk filter cases: (title, artist) -> kind. kind is song, placeholder, ad or unknown. Cases marked 'Known gap' record a limit of the reference rules; a port must match the expected value as written.",
+  "cases": [
+    {
+      "title": "Diabla Caliente",
+      "artist": "Alex Cortiz",
+      "expected_kind": "song",
+      "note": "Plain song"
+    },
+    {
+      "title": "Jingle Bells",
+      "artist": "Frank Sinatra",
+      "expected_kind": "song",
+      "note": "Word 'jingle' inside a real title"
+    },
+    {
+      "title": "Live and Let Die",
+      "artist": "Wings",
+      "expected_kind": "song",
+      "note": "Starts with 'Live'"
+    },
+    {
+      "title": "Searching for the Young Soul Rebels",
+      "artist": "Dexys Midnight Runners",
+      "expected_kind": "song",
+      "note": "Starts with 'Searching'"
+    },
+    {
+      "title": "Unknown",
+      "artist": "Pink Floyd",
+      "expected_kind": "song",
+      "note": "Bare word with a real artist is trusted"
+    },
+    {
+      "title": "Technical Difficulties",
+      "artist": "Racer X",
+      "expected_kind": "song",
+      "note": "Phrase as a real title with a real artist"
+    },
+    {
+      "title": "Ad Astra",
+      "artist": "Bonobo",
+      "expected_kind": "song",
+      "note": "'Ad' prefix in a real title"
+    },
+    {
+      "title": "Song 2",
+      "artist": "Blur",
+      "expected_kind": "song",
+      "note": "'Song' in a real title"
+    },
+    {
+      "title": "Live",
+      "artist": "Live",
+      "expected_kind": "song",
+      "note": "Band named Live; bare word with an artist is trusted"
+    },
+    {
+      "title": "hangixristos",
+      "artist": "glikobradiazei_kai_o_ntounias",
+      "expected_kind": "song",
+      "note": "Transliterated slug looks like a file id but is a song; not filtered"
+    },
+    {
+      "title": "Live",
+      "artist": null,
+      "expected_kind": "placeholder",
+      "note": "Bare status word, no artist"
+    },
+    {
+      "title": "Searching",
+      "artist": null,
+      "expected_kind": "placeholder",
+      "note": "Bare status word, no artist"
+    },
+    {
+      "title": "Unknown",
+      "artist": null,
+      "expected_kind": "placeholder",
+      "note": "Bare word, no artist"
+    },
+    {
+      "title": "XYZ_ID6",
+      "artist": "Unknown Artist",
+      "expected_kind": "placeholder",
+      "note": "Automation slate id"
+    },
+    {
+      "title": "Shine 879 DAB - The World's Leading Dance Music Station",
+      "artist": null,
+      "expected_kind": "song",
+      "note": "Known gap: a long station-ID string without a marker looks like a title"
+    },
+    {
+      "title": "{cartNumber}",
+      "artist": null,
+      "expected_kind": "placeholder",
+      "note": "Unfilled template token"
+    },
+    {
+      "title": "{cartNumber}",
+      "artist": "INVASORES DE NUEVO LEON",
+      "expected_kind": "placeholder",
+      "note": "Template token in the title field"
+    },
+    {
+      "title": "26_Q4_Good_English_Billboard_Style_Meloxicam.mp3",
+      "artist": null,
+      "expected_kind": "placeholder",
+      "note": "File name with extension"
+    },
+    {
+      "title": "eng-bodhinatha-veylanswami-kauai-h.mp3",
+      "artist": null,
+      "expected_kind": "placeholder",
+      "note": "File name with extension"
+    },
+    {
+      "title": "-",
+      "artist": null,
+      "expected_kind": "placeholder",
+      "note": "Dash only"
+    },
+    {
+      "title": " - ",
+      "artist": null,
+      "expected_kind": "placeholder",
+      "note": "Dash with spaces (Zeno)"
+    },
+    {
+      "title": "",
+      "artist": "Artist",
+      "expected_kind": "unknown",
+      "note": "Empty title"
+    },
+    {
+      "title": "Nous revenons rapidement",
+      "artist": "Problème technique",
+      "expected_kind": "placeholder",
+      "note": "Station slate in the artist field (AzuraCast)"
+    },
+    {
+      "title": "THIS STATION WILL CONTINUE AFTER THE PLEDGE BREAK",
+      "artist": null,
+      "expected_kind": "placeholder",
+      "note": "Pledge placeholder (KUTX ICY)"
+    },
+    {
+      "title": "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\"><html>",
+      "artist": "x",
+      "expected_kind": "placeholder",
+      "note": "HTML error page leaked into a tag (SomaFM HLS TALB)"
+    },
+    {
+      "title": "Spot Block End",
+      "artist": null,
+      "expected_kind": "ad",
+      "note": "Automation ad marker"
+    },
+    {
+      "title": "Advertisement",
+      "artist": null,
+      "expected_kind": "ad",
+      "note": "Ad word"
+    },
+    {
+      "title": "Your Morning Show",
+      "artist": "Ad Astra",
+      "expected_kind": "song",
+      "note": "'Ad' inside an artist name"
+    }
+  ]
+}

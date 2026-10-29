@@ -1,0 +1,37 @@
+{
+  "id": "npr_composer__show_only",
+  "description": "NPR Composer: no song, only the live programme. Shown as a show with the programme's own start and end.",
+  "adapter": "npr_composer",
+  "params": {
+    "ucs": "x",
+    "tz": "America/Chicago"
+  },
+  "now": 1793273912,
+  "raw": {
+    "composer.nprstations.org": "{\"onNow\": {\"start_utc\": \"2026-10-29T10:00:00.000Z\", \"end_utc\": \"2026-10-29T13:00:00.000Z\", \"program\": {\"name\": \"Taylor Wallace-Riegel\", \"ucs\": \"50ef24ebe1c8a1369593d032\"}, \"song\": null}}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "show",
+      "title": "Taylor Wallace-Riegel",
+      "artist": null,
+      "album": null,
+      "artworkUrl": null,
+      "startedAt": "2026-10-29T10:00:00Z",
+      "durationSec": 10800,
+      "endsAt": "2026-10-29T13:00:00Z"
+    },
+    "show": {
+      "title": "Taylor Wallace-Riegel"
+    },
+    "provenance": {
+      "adapter": "npr_composer",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "stamped"
+    },
+    "pollAfterSec": 10
+  }
+}

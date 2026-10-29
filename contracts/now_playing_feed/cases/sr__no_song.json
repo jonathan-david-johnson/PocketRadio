@@ -1,0 +1,25 @@
+{
+  "id": "sr__no_song",
+  "description": "Sveriges Radio: no current song (talk programme). 'between'.",
+  "adapter": "sr",
+  "params": {
+    "channel": 164
+  },
+  "now": 1793273912,
+  "raw": {
+    "api.sr.se": "{\"playlist\": {\"previoussong\": {\"title\": \"Storm II\", \"description\": \"Gener8ion & Yung Lean - Storm II\", \"artist\": \"Gener8ion & Yung Lean\", \"composer\": \"Benoit Heitz\", \"albumname\": \"Storm\", \"recordlabel\": \"\", \"starttimeutc\": \"/Date(1793273666000)/\", \"stoptimeutc\": \"/Date(1793273835000)/\"}, \"channel\": {\"id\": 164, \"name\": \"P3\"}}}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "between",
+    "item": null,
+    "show": null,
+    "provenance": {
+      "adapter": "sr",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "none"
+    },
+    "pollAfterSec": 10
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "icy__artist_title",
+  "description": "ICY block: Artist - Title in one string.",
+  "adapter": "icy",
+  "params": {
+    "block": "StreamTitle='Alex Cortiz - Diabla Caliente';",
+    "station_name": null
+  },
+  "now": 1793273912,
+  "raw": {},
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "song",
+      "title": "Diabla Caliente",
+      "artist": "Alex Cortiz",
+      "album": null,
+      "artworkUrl": null,
+      "startedAt": null,
+      "durationSec": null,
+      "endsAt": null
+    },
+    "show": null,
+    "provenance": {
+      "adapter": "icy",
+      "channel": "icy",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "observed"
+    },
+    "pollAfterSec": 10
+  }
+}

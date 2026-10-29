@@ -1,0 +1,34 @@
+{
+  "id": "iheart__song",
+  "description": "iHeart: epoch ms start, duration in seconds, artwork.",
+  "adapter": "iheart",
+  "params": {
+    "id": 6045
+  },
+  "now": 1793273912,
+  "raw": {
+    "live-meta/stream/6045": "{\"artistId\":39190,\"albumId\":61911661,\"trackId\":61911668,\"title\":\"Party Up\",\"artist\":\"DMX\",\"album\":\"...And Then There Was X\",\"trackDuration\":268,\"imagePath\":\"http://image.iheart.com/ihr-ingestion-pipeline-production-umg/00602567827627_20260227115430165/cca67a0c0cbfbbeed352cbe04abd3154.jpg\",\"explicitLyrics\":true,\"lyricsId\":0,\"startTime\":1793273660622,\"endTime\":1793273929091,\"playbackRights\":{\"onDemand\":true},\"status\":\"match\",\"offset\":7078,\"dataSource\":\"Gracenote\"}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "song",
+      "title": "Party Up",
+      "artist": "DMX",
+      "album": "...And Then There Was X",
+      "artworkUrl": "https://image.iheart.com/ihr-ingestion-pipeline-production-umg/00602567827627_20260227115430165/cca67a0c0cbfbbeed352cbe04abd3154.jpg",
+      "startedAt": "2026-10-29T11:34:20Z",
+      "durationSec": 268,
+      "endsAt": "2026-10-29T11:38:48Z"
+    },
+    "show": null,
+    "provenance": {
+      "adapter": "iheart",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "stamped"
+    },
+    "pollAfterSec": 10
+  }
+}

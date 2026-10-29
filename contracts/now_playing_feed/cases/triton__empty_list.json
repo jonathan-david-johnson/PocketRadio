@@ -1,0 +1,25 @@
+{
+  "id": "triton__empty_list",
+  "description": "Triton: 200 with an empty list. 'between'.",
+  "adapter": "triton",
+  "params": {
+    "mount": "X"
+  },
+  "now": 1793273912,
+  "raw": {
+    "np.tritondigital.com": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><nowplaying-info-list></nowplaying-info-list>"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "between",
+    "item": null,
+    "show": null,
+    "provenance": {
+      "adapter": "triton",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "none"
+    },
+    "pollAfterSec": 10
+  }
+}

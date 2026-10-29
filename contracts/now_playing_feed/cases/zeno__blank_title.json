@@ -1,0 +1,23 @@
+{
+  "id": "zeno__blank_title",
+  "description": "Zeno SSE: title is ' - '. 'between'.",
+  "adapter": "zeno",
+  "params": {
+    "block": "event:message\ndata:{\"mount\":\"ud2u96xst5quv\",\"streamTitle\":\" - \"}\n"
+  },
+  "now": 1793273912,
+  "raw": {},
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "between",
+    "item": null,
+    "show": null,
+    "provenance": {
+      "adapter": "zeno",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "none"
+    },
+    "pollAfterSec": 10
+  }
+}

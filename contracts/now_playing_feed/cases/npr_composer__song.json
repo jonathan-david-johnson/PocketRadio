@@ -1,0 +1,37 @@
+{
+  "id": "npr_composer__song",
+  "description": "NPR Composer (song object added by hand from an earlier live response): start time as MM-DD-YYYY in the station's zone; duration in ms.",
+  "adapter": "npr_composer",
+  "params": {
+    "ucs": "50ef24ebe1c8a1369593d032",
+    "tz": "America/Chicago"
+  },
+  "now": 1793273912,
+  "raw": {
+    "composer.nprstations.org": "{\"onNow\": {\"start_utc\": \"2026-10-29T10:00:00.000Z\", \"end_utc\": \"2026-10-29T13:00:00.000Z\", \"program\": {\"name\": \"Taylor Wallace-Riegel\", \"ucs\": \"50ef24ebe1c8a1369593d032\"}, \"song\": {\"_start_time\": \"10-29-2026 06:37:32\", \"artistName\": \"Justice\", \"collectionName\": \"Hyperdrama\", \"trackName\": \"Flower in a Hurricane\", \"_duration\": 223000}}}"
+  },
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "song",
+      "title": "Flower in a Hurricane",
+      "artist": "Justice",
+      "album": "Hyperdrama",
+      "artworkUrl": null,
+      "startedAt": "2026-10-29T11:37:32Z",
+      "durationSec": 223,
+      "endsAt": "2026-10-29T11:41:15Z"
+    },
+    "show": {
+      "title": "Taylor Wallace-Riegel"
+    },
+    "provenance": {
+      "adapter": "npr_composer",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "stamped"
+    },
+    "pollAfterSec": 10
+  }
+}

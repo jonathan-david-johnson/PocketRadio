@@ -1,0 +1,32 @@
+{
+  "id": "zeno__sse_event",
+  "description": "Zeno SSE: one event with a combined title.",
+  "adapter": "zeno",
+  "params": {
+    "block": "id:1793269678157\nevent:message\ndata:{\"mount\":\"47080zndvbruv\",\"streamTitle\":\"Ivan Spell - Buddha Bar Sessions 7\",\"streamUrl\":\"&artist=Ivan Spell&album=Bar Sessions\"}\n"
+  },
+  "now": 1793273912,
+  "raw": {},
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "playing",
+    "item": {
+      "kind": "song",
+      "title": "Buddha Bar Sessions 7",
+      "artist": "Ivan Spell",
+      "album": null,
+      "artworkUrl": null,
+      "startedAt": null,
+      "durationSec": null,
+      "endsAt": null
+    },
+    "show": null,
+    "provenance": {
+      "adapter": "zeno",
+      "channel": "api",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "observed"
+    },
+    "pollAfterSec": 10
+  }
+}

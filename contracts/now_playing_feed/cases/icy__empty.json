@@ -1,0 +1,24 @@
+{
+  "id": "icy__empty",
+  "description": "ICY block: empty title. 'between'.",
+  "adapter": "icy",
+  "params": {
+    "block": "StreamTitle='';",
+    "station_name": null
+  },
+  "now": 1793273912,
+  "raw": {},
+  "expected": {
+    "stationId": "fixture-station",
+    "status": "between",
+    "item": null,
+    "show": null,
+    "provenance": {
+      "adapter": "icy",
+      "channel": "icy",
+      "observedAt": "2026-10-29T11:38:32Z",
+      "timing": "none"
+    },
+    "pollAfterSec": 10
+  }
+}
