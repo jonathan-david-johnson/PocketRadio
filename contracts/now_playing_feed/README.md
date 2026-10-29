@@ -6,7 +6,9 @@ Golden fixtures for turning a station's raw "now playing" response into one norm
 
 The expected values were produced by a research prototype (`docs/global/experiments/traces/2026-10-29_now_playing/scripts/np_adapters.py`) and then **read case by case by a person**.
 
-**Swift port (2026-10-29):** `pocket-radio-menubar` branch `feature/now-playing-feed`, package `Packages/NowPlayingFeed`, passes all 41 cases and all 28 junk cases, and its time-converter checks were verified against Python's `datetime`. The same person wrote it from the Python reference, so it shows the fixtures are consistent and the rules port cleanly. It is not an independent reading of the rules. The TypeScript port (web M3a) is the next check. Disagreements the Swift port exposed are written into the rules below.
+**Swift port (2026-10-29):** `pocket-radio-menubar` branch `feature/now-playing-feed`, package `Packages/NowPlayingFeed`, passes all 41 cases and all 28 junk cases, and its time-converter checks were verified against Python's `datetime`. The same person wrote it from the Python reference, so it shows the fixtures are consistent and the rules port cleanly. It is not an independent reading of the rules. Disagreements the Swift port exposed are written into the rules below.
+
+**TypeScript port (2026-10-29):** web branch `feature/m3a-now-playing` commits `77c513f` and `e918742` pass all 41 cases, all 28 junk cases, and the record-shape checks. It implements all fixture parsers, but makes requests only for first-release adapters. The same person used the Swift port while writing it, so this is a second language implementation, not independent review.
 
 Raw bodies were recorded from live services on 2026-10-29 and trimmed. Several carry a few hand edits, each named in the case's `description`. The services' terms of use were not reviewed for fixture use. No audio is involved.
 
