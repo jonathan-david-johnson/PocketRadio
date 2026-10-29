@@ -1,8 +1,8 @@
 # 0011 — KCRW HLS pins each listening session to the server that owns it
 
-**Status:** Accepted 2026-10-28 as the approach for the Debug experiment on `experiment/unified-skew`. Measured on the Mac and in a phone packet capture. Pinning passed phone runs on the speaker; Bluetooth, CarPlay and background playback are not yet tested.
+**Status:** Accepted 2026-10-28 as the approach for the Debug experiment on `experiment/unified-skew`. The user selected it as the production path on 2026-10-29, conditional on the remaining route checks. Measured on the Mac and in a phone packet capture. Pinning passed phone runs on the speaker; Bluetooth, CarPlay and background playback are not yet tested.
 
-**Decision:** For KCRW's HLS stream, the app fetches the master playlist itself and rewrites its variant URL to `http://<server>/…`, where `<server>` is the address that the listening session ID names. The variant playlist and every segment, whose URIs are relative, then go to the server that holds the session, whatever DNS returns. As a backstop, when the segment loader still stops, the app replaces the item, which starts a new session.
+**Decision:** For KCRW's HLS stream, the app fetches the master playlist itself and rewrites its variant URL to `http://<server>/…`, where `<server>` is the address that the listening session ID names. The variant playlist and every segment, whose URIs are relative, then go to the server that holds the session, whatever DNS returns. As a backstop, when the segment loader still stops, the app replaces the item, which starts a new session. The current code remains Debug-only. After Bluetooth, wired CarPlay, and locked/background checks pass, promote this pin-and-backstop path to Release; that requires a separate code change, manual validation, and approval to merge.
 
 ## What the server does
 

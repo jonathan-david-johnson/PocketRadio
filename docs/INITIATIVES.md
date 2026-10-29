@@ -15,7 +15,7 @@ What is running across PocketRadio, what each one is waiting for, and what is pa
 
 | # | Initiative | Parent milestone | Code | State | Next | Needs you |
 |---|---|---|---|---|---|---|
-| 1 | **iOS: KCRW alignment and routes** | [iOS M14](ios/milestones/milestone_14.md), step 14.4 | `pocket-radio-ios`, branch `experiment/unified-skew` (`56a7ecf21`), worktree `pocket-radio-ios-alignment/`. 16 commits are not on `trunk` | The stall cause is found and a Debug fix passed about 21 minutes on the phone's speaker. **Not resolved** (see below) | Run Bluetooth, wired CarPlay and locked/background checks on the fixed build | Wired phone for installs; the car; a decision on the production path for the fix |
+| 1 | **iOS: KCRW alignment and routes** | [iOS M14](ios/milestones/milestone_14.md), step 14.4 | `pocket-radio-ios`, branch `experiment/unified-skew` (`56a7ecf21`), worktree `pocket-radio-ios-alignment/`. 16 commits are not on `trunk` | The stall cause is found and a Debug fix passed about 21 minutes on the phone's speaker. **Not resolved.** The user selected pinning plus the backstop as the Release path after route checks. | Run Bluetooth, wired CarPlay and locked/background checks on the fixed build; then make and validate the separate Release configuration change | Wired phone for installs and the car when the deferred route checks resume |
 | 2 | **Web player** | [Web M2](web/milestones/milestone_2.md), then M3a, M3 | `pocket-radio-web` `main` (`dbf7759`); M3a branch `feature/m3a-now-playing` in `pocket-radio-web-m3a/` | M2 merged 2026-10-29. Its missed-refocus observation and deleted-playlist hand check remain open. M3a has started. | Build the M3a resolver | Run the two M2 follow-ups only when you want to validate them live |
 | 3 | **Now Playing normalization** | [Global M4](global/milestones/milestone_4.md) | Web: M3a in `pocket-radio-web-m3a/`. Menubar: M13 package branch `feature/now-playing-feed` in `pocket-radio-menubar-nowplaying/`. iOS: not opened | Research done (cycle 1). Contract on `main`. The isolated Swift package passes its tests and remains unintegrated. ADR 0008 accepts no server-side ICY peek for now. | Build the web resolver; decide later whether to merge the Swift package | No decision now |
 | 4 | **CarPlay verification backlog** | iOS M14.4, and closed M13.x (bugs 4–8) | Same as 1 | The simulator suite passes (128 tests, nine expected failures). **No real-CarPlay run is recorded. Deferred by the user on 2026-10-29.** | Wait until the user schedules a session | A parked car, the wired cable, consent for device-harness runs |
@@ -42,11 +42,7 @@ What is running across PocketRadio, what each one is waiting for, and what is pa
   3. **The fix rests on an undocumented format.** It decodes the server from KCRW's session ID and sends plain `http://` to that server's address. If KCRW changes the format, the fix quietly stops working and the 20 s item-replacement backstop takes over, at about 7 s of silence each time.
   4. **It lives on an experiment branch** with 15 other commits (alignment, ShazamKit healing). None is on `trunk`.
   5. **Twenty-one minutes is a small sample.** The stalls were intermittent (a clean 18 minute run happened before the fix).
-- **Options for a production path** (not decided; they are yours):
-  - **A.** Ship the pin in Release, with the backstop, after the route checks pass. Fastest. Keeps the undocumented dependency.
-  - **B.** Play KCRW's direct MP3 stream, which held for 100 s with no stall in a Mac test. It has no program-date clock, so alignment would need new calibration (ADR 0011 and bug 15 explain why the saved skew cannot be reused).
-  - **C.** Ask KCRW to fix the session handling on their servers. Free, outside our control.
-  - My recommendation is A for now (it is built and tested), with C attempted in parallel.
+- **Production path (selected 2026-10-29):** **A.** After Bluetooth, wired CarPlay, and locked/background checks pass, promote the KCRW session pin and its replacement backstop to Release. It is the fastest path and keeps the documented behavior, but it retains an undocumented dependency: if KCRW changes the session-ID format, the pin falls back to the slower recovery backstop. The current code is still Debug-only; the Release configuration change has not been made or approved.
 
 ## CarPlay backlog
 
@@ -76,8 +72,7 @@ The simulator suite does not certify real head-unit behavior (ADR 0003). The rea
 
 ## Decisions waiting for you
 
-1. Production path for the KCRW stall fix (A, B or C above).
-2. Whether to run the two remaining Web M2 hand checks (a missed refocus refresh and a deleted playlist).
-3. Whether to merge the Swift package into menubar `main` after it remains isolated long enough for review.
-4. Whether to schedule the real-car CarPlay session, and whether the device harness is wanted.
-5. Whether to spend a session closing the finished milestones.
+1. Whether to run the two remaining Web M2 hand checks (a missed refocus refresh and a deleted playlist).
+2. Whether to merge the Swift package into menubar `main` after it remains isolated long enough for review.
+3. Whether to schedule the deferred real-car CarPlay session, and whether the device harness is wanted.
+4. Whether to spend a session closing the finished milestones.
