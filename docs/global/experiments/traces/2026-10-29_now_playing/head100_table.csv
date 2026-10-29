@@ -1,0 +1,101 @@
+rank,clicks,name,country,host,group,state,icy_title,hls_pdt,hls_id3,homepage,rb_uuid
+1,1657,RTL,FR,hls.rtl.fr,single/other,hls_id3_text,,1,TIT2|TPE1|WXXX,https://www.rtl.fr/,042d3140-227c-4fac-9387-4903b692d5f2
+2,1029,Radio Armisa,IT,onair.armisa.it,single/other,icy_title,Fisa Da Ballo 9,0,,https://armisa.it/,83dcfac4-b3c3-4731-afc1-a80dd271dffa
+3,863,Europe 1,FR,europe1.lmn.fm,single/other,icy_title,Europe 1 - La radio libre,0,,https://www.europe1.fr/,dfcef843-6bf9-40f6-b3fe-2b224df86e48
+4,837,RMC FR,FR,audio.bfmtv.com,single/other,icy_empty,,0,,https://rmc.bfmtv.com/,7a3a3989-8f26-44f7-9ae5-fa91e5cf4f9d
+5,746,Anon.FM,RU,icecast.anon.fm,single/other,icy_title,Donchan no Uta,0,,https://anon.radio.fm/,b6fa9d93-97bf-48b0-8624-e8f84b817823
+6,640,MANGORADIO,DE,mangoradio.stream.laut.fm,laut.fm,icy_title,"Sääftig, Marlon Deagle - BÄBY",0,,https://mangoradio.de/,78012206-1aa1-11e9-a80b-52543be04c81
+7,636,Nostalgie HQ,FR,streaming.nrjaudio.fm,NRJ,icy_title,10073 - 10073,0,,https://www.nostalgie.fr/,d39ab442-6c34-4097-afd0-e298ac21e50c
+8,606,France Inter,FR,stream.radiofrance.fr,Radio France,hls_no_text,,1,,https://www.radiofrance.fr/franceinter,33960c43-0464-44b4-abfa-73591ebf647f
+9,564,Deutschlandfunk | DLF | MP3 128k,DE,f141.rndfnk.com,ARD (rndfnk),icy_title,"Nachrichten, Deutschlandfunk-Nachrichtenredaktion",0,,https://www.deutschlandfunk.de/,1c3e8be2-5b14-4933-bad3-87cbc227cba4
+10,480,SWR3,DE,f131.rndfnk.com,ARD (rndfnk),icy_title,Kontakt zu SWR3: facebook.com/swr3,0,,https://swr3.de/,240d28b9-7858-48d2-a816-9cf8e1875fe8
+11,426,Dance Wave!,HU,stream1.dancewave.online,single/other,icy_title,All about Dance from 2000 till today!,0,,https://dancewave.online/,962cc6df-0601-11e8-ae97-52543be04c81
+12,407,Nrj Hits,FR,streaming.nrjaudio.fm,NRJ,icy_title,289104 - 407237,0,,https://www.nrj.fr/webradios/mur-des-radios/nrj-hits,36eba167-5c51-4421-98f0-d2cda24be928
+13,350,Heart 80s,GB,media-ssl.musicradio.com,Global (musicradio),icy_title,Bronski Beat - Smalltown Boy,0,,https://www.heart.co.uk/80s,c4077677-dc2f-11e9-a8ba-52543be04c81
+14,341,Radio Mirchi Hindi,IN,eu8.fastcast4u.com,fastcast4u,icy_empty,,0,,,cdd3b5a0-47f6-46d5-8209-b78e8b10ff6e
+15,307,LOS 40 Principales España,ES,27743.live.streamtheworld.com,Triton/StreamTheWorld,icy_title,"Charlie Puth,Selena Gomez - We don't talk anymore",0,,https://los40.com/,b81c57c3-eb05-47ac-a0ea-eb01a6960cc4
+16,305,CCTV-13新闻伴音,CN,piccpndali.v.myalicdn.com,Akamai CDN,hls_no_text,,0,,https://www.cctv.com/,2bf82625-6e78-445d-afff-e51e53c369a9
+17,300,Bollywood Gaane Purane,IN,stream-291.surfernetwork.com,Zeno,icy_title,"Karvaten Badalte Rahe Saari Raat Hum | Kishore Kumar, Lata Mangeshkar | Aap Ki Kasam 1974 Songs",0,,https://gaanepurane.my-free.website/,e928bf7b-7de2-4447-87ec-369d1be1b9f5
+18,294,Power POP,TR,listen.powerapp.com.tr,single/other,hls_no_text,,0,,https://www.powerapp.com.tr/powerpop/,fb1fd397-78fd-11ea-8a3b-52543be04c81
+19,288,CAPITAL - The UK's No.1 Hit Music Station,GB,media-ssl.musicradio.com,Global (musicradio),icy_title,Tate McRae - Greedy,0,,https://www.capitalfm.com/,4ad5bdc7-01e5-47c9-a1f9-751671b4707e
+20,276,Radio Italia Solo Musica Italiana,IT,radioitaliasmi.akamaized.net,Akamai CDN,hls_no_text,,1,,https://www.radioitalia.it/,216ee092-939d-43b6-8562-c646f73ad89f
+21,269,Chérie FM,FR,cdnradio.streamakaci.com,single/other,icy_empty,,0,,,f9ed1fa4-63d7-45a4-bdd6-48c5567f0f6b
+22,251,Radio Deejay,IT,streamcdnc1-4c4b867c89244861ac216426883d1ad0.msvdn.net,single/other,hls_no_text,,0,,https://www.deejay.it/,999ff951-68eb-4f4a-bec9-ed972b99d258
+23,248,ONDA CERO (España),ES,25533.live.streamtheworld.com,Triton/StreamTheWorld,hls_no_text,,1,PRIV,https://www.radio.es/s/onda-cero-madrid,b8601593-152a-429d-9cb2-5065cf7c0185
+24,246,CNN,US,tunein.cdnstream1.com,single/other,icy_empty,,0,,https://www.cnn.com/,33178054-56cd-449c-8cf7-412cc7be936a
+25,236,Fox News Radio,US,prod-52-90-119-121.amperwave.net,Amperwave,icy_empty,,0,,https://radio.foxnews.com/,510aeeac-e7a0-41c2-aea2-e572e811ffe7
+26,230,Vivid Bharti,IN,air.pc.cdn.bitgravity.com,Akamai CDN,hls_no_text,,0,,,902ea231-d537-4dc8-8708-6819418086d0
+27,226,怀集音乐之声,CN,lhttp.qingting.fm,Qingting/Qtfm (CN),icy_empty,,0,,http://www.hj0758.cn/,24711f7f-8ff5-4141-8e0f-ab17f3da1b89
+28,221,AR RADIO,IN,free.rcast.net,single/other,icy_title,"Mano, Neeti Mohan - [Songs.PK] Hits Of Rajinikanth - 04 - Mona Gasolina",0,,https://arradiokerala.blogspot.com/,fcfb0919-27a6-46cd-9cef-55f48833b077
+29,221,Bayern 3,DE,f121.rndfnk.com,ARD (rndfnk),icy_title,*** Bayern 3 - Bayerns Hitradio Nummer 1 mit allen Hits von heute – und den meisten neuen!,0,,https://www.bayern3.de/,0de82079-04e7-407b-b616-e0726eba5244
+30,221,Cope Madrid FM,ES,net1-cope-rrcast.flumotion.com,single/other,icy_empty,,0,,https://cope.es/,00526b4f-47a3-432d-baca-f914c1273f0b
+31,220,CNR-1 中国之声,CN,lhttp.qtfm.cn,Qingting/Qtfm (CN),icy_empty,,0,,http://www.cnr.cn/,835070cd-bf45-4e48-88a4-e9f9a0d7dd9e
+32,217,KRAL TÜRK FM,TR,live.radyositesihazir.com,single/other,icy_title,Ferdi Tayfur - Koparma Gülleri,0,,https://live.radyositesihazir.com/8032/stream,09f8922f-56bb-41bd-ad35-a7e54c5520e3
+33,209,SomaFM Groove Salad (128k MP3),US,ice2.somafm.com,single/other,icy_title,Gold Lounge - Whats going on,0,,https://somafm.com/groovesalad/,960cf833-0601-11e8-ae97-52543be04c81
+34,196,102.7 KIIS FM,US,cloud.revma.ihrhls.com,iHeart/Revma,icy_title,"Tame Impala / Jennie - text=""Dracula"" song_spot=""M"" MediaBaseId=""3164232"" itunesTrackId=""0"" amgTrackId=""-1"" amgArtistId=""0"" TAID=""0"" TPID=""355245498"" cartcutId=""0445884001"" amgArtworkURL=""https://i.iheart.com/v3/catalog/track/377776484?ops=fit(200,200),format(%22jpeg%22)"" length=""00:03:23"" unsID=""-1"" spotInstanceId=""-1""",0,,https://kiisfm.iheart.com/,c76686ca-a8b9-4db9-9839-1470c9599623
+35,196,Radio 357,PL,n-11-21.dcs.redcdn.pl,single/other,icy_empty,,0,,https://radio357.pl/,d377fdb9-9136-47de-a1f4-6b02a1bc7f72
+36,195,"# TOP 100 CLUB CHARTS - DANCE & DJ MIX RADIO - 24 HOURS NON-STOP MUSIC @ TikTok Hits, Ibiza House, Sunset Lounge, Melodic Music, EDM, Deep House, Dance Music, Techno & Hypertechno, Rave Charts, Top 40 Charts, Latin, Reggaeton Music, Moombahton, Urban Hits, HipHop, Party & Clubbing Radio, Trending Chartmusic, R&B, Urban, Mixtape - & LIVE DJ SET",DE,rautemusik.stream37.radiohost.de,rautemusik,icy_empty,,0,,https://rm.fm/breakz/team,dd98c499-a0c4-4019-a35e-99caa6940407
+37,195,Slow Turk,TR,radyo.duhnet.tv,single/other,icy_empty,,0,,https://www.slowturk.com.tr/,97f3bb39-24a0-461d-b282-b0ccae5a12c4
+38,192,RAC1,ES,20103.live.streamtheworld.com,Triton/StreamTheWorld,icy_empty,,0,,https://www.rac1.cat/,38a33fc0-be05-4c98-8c6a-ba3869575bc1
+39,190,KISS FM,ES,bbkissfm.kissfmradio.cires21.com,single/other,no_icy,,0,,https://www.kissfm.es/,743889d5-5472-4e9f-ac61-5f0f04e7efa8
+40,179,Deutschlandfunk | DLF | AAC 192k,DE,f111.rndfnk.com,ARD (rndfnk),icy_title,"Nachrichten, Deutschlandfunk-Nachrichtenredaktion",0,,https://www.deutschlandfunk.de/,717e3749-b9e8-4497-bd6a-61ccec935922
+41,178,latamangeshkarradio,IN,stream-288.surfernetwork.com,Zeno,icy_title,"Lata Mangeshkar,S. P. Balasubrahmanyam (Raag.Fm) - Didi Tera Devar Deewana (Hum Aapke Hain Koun) (Raag.Fm)",0,,,7b130d03-6142-4de2-85db-a821b5949468
+42,177,RTL 102.5,IT,streamcdnc1-dd782ed59e2a4e86aabf6fc508674b59.msvdn.net,single/other,hls_no_text,,0,PRIV,https://www.rtl.it/,675bd925-8b13-43fe-a1b9-43bb0f90fbbd
+43,177,新闻联播,CN,rfienchinois64k.ice.infomaniak.ch,Infomaniak,icy_title,rfi input8-live ,0,,https://www.rfi.fr/cn/,3f6d52c1-9373-4fd2-8bef-5dd476e4e7d2
+44,176,Iran International (HTTPS stream),IR,n09.radiojar.com,RadioJar,icy_title,Volant Media,0,,https://www.iranintl.com/,37acc36e-e070-4225-9d9f-d3c3610470fd
+45,173,KJ Yesudas Malayalam radio,IN,stream-281.surfernetwork.com,Zeno,icy_title,K J Yesudas Malayalam Hits _ Malayalam Songs _ Full Audio Jukebox Vol-4 ( 256kbps cbr )conv,0,,,4dbdab26-dd91-4b89-8219-c11e9a99efea
+46,173,Mirchi Top 20,IN,drive.uber.radio,Uber.radio,icy_title,"Pritam, Mahmood, Raghav Chaitanya, Amitabh Bhattacharya  and  Ruaa Kayy - Mashooqa (From “Cocktail 2”)",0,,http://mirchi.in/,6b36ba4f-6d29-4272-b3c0-9aeeb64e61ec
+47,173,Radio Nacional de España - Radio 5 Todo noticias,ES,f131.rndfnk.com,ARD (rndfnk),icy_empty,,0,,https://www.rtve.es/play/radio/radio-5/,5d6b5573-d661-477a-82fc-1d0d03799679
+48,170,Relax FM Chillout,RU,pub0201.101.ru,single/other,icy_title,Finding Hope - Love - 0:00,0,,https://relax-fm.ru/,95eff2f9-cb7a-4fe4-bb07-8c700719f8b6
+49,168,Kameme FM,KE,kamemefm-atunwadigital.streamguys1.com,single/other,icy_title,MEDIAMAX NETWORK LIMITED - KAMEME FM,0,,https://www.mediamax.app/kameme-fm,ac15c045-6f16-4021-b35c-00b265b7201d
+50,167,KRAL FM,TR,dygedge2.radyotvonline.net,single/other,hls_no_text,,0,,https://www.kralmuzik.com.tr/radyo/kral-fm#,948408f4-0060-44fa-a26c-bf313f6c774d
+51,163,Rádio Antena 1 94.7 FM,BR,antenaone.crossradio.com.br,single/other,icy_title,ANTENA 1 - ANTENA 1,0,,https://www.antena1.com.br/,570cc99a-9159-4d91-9a8f-96ddb5b30797
+52,163,talkSPORT,GB,talksport.live.stream.broadcasting.news,single/other,icy_title,_,0,,https://talksport.com/,9f5d0645-ae1e-4e9f-9b2f-91fa63d5b1fa
+53,162,Convoy en vivo,MX,live.convoynetwork.com,single/other,icy_title,Convoy Network - Livestream,0,,http://convoynetwork.com/,a5b56fc7-32ea-11e9-8f31-52543be04c81
+54,157,Rire et Chansons,FR,streaming.nrjaudio.fm,NRJ,icy_empty,,0,,https://www.rireetchansons.fr/,a70cdc64-9a33-4432-91a1-957beb5ac6e7
+55,156,ORF Hitradio Ö3 | HQ,AT,orf-live.ors-shoutcast.at,ORF,icy_title,HITRADIO Ö3 - Livestream,0,,http://oe3.orf.at/,e723f7f8-0db1-4bc5-a64c-64d8377f9f9a
+56,149,Sonora FM 92 Jakarta,ID,sonora-radio.arenastreaming.com,single/other,icy_title,Now Playing: Kylie Minogue - If You Were With Me Now,0,,https://www.sonora.id/,6233fefa-714e-444c-bc76-065d440c8082
+57,147,Radio Malayalam 98.6 FM,IN,stream-280.surfernetwork.com,Zeno,icy_title, - ,0,,,8785a9e4-1c79-4830-b602-674c17375192
+58,146,国际新闻,CN,lhttp.qtfm.cn,Qingting/Qtfm (CN),icy_empty,,0,,http://www.ajmide.com/,ab0cc7f6-df03-4923-ac83-f4a7d8c55916
+59,145,#100 BEST IBIZA DEEP HOUSE,CA,stream-289.surfernetwork.com,Zeno,icy_title,100 BEST IBIZA - DEEP HOUSE 20,0,,https://zeno.fm/radio/100-best-ibiza-deep-house-/,64d74c72-025e-4cea-8a32-906812691731
+60,144,CCTV-13 新闻（伴音）,CN,piccpndali.v.myalicdn.com,Akamai CDN,hls_no_text,,0,,https://superradio.cc/,0863581e-013e-465b-8db6-205bb29c217d
+61,142,REYFM - #original,,reyfm.stream37.radiohost.de,rautemusik,icy_title,BURNS - Talamanca,0,,https://www.reyfm.de/,f592bcd7-c052-11e9-8502-52543be04c81
+62,141,Deutschlandfunk | DLF | OPUS 24k,DE,f141.rndfnk.com,ARD (rndfnk),icy_empty,,0,,https://www.deutschlandfunk.de/,5a6946a2-f02f-4fd1-a16b-558c90150041
+63,141,Hindi Retro,IN,stream-291.surfernetwork.com,Zeno,icy_title,Duets Of Lata Mangeshkar _ Best Evergreen Romantic Songs _ JUKEBOX _ 90's Bollywood Love Songs,0,,,db5a1f42-7f91-4531-895b-1b7f1ff45bc8
+64,140,Gold,GB,media-ssl.musicradio.com,Global (musicradio),icy_title,Dolly Parton - 9 to 5,0,,https://www.mygoldmusic.co.uk/,0a1e0bb0-dc37-11e9-a8ba-52543be04c81
+65,137,500首华语经典,CN,lhttp.qtfm.cn,Qingting/Qtfm (CN),icy_empty,,0,,https://www.qingting.fm/radios/5022308,815f20d0-3ecd-49d2-8449-9725e82b5f64
+66,136,RADIO BOLLYWOOD 90s,IN,stream-289.surfernetwork.com,Zeno,icy_title,"Pankaj Udhas, Sadhana Sargam, Anu Malik, Alka Yagnik, Kumar Sanu - Mix by audio-joiner.com",0,,https://www.radioindia.in/radio-retro-bollywood-90s,baae978e-a9d0-422c-8ad4-ec803da4ef8c
+67,136,Rafi hit songs,IN,stream-281.surfernetwork.com,Zeno,icy_title,HITS OF RAFI - WITH ASHA Vol 1,0,,http://www.hitsofbollywood.com/,9ae30654-b1a6-4eff-81f3-6400d105b340
+68,133,中廣新聞網,TW,n01-us2.rcs.revma.com,iHeart/Revma,icy_empty,,0,,https://www.bcc.com.tw/,f3bc042d-938c-4e63-97c9-9e4ce8ed20b4
+69,131,Shaiva Lahari,IN,radio.shaivam.org,single/other,icy_title,M.M.Swami Shri Atmanand Giriji Maharaja - Shivananda lahari-34-1,0,,https://shaivam.org/,c31a923e-7677-4a80-bd4b-b33c1f4440c7
+70,126,EuroDance 90 radio,FR,stream-eurodance90.fr,single/other,icy_title,2 Unlimited - Burning Like Fire,0,,https://eurodance90.fr/,60ceaabd-4efd-4f47-b961-0dab6f475731
+71,125,臺北電台,TW,stream.ginnet.cloud,single/other,hls_no_text,,0,PRIV,http://www.radio.gov.taipei/,96b88cb2-76a4-43fb-9257-e791103f5fa8
+72,124,Retro Rádió,HU,icast.connectmedia.hu,single/other,icy_empty,,0,,http://www.retroradio.hu/,98b22cd2-0ec8-4bb1-a5f6-f168de7548b5
+73,124,Shahimsha Online radio,IN,radio.shahimsha.com,single/other,icy_title,poovili poovili ponnonamaayi,0,,https://shahimsha.com/,a1ef1dfe-42cf-45d0-b6d8-d95e736396a1
+74,123,ایران‎  Radio Liberty (Iran) (official stream),IR,n10.radiojar.com,RadioJar,icy_title,-,0,,https://www.radiofarda.com/,b6eedfc6-4a4b-4899-852f-03dd833f1f1b
+75,122,50s 60s RETRO HITS,IT,stream-289.surfernetwork.com,Zeno,icy_title,50S 60S RETRO HITS - PLAY 18,0,,https://zeno.fm/radio/50s-60s-retro-hits/,5532c4d9-616e-4d62-a49f-984a13e3189c
+76,122,BIG 92.7 FM,IN,stream-280.surfernetwork.com,Zeno,icy_title,Md.Rafi - Jhil mil sitaron ka,0,,https://bigfmindia.com/,3bf95cf7-69fd-4ae6-b30a-d833ab3ae77c
+77,122,LOS40 Classic,ES,22733.live.streamtheworld.com,Triton/StreamTheWorld,icy_title,Mike and The Mechanics - Over my shoulder,0,,https://play.los40.com/emisora/los40_classic/,de39fc19-0636-4d05-acbb-2aba2c0d1f7a
+78,122,РАДИО ВАНЯ,RU,icecast-radiovanya.cdnvideo.ru,single/other,icy_title,radiovanya.ru,0,,http://www.radiovanya.ru/,63688c44-e90b-11e8-a471-52543be04c81
+79,120,NRJ Paris,FR,streaming.nrjaudio.fm,NRJ,icy_title,nrjaudio_866 - nrjaudio_866,0,,https://www.nrj.fr/,226396d3-6335-4d39-89fc-f1564d6f3ad7
+80,118,Intense Radio - We love Dance 256K,NL,secure.live-streams.nl,single/other,icy_title,U96 - Das Boot,0,,https://www.intenseradio.net/,af6f51b1-0ca9-11ea-a87e-52543be04c81
+81,118,Vividh Bharati,IN,air.pc.cdn.bitgravity.com,Akamai CDN,hls_no_text,,0,,,68d00a44-200c-4c82-b17f-18d777f3b2ee
+82,115,"IBIZA CHILLOUT LOUNGE - Ambient, Deep House, Balearic, Smooth Jazz, Acoustic, Chill House, Lo-Fi, Chillwave, Dream Pop, Electro, Tropical House, Sunset Chill, Café del Mar, Soft Electronica, Slow House, Ambient, Relax, Easy Listening, Beach Vibes, Summer",DE,0nlineradio.stream39.radiohost.de,rautemusik,icy_empty,,0,,https://0nlineradio.com/,d271b4e8-a298-4862-9f4b-025c110cedd9
+83,113,Radio Navahang,IR,navairan.com,single/other,fail,,0,,https://www.navahang.com/,aa408a3b-3d07-415d-8af1-a60b64e07043
+84,112,90sonceagainradio,IN,stream-289.surfernetwork.com,Zeno,icy_title,"Pankaj Udhas, Sadhana Sargam, Anu Malik, Alka Yagnik, Kumar Sanu - Mix by audio-joiner.com",0,,,4fa18bc0-94f8-4589-942a-ed44abedb3bb
+85,112,RMC,FR,hls-rmc.nextradiotv.com,single/other,hls_no_text,,1,,https://rmc.bfmtv.com/,da5f481e-f7d6-49b3-b213-514027740d39
+86,110,POWER TÜRK FM,TR,live.powerapp.com.tr,single/other,hls_no_text,,0,,https://live.powerapp.com.tr/powerturk/abr/powerturk/128/playlist.m3u8,43061315-2893-46fa-ae1e-96e767d5bce3
+87,109,FM4 | ORF | HQ,AT,orf-live.ors-shoutcast.at,ORF,icy_title,Outkast - Hey Ya | FM4 Conny Lee bis 1,0,,https://fm4.orf.at/,1e13ed4e-daa9-4728-8550-e08d89c1c8e7
+88,107,Radio Classique,FR,str0.creacast.com,Creacast,icy_title," -) A Bourges, St-Amand-Montrond et Montlu  on, Radio Classique est en Dab+  ",0,,https://www.radioclassique.fr/,d1aa02d7-e611-4208-b38b-da21bc236cd8
+89,107,فيروز,LB,stream-285.surfernetwork.com,Zeno,icy_title,Fairouz - ماقدرت نسيت,0,,https://stream.zeno.fm/9vrahqqfuuhvv,215dd8ad-56af-4234-9ace-573b20567d28
+90,106,BR24,DE,f111.rndfnk.com,ARD (rndfnk),icy_title,*** BR24 - Hier ist Bayern,0,,https://www.br.de/radio/br24/index.html,787eda99-1532-4ee0-b14e-fdb88ec71530
+91,104,RNE Radio Nacional,ES,rtvelivestream.rtve.es,single/other,hls_no_text,,0,,https://www.rtve.es/play/radio/rne/,4a629927-b026-4cea-a093-4cf44ec69af5
+92,103,两广之声音乐台,CN,lhttp.qtfm.cn,Qingting/Qtfm (CN),icy_empty,,0,,https://www.qingting.fm/radios/20500149/,ba8cf3a2-70c7-4567-9d9f-e6d028aecb2a
+93,102,iraninternational,IR,n0a.radiojar.com,RadioJar,icy_title,Radio Iran International - ,0,,https://iranintl.com/,5c6c092b-2b8b-4ac1-a8d0-090f87037fd9
+94,102,WDR4,DE,f121.rndfnk.com,ARD (rndfnk),icy_title,Die WDR 4 Hotline: 0221 56789 444,0,,https://www1.wdr.de/index.html,44ee797f-b7c4-4f94-8853-ce9a9c8731ed
+95,101,JOY TÜRK TURKEY,TR,25533.live.streamtheworld.com,Triton/StreamTheWorld,icy_title,BLOK3 - Sebebi Yar,0,,https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_TURK_SC?/,2a372113-4b74-41aa-a1e8-3dcb5d66de61
+96,100,OLDIE ANTENNE,DE,s1-webradio.oldie-antenne.de,single/other,icy_title,Toto - Africa (1983),0,,https://www.oldie-antenne.de/,87906f1e-5f82-4b86-9865-69e8eab8a69a
+97,100,Z100 - New York's #1 Hit Music Station WHTZ,US,cloud.revma.ihrhls.com,iHeart/Revma,icy_title,"NY's #1 Hit Music Station - text=""Z100"" song_spot=""T"" MediaBaseId=""0"" itunesTrackId=""0"" amgTrackId=""0"" amgArtistId=""0"" TAID=""0"" TPID=""0"" cartcutId=""0"" amgArtworkURL="""" length=""00:00:00"" unsID=""0"" spotInstanceId=""-1""",0,,https://z100.iheart.com/,ba3ad919-0516-485c-bce6-b27c4492ab14
+98,99,中央廣播電台,TW,streamak0138.akamaized.net,Akamai CDN,hls_no_text,,0,PRIV,https://www.rti.org.tw/,b40c66c7-c7d1-498d-8a06-375fa94c03fc
+99,98,Mirchi Love,IN,drive.uber.radio,Uber.radio,icy_title,Pritam  and  Mohit Chauhan - Yeh Dooriyan,0,,http://mirchi.in/,0e5dfcc8-99e2-4fed-a232-7f4bf23ba3c3
+100,98,Sud Radio,FR,ice.creacast.com,Creacast,icy_title,LA FRANCE DANS TOUS SES ETATS avec Perico Legasse,0,,https://www.sudradio.fr/,188c36ae-f1ef-4b5c-8587-f29c216bfaa2

@@ -65,6 +65,7 @@ include the actual choice even when the preceding document defines it.
 |---|---|---|
 | Inspect raw ICY headers/metadata blocks, check whether a station feed is stale, or compare upstream ICY and feed titles | `tools/stream-probe.py` (`python3 tools/stream-probe.py --help`); background in `docs/menubar/ACR_track_fingerprinting.md` | Opens its own HTTP stream connection and discards audio. It diagnoses upstream transport/feed behavior, not what AVPlayer or the listener received. |
 | Line up, song by song, when the feed stamped a song, when the feed listed it, when the stream's own title arrived, and when ShazamKit says it began, from the iOS app's debug log | `tools/stream-timeline.py` (`python3 tools/stream-timeline.py --help`); the lines come from `StreamTrace` in the iOS app's aligned session | Needs a heal (a ShazamKit anchor) on each song to compare. It reports what one phone's session saw. |
+| Profile many audio stream URLs at once: reachability, codec, ICY and HLS metadata, CORS | `tools/source-survey.py` (`python3 tools/source-survey.py --help`) | One connection per URL from this machine. It shows what a server sends, not what a player plays or what a listener hears. |
 | Measure metadata, media time, buffering, feed observations, and human markers on the macOS AVPlayer path, then replay them offline | `pocket-radio-menubar/Tools/StreamLab/README.md` and `docs/menubar/current_milestone.md` | Uses the application playback framework. A parallel connection from another tool is not the same audio timeline. |
 
 ## Pointers

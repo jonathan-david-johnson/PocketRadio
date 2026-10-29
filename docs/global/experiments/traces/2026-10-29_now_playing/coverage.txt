@@ -1,0 +1,65 @@
+archetype                                      stations  %stn %click24h  %votes  adapter
+Other named host                                  24361  39.1      49.9    46.5  unknown
+Self-hosted (explicit port)                       15841  25.4      16.0    21.8  icecast/shoutcast-generic
+Zeno                                               3044   4.9       5.3     3.7  zeno_sse
+Triton/StreamTheWorld                              2831   4.5       5.3     4.7  triton
+Radio.co                                           2113   3.4       4.4     8.0  radioco
+Radiocast-family (fastcast4u, radioca.st, …)       2631   4.2       3.1     2.4  icecast/shoutcast-generic
+AzuraCast                                          2128   3.4       2.8     0.8  azuracast
+Infomaniak                                         1023   1.6       1.9     2.5  icecast/shoutcast-generic
+Qingting/Ximalaya (CN)                             1318   2.1       1.6     0.6  none-known
+CDN HLS (akamai/cloudfront)                         419   0.7       1.5     0.6  hls/id3-or-none
+iHeart/Revma                                        896   1.4       1.5     0.4  iheart
+Live365                                             648   1.0       1.2     1.1  live365
+laut.fm                                            1502   2.4       1.2     3.7  laut
+NRJ audio                                           804   1.3       1.0     0.0  none-known
+StreamGuys                                          711   1.1       1.0     0.5  none-known
+RadioJar                                            376   0.6       0.8     1.3  radiojar
+SecureNet                                           781   1.3       0.4     0.6  none-known
+Mediastream/RadioCult/Radiomast                     452   0.7       0.4     0.3  none-known
+RadioKing                                           315   0.5       0.4     0.3  radioking
+Airtime Pro                                         181   0.3       0.3     0.3  airtime
+total clicks24h 213856 votes 29097344
+
+by adapter class
+unknown                        24361  39.1%stn   49.9%clicks   46.5%votes
+icecast/shoutcast-generic      19495  31.3%stn   21.0%clicks   26.7%votes
+zeno_sse                        3044   4.9%stn    5.3%clicks    3.7%votes
+triton                          2831   4.5%stn    5.3%clicks    4.7%votes
+radioco                         2113   3.4%stn    4.4%clicks    8.0%votes
+none-known                      4066   6.5%stn    4.3%clicks    1.9%votes
+azuracast                       2128   3.4%stn    2.8%clicks    0.8%votes
+hls/id3-or-none                  419   0.7%stn    1.5%clicks    0.6%votes
+iheart                           896   1.4%stn    1.5%clicks    0.4%votes
+live365                          648   1.0%stn    1.2%clicks    1.1%votes
+laut                            1502   2.4%stn    1.2%clicks    3.7%votes
+radiojar                         376   0.6%stn    0.8%clicks    1.3%votes
+radioking                        315   0.5%stn    0.4%clicks    0.3%votes
+airtime                          181   0.3%stn    0.3%clicks    0.3%votes
+
+top 25 stations by 24h clicks
+  1657 RTL                                Other named host         live.m6radio.quortex.io
+  1413 France Info                        Other named host         direct.franceinfo.fr
+  1029 Radio Armisa                       AzuraCast                onair.armisa.it
+   863 Europe 1                           Other named host         stream.europe1.fr
+   837 RMC FR                             Other named host         audio.bfmtv.com
+   783 BBC World Service                  Other named host         stream.live.vc.bbcmedia.co.uk
+   746 Anon.FM                            Other named host         icecast.anon.fm
+   731 Classic Vinyl HD                   Radio.co                 icecast.walmradio.com
+   671 Rai Radio 1                        Other named host         icestreaming.rai.it
+   640 MANGORADIO                         laut.fm                  mangoradio.stream.laut.fm
+   636 Nostalgie HQ                       NRJ audio                streaming.nrjaudio.fm
+   606 France Inter                       Other named host         stream.radiofrance.fr
+   603 Cadena SER España                  Triton/StreamTheWorld    playerservices.streamtheworld.com
+   564 Deutschlandfunk | DLF | MP3 128k   Other named host         st01.sslstream.dlf.de
+   548 101 SMOOTH JAZZ                    Live365                  jking.cdnstream1.com
+   536 FUN Radio                          Other named host         icecast.funradio.fr
+   502 Radio Paradise Main Mix (EU) 320k  Other named host         stream-uk1.radioparadise.com
+   482 esRadio                            Other named host         livestreaming.esradio.fm
+   480 SWR3                               Other named host         liveradio.swr.de
+   463 RFM                                Other named host         stream.rfm.fr
+   436 凤凰卫视资讯台                            Other named host         playtv-live.ifeng.com
+   426 Dance Wave!                        Other named host         dancewave.online
+   424 Skyrock                            Other named host         icecast.skyrock.net
+   407 Nrj Hits                           NRJ audio                streaming.nrjaudio.fm
+   350 Heart 80s                          Radio.co                 media-ssl.musicradio.com

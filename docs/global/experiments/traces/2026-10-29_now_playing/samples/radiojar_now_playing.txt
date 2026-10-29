@@ -1,0 +1,2 @@
+https://www.radiojar.com/api/stations/f4uubny2uexb/now_playing/
+{"album": "fones egeou", "sku": "", "thumb": "https://radiojar-lib.appspot.com/get_media_image?size=orig&guid=e0961f62-e4a0-11e9-af3c-fa163eb018f7", "artist": "Maria Nomikou", "title": "Taximi - Pano Sto Mouragio", "show": {}, "buy_urls": "", "info_urls": "", "duration": "275", "guid": "e0961f62-e4a0-11e9-af3c-fa163eb018f7"}

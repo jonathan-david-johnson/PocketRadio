@@ -1,0 +1,60 @@
+verified-adapter platforms, % of clicks / % stations
+  zeno                  5.3% clicks   4.9% stn
+  triton                5.3% clicks   4.5% stn
+  azuracast             3.0% clicks   3.6% stn
+  iheart/revma          1.5% clicks   1.4% stn
+  live365/cdnstream     1.2% clicks   1.0% stn
+  laut.fm               1.2% clicks   2.4% stn
+  radiojar              0.8% clicks   0.6% stn
+  radio.co              0.7% clicks   1.0% stn
+  radioking             0.4% clicks   0.5% stn
+  airtime               0.3% clicks   0.3% stn
+  TOTAL 19.6% clicks 20.3% stn
+
+top domains in the remainder by clicks (n stations)
+  infomaniak.ch                    1.87% clicks   1023 stn
+  musicradio.com                   1.49% clicks    186 stn
+  akamaized.net                    1.43% clicks    347 stn
+  hostingradio.ru                  1.33% clicks    587 stn
+  radiofrance.fr                   1.04% clicks    189 stn
+  nrjaudio.fm                      0.98% clicks    804 stn
+  qtfm.cn                          0.97% clicks    753 stn
+  streamguys1.com                  0.92% clicks    666 stn
+  rndfnk.com                       0.91% clicks    177 stn
+  walmradio.com                    0.86% clicks     27 stn
+  flumotion.com                    0.84% clicks     75 stn
+  quortex.io                       0.79% clicks      8 stn
+  rautemusik.fm                    0.69% clicks    135 stn
+  somafm.com                       0.68% clicks    145 stn
+  franceinfo.fr                    0.67% clicks      5 stn
+  radioca.st                       0.66% clicks    512 stn
+  wdr.de                           0.65% clicks    129 stn
+  dlf.de                           0.63% clicks     36 stn
+  torontocast.com                  0.62% clicks    154 stn
+  fastcast4u.com                   0.59% clicks    364 stn
+  bitgravity.com                   0.59% clicks    111 stn
+  msvdn.net                        0.55% clicks     92 stn
+  streamabc.net                    0.54% clicks    321 stn
+  unitedradio.it                   0.53% clicks    137 stn
+  rai.it                           0.52% clicks     35 stn
+  bfmtv.com                        0.51% clicks      8 stn
+  qingting.fm                      0.50% clicks    502 stn
+  uber.radio                       0.50% clicks    283 stn
+  1.fm                             0.47% clicks    117 stn
+  radioho.st                       0.46% clicks     35 stn
+  bbcmedia.co.uk                   0.46% clicks     18 stn
+  omroep.nl                        0.45% clicks     64 stn
+  swr.de                           0.45% clicks     77 stn
+  qurango.net                      0.45% clicks     76 stn
+  sharp-stream.com                 0.43% clicks    223 stn
+  radioparadise.com                0.43% clicks     86 stn
+  srg-ssr.ch                       0.43% clicks    152 stn
+  exclusive.radio                  0.42% clicks    363 stn
+  securenetsystems.net             0.41% clicks    781 stn
+  europe1.fr                       0.41% clicks      3 stn
+
+clicks by country [('DE', 10.5), ('US', 9.5), ('FR', 8.6), ('GB', 5.1), ('IN', 4.8), ('IT', 4.2), ('ES', 4.0), ('RU', 4.0), ('CN', 3.6), ('TR', 3.2), ('NL', 2.2), ('PL', 2.0)]
+
+stations for 50% clicks: 1906
+stations for 80% clicks: 10497
+stations with 0 clicks: 25711

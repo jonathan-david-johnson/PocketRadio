@@ -1,0 +1,16 @@
+web-playable under ADR 0006 rules: 33257 of 62375 (53.3% stations), 56.7% of clicks
+archetype               stn %web stn %web clicks
+other                 24281     73.0        74.9
+zeno                   2446      7.4         8.1
+triton                 1758      5.3         5.7
+azuracast              1646      4.9         4.0
+iheart/revma            753      2.3         2.2
+laut.fm                 720      2.2         1.4
+live365/cdnstream       484      1.5         1.2
+radio.co                555      1.7         1.0
+radiojar                223      0.7         0.7
+radioking               280      0.8         0.6
+airtime                 111      0.3         0.2
+platform adapters cover 25.1% of web-playable clicks; 27.0% of web-playable stations
+not web-playable reasons: Counter({'http': 22146, 'port': 6947, 'ip/other': 25})
+HLS in web-playable: 3104 = 9.3%

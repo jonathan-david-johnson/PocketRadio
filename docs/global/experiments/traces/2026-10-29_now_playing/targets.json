@@ -1,0 +1,310 @@
+[
+ {
+  "id": "somafm:groovesalad",
+  "stream": "https://ice1.somafm.com/groovesalad-128-mp3",
+  "cfg": {
+   "adapter": "somafm",
+   "channel": "groovesalad"
+  }
+ },
+ {
+  "id": "radioparadise:main",
+  "stream": "https://stream.radioparadise.com/mp3-128",
+  "cfg": {
+   "adapter": "radioparadise"
+  }
+ },
+ {
+  "id": "kexp",
+  "stream": "https://kexp.streamguys1.com/kexp160.aac",
+  "cfg": {
+   "adapter": "kexp"
+  }
+ },
+ {
+  "id": "kcrw:e24",
+  "stream": "https://streams.kcrw.com/e24_mp3",
+  "cfg": {
+   "adapter": "kcrw"
+  }
+ },
+ {
+  "id": "nts:1",
+  "stream": "https://stream-relay-geo.ntslive.net/stream",
+  "cfg": {
+   "adapter": "nts",
+   "ch": 0
+  }
+ },
+ {
+  "id": "azuracast:demo",
+  "stream": "https://demo.azuracast.com/listen/azuratest_radio/radio.mp3",
+  "cfg": {
+   "adapter": "azuracast",
+   "api": "https://demo.azuracast.com/api/nowplaying",
+   "shortcode": "azuratest_radio"
+  }
+ },
+ {
+  "id": "live365:a75642",
+  "stream": "https://das-edge11-live365-dal03.cdnstream.com/a75642",
+  "cfg": {
+   "adapter": "live365",
+   "mount": "a75642"
+  }
+ },
+ {
+  "id": "iheart:5162 K-LOVE",
+  "stream": "https://stream.revma.ihrhls.com/zc5162",
+  "cfg": {
+   "adapter": "iheart",
+   "id": 5162
+  }
+ },
+ {
+  "id": "iheart:6045 Power106",
+  "stream": "https://stream.revma.ihrhls.com/zc6045",
+  "cfg": {
+   "adapter": "iheart",
+   "id": 6045
+  }
+ },
+ {
+  "id": "radioking:416299",
+  "stream": "https://listen.radioking.com/radio/416299/stream/469240",
+  "cfg": {
+   "adapter": "radioking",
+   "id": 416299
+  }
+ },
+ {
+  "id": "airtime:dublab",
+  "stream": "https://dublab.out.airtime.pro/dublab_a",
+  "cfg": {
+   "adapter": "airtime",
+   "host": "dublab.airtime.pro"
+  }
+ },
+ {
+  "id": "npr_composer:KUTX",
+  "stream": "https://streams.kut.org/4428_192.mp3",
+  "cfg": {
+   "adapter": "npr_composer",
+   "ucs": "50ef24ebe1c8a1369593d032",
+   "tz": "America/Chicago"
+  }
+ },
+ {
+  "id": "sr:P3",
+  "stream": "https://live1.sr.se/p3-mp3-96",
+  "cfg": {
+   "adapter": "sr",
+   "channel": 164
+  }
+ },
+ {
+  "id": "abc:triplej",
+  "stream": "http://abc.streamguys1.com/live/triplejnsw/icecast.audio",
+  "cfg": {
+   "adapter": "abc",
+   "station": "triplej"
+  }
+ },
+ {
+  "id": "radiofrance:FIP",
+  "stream": "https://icecast.radiofrance.fr/fip-midfi.mp3",
+  "cfg": {
+   "adapter": "radiofrance",
+   "id": 7
+  }
+ },
+ {
+  "id": "npo:radio2",
+  "stream": "https://icecast.omroep.nl/radio2-bb-mp3",
+  "cfg": {
+   "adapter": "npo"
+  }
+ },
+ {
+  "id": "tunein:KCSB",
+  "stream": "https://kcsb.streamguys1.com/live",
+  "cfg": {
+   "adapter": "tunein",
+   "id": "s32156"
+  }
+ },
+ {
+  "id": "icecast:RDS relax",
+  "stream": "http://icstream.rds.radio/rdsrelax",
+  "cfg": {
+   "adapter": "icecast",
+   "origin": "http://icstream.rds.radio",
+   "path": "/rdsrelax"
+  }
+ },
+ {
+  "id": "icecast:Radio Rebetikes Melodi",
+  "stream": "https://rebetis.duckdns.org:8545/live",
+  "cfg": {
+   "adapter": "icecast",
+   "origin": "https://rebetis.duckdns.org:8545",
+   "path": "/live"
+  }
+ },
+ {
+  "id": "icecast:WBCQ The Planet\n\n7490 ",
+  "stream": "http://splatterbox.us/wbcq1",
+  "cfg": {
+   "adapter": "icecast",
+   "origin": "http://splatterbox.us",
+   "path": "/wbcq1"
+  }
+ },
+ {
+  "id": "shoutcast:Radio Magica 87.7 (Ecu",
+  "stream": "http://usa10.fastcast4u.com:1680/",
+  "cfg": {
+   "adapter": "shoutcast",
+   "origin": "http://usa10.fastcast4u.com:1680"
+  }
+ },
+ {
+  "id": "shoutcast:RDU 98.5FM",
+  "stream": "http://rdu985fm-gecko.radioca.st:8247/stream",
+  "cfg": {
+   "adapter": "shoutcast",
+   "origin": "http://rdu985fm-gecko.radioca.st:8247"
+  }
+ },
+ {
+  "id": "shoutcast:Radio Nuova San Giorgi",
+  "stream": "http://eu1.fastcast4u.com:10942/stream",
+  "cfg": {
+   "adapter": "shoutcast",
+   "origin": "http://eu1.fastcast4u.com:10942"
+  }
+ },
+ {
+  "id": "azuracast:RKB",
+  "stream": "https://stream.radios.bzh/listen/rkb/radio.mp3",
+  "cfg": {
+   "adapter": "azuracast",
+   "api": "https://stream.radios.bzh/api/nowplaying",
+   "shortcode": "rkb"
+  }
+ },
+ {
+  "id": "laut.fm:Ahuga laut.fm",
+  "stream": "http://ahuga.stream.laut.fm/ahuga?t302=2026-10-29_11-19-55&uuid=2592a5ef-9c40-d1c0-4f8c-5ba2180df7ea",
+  "cfg": {
+   "adapter": "laut",
+   "name": "ahuga"
+  }
+ },
+ {
+  "id": "azuracast:RADIO VISION",
+  "stream": "https://neondex.cl/listen/radio_vision/radio.mp3",
+  "cfg": {
+   "adapter": "azuracast",
+   "api": "https://neondex.cl/api/nowplaying",
+   "shortcode": "radio_vision"
+  }
+ },
+ {
+  "id": "azuracast:Glitchy Radio",
+  "stream": "https://ca.azura.linkodev.ch/listen/glitchy_radio/glitchyradio",
+  "cfg": {
+   "adapter": "azuracast",
+   "api": "https://ca.azura.linkodev.ch/api/nowplaying",
+   "shortcode": "glitchy_radio"
+  }
+ },
+ {
+  "id": "laut.fm:Dark Asylum",
+  "stream": "https://darkclubradio.stream.laut.fm/darkclubradio?t302=2017-10-06_10-10-19&uuid=04ef8081-69df-483f-b486-2b7cfc49a09d",
+  "cfg": {
+   "adapter": "laut",
+   "name": "darkclubradio"
+  }
+ },
+ {
+  "id": "laut.fm:Odessa",
+  "stream": "http://odessa.stream.laut.fm/odessa",
+  "cfg": {
+   "adapter": "laut",
+   "name": "odessa"
+  }
+ },
+ {
+  "id": "triton:ABC NOTICIAS 1310 (MTY",
+  "stream": "https://26363.live.streamtheworld.com:443/REGIONAL_MEXICANA_570AMAAC.aac",
+  "cfg": {
+   "adapter": "triton",
+   "mount": "REGIONAL_MEXICANA_570AM"
+  }
+ },
+ {
+  "id": "triton:Shaiva Lahari",
+  "stream": "https://15113.live.streamtheworld.com/SP_R2925215_SC",
+  "cfg": {
+   "adapter": "triton",
+   "mount": "SP_R2925215"
+  }
+ },
+ {
+  "id": "radio.co:Shine 879",
+  "stream": "https://s3.radio.co/sd4abfe69e/listen",
+  "cfg": {
+   "adapter": "radioco",
+   "sid": "sd4abfe69e"
+  }
+ },
+ {
+  "id": "radiojar:\u039d\u03b7\u03c3\u03b9\u03ce\u03c4\u03b9\u03ba\u03b1 24/7",
+  "stream": "https://n0f.radiojar.com/f4uubny2uexb?1709758100=&rj-ttl=5&rj-tok=AAABoYc1qvQAEGFUGPGV92DG5Q",
+  "cfg": {
+   "adapter": "radiojar",
+   "id": "f4uubny2uexb"
+  }
+ },
+ {
+  "id": "triton:Sky Radio Lounge",
+  "stream": "http://22613.live.streamtheworld.com/SRGSTR07AAC_SC",
+  "cfg": {
+   "adapter": "triton",
+   "mount": "SRGSTR07"
+  }
+ },
+ {
+  "id": "radio.co:Radio Trib",
+  "stream": "https://streams.radio.co/s78f983952/listen",
+  "cfg": {
+   "adapter": "radioco",
+   "sid": "s78f983952"
+  }
+ },
+ {
+  "id": "radio.co:The Christmas Station",
+  "stream": "https://stream.radio.co/s63541ce9b/listen",
+  "cfg": {
+   "adapter": "radioco",
+   "sid": "s63541ce9b"
+  }
+ },
+ {
+  "id": "radiojar:Monkey Bros",
+  "stream": "http://n06.radiojar.com/5tyqrwpgpfeuv?rj-ttl=5&rj-tok=AAABoYc2KiYAXFdC9jkVcRAEng",
+  "cfg": {
+   "adapter": "radiojar",
+   "id": "5tyqrwpgpfeuv"
+  }
+ },
+ {
+  "id": "radiojar:I-Radio Jakarta",
+  "stream": "http://n09.radiojar.com/4ywdgup3bnzuv?rj-ttl=5&rj-tok=AAABoYc2LAAAD4uPzxKwUoLMdQ",
+  "cfg": {
+   "adapter": "radiojar",
+   "id": "4ywdgup3bnzuv"
+  }
+ }
+]

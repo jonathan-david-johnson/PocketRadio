@@ -1,0 +1,221 @@
+total 69425
+lastcheckok=1 62375 =0 7050
+
+===== ALL
+
+codec (n=69425)
+  MP3                           46389  66.8%
+  AAC+                          10097  14.5%
+  AAC                            9250  13.3%
+  UNKNOWN                        2278   3.3%
+  OGG                             758   1.1%
+  ?                               528   0.8%
+  AAC,H.264                        77   0.1%
+  MP4                              21   0.0%
+  FLV                              16   0.0%
+  AAC+,H.264                        5   0.0%
+  FLAC                              5   0.0%
+  UNKNOWN,H.264                     1   0.0%
+
+hls (n=69425)
+  0                             64428  92.8%
+  1                              4997   7.2%
+
+scheme(url_resolved) (n=69425)
+  https                         44674  64.3%
+  http                          24751  35.7%
+
+ssl_error (n=69425)
+  0                             68626  98.8%
+  1                               799   1.2%
+
+bitrate bucket (n=69425)
+  128                           28069  40.4%
+  0                             11336  16.3%
+  64                             9182  13.2%
+  192                            8247  11.9%
+  320                            5798   8.4%
+  96                             4166   6.0%
+  32                             2042   2.9%
+  999                             585   0.8%
+
+has_extended_info (n=69425)
+  False                         68510  98.7%
+  True                            915   1.3%
+
+url ext/path hint (n=69425)
+  other                         42372  61.0%
+  port-in-url                   18068  26.0%
+  m3u8                           4940   7.1%
+  pls                            2184   3.1%
+  m3u                            1795   2.6%
+  asx                              66   0.1%
+
+===== OK
+
+codec (n=62375)
+  MP3                           42362  67.9%
+  AAC+                           8922  14.3%
+  AAC                            8383  13.4%
+  UNKNOWN                        1931   3.1%
+  OGG                             650   1.0%
+  AAC,H.264                        67   0.1%
+  ?                                23   0.0%
+  MP4                              19   0.0%
+  FLV                              12   0.0%
+  FLAC                              4   0.0%
+  AAC+,H.264                        1   0.0%
+  UNKNOWN,H.264                     1   0.0%
+
+hls (n=62375)
+  0                             58257  93.4%
+  1                              4118   6.6%
+
+scheme(url_resolved) (n=62375)
+  https                         40250  64.5%
+  http                          22125  35.5%
+
+ssl_error (n=62375)
+  0                             61691  98.9%
+  1                               684   1.1%
+
+bitrate bucket (n=62375)
+  128                           25927  41.6%
+  0                              9548  15.3%
+  64                             8158  13.1%
+  192                            7403  11.9%
+  320                            5309   8.5%
+  96                             3696   5.9%
+  32                             1850   3.0%
+  999                             484   0.8%
+
+has_extended_info (n=62375)
+  False                         61558  98.7%
+  True                            817   1.3%
+
+url ext/path hint (n=62375)
+  other                         38612  61.9%
+  port-in-url                   16146  25.9%
+  m3u8                           4070   6.5%
+  pls                            1842   3.0%
+  m3u                            1656   2.7%
+  asx                              49   0.1%
+
+country (OK) (n=62375)
+  US                             7638  12.2%
+  DE                             6305  10.1%
+  FR                             3611   5.8%
+  RU                             3031   4.9%
+  MX                             2859   4.6%
+  GB                             2307   3.7%
+  GR                             2202   3.5%
+  CN                             2180   3.5%
+  AU                             1817   2.9%
+  IT                             1801   2.9%
+  BR                             1591   2.6%
+  CA                             1529   2.5%
+
+language (OK) (n=62375)
+                                21259  34.1%
+  english                       11940  19.1%
+  spanish                        4815   7.7%
+  german                         3840   6.2%
+  french                         2729   4.4%
+  chinese                        2200   3.5%
+  russian                        1456   2.3%
+  italian                        1249   2.0%
+  greek                          1069   1.7%
+  dutch                           864   1.4%
+
+host (OK) (n=62375)
+  stream.zeno.fm                 2318   3.7%
+  playerservices.streamtheworld.com   1984   3.2%
+  streaming.nrjaudio.fm           803   1.3%
+  stream.laut.fm                  795   1.3%
+  stream.revma.ihrhls.com         592   0.9%
+  lhttp.qingting.fm               442   0.7%
+  lhttp-hw.qtfm.cn                386   0.6%
+  lhttp.qtfm.cn                   367   0.6%
+  streaming.exclusive.radio       363   0.6%
+  streaming.live365.com           315   0.5%
+  drive.uber.radio                283   0.5%
+  listen.radioking.com            255   0.4%
+  streams.radiobob.de             225   0.4%
+  stream.radiojar.com             207   0.3%
+  mdstrm.com                      207   0.3%
+  abm21.com.au                    192   0.3%
+  abm22.com.au                    172   0.3%
+  radiorecord.hostingradio.ru     162   0.3%
+  79.111.14.76                    157   0.3%
+  79.120.77.11                    151   0.2%
+  stream.srg-ssr.ch               151   0.2%
+  stream.rcs.revma.com            142   0.2%
+  streamingcwsradio30.com         139   0.2%
+  streaming.servicioswebmx.com    134   0.2%
+  79.111.119.111                  133   0.2%
+  79.120.39.202                   127   0.2%
+  icy.unitedradio.it              124   0.2%
+  www.hamropatro.com              122   0.2%
+  213.141.131.10                  120   0.2%
+  streams.fluxfm.de               120   0.2%
+
+domain (OK) (n=62375)
+  streamtheworld.com             2831   4.5%
+  zeno.fm                        2741   4.4%
+  laut.fm                        1502   2.4%
+  infomaniak.ch                  1023   1.6%
+  nrjaudio.fm                     804   1.3%
+  securenetsystems.net            782   1.3%
+  qtfm.cn                         753   1.2%
+  com.br                          749   1.2%
+  streamguys1.com                 666   1.1%
+  ihrhls.com                      644   1.0%
+  radio.co                        638   1.0%
+  hostingradio.ru                 587   0.9%
+  com.au                          587   0.9%
+  radioca.st                      512   0.8%
+  qingting.fm                     502   0.8%
+  asurahosting.com                417   0.7%
+  co.uk                           412   0.7%
+  leanstream.co                   386   0.6%
+  radiojar.com                    375   0.6%
+  fastcast4u.com                  364   0.6%
+  exclusive.radio                 363   0.6%
+  akamaized.net                   347   0.6%
+  cdnstream1.com                  332   0.5%
+  streamabc.net                   321   0.5%
+  radioking.com                   316   0.5%
+  live365.com                     316   0.5%
+  surfernetwork.com               305   0.5%
+  com.ar                          290   0.5%
+  uber.radio                      283   0.5%
+  myradiostream.com               267   0.4%
+
+distinct hosts OK: 14595 distinct domains: 7328
+
+port (OK) (n=62375)
+  None                          44546  71.4%
+  8000                           3704   5.9%
+  8443                            618   1.0%
+  8002                            392   0.6%
+  3690                            222   0.4%
+  8001                            215   0.3%
+  8010                            213   0.3%
+  8004                            197   0.3%
+  8020                            184   0.3%
+  8080                            182   0.3%
+  9000                            141   0.2%
+  8030                            124   0.2%
+  443                             108   0.2%
+  8040                            102   0.2%
+  8100                             95   0.2%
+
+tags(OK) (n=62375)
+                                62375 100.0%
+
+top tags [('pop', 6182), ('music', 5054), ('news', 3203), ('rock', 3129), ('radio', 2375), ('entretenimiento', 2232), ('estación', 2226), ('méxico', 2087), ('norteamérica', 2009), ('moi merino', 1910), ('talk', 1869), ('latinoamérica', 1837), ('fm', 1830), ('música', 1826), ('español', 1806), ('hits', 1666), ('dance', 1610), ('américa', 1592), ('classical', 1492), ('oldies', 1441), ('pop music', 1273), ('jazz', 1250), ('80s', 1238), ('música en español', 1068), ('public radio', 1056)]
+
+lastchecktime year-month (all) [('2026-10', 69400), ('', 23), ('2026-09', 2)]
+broken w/ lastcheckoktime in 2026: 6545
+dup url_resolved among OK: 10849
+votes>0 OK: 57672 clickcount>0: 36664

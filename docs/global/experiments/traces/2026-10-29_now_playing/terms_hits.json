@@ -1,0 +1,82 @@
+{
+ "triton": {
+  "url": "https://www.tritondigital.com/terms-of-use",
+  "hits": [
+   "Obtain or attempt to obtain any materials or information through any means not intentionally made available through this Triton Site, including harvesting or otherwise collecting information about others such as email addresses.",
+   "(iv) to extract, scrape, harvest or collect any Triton IP & Data for use in connection with AI Technology and/or Blockchain Technology or otherwise;",
+   "(v) to discover, reverse engineer, decompile, disassemble, or attempt to derive Triton IP & Data source code or algorithms ;",
+   "and (vii) you will not use, nor attempt to use, the GAIS to profile any individual nor to make an automated decision that has legal or significant effects upon any individuals."
+  ]
+ },
+ "airtime": {
+  "url": "https://www.airtime.pro/terms",
+  "hits": [
+   "Settlement of the invoice automatically turns the contract into a monthly recurring and payable agreement (see item 4.1).",
+   "Nonsettlement of the invoice after 5 days automatically causes account suspension.",
+   "However, you may of course provide your employees or any authors or graphic designers working for you on a freelance basis, or any other persons involved in radio automation on your behalf, with access to the Airtime Pro service by allocating individual access authorisation to these.",
+   "If we further develop or alter Airtime Pro, therefore, this shall automatically affect all our customers."
+  ]
+ },
+ "radioking": {
+  "url": "https://www.radioking.com/terms",
+  "hits": [
+   "Access Codes: Refers to the personal username and password which allow the Client to access their Personal Account.",
+   "Annually: The Subscription is concluded for a term of one (1) year from the placement of the order and shall be extended by automatic renewal for successive one-year (1) periods, unless the Subscription is cancelled at least seven (7) days prior to its renewal date, under the conditions set out in Article 8.1 of these terms and conditions;",
+   "b/ For any other type of subscription – Bank card (secure online payment) – Paypal Payment is made automatically on each due date, insofar as the contract is active.",
+   "The Client’s attention is drawn to the fact that Paypal automatically debits the total for the offer subscribed and that it is consequently required, when intending to terminate the offer subscribed, to also ensure that the Paypal subscription is ended.",
+   "RADIOKING may also not be held liable for any malfunction of the Services which have originated from the use of third-party services, particularly the use of external API (such as LastFM, Facebook, Twitter, etc.).",
+   "The Client automatically benefits from any version update issued by RADIOKING for the Services they use.",
+   "Any intrusion or fraudulent maintenance of a third party in the system or illegal extraction of data, despite implementation of security means which comply with current technical data, with RADIOKING only accepting an obligation of means with regard to known security techniques;"
+  ]
+ },
+ "live365": {
+  "url": "https://live365.com/terms-of-service",
+  "hits": []
+ },
+ "nts": {
+  "url": "https://www.nts.live/terms-and-conditions",
+  "hits": []
+ },
+ "radiofrance_cgu": {
+  "url": "https://www.radiofrance.fr/conditions-generales-d-utilisation",
+  "hits": []
+ },
+ "radiofrance_legal": {
+  "url": "https://www.radiofrance.fr/mentions-legales",
+  "hits": []
+ },
+ "npr": {
+  "url": "https://www.npr.org/about-npr/179876898/terms-of-use",
+  "hits": [
+   "Consent to Terms Copyrights Trademarks User Materials Content Feeds API Content Podcasts NPR Media Player Use of Content: Conditions and Acknowledgments Subscription Services (including Subscription Term;",
+   "You may not reproduce, distribute, republish, upload, transmit, display, prepare derivative works of, scrape for the purposes of replicating or republishing (by you or by third parties) publicly perform, sell, transfer, assign, license or use for commercial purposes any copyrighted material on the NPR Services without the prior written consent of NPR, except as provided in these Terms of Use.",
+   "API Content NPR, in its discretion, enables registered users to access certain content, including audio, text, images and other content on the NPR Services, NPR Member station sites, applications, platforms and services, and other Content Provider sites, applications, platforms and services through its APIs.",
+   "Content accessed through the API is available to registered users only for the limited uses described in these Terms of Use.",
+   "If you have registered with NPR to access any NPR API by using a key or client secret provided by NPR, and if your registration has not been revoked, you may use the API provided that you abide by the restrictions in \" Use of Content: Conditions and Acknowledgements \".",
+   "Use of Content: Conditions and Acknowledgments To use Content Feeds, API content and podcasts, or to Submit User Materials, you agree to the following conditions and acknowledgments: the content may be used only for personal noncommercial use or for noncommercial online use by a 501(c)(3) Nonprofit Corporation (which is not a news, broadcast, or multimedia organization);",
+   "Automatic Renewals If you elect to subscribe to a Subscription Service then, in exchange for payment of the applicable fee (the \"Fee\"), you will have access to such Subscription Service for the period of time indicated during the subscription sign-up process.",
+   "This may be a fixed period of time specified by NPR, or you may have the option of choosing among automatically renewing subscription term options, such as a subscription that automatically renews on a monthly or annual basis until cancelled, offered at different Fees."
+  ]
+ },
+ "iheart": {
+  "url": "https://www.iheart.com/content/terms-of-use/",
+  "hits": [
+   "Obtain or attempt to obtain any materials or information through any means not intentionally made available through this iHeart Site, including harvesting or otherwise collecting information about others such as email addresses.",
+   "The Additional Terms may include automatic renewals and periodic recurring charges (e.g., monthly, quarterly, or annually), and details about our third-party payment processor and any terms and conditions that it may have in order for you to use its services.",
+   "Your use of the iHeart Software is subject to a limited, revocable, license to use the iHeart Software for your private, non-commercial use.",
+   "We may void any votes/ratings generated by script, macro or other automated means or any other means intended to impact the integrity of the voting/rating process in our discretion.",
+   "(iv) to extract, scrape, harvest or collect any iHeart IP & Data for use in connection with AI Technology;",
+   "nor (v) to discover, reverse engineer, decompile, disassemble, or attempt to derive iHeart IP & Data source code or algorithms ;"
+  ]
+ },
+ "tunein_policies": {
+  "url": "https://tunein.com/policies/",
+  "hits": []
+ },
+ "kexp": {
+  "url": "https://www.kexp.org/about/privacy-policy/",
+  "hits": [
+   "not to reverse engineer, disassemble, or otherwise attempt to create or derive the source code underlying the Sites;"
+  ]
+ }
+}

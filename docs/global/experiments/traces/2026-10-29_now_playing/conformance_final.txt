@@ -1,0 +1,41 @@
+target                          adapter       kind          age_s   dur  artist | title | art?
+somafm:groovesalad              somafm        song            113  None  Fascinating Earthbound | Prap | -
+radioparadise:main              radioparadise song           None  None  Dead Can Dance | Rakim | Y
+kexp                            kexp          song             68  None  Darlynn | Girl 2 Girl | Y
+kcrw:e24                        kcrw          song             98  None  The Avalanches | Far Away (feat. with John Glacier  | -
+nts:1                           nts           show            876  None  None | SOUP TO NUTS W/ BABYSCHÖN | -
+azuracast:demo                  azuracast     song            287   368  Dilemmachine | Meaningless | Y
+live365:a75642                  live365       song            207   345  Bob Seger | Against the Wind | Y
+iheart:5162 K-LOVE              iheart        song            174   217  Anne Wilson | My Jesus | Y
+iheart:6045 Power106            iheart        song            115   203  Future | Mask Off | Y
+radioking:416299                radioking     song             14   328  Reel By Real | Surkit (1991 I-102 Version) | Y
+airtime:dublab                  airtime       song            110   193  Hakushi Hasegawa, HaHa | We The Ominous Warriors | -
+npr_composer:KUTX               npr_composer  show           4476  None  None | Taylor Wallace-Riegel | -
+sr:P3                           sr            song             99   200  sombr | Homewrecker | -
+abc:triplej                     abc           song            116   284  The Black Eyed Peas | Meet Me Halfway | Y
+radiofrance:FIP                 radiofrance   song            390   403  DJ Psychiatre | Rhythm is key | Y
+npo:radio2                      npo           song            205   237  Linda, Roos & Jessica | Ademnood | Y
+tunein:KCSB                     tunein        NONE         
+icecast:RDS relax               icecast       song           None  None  None | Song*I'M NOT IN LOVE*10 CC*1975*41 | -
+icecast:Radio Rebetikes Melodi  icecast       song           None  None  Sotiria_Mpelou | mi_mou_xanafigeis_pia | -
+icecast:WBCQ The Planet
+
+7490   icecast       unknown        None  None  None | None | -
+shoutcast:Radio Magica 87.7 (Ec shoutcast     song           None  None  Foreigner | Say You Will | -
+shoutcast:RDU 98.5FM            shoutcast     song           None  None  TOROA (nz) | Hautonga | -
+shoutcast:Radio Nuova San Giorg shoutcast     song           None  None  GIGI FINIZIO | RITORNERO' | -
+azuracast:RKB                   azuracast     song            811  None  RKB | La petite lanterne | Y
+laut.fm:Ahuga laut.fm           laut          song            365   568  Götz Widmann | Liegen Bleiben | -
+azuracast:RADIO VISION          azuracast     song              1  None  3x1 junto a Maureen So | Eres | Y
+azuracast:Glitchy Radio         azuracast     song            492   222  Mela Mirage | Dissonant | Zooble's Abstraction S | Y
+laut.fm:Dark Asylum             laut          song            175   460  In Strict Confidence | Stripped | -
+laut.fm:Odessa                  laut          song             62   241  The Tamlins | Baltimore | -
+triton:ABC NOTICIAS 1310 (MTY   triton        song          19490   172  INVASORES DE NUEVO LEO | EN ESO QUEDAMOS CORAZON | -
+triton:Shaiva Lahari            triton        placeholder    2241  2305  069_dis | eng-bodhinatha-veylanswami-kauai-h | -
+radio.co:Shine 879              radioco       song            870  None  Shine 879 DAB | The World's Leading Dance Music St | Y
+radiojar:Νησιώτικα 24/7         radiojar      song           None   201  Μάνεσης Παναγιώτης | Οξω Μέρη | Y
+triton:Sky Radio Lounge         triton        song            207   221  Adele | Send My Love (To Your New Lover) | -
+radio.co:Radio Trib             radioco       song             26  None  Muse | Cryogen | Y
+radio.co:The Christmas Station  radioco       song             11  None  Simon & Garfunkel | Star Carol | Y
+radiojar:Monkey Bros            radiojar      song           None   383  Spillage Village | Hapi feat. Big Rube | -
+radiojar:I-Radio Jakarta        radiojar      song           None  None  None | ISWARA JAKARTA | -

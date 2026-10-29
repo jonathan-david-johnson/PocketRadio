@@ -1,0 +1,600 @@
+{"id": "somafm:groovesalad", "src": "api", "ev": "change", "title": "Run", "artist": "Klangstein", "kind": "song", "started_at": 1793270972.0, "duration": null, "stale": false, "t": 1793271171.129987}
+{"id": "somafm:groovesalad", "src": "icy", "ev": "open", "metaint": "45000", "t": 1793271171.155692}
+{"id": "radioparadise:main", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271171.167454}
+{"id": "radioparadise:main", "src": "icy", "ev": "change", "title": "Annabouboula - Opium Bride", "first": true, "kind": "song", "t": 1793271171.171287}
+{"id": "kcrw:e24", "src": "api", "ev": "change", "title": "Love You Anyway", "artist": "The Marías", "kind": "song", "started_at": 1793270875.0, "duration": null, "stale": false, "t": 1793271171.280653}
+{"id": "kexp", "src": "api", "ev": "change", "title": "One Nation Under a Groove", "artist": "Funkadelic", "kind": "song", "started_at": 1793270717.0, "duration": null, "stale": false, "t": 1793271171.284096}
+{"id": "somafm:groovesalad", "src": "icy", "ev": "change", "title": "Klangstein - Run", "first": true, "kind": "song", "t": 1793271171.309547}
+{"id": "radioparadise:main", "src": "api", "ev": "change", "title": "Opium Bride", "artist": "Annabouboula", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271171.31458}
+{"id": "nts:1", "src": "api", "ev": "change", "title": "THE NTS BREAKFAST SHOW W/ FLO & Operelly", "artist": null, "kind": "show", "started_at": 1793264400.0, "duration": null, "stale": true, "t": 1793271171.455675}
+{"id": "azuracast:demo", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271171.836032}
+{"id": "azuracast:demo", "src": "api", "ev": "change", "title": "Amnesia", "artist": "Luke Swanson", "kind": "song", "started_at": 1793270864.0, "duration": 209, "stale": true, "t": 1793271171.843235}
+{"id": "azuracast:demo", "src": "icy", "ev": "change", "title": "AzuraCast.com - AzuraCast is Live!", "first": true, "kind": "song", "t": 1793271171.847477}
+{"id": "live365:a75642", "src": "icy", "ev": "open", "metaint": "8192", "t": 1793271171.8936949}
+{"id": "live365:a75642", "src": "icy", "ev": "change", "title": "Joann Marie Diesel - Tennessee State Line", "first": true, "kind": "song", "t": 1793271171.918525}
+{"id": "live365:a75642", "src": "api", "ev": "change", "title": "Tennessee State Line", "artist": "Joann Marie Diesel", "kind": "song", "started_at": 1793270918.02, "duration": 323.0, "stale": false, "t": 1793271171.926434}
+{"id": "iheart:5162 K-LOVE", "src": "icy", "ev": "noicy", "status": "HTTP/1.0 503 Service Unavailab", "t": 1793271172.027748}
+{"id": "iheart:6045 Power106", "src": "api", "ev": "change", "title": "Dilemma", "artist": "Nelly feat. Kelly Rowland", "kind": "song", "started_at": 1793271018.083, "duration": 288, "stale": false, "t": 1793271172.210731}
+{"id": "iheart:6045 Power106", "src": "icy", "ev": "noicy", "status": "HTTP/1.0 404 Not Found", "t": 1793271172.25371}
+{"id": "kcrw:e24", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271172.339342}
+{"id": "nts:1", "src": "icy", "ev": "open", "metaint": "16384", "t": 1793271172.458347}
+{"id": "nts:1", "src": "icy", "ev": "change", "title": "", "first": true, "kind": "unknown", "t": 1793271172.505126}
+{"id": "npr_composer:KUTX", "src": "api", "ev": "change", "title": "Flower in a Hurricane", "artist": "Justice", "kind": "song", "started_at": 1793271025.0, "duration": 223.0, "stale": false, "t": 1793271172.612894}
+{"id": "kexp", "src": "icy", "ev": "open", "metaint": "4096", "t": 1793271172.757164}
+{"id": "kcrw:e24", "src": "icy", "ev": "change", "title": "", "first": true, "kind": "unknown", "t": 1793271172.772084}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271172.977823}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "THIS STATION WILL CONTINUE AFTER THIS BREAK", "first": true, "kind": "placeholder", "t": 1793271173.010196}
+{"id": "airtime:dublab", "src": "api", "ev": "change", "title": "DON’T LISTEN", "artist": "corto.alto", "kind": "song", "started_at": 1793271088.0, "duration": 178.0, "stale": false, "t": 1793271173.076181}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to Grand Theft Auto VI soundtrack", "first": false, "kind": "song", "t": 1793271173.115951}
+{"id": "kexp", "src": "icy", "ev": "change", "title": "Funkadelic - One Nation Under a Groove", "first": true, "kind": "song", "t": 1793271173.234066}
+{"id": "radiofrance:FIP", "src": "api", "ev": "change", "title": "Feeling free", "artist": "Nicole Willis", "kind": "song", "started_at": 1793271049, "duration": 208, "stale": false, "t": 1793271173.234748}
+{"id": "radioking:416299", "src": "api", "ev": "change", "title": "Freak, Go Home", "artist": "Darkside", "kind": "song", "started_at": 1793270977.0, "duration": 373.02, "stale": false, "t": 1793271173.249485}
+{"id": "abc:triplej", "src": "icy", "ev": "noicy", "status": "HTTP/1.1 200 OK", "t": 1793271173.314995}
+{"id": "radioking:416299", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271173.367123}
+{"id": "radioking:416299", "src": "icy", "ev": "change", "title": "", "first": true, "kind": "unknown", "t": 1793271173.367363}
+{"id": "radioking:416299", "src": "icy", "ev": "change", "title": "Darkside - Freak, Go Home", "first": false, "kind": "song", "t": 1793271173.3674371}
+{"id": "abc:triplej", "src": "api", "ev": "change", "title": "Slide through", "artist": "HKRamz & TAKTiX", "kind": "song", "started_at": 1793270993.0, "duration": 151, "stale": false, "t": 1793271173.3769011}
+{"id": "tunein:KCSB", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271173.445565}
+{"id": "tunein:KCSB", "src": "icy", "ev": "change", "title": "", "first": true, "kind": "unknown", "t": 1793271173.4612281}
+{"id": "npo:radio2", "src": "icy", "ev": "open", "metaint": "64000", "t": 1793271173.6447518}
+{"id": "icecast:RDS relax", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271173.7487738}
+{"id": "icecast:RDS relax", "src": "api", "ev": "change", "title": "Song*I WAS BORN TO LOVE YOU*FREDDIE MERCURY*1985*0611dee5-0b05-4d59-8ee0-625a0acb4092", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271173.80355}
+{"id": "icecast:RDS relax", "src": "icy", "ev": "change", "title": "Song*I WAS BORN TO LOVE YOU*FREDDIE MERCURY*1985*0611dee5-0b05-4d59-8ee0-625a0acb4092", "first": true, "kind": "song", "t": 1793271173.8403149}
+{"id": "npo:radio2", "src": "icy", "ev": "change", "title": "Inxs - Suicide blonde", "first": true, "kind": "song", "t": 1793271173.848331}
+{"id": "shoutcast:Radio Magica 87.7 (Ecu", "src": "api", "ev": "change", "title": "Searching", "artist": "Change", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271173.932606}
+{"id": "shoutcast:Radio Magica 87.7 (Ecu", "src": "icy", "ev": "open", "metaint": "32768", "t": 1793271173.956681}
+{"id": "radiofrance:FIP", "src": "icy", "ev": "noicy", "status": "HTTP/1.1 200 OK", "t": 1793271173.994237}
+{"id": "shoutcast:Radio Magica 87.7 (Ecu", "src": "icy", "ev": "change", "title": "Change - Searching", "first": true, "kind": "song", "t": 1793271174.07543}
+{"id": "airtime:dublab", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271174.0940769}
+{"id": "shoutcast:RDU 98.5FM", "src": "api", "ev": "change", "title": "3WISEFM", "artist": "Live", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271174.272417}
+{"id": "airtime:dublab", "src": "icy", "ev": "change", "title": "corto.alto - DON’T LISTEN", "first": true, "kind": "song", "t": 1793271174.272547}
+{"id": "shoutcast:RDU 98.5FM", "src": "icy", "ev": "open", "metaint": "8192", "t": 1793271174.288501}
+{"id": "shoutcast:RDU 98.5FM", "src": "icy", "ev": "change", "title": "Live - 3WISEFM", "first": true, "kind": "song", "t": 1793271174.387721}
+{"id": "sr:P3", "src": "icy", "ev": "open", "metaint": "16384", "t": 1793271174.399544}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "GIOCHI DI ZUCCA", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271174.411345}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "open", "metaint": "8192", "t": 1793271174.429963}
+{"id": "icecast:Radio Rebetikes Melodi", "src": "api", "ev": "change", "title": "De Thelo Pia Na Xanartheis", "artist": "Imam Baildi", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271174.44769}
+{"id": "icecast:Radio Rebetikes Melodi", "src": "icy", "ev": "noicy", "status": "HTTP/1.1 200 OK", "t": 1793271174.5194921}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "GIOCHI DI ZUCCA", "first": true, "kind": "song", "t": 1793271174.522549}
+{"id": "laut.fm:Ahuga laut.fm", "src": "api", "ev": "change", "title": "Warum zieht's mich nur so runter", "artist": "Gymmick", "kind": "song", "started_at": 1793271147.0, "duration": 243, "stale": false, "t": 1793271174.687756}
+{"id": "sr:P3", "src": "icy", "ev": "change", "title": "Magasinet i P3 med Siri Fagerudd, spelar nu Busta Rhymes, Mariah Carey & Flipmode Squad - I Know What You Want", "first": true, "kind": "song", "t": 1793271174.7988591}
+{"id": "azuracast:RKB", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271174.810498}
+{"id": "azuracast:RKB", "src": "api", "ev": "change", "title": "Go home tae yer bed", "artist": "BROGEAL", "kind": "song", "started_at": 1793271073.0, "duration": 0, "stale": false, "t": 1793271174.813375}
+{"id": "laut.fm:Ahuga laut.fm", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271174.8217778}
+{"id": "azuracast:RKB", "src": "icy", "ev": "change", "title": "BROGEAL - Go home tae yer bed", "first": true, "kind": "song", "t": 1793271174.897536}
+{"id": "laut.fm:Ahuga laut.fm", "src": "icy", "ev": "change", "title": "Gymmick - Warum zieht's mich nur so runter", "first": true, "kind": "song", "t": 1793271174.9318259}
+{"id": "azuracast:Glitchy Radio", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271174.983605}
+{"id": "azuracast:Glitchy Radio", "src": "api", "ev": "error", "err": "HTTPError: HTTP Error 404: Not Found", "t": 1793271174.987861}
+{"id": "azuracast:Glitchy Radio", "src": "icy", "ev": "change", "title": "KittenSneeze - Abstraction (Big Band Version)", "first": true, "kind": "song", "t": 1793271175.021734}
+{"id": "laut.fm:Dark Asylum", "src": "api", "ev": "change", "title": "The Pleasure Remains (Camouflage Vs. Wet Fingers-Club Version)", "artist": "Camouflage", "kind": "song", "started_at": 1793271096.0, "duration": 452, "stale": false, "t": 1793271175.064922}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Flower in a Hurricane - Justice", "first": false, "kind": "song", "t": 1793271175.11413}
+{"id": "laut.fm:Odessa", "src": "api", "ev": "change", "title": "El niño", "artist": "DjeuhDjoah & Lieutenant Nicholson", "kind": "song", "started_at": 1793271061.0, "duration": 243, "stale": false, "t": 1793271175.201752}
+{"id": "azuracast:RADIO VISION", "src": "api", "ev": "change", "title": "Aleluya", "artist": "Polo Negrete", "kind": "song", "started_at": 1793271132.0, "duration": 0, "stale": false, "t": 1793271175.358321}
+{"id": "azuracast:RADIO VISION", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271175.4797509}
+{"id": "azuracast:RADIO VISION", "src": "icy", "ev": "change", "title": "Polo Negrete - Aleluya", "first": true, "kind": "song", "t": 1793271175.4983292}
+{"id": "laut.fm:Odessa", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271175.5429592}
+{"id": "triton:ABC NOTICIAS 1310 (MTY", "src": "api", "ev": "change", "title": "EN ESO QUEDAMOS CORAZON", "artist": "INVASORES DE NUEVO LEON", "kind": "song", "started_at": 1793252985.816, "duration": 172.0, "stale": true, "t": 1793271175.5603719}
+{"id": "triton:Shaiva Lahari", "src": "api", "ev": "change", "title": "eng-bodhinatha-veylanswami-kauai-hindu-lectures-048.mp3", "artist": "069_dis", "kind": "placeholder", "started_at": 1793270234.182, "duration": 2304.828, "stale": false, "t": 1793271175.636961}
+{"id": "laut.fm:Odessa", "src": "icy", "ev": "change", "title": "DjeuhDjoah & Lieutenant Nicholson - El niño", "first": true, "kind": "song", "t": 1793271175.6504982}
+{"id": "laut.fm:Dark Asylum", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271175.668288}
+{"id": "laut.fm:Dark Asylum", "src": "icy", "ev": "change", "title": "Camouflage - The Pleasure Remains (Camouflage Vs. Wet Fingers-Club Version)", "first": true, "kind": "song", "t": 1793271175.668355}
+{"id": "radio.co:Shine 879", "src": "api", "ev": "change", "title": "The World's Leading Dance Music Station", "artist": "Shine 879 DAB", "kind": "song", "started_at": 1793268005.0, "duration": null, "stale": true, "t": 1793271175.715472}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "api", "ev": "change", "title": "Taximi - Pano Sto Mouragio", "artist": "Maria Nomikou", "kind": "song", "started_at": null, "duration": 275.0, "stale": null, "t": 1793271175.963331}
+{"id": "triton:Sky Radio Lounge", "src": "api", "ev": "change", "title": "Don`t Break The Heart", "artist": "Tom Grennan", "kind": "song", "started_at": 1793271019.04, "duration": 220.494, "stale": false, "t": 1793271176.084291}
+{"id": "radio.co:Radio Trib", "src": "api", "ev": "change", "title": "Self-Loathing", "artist": "Váthos", "kind": "song", "started_at": 1793270972.0, "duration": null, "stale": false, "t": 1793271176.198266}
+{"id": "triton:ABC NOTICIAS 1310 (MTY", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271176.2378309}
+{"id": "triton:Shaiva Lahari", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271176.375983}
+{"id": "triton:Shaiva Lahari", "src": "icy", "ev": "change", "title": "069_dis - eng-bodhinatha-veylanswami-kauai-hindu-lectures-048.mp3", "first": true, "kind": "placeholder", "t": 1793271176.410353}
+{"id": "radio.co:The Christmas Station", "src": "api", "ev": "change", "title": "Takin' Care of Christmas", "artist": "Randy Bachman", "kind": "song", "started_at": 1793270918.0, "duration": null, "stale": false, "t": 1793271176.415156}
+{"id": "radiojar:Monkey Bros", "src": "api", "ev": "change", "title": "Lucky Day", "artist": "Restless Leg Syndrome", "kind": "song", "started_at": null, "duration": 171.0, "stale": null, "t": 1793271176.547463}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271176.668756}
+{"id": "radiojar:I-Radio Jakarta", "src": "api", "ev": "change", "title": "D", "artist": null, "kind": "song", "started_at": null, "duration": 0.0, "stale": null, "t": 1793271176.6910899}
+{"id": "triton:Sky Radio Lounge", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271176.697697}
+{"id": "triton:Sky Radio Lounge", "src": "icy", "ev": "change", "title": "Tom Grennan - Don`t Break The Heart", "first": true, "kind": "song", "t": 1793271176.8020742}
+{"id": "radiojar:Monkey Bros", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271176.8931708}
+{"id": "radiojar:Monkey Bros", "src": "icy", "ev": "change", "title": "Kendrick Lamar - Count Me Out", "first": true, "kind": "song", "t": 1793271176.992799}
+{"id": "radio.co:Radio Trib", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271177.074146}
+{"id": "radio.co:Radio Trib", "src": "icy", "ev": "change", "title": "Váthos - Self-Loathing", "first": true, "kind": "song", "t": 1793271177.113015}
+{"id": "radiojar:I-Radio Jakarta", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271177.139609}
+{"id": "zeno:KBC", "src": "api", "ev": "open", "t": 1793271177.191749}
+{"id": "zeno:KBC", "src": "api", "ev": "change", "title": " - ", "artist": null, "kind": "song", "started_at": null, "t": 1793271177.192199}
+{"ev": "start", "n": 40, "dur": 1260.0, "poll": 8.0, "t": 1793271177.200417}
+{"id": "radiojar:I-Radio Jakarta", "src": "icy", "ev": "change", "title": "D", "first": true, "kind": "song", "t": 1793271177.235092}
+{"id": "zeno:Bar Sessions (MP3)", "src": "api", "ev": "open", "t": 1793271177.287605}
+{"id": "zeno:Bar Sessions (MP3)", "src": "api", "ev": "change", "title": "Ivan Spell - Buddha Bar Sessions 7", "artist": null, "kind": "song", "started_at": null, "t": 1793271177.287704}
+{"id": "zeno:Radio Badal", "src": "api", "ev": "open", "t": 1793271177.440417}
+{"id": "zeno:Radio Badal", "src": "api", "ev": "change", "title": "Badal's... - Hit Super Hits??90's??", "artist": null, "kind": "song", "started_at": null, "t": 1793271177.440533}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "change", "title": "Maria Nomikou - Taximi - Pano Sto Mouragio", "first": true, "kind": "song", "t": 1793271177.6910772}
+{"id": "radio.co:The Christmas Station", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271177.946404}
+{"id": "zeno:KBC", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271177.9717472}
+{"id": "zeno:KBC", "src": "icy", "ev": "change", "title": " - ", "first": true, "kind": "song", "t": 1793271177.972094}
+{"id": "radio.co:The Christmas Station", "src": "icy", "ev": "change", "title": "Randy Bachman - Takin' Care of Christmas", "first": true, "kind": "song", "t": 1793271177.990867}
+{"id": "zeno:Radio Badal", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271178.0074072}
+{"id": "zeno:Radio Badal", "src": "icy", "ev": "change", "title": "Badal's... - Hit Super Hits??90's??", "first": true, "kind": "song", "t": 1793271178.007842}
+{"id": "zeno:Bar Sessions (MP3)", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271178.112788}
+{"id": "zeno:Bar Sessions (MP3)", "src": "icy", "ev": "change", "title": "Ivan Spell - Buddha Bar Sessions 7", "first": true, "kind": "song", "t": 1793271178.113188}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271178.688142}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "change", "title": "Shine 879 DAB - The World's Leading Dance Music Station", "first": true, "kind": "song", "t": 1793271178.7976499}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": "Suicide Blonde", "artist": "Inxs", "kind": "song", "started_at": 1793270989.0, "duration": 230.0, "stale": false, "t": 1793271182.460448}
+{"id": "azuracast:Glitchy Radio", "src": "api", "ev": "error", "err": "HTTPError: HTTP Error 404: Not Found", "t": 1793271183.26217}
+{"id": "radiojar:Monkey Bros", "src": "api", "ev": "change", "title": "Count Me Out", "artist": "Kendrick Lamar", "kind": "song", "started_at": null, "duration": 283.0, "stale": null, "t": 1793271184.762342}
+{"id": "shoutcast:Radio Magica 87.7 (Ecu", "src": "icy", "ev": "change", "title": "D Train - You're The One For Me", "first": false, "kind": "song", "t": 1793271186.7608058}
+{"id": "kcrw:e24", "src": "api", "ev": "change", "title": "De La Soul", "artist": "Gareth Donkin", "kind": "song", "started_at": 1793271107.0, "duration": null, "stale": false, "t": 1793271187.568278}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "MARIANO RUGGIERO - VAI", "first": false, "kind": "song", "t": 1793271187.782874}
+{"id": "shoutcast:Radio Magica 87.7 (Ecu", "src": "api", "ev": "change", "title": "You're The One For Me", "artist": "D Train", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271190.258317}
+{"id": "abc:triplej", "src": "api", "ev": "change", "title": "Still Out Here", "artist": "Rops1", "kind": "song", "started_at": 1793271175.0, "duration": 183, "stale": false, "t": 1793271190.665728}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "VAI", "artist": "MARIANO RUGGIERO", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271190.899455}
+{"id": "azuracast:Glitchy Radio", "src": "api", "ev": "error", "err": "HTTPError: HTTP Error 404: Not Found", "t": 1793271191.454648}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "change", "title": "Stelios Manolas - Molis se protoidane", "first": false, "kind": "song", "t": 1793271191.75024}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "api", "ev": "change", "title": "Molis se protoidane", "artist": "Stelios Manolas", "kind": "song", "started_at": null, "duration": 42.0, "stale": null, "t": 1793271192.458555}
+{"id": "azuracast:Glitchy Radio", "src": "api", "ev": "error", "err": "HTTPError: HTTP Error 404: Not Found", "t": 1793271199.618131}
+{"id": "kexp", "src": "icy", "ev": "change", "title": "Bill Withers - Use Me", "first": false, "kind": "song", "t": 1793271203.924741}
+{"id": "sr:P3", "src": "api", "ev": "change", "title": "I Know What You Want", "artist": "Busta Rhymes, Mariah Carey & Flipmode Squad", "kind": "song", "started_at": 1793271130.0, "duration": 245.0, "stale": false, "t": 1793271206.957527}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to Grand Theft Auto VI soundtrack", "first": false, "kind": "song", "t": 1793271207.153451}
+{"id": "azuracast:Glitchy Radio", "src": "api", "ev": "change", "title": "Abstraction (Big Band Version)", "artist": "KittenSneeze", "kind": "song", "started_at": 1793271164.0, "duration": 216, "stale": false, "t": 1793271208.36342}
+{"id": "radio.co:Radio Trib", "src": "icy", "ev": "change", "title": "Reverse The Moment - Without Me", "first": false, "kind": "song", "t": 1793271210.973045}
+{"id": "kexp", "src": "api", "ev": "change", "title": "Use Me", "artist": "Bill Withers", "kind": "song", "started_at": 1793271160.0, "duration": null, "stale": false, "t": 1793271220.553951}
+{"id": "npo:radio2", "src": "icy", "ev": "change", "title": "NPO Radio 2 - NPO Radio 2 Top '90s - NPO", "first": false, "kind": "song", "t": 1793271221.686775}
+{"id": "npo:radio2", "src": "icy", "ev": "change", "title": "Alannah Myles - Black velvet", "first": false, "kind": "song", "t": 1793271224.377517}
+{"id": "radio.co:Radio Trib", "src": "api", "ev": "change", "title": "Without Me", "artist": "Reverse The Moment", "kind": "song", "started_at": 1793271209.0, "duration": null, "stale": false, "t": 1793271225.129975}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793271225.5615768}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "change", "title": "Παναγιώτης Μάνεσης - Τι τους έκανα εγώ", "first": false, "kind": "song", "t": 1793271231.654161}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Playlist Videos 1A and more at kutx.org - https://kutx.org/", "first": false, "kind": "song", "t": 1793271232.157459}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "api", "ev": "change", "title": "Τι τους έκανα εγώ", "artist": "Παναγιώτης Μάνεσης", "kind": "song", "started_at": null, "duration": 51.0, "stale": null, "t": 1793271233.517781}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": "Black Velvet", "artist": "Alannah Myles", "kind": "song", "started_at": 1793271214.0, "duration": 241.0, "stale": false, "t": 1793271242.696351}
+{"id": "triton:Sky Radio Lounge", "src": "icy", "ev": "change", "title": "Tina Turner - Let's Stay Together", "first": false, "kind": "song", "t": 1793271250.817396}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793271251.4527712}
+{"id": "radio.co:The Christmas Station", "src": "icy", "ev": "change", "title": "Mariah Carey - All I Want for Christmas Is You", "first": false, "kind": "song", "t": 1793271252.033823}
+{"id": "triton:Sky Radio Lounge", "src": "api", "ev": "change", "title": "Let's Stay Together", "artist": "Tina Turner", "kind": "song", "started_at": 1793271240.821, "duration": 314.514, "stale": false, "t": 1793271258.165954}
+{"id": "radio.co:The Christmas Station", "src": "api", "ev": "change", "title": "All I Want for Christmas Is You", "artist": "Mariah Carey", "kind": "song", "started_at": 1793271249.0, "duration": null, "stale": false, "t": 1793271258.495341}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": "Black Velvet", "artist": "Alannah Myles", "kind": "song", "started_at": 1793271214.0, "duration": 241.0, "stale": false, "t": 1793271260.3778508}
+{"id": "npr_composer:KUTX", "src": "api", "ev": "change", "title": "KUTX Music Mix", "artist": null, "kind": "show", "started_at": 1793250000.0, "duration": null, "stale": true, "t": 1793271261.8883898}
+{"id": "radiofrance:FIP", "src": "api", "ev": "change", "title": "Nessuno mi può giudicare", "artist": "Caterina Caselli", "kind": "song", "started_at": 1793271257, "duration": 159, "stale": false, "t": 1793271263.927642}
+{"id": "airtime:dublab", "src": "icy", "ev": "change", "title": "dubstream", "first": false, "kind": "song", "t": 1793271266.086051}
+{"id": "airtime:dublab", "src": "icy", "ev": "change", "title": "corto.alto - APRIL (feat. anaiis)", "first": false, "kind": "song", "t": 1793271266.649726}
+{"id": "live365:a75642", "src": "icy", "ev": "change", "title": "Joann Marie - SID PRE-TRIP", "first": false, "kind": "song", "t": 1793271267.073757}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "The Austin Music Experience - KUTX 98.9", "first": false, "kind": "song", "t": 1793271268.1643689}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "change", "title": "Nico Da Funksta - HallowRave2026", "first": false, "kind": "song", "t": 1793271269.6928918}
+{"id": "airtime:dublab", "src": "api", "ev": "change", "title": "APRIL (feat. anaiis)", "artist": "corto.alto", "kind": "song", "started_at": 1793271266.0, "duration": 178.0, "stale": false, "t": 1793271269.993113}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Detroit City - Bobby Bare", "first": false, "kind": "song", "t": 1793271271.302508}
+{"id": "npr_composer:KUTX", "src": "api", "ev": "change", "title": "Detroit City", "artist": "Bobby Bare", "kind": "song", "started_at": 1793271242.0, "duration": 165.0, "stale": false, "t": 1793271278.145335}
+{"id": "somafm:groovesalad", "src": "icy", "ev": "change", "title": "Kaya Project - Desert Phase (Hibernation Remix)", "first": false, "kind": "song", "t": 1793271278.6105752}
+{"id": "live365:a75642", "src": "api", "ev": "change", "title": "Prisoner Of The Highway", "artist": "Ronnie Milsap", "kind": "song", "started_at": 1793271259.28, "duration": 268.2, "stale": false, "t": 1793271279.130367}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "change", "title": "Maria Nomikou - Nisiotiki Giorti (Live)", "first": false, "kind": "song", "t": 1793271279.664686}
+{"id": "somafm:groovesalad", "src": "api", "ev": "change", "title": "Desert Phase (Hibernation Remix)", "artist": "Kaya Project", "kind": "song", "started_at": 1793271273.0, "duration": null, "stale": false, "t": 1793271280.509196}
+{"id": "radio.co:Shine 879", "src": "api", "ev": "change", "title": "HallowRave2026", "artist": "Nico Da Funksta", "kind": "song", "started_at": 1793271268.0, "duration": null, "stale": false, "t": 1793271281.3233972}
+{"id": "icecast:RDS relax", "src": "icy", "ev": "change", "title": "Song*STARDUST*MIKA feat. CHIARA*2013*9c2d41c8-3ad7-47e1-8870-b5fde1344059", "first": false, "kind": "song", "t": 1793271282.2742112}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "api", "ev": "change", "title": "Nisiotiki Giorti (Live)", "artist": "Maria Nomikou", "kind": "song", "started_at": null, "duration": 77.0, "stale": null, "t": 1793271282.8006542}
+{"id": "live365:a75642", "src": "icy", "ev": "change", "title": "Ronnie Milsap - Prisoner Of The Highway", "first": false, "kind": "song", "t": 1793271286.994345}
+{"id": "icecast:RDS relax", "src": "api", "ev": "change", "title": "Song*STARDUST*MIKA feat. CHIARA*2013*9c2d41c8-3ad7-47e1-8870-b5fde1344059", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271289.674258}
+{"id": "iheart:5162 K-LOVE", "src": "api", "ev": "change", "title": "Never Been a Moment", "artist": "Micah Tyler", "kind": "song", "started_at": 1793271293.251, "duration": 200, "stale": false, "t": 1793271301.91456}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to The Best Of Bobby Bare", "first": false, "kind": "song", "t": 1793271302.19899}
+{"id": "laut.fm:Odessa", "src": "icy", "ev": "change", "title": "Saint Etienne  - Cool Kids of Death (Underworld Mix)", "first": false, "kind": "song", "t": 1793271306.301059}
+{"id": "radiojar:I-Radio Jakarta", "src": "icy", "ev": "change", "title": "TEN2FIVE - HANYA UNTUKMU", "first": false, "kind": "song", "t": 1793271310.064383}
+{"id": "iheart:6045 Power106", "src": "api", "ev": "change", "title": "Players", "artist": "Coi Leray", "kind": "song", "started_at": 1793271289.396, "duration": 138, "stale": false, "t": 1793271310.099519}
+{"id": "laut.fm:Odessa", "src": "api", "ev": "change", "title": "Cool Kids of Death (Underworld Mix)", "artist": "Saint Etienne", "kind": "song", "started_at": 1793271305.0, "duration": 870, "stale": false, "t": 1793271314.291894}
+{"id": "radioparadise:main", "src": "icy", "ev": "change", "title": "Phosphorescent - C’est la vie No.2", "first": false, "kind": "song", "t": 1793271321.073164}
+{"id": "radiojar:I-Radio Jakarta", "src": "api", "ev": "change", "title": "HANYA UNTUKMU", "artist": "TEN2FIVE", "kind": "song", "started_at": null, "duration": 0.0, "stale": null, "t": 1793271323.8224971}
+{"id": "radioparadise:main", "src": "api", "ev": "change", "title": "C’est la vie No.2", "artist": "Phosphorescent", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271324.37218}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Detroit City - Bobby Bare", "first": false, "kind": "song", "t": 1793271333.176536}
+{"id": "azuracast:RADIO VISION", "src": "icy", "ev": "change", "title": "Impacto - nelson soto - porque me das la espalda", "first": false, "kind": "song", "t": 1793271344.297166}
+{"id": "icecast:Radio Rebetikes Melodi", "src": "api", "ev": "change", "title": "mavra_matia", "artist": "Markos_Bambakaris", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271349.736143}
+{"id": "azuracast:RADIO VISION", "src": "api", "ev": "change", "title": "nelson soto - porque me das la espalda", "artist": "Impacto", "kind": "song", "started_at": 1793271347.0, "duration": 0, "stale": false, "t": 1793271350.781583}
+{"id": "radioking:416299", "src": "api", "ev": "change", "title": "Slim Chance", "artist": "Debasser", "kind": "song", "started_at": 1793271350.0, "duration": 269.65, "stale": false, "t": 1793271352.028445}
+{"id": "radioking:416299", "src": "icy", "ev": "change", "title": "Debasser - Slim Chance", "first": false, "kind": "song", "t": 1793271353.139267}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "change", "title": "Konitopoulos Vaggelis &Stelina - 15-Tsarka me to trihandiri", "first": false, "kind": "song", "t": 1793271355.678538}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "change", "title": "Unknown Artist - XYZ Advert", "first": false, "kind": "ad", "t": 1793271358.551643}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793271363.756992}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to The Best Of Bobby Bare", "first": false, "kind": "song", "t": 1793271364.177881}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "api", "ev": "change", "title": "15-Tsarka me to trihandiri", "artist": "Konitopoulos Vaggelis &Stelina", "kind": "song", "started_at": null, "duration": 64.0, "stale": null, "t": 1793271364.495632}
+{"id": "azuracast:RKB", "src": "icy", "ev": "change", "title": "KLEZMOFOBIA - Grine kuzine", "first": false, "kind": "song", "t": 1793271367.74332}
+{"id": "azuracast:RKB", "src": "api", "ev": "change", "title": "Grine kuzine", "artist": "KLEZMOFOBIA", "kind": "song", "started_at": 1793271372.0, "duration": 0, "stale": false, "t": 1793271370.235411}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": "Black Velvet", "artist": "Alannah Myles", "kind": "song", "started_at": 1793271214.0, "duration": 241.0, "stale": false, "t": 1793271372.369477}
+{"id": "sr:P3", "src": "icy", "ev": "change", "title": "Magasinet i P3 med Siri Fagerudd", "first": false, "kind": "song", "t": 1793271375.949282}
+{"id": "radio.co:Shine 879", "src": "api", "ev": "change", "title": "XYZ Advert", "artist": "Unknown Artist", "kind": "ad", "started_at": 1793271357.0, "duration": null, "stale": false, "t": 1793271379.094667}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "STATION DAB - DABPLUS", "first": false, "kind": "song", "t": 1793271390.501968}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "pixxxie - Magi Merlin", "first": false, "kind": "song", "t": 1793271391.151524}
+{"id": "sr:P3", "src": "icy", "ev": "change", "title": "Magasinet i P3 med Siri Fagerudd, spelar nu Cleo Sol - Gentlewoman", "first": false, "kind": "song", "t": 1793271391.557975}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "change", "title": "Unknown Artist - XYZ_ID2", "first": false, "kind": "placeholder", "t": 1793271391.738955}
+{"id": "laut.fm:Ahuga laut.fm", "src": "icy", "ev": "change", "title": "Mani Terzok - 07 Pflanz dich", "first": false, "kind": "song", "t": 1793271391.7425761}
+{"id": "sr:P3", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793271393.9527638}
+{"id": "laut.fm:Ahuga laut.fm", "src": "api", "ev": "change", "title": "07 Pflanz dich", "artist": "Mani Terzok", "kind": "song", "started_at": 1793271390.0, "duration": 130, "stale": false, "t": 1793271394.650492}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "change", "title": "Unknown Artist - Shine879 Xmas", "first": false, "kind": "placeholder", "t": 1793271396.419608}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "DABPLUS", "artist": "STATION DAB", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271397.619617}
+{"id": "radio.co:Shine 879", "src": "api", "ev": "change", "title": "XYZ_ID2", "artist": "Unknown Artist", "kind": "placeholder", "started_at": 1793271390.0, "duration": null, "stale": false, "t": 1793271403.455743}
+{"id": "radio.co:Shine 879", "src": "api", "ev": "change", "title": "Shine879 Xmas", "artist": "Unknown Artist", "kind": "placeholder", "started_at": 1793271395.0, "duration": null, "stale": false, "t": 1793271411.575648}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "change", "title": "Leta Korre - Pou na sai erota mou (Live)", "first": false, "kind": "song", "t": 1793271417.7064161}
+{"id": "radiofrance:FIP", "src": "api", "ev": "change", "title": "Sliced tomatoes", "artist": "The Just Brothers", "kind": "song", "started_at": 1793271416, "duration": 138, "stale": false, "t": 1793271420.036505}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "api", "ev": "change", "title": "Pou na sai erota mou (Live)", "artist": "Leta Korre", "kind": "song", "started_at": null, "duration": 91.0, "stale": null, "t": 1793271421.7408059}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to Power House", "first": false, "kind": "song", "t": 1793271422.1722932}
+{"id": "npr_composer:KUTX", "src": "api", "ev": "change", "title": "pixxxie", "artist": "Magi Merlin", "kind": "song", "started_at": 1793271369.0, "duration": 231.0, "stale": false, "t": 1793271424.4050188}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "DORA NAVAS - SIMMO TUTTI FIGLI E DIO", "first": false, "kind": "song", "t": 1793271429.441464}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "SIMMO TUTTI FIGLI E DIO", "artist": "DORA NAVAS", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271430.650401}
+{"id": "radio.co:Radio Trib", "src": "icy", "ev": "change", "title": "Jingle 11 - Urmeaza-ti Tribul... Radio Trib", "first": false, "kind": "placeholder", "t": 1793271431.177862}
+{"id": "iheart:6045 Power106", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793271431.9622889}
+{"id": "kexp", "src": "icy", "ev": "change", "title": "Danielle Ponder feat. Reenah Golden - Power", "first": false, "kind": "song", "t": 1793271432.8704581}
+{"id": "radio.co:Radio Trib", "src": "icy", "ev": "change", "title": "Conexiuni - Tu", "first": false, "kind": "song", "t": 1793271434.9106932}
+{"id": "shoutcast:Radio Magica 87.7 (Ecu", "src": "icy", "ev": "change", "title": "Dan Fogelberg - Leader Of The Band", "first": false, "kind": "song", "t": 1793271438.6726542}
+{"id": "iheart:6045 Power106", "src": "api", "ev": "change", "title": "Keep Ya Head Up", "artist": "2Pac", "kind": "song", "started_at": 1793271427.085, "duration": 262, "stale": false, "t": 1793271440.144403}
+{"id": "shoutcast:Radio Magica 87.7 (Ecu", "src": "api", "ev": "change", "title": "Leader Of The Band", "artist": "Dan Fogelberg", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271442.8270621}
+{"id": "airtime:dublab", "src": "icy", "ev": "change", "title": "A LARGE SHEET OF MUSCLE - A 2 YEAR OLD BOY", "first": false, "kind": "song", "t": 1793271445.030715}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "change", "title": "roger.com - Roger.com - The Airplane", "first": false, "kind": "song", "t": 1793271446.660778}
+{"id": "azuracast:Glitchy Radio", "src": "icy", "ev": "change", "title": "Vice Ganda - Ang Kulit - From \"The Super Parental Guardians\"", "first": false, "kind": "song", "t": 1793271448.581999}
+{"id": "kexp", "src": "api", "ev": "change", "title": "Power", "artist": "Danielle Ponder feat. Reenah Golden", "kind": "song", "started_at": 1793271378.0, "duration": null, "stale": false, "t": 1793271450.720546}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "pixxxie - Magi Merlin", "first": false, "kind": "song", "t": 1793271451.206634}
+{"id": "sr:P3", "src": "api", "ev": "change", "title": "Gentlewoman", "artist": "Cleo Sol", "kind": "song", "started_at": 1793271380.0, "duration": 226.0, "stale": false, "t": 1793271451.315815}
+{"id": "radio.co:Radio Trib", "src": "api", "ev": "change", "title": "Tu", "artist": "Conexiuni", "kind": "song", "started_at": 1793271433.0, "duration": null, "stale": false, "t": 1793271453.10889}
+{"id": "radiojar:Monkey Bros", "src": "icy", "ev": "change", "title": "Kobo Town - Abatina", "first": false, "kind": "song", "t": 1793271455.824638}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793271458.441795}
+{"id": "npo:radio2", "src": "icy", "ev": "change", "title": "NPO Radio 2 - NPO Radio 2 Top '90s - NPO", "first": false, "kind": "song", "t": 1793271458.640903}
+{"id": "radiojar:Monkey Bros", "src": "api", "ev": "change", "title": "Abatina", "artist": "Kobo Town", "kind": "song", "started_at": null, "duration": 294.0, "stale": null, "t": 1793271462.82533}
+{"id": "airtime:dublab", "src": "api", "ev": "change", "title": "A 2 YEAR OLD BOY", "artist": "A LARGE SHEET OF MUSCLE", "kind": "song", "started_at": 1793271444.0, "duration": 156.0, "stale": false, "t": 1793271464.443819}
+{"id": "azuracast:Glitchy Radio", "src": "api", "ev": "change", "title": "Ang Kulit - From \"The Super Parental Guardians\"", "artist": "Vice Ganda", "kind": "song", "started_at": 1793271453.0, "duration": 169, "stale": false, "t": 1793271465.6404328}
+{"id": "radio.co:Shine 879", "src": "api", "ev": "change", "title": "Roger.com - The Airplane", "artist": "roger.com", "kind": "song", "started_at": 1793271445.0, "duration": null, "stale": false, "t": 1793271468.471812}
+{"id": "icecast:RDS relax", "src": "icy", "ev": "change", "title": "Link*Liner 16 La vita � leggera*La tua oasi di Relax**b58e7835-0708-4c5e-8c17-e46023e8aedc", "first": false, "kind": "song", "t": 1793271473.727304}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "change", "title": "Unknown Artist - XYZ_ID5", "first": false, "kind": "placeholder", "t": 1793271476.519406}
+{"id": "icecast:RDS relax", "src": "api", "ev": "change", "title": "Link*Liner 16 La vita è leggera*La tua oasi di Relax**b58e7835-0708-4c5e-8c17-e46023e8aedc", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271479.143042}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to Power House", "first": false, "kind": "song", "t": 1793271481.2140732}
+{"id": "icecast:RDS relax", "src": "icy", "ev": "change", "title": "Song*YOU'LL BE IN MY HEART*PHIL COLLINS*1999*2a7faaa2-89c4-4fa2-8c9d-fbe68a56920b", "first": false, "kind": "song", "t": 1793271487.2730172}
+{"id": "radio.co:Shine 879", "src": "api", "ev": "change", "title": "XYZ_ID5", "artist": "Unknown Artist", "kind": "placeholder", "started_at": 1793271475.0, "duration": null, "stale": false, "t": 1793271492.887965}
+{"id": "radio.co:The Christmas Station", "src": "icy", "ev": "change", "title": "Andy Williams - Happy Holidays", "first": false, "kind": "song", "t": 1793271493.954311}
+{"id": "icecast:RDS relax", "src": "api", "ev": "change", "title": "Song*YOU'LL BE IN MY HEART*PHIL COLLINS*1999*2a7faaa2-89c4-4fa2-8c9d-fbe68a56920b", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271495.662166}
+{"id": "iheart:5162 K-LOVE", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793271496.9994628}
+{"id": "radio.co:The Christmas Station", "src": "api", "ev": "change", "title": "Happy Holidays", "artist": "Andy Williams", "kind": "song", "started_at": 1793271490.0, "duration": null, "stale": false, "t": 1793271504.080565}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "change", "title": "Konitopoulos Vaggelis &Stelina - 19-I veres", "first": false, "kind": "song", "t": 1793271505.643209}
+{"id": "kexp", "src": "api", "ev": "change", "title": null, "artist": null, "kind": "station_id", "started_at": 1793271502.0, "duration": null, "stale": false, "t": 1793271508.249439}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "api", "ev": "change", "title": "19-I veres", "artist": "Konitopoulos Vaggelis &Stelina", "kind": "song", "started_at": null, "duration": 118.0, "stale": null, "t": 1793271511.818604}
+{"id": "radiojar:I-Radio Jakarta", "src": "icy", "ev": "change", "title": "ANDIEN - NAKSIR", "first": false, "kind": "song", "t": 1793271512.119319}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "pixxxie - Magi Merlin", "first": false, "kind": "song", "t": 1793271512.2287161}
+{"id": "kexp", "src": "icy", "ev": "change", "title": "Reverend Dollars - Variety Mix", "first": false, "kind": "song", "t": 1793271512.441516}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "change", "title": "wrightglazing.co.uk - Wright Glazing - Cheam", "first": false, "kind": "song", "t": 1793271515.694967}
+{"id": "abc:triplej", "src": "api", "ev": "change", "title": "Oh Shit", "artist": "iamshani", "kind": "song", "started_at": 1793271499.0, "duration": 171, "stale": false, "t": 1793271517.699913}
+{"id": "radiojar:I-Radio Jakarta", "src": "api", "ev": "change", "title": "NAKSIR", "artist": "ANDIEN", "kind": "song", "started_at": null, "duration": 0.0, "stale": null, "t": 1793271520.3031812}
+{"id": "radioparadise:main", "src": "icy", "ev": "change", "title": "Eric Hilton - The Dharma Lovers", "first": false, "kind": "song", "t": 1793271523.6020129}
+{"id": "laut.fm:Ahuga laut.fm", "src": "api", "ev": "change", "title": "Ich möchte mit Dir...", "artist": "Billy Rückwärts", "kind": "song", "started_at": 1793271520.0, "duration": 168, "stale": false, "t": 1793271525.0282528}
+{"id": "radioparadise:main", "src": "api", "ev": "change", "title": "The Dharma Lovers", "artist": "Eric Hilton", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271527.123035}
+{"id": "laut.fm:Ahuga laut.fm", "src": "icy", "ev": "change", "title": "talkspace.com - Ein bisschen Verbraucherinformationen ...", "first": false, "kind": "song", "t": 1793271527.2162519}
+{"id": "icecast:Radio Rebetikes Melodi", "src": "api", "ev": "change", "title": "aspro_poukamiso_foro", "artist": "Τσιτσάνης", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271533.227798}
+{"id": "radio.co:Shine 879", "src": "api", "ev": "change", "title": "Wright Glazing - Cheam", "artist": "wrightglazing.co.uk", "kind": "song", "started_at": 1793271514.0, "duration": null, "stale": false, "t": 1793271533.5159411}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to Power House", "first": false, "kind": "song", "t": 1793271542.202091}
+{"id": "laut.fm:Dark Asylum", "src": "api", "ev": "change", "title": "Date Of Expiration (Expired)", "artist": "Funker Vogt", "kind": "song", "started_at": 1793271548.0, "duration": 275, "stale": false, "t": 1793271549.83139}
+{"id": "live365:a75642", "src": "icy", "ev": "change", "title": "Joann Marie Mile - Rosalinda Knows", "first": false, "kind": "song", "t": 1793271550.011453}
+{"id": "laut.fm:Dark Asylum", "src": "icy", "ev": "change", "title": "Funker Vogt - Date Of Expiration (Expired)", "first": false, "kind": "song", "t": 1793271550.0926661}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "change", "title": "Unknown Artist - XYZ_ID6", "first": false, "kind": "placeholder", "t": 1793271553.592236}
+{"id": "azuracast:RADIO VISION", "src": "icy", "ev": "change", "title": "Josue Del Cid - Un Cántico Nuevo", "first": false, "kind": "song", "t": 1793271555.562196}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "change", "title": "Envirovan Van Hire - Envirovan Van Hire Essex", "first": false, "kind": "song", "t": 1793271558.637374}
+{"id": "live365:a75642", "src": "api", "ev": "change", "title": "Rosalinda Knows", "artist": "Joann Marie Mile", "kind": "song", "started_at": 1793271524.52, "duration": 210.0, "stale": false, "t": 1793271558.736941}
+{"id": "radiofrance:FIP", "src": "api", "ev": "change", "title": "Parlez vous anglais mr katerine ?", "artist": "Katerine & Erin Moran", "kind": "song", "started_at": 1793271554, "duration": 136, "stale": false, "t": 1793271559.974742}
+{"id": "azuracast:RADIO VISION", "src": "api", "ev": "change", "title": "Un Cántico Nuevo", "artist": "Josue Del Cid", "kind": "song", "started_at": 1793271559.0, "duration": 0, "stale": false, "t": 1793271560.489315}
+{"id": "triton:Sky Radio Lounge", "src": "icy", "ev": "change", "title": "Sheppard - Die Young", "first": false, "kind": "song", "t": 1793271572.5171762}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "pixxxie - Magi Merlin", "first": false, "kind": "song", "t": 1793271573.2557929}
+{"id": "radio.co:Shine 879", "src": "api", "ev": "change", "title": "Envirovan Van Hire Essex", "artist": "Envirovan Van Hire", "kind": "song", "started_at": 1793271556.0, "duration": null, "stale": false, "t": 1793271574.0948591}
+{"id": "kcrw:e24", "src": "api", "ev": "change", "title": "La mirada", "artist": "Nicola Cruz", "kind": "song", "started_at": 1793271459.0, "duration": null, "stale": false, "t": 1793271577.589472}
+{"id": "triton:Sky Radio Lounge", "src": "api", "ev": "change", "title": "Die Young", "artist": "Sheppard", "kind": "song", "started_at": 1793271564.671, "duration": 224.275, "stale": false, "t": 1793271578.172269}
+{"id": "laut.fm:Ahuga laut.fm", "src": "icy", "ev": "change", "title": "amazon.com - Ein bisschen Verbraucherinformationen ...", "first": false, "kind": "song", "t": 1793271583.258637}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "change", "title": "Unknown Artist - DL APP JINGLE 1", "first": false, "kind": "placeholder", "t": 1793271593.944312}
+{"id": "radio.co:Shine 879", "src": "api", "ev": "change", "title": "DL APP JINGLE 1", "artist": "Unknown Artist", "kind": "placeholder", "started_at": 1793271591.0, "duration": null, "stale": false, "t": 1793271598.608504}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "change", "title": "Unknown Artist - Alison Limerick (wet) ", "first": false, "kind": "placeholder", "t": 1793271600.6683679}
+{"id": "airtime:dublab", "src": "icy", "ev": "change", "title": "Jeff Parker featuring Chris Speed, Kaveh Rastegar, and Aaron Steele - Miles' Mode", "first": false, "kind": "song", "t": 1793271600.85797}
+{"id": "sr:P3", "src": "icy", "ev": "change", "title": "P3 Nyheter", "first": false, "kind": "song", "t": 1793271602.121123}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to Power House", "first": false, "kind": "song", "t": 1793271604.259309}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "change", "title": "Shine 879 DAB - The World's Leading Dance Music Station", "first": false, "kind": "song", "t": 1793271607.9785779}
+{"id": "somafm:groovesalad", "src": "icy", "ev": "change", "title": "Marc Minot - Joop Joop", "first": false, "kind": "song", "t": 1793271610.363013}
+{"id": "radiojar:I-Radio Jakarta", "src": "icy", "ev": "change", "title": "ISWARA JAKARTA", "first": false, "kind": "song", "t": 1793271611.1128361}
+{"id": "laut.fm:Ahuga laut.fm", "src": "icy", "ev": "change", "title": "Billy Rückwärts - Ich möchte mit Dir...", "first": false, "kind": "song", "t": 1793271611.279992}
+{"id": "npr_composer:KUTX", "src": "api", "ev": "change", "title": "Taylor Wallace-Riegel", "artist": null, "kind": "show", "started_at": 1793268000.0, "duration": null, "stale": true, "t": 1793271611.302369}
+{"id": "azuracast:demo", "src": "icy", "ev": "error", "err": "EOFError: ", "t": 1793271611.311612}
+{"id": "radio.co:Shine 879", "src": "api", "ev": "change", "title": "Alison Limerick (wet)", "artist": "Unknown Artist", "kind": "placeholder", "started_at": 1793271598.0, "duration": null, "stale": false, "t": 1793271614.82204}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "Ora Esatta", "first": false, "kind": "song", "t": 1793271615.729048}
+{"id": "azuracast:demo", "src": "api", "ev": "error", "err": "HTTPError: HTTP Error 521: <none>", "t": 1793271615.930829}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Please Don`t Let Me Be Misunderstood - Meshell Ndegeocello", "first": false, "kind": "song", "t": 1793271616.2512472}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "Pubblicita", "first": false, "kind": "song", "t": 1793271618.935145}
+{"id": "npr_composer:KUTX", "src": "api", "ev": "change", "title": "KUTX Music Mix", "artist": null, "kind": "show", "started_at": 1793250000.0, "duration": null, "stale": true, "t": 1793271619.9842188}
+{"id": "airtime:dublab", "src": "api", "ev": "change", "title": "Miles' Mode", "artist": "Jeff Parker featuring Chris Speed, Kaveh Rastegar, and Aaron Steele", "kind": "song", "started_at": 1793271600.0, "duration": 464.0, "stale": false, "t": 1793271620.007062}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "Pubblicita", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271620.690475}
+{"id": "azuracast:demo", "src": "icy", "ev": "noicy", "status": "HTTP/1.1 521 <none>", "t": 1793271621.518344}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "TUFANO ELETTRODOMESTICI", "first": false, "kind": "song", "t": 1793271621.898898}
+{"id": "radioking:416299", "src": "icy", "ev": "change", "title": " - Line Out Radio A Warm Ensemble bis", "first": false, "kind": "song", "t": 1793271623.06818}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "change", "title": "Μαρία Νομικού - Μεσ Την Καρδια Μου Σ΄Εβαλα", "first": false, "kind": "song", "t": 1793271623.865889}
+{"id": "azuracast:demo", "src": "api", "ev": "error", "err": "HTTPError: HTTP Error 521: <none>", "t": 1793271624.216741}
+{"id": "somafm:groovesalad", "src": "api", "ev": "change", "title": "Joop Joop", "artist": "Marc Minot", "kind": "song", "started_at": 1793271606.0, "duration": null, "stale": false, "t": 1793271624.472406}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "api", "ev": "change", "title": "Μεσ Την Καρδια Μου Σ΄Εβαλα", "artist": "Μαρία Νομικού", "kind": "song", "started_at": null, "duration": 75.0, "stale": null, "t": 1793271626.646207}
+{"id": "radiojar:I-Radio Jakarta", "src": "api", "ev": "change", "title": "ISWARA JAKARTA", "artist": null, "kind": "song", "started_at": null, "duration": 0.0, "stale": null, "t": 1793271626.742492}
+{"id": "radioking:416299", "src": "icy", "ev": "change", "title": "Lunatic Asylum - Kingdom Of Lust", "first": false, "kind": "song", "t": 1793271627.0752409}
+{"id": "npr_composer:KUTX", "src": "api", "ev": "change", "title": "Taylor Wallace-Riegel", "artist": null, "kind": "show", "started_at": 1793268000.0, "duration": null, "stale": true, "t": 1793271628.056927}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "TUFANO ELETTRODOMESTICI", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271628.9699898}
+{"id": "radio.co:Shine 879", "src": "api", "ev": "change", "title": "The World's Leading Dance Music Station", "artist": "Shine 879 DAB", "kind": "song", "started_at": 1793271606.0, "duration": null, "stale": false, "t": 1793271631.110548}
+{"id": "azuracast:demo", "src": "api", "ev": "error", "err": "HTTPError: HTTP Error 521: <none>", "t": 1793271632.380543}
+{"id": "radioking:416299", "src": "api", "ev": "change", "title": "Kingdom Of Lust", "artist": "Lunatic Asylum", "kind": "song", "started_at": 1793271624.0, "duration": 437.87, "stale": false, "t": 1793271636.463943}
+{"id": "azuracast:demo", "src": "api", "ev": "error", "err": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)", "t": 1793271642.2602901}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to Pour Une Ame Souveraine:  A Dedication To Nina Simone", "first": false, "kind": "song", "t": 1793271646.26526}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "error", "err": "timeout: The read operation timed out", "t": 1793271647.1177988}
+{"id": "radio.co:The Christmas Station", "src": "icy", "ev": "change", "title": "Stevie Wonder - The Day That Love Began", "first": false, "kind": "song", "t": 1793271647.78099}
+{"id": "azuracast:demo", "src": "api", "ev": "error", "err": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)", "t": 1793271651.151447}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271658.502269}
+{"id": "radio.co:The Christmas Station", "src": "api", "ev": "change", "title": "The Day That Love Began", "artist": "Stevie Wonder", "kind": "song", "started_at": 1793271645.0, "duration": null, "stale": false, "t": 1793271659.776503}
+{"id": "azuracast:demo", "src": "api", "ev": "error", "err": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)", "t": 1793271659.914015}
+{"id": "azuracast:RKB", "src": "icy", "ev": "change", "title": "RKB - La petite lanterne", "first": false, "kind": "song", "t": 1793271661.23354}
+{"id": "sr:P3", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793271666.688053}
+{"id": "azuracast:demo", "src": "api", "ev": "error", "err": "HTTPError: HTTP Error 521: <none>", "t": 1793271668.0574138}
+{"id": "azuracast:RKB", "src": "api", "ev": "change", "title": "La petite lanterne", "artist": "RKB", "kind": "song", "started_at": 1793271665.0, "duration": 0, "stale": false, "t": 1793271675.6963542}
+{"id": "azuracast:demo", "src": "api", "ev": "error", "err": "HTTPError: HTTP Error 521: <none>", "t": 1793271676.239519}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Please Don`t Let Me Be Misunderstood - Meshell Ndegeocello", "first": false, "kind": "song", "t": 1793271676.27586}
+{"id": "abc:triplej", "src": "api", "ev": "change", "title": "Sativa", "artist": "Jhené Aiko, Swae Lee", "kind": "song", "started_at": 1793271662.0, "duration": 276, "stale": false, "t": 1793271677.6121962}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "error", "err": "EOFError: ", "t": 1793271678.465334}
+{"id": "azuracast:demo", "src": "api", "ev": "error", "err": "HTTPError: HTTP Error 521: <none>", "t": 1793271684.527497}
+{"id": "radio.co:Shine 879", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793271689.656068}
+{"id": "radiofrance:FIP", "src": "api", "ev": "change", "title": "Make me believe in you", "artist": "Patti Jo", "kind": "song", "started_at": 1793271690, "duration": 206, "stale": false, "t": 1793271691.9422898}
+{"id": "iheart:6045 Power106", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793271692.080702}
+{"id": "shoutcast:Radio Magica 87.7 (Ecu", "src": "icy", "ev": "change", "title": "The Gap Band - Burn Rubber On Me (Single Mix)", "first": false, "kind": "song", "t": 1793271692.601705}
+{"id": "azuracast:demo", "src": "api", "ev": "error", "err": "HTTPError: HTTP Error 404: Not Found", "t": 1793271693.39771}
+{"id": "shoutcast:Radio Magica 87.7 (Ecu", "src": "api", "ev": "change", "title": "Burn Rubber On Me (Single Mix)", "artist": "The Gap Band", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271694.759735}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "change", "title": "Παναγιώτης Μάυρος - Έλα να πάμε κάτω (Live)", "first": false, "kind": "song", "t": 1793271695.6500611}
+{"id": "laut.fm:Ahuga laut.fm", "src": "api", "ev": "change", "title": "09 Ansage Der Bien", "artist": "Mani Terzok", "kind": "song", "started_at": 1793271689.0, "duration": 68, "stale": false, "t": 1793271696.16}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "api", "ev": "change", "title": "Έλα να πάμε κάτω (Live)", "artist": "Παναγιώτης Μάυρος", "kind": "song", "started_at": null, "duration": 66.0, "stale": null, "t": 1793271700.357331}
+{"id": "azuracast:demo", "src": "api", "ev": "error", "err": "HTTPError: HTTP Error 404: Not Found", "t": 1793271701.616148}
+{"id": "azuracast:Glitchy Radio", "src": "icy", "ev": "change", "title": "Naomi Scott - Speechless (Full)", "first": false, "kind": "song", "t": 1793271702.589041}
+{"id": "azuracast:Glitchy Radio", "src": "api", "ev": "change", "title": "Speechless (Full)", "artist": "Naomi Scott", "kind": "song", "started_at": 1793271706.0, "duration": 208, "stale": false, "t": 1793271706.334579}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to Pour Une Ame Souveraine:  A Dedication To Nina Simone", "first": false, "kind": "song", "t": 1793271707.251094}
+{"id": "radio.co:Radio Trib", "src": "icy", "ev": "change", "title": "TOP OF THE HOUR - TOP OF THE HOUR", "first": false, "kind": "song", "t": 1793271708.0128078}
+{"id": "azuracast:demo", "src": "api", "ev": "change", "title": "Station Offline", "artist": null, "kind": "song", "started_at": 0.0, "duration": 0, "stale": null, "t": 1793271709.862946}
+{"id": "radioparadise:main", "src": "api", "ev": "change", "title": "Inept Apollo", "artist": "Nation of Language", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271713.553108}
+{"id": "radio.co:Radio Trib", "src": "api", "ev": "change", "title": "The Sound", "artist": "The 1975", "kind": "song", "started_at": 1793271713.0, "duration": null, "stale": false, "t": 1793271714.3000991}
+{"id": "radio.co:Radio Trib", "src": "icy", "ev": "change", "title": "The 1975 - The Sound", "first": false, "kind": "song", "t": 1793271714.921702}
+{"id": "radioparadise:main", "src": "icy", "ev": "change", "title": "Nation of Language - Inept Apollo", "first": false, "kind": "song", "t": 1793271715.220246}
+{"id": "sr:P3", "src": "icy", "ev": "change", "title": "Magasinet i P3 med Siri Fagerudd", "first": false, "kind": "song", "t": 1793271721.330728}
+{"id": "icecast:RDS relax", "src": "icy", "ev": "change", "title": "Link*LINER  RDS RELAX 2025 - 30 (SMART SPEAKERS CUCINA)*La tua oasi di Relax**8b6c6502-daec-4bfd-b7b2-c446b90a9bf1", "first": false, "kind": "song", "t": 1793271722.76894}
+{"id": "iheart:5162 K-LOVE", "src": "api", "ev": "change", "title": "Keep Going", "artist": "Rachel Purcell", "kind": "song", "started_at": 1793271710.147, "duration": 135, "stale": false, "t": 1793271724.5507069}
+{"id": "icecast:RDS relax", "src": "api", "ev": "change", "title": "30 (SMART SPEAKERS CUCINA)*La tua oasi di Relax**8b6c6502-daec-4bfd-b7b2-c446b90a9bf1", "artist": "Link*LINER  RDS RELAX 2025", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271726.4664168}
+{"id": "azuracast:demo", "src": "api", "ev": "change", "title": "Press Start", "artist": "Jack Slicer", "kind": "song", "started_at": 1793271722.0, "duration": 246, "stale": false, "t": 1793271726.728689}
+{"id": "iheart:6045 Power106", "src": "api", "ev": "change", "title": "Ghetto Supastar (That is What You Are)", "artist": "Pras feat. Ol' Dirty Bastard & Mýa", "kind": "song", "started_at": 1793271716.194, "duration": 260, "stale": false, "t": 1793271732.7146828}
+{"id": "kexp", "src": "icy", "ev": "change", "title": "Adrian Younge & Ali Shaheed Muhammad - Donatos Run", "first": false, "kind": "song", "t": 1793271736.138935}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Please Don`t Let Me Be Misunderstood - Meshell Ndegeocello", "first": false, "kind": "song", "t": 1793271737.2592828}
+{"id": "icecast:RDS relax", "src": "icy", "ev": "change", "title": "Song*IT AIN'T EASY (ON YOUR OWN)*RICKY FANTE'*2005*29a50497-4a60-44fe-8b4d-7b8687604656", "first": false, "kind": "song", "t": 1793271740.277907}
+{"id": "azuracast:Glitchy Radio", "src": "api", "ev": "error", "err": "HTTPError: HTTP Error 404: Not Found", "t": 1793271740.408163}
+{"id": "icecast:RDS relax", "src": "api", "ev": "change", "title": "Song*IT AIN'T EASY (ON YOUR OWN)*RICKY FANTE'*2005*29a50497-4a60-44fe-8b4d-7b8687604656", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271742.955704}
+{"id": "icecast:Radio Rebetikes Melodi", "src": "api", "ev": "change", "title": "gia stamatiste mousikoi", "artist": "Babis Goles", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271745.047203}
+{"id": "kexp", "src": "api", "ev": "change", "title": "Donato’s Run", "artist": "Adrian Younge & Ali Shaheed Muhammad", "kind": "song", "started_at": 1793271649.0, "duration": null, "stale": false, "t": 1793271746.429184}
+{"id": "azuracast:Glitchy Radio", "src": "api", "ev": "error", "err": "HTTPError: HTTP Error 404: Not Found", "t": 1793271748.586855}
+{"id": "radiojar:Monkey Bros", "src": "api", "ev": "change", "title": "Finish Line / Drown (feat. T-Pain, Kirk Franklin, Eryn Allen Kane & Noname)", "artist": "Chance the Rapper", "kind": "song", "started_at": null, "duration": 407.0, "stale": null, "t": 1793271749.5609448}
+{"id": "radiojar:Monkey Bros", "src": "icy", "ev": "change", "title": "Chance the Rapper - Finish Line / Drown (feat. T-Pain, Kirk Franklin, Eryn Allen Kane & Noname)", "first": false, "kind": "song", "t": 1793271749.7780359}
+{"id": "live365:a75642", "src": "api", "ev": "change", "title": "AM-02-MIXED", "artist": "Joann Marie", "kind": "song", "started_at": 1793271734.38, "duration": 25.7, "stale": false, "t": 1793271756.142097}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "change", "title": "Μάνεσης Παναγιώτης - Θέλω να βλέπω τα καράβια", "first": false, "kind": "song", "t": 1793271759.688368}
+{"id": "live365:a75642", "src": "icy", "ev": "change", "title": "Joann Marie - AM-02-MIXED", "first": false, "kind": "song", "t": 1793271761.032814}
+{"id": "kexp", "src": "icy", "ev": "change", "title": "Herbie Hancock - Trust Me", "first": false, "kind": "song", "t": 1793271762.90623}
+{"id": "kcrw:e24", "src": "api", "ev": "change", "title": "Be What You Must", "artist": "YUSUF ISLAM (CAT STEVENS)", "kind": "song", "started_at": 1793271662.0, "duration": null, "stale": false, "t": 1793271764.758791}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "api", "ev": "change", "title": "Θέλω να βλέπω τα καράβια", "artist": "Μάνεσης Παναγιώτης", "kind": "song", "started_at": null, "duration": 85.0, "stale": null, "t": 1793271765.8167}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "Pubblicita", "first": false, "kind": "song", "t": 1793271766.313885}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to Pour Une Ame Souveraine:  A Dedication To Nina Simone", "first": false, "kind": "song", "t": 1793271768.32732}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "GRAFFAM'C", "first": false, "kind": "song", "t": 1793271768.425736}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "GRAFFAM'C", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271769.3549042}
+{"id": "laut.fm:Ahuga laut.fm", "src": "api", "ev": "change", "title": "Zeit zu gehen", "artist": "Marian Meyer", "kind": "song", "started_at": 1793271757.0, "duration": 153, "stale": false, "t": 1793271769.701928}
+{"id": "shoutcast:RDU 98.5FM", "src": "icy", "ev": "change", "title": "BARBICAN ESTATE - Song For Derek", "first": false, "kind": "song", "t": 1793271769.906274}
+{"id": "live365:a75642", "src": "api", "ev": "change", "title": "Wolf Creek Pass", "artist": "C.W. McCall", "kind": "song", "started_at": 1793271760.04, "duration": 240.1, "stale": false, "t": 1793271772.596205}
+{"id": "azuracast:RADIO VISION", "src": "icy", "ev": "change", "title": "cuñaMamiSomosVision1079", "first": false, "kind": "song", "t": 1793271772.9142048}
+{"id": "somafm:groovesalad", "src": "icy", "ev": "change", "title": "Near The Parenthesis - Low Horizon", "first": false, "kind": "song", "t": 1793271773.540639}
+{"id": "shoutcast:RDU 98.5FM", "src": "api", "ev": "change", "title": "Song For Derek", "artist": "BARBICAN ESTATE", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271775.922793}
+{"id": "kexp", "src": "api", "ev": "change", "title": "Trust Me", "artist": "Herbie Hancock", "kind": "song", "started_at": 1793271731.0, "duration": null, "stale": false, "t": 1793271779.3088572}
+{"id": "laut.fm:Ahuga laut.fm", "src": "icy", "ev": "change", "title": "Mani Terzok - 09 Ansage Der Bien", "first": false, "kind": "song", "t": 1793271780.455084}
+{"id": "nts:1", "src": "api", "ev": "change", "title": "SOUP TO NUTS W/ BABYSCHÖN", "artist": null, "kind": "show", "started_at": 1793271600.0, "duration": null, "stale": false, "t": 1793271783.100051}
+{"id": "somafm:groovesalad", "src": "api", "ev": "change", "title": "Low Horizon", "artist": "Near The Parenthesis", "kind": "song", "started_at": 1793271770.0, "duration": null, "stale": false, "t": 1793271783.813901}
+{"id": "live365:a75642", "src": "icy", "ev": "change", "title": "C.W. McCall - Wolf Creek Pass", "first": false, "kind": "song", "t": 1793271786.030796}
+{"id": "azuracast:RADIO VISION", "src": "api", "ev": "change", "title": "cuñaMamiSomosVision1079", "artist": null, "kind": "song", "started_at": 1793271776.0, "duration": 0, "stale": false, "t": 1793271787.7150238}
+{"id": "sr:P3", "src": "icy", "ev": "change", "title": "Magasinet i P3 med Siri Fagerudd, spelar nu Kasbo - Falling Slow", "first": false, "kind": "song", "t": 1793271794.712325}
+{"id": "azuracast:RADIO VISION", "src": "icy", "ev": "change", "title": "PGU FRASE 01~", "first": false, "kind": "song", "t": 1793271796.763912}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Please Don`t Let Me Be Misunderstood - Meshell Ndegeocello", "first": false, "kind": "song", "t": 1793271798.267443}
+{"id": "azuracast:RADIO VISION", "src": "api", "ev": "change", "title": "PGU FRASE 01~", "artist": null, "kind": "song", "started_at": 1793271800.0, "duration": 0, "stale": false, "t": 1793271805.172064}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "Pubblicita", "first": false, "kind": "song", "t": 1793271814.849206}
+{"id": "triton:Sky Radio Lounge", "src": "icy", "ev": "change", "title": "Jordin Sparks - No Air", "first": false, "kind": "song", "t": 1793271816.1121979}
+{"id": "triton:Sky Radio Lounge", "src": "api", "ev": "change", "title": "No Air", "artist": "Jordin Sparks", "kind": "song", "started_at": 1793271806.975, "duration": 199.862, "stale": false, "t": 1793271816.568317}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "FASHION E RELAX", "first": false, "kind": "song", "t": 1793271816.959521}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "FASHION E RELAX", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271818.8579571}
+{"id": "azuracast:RADIO VISION", "src": "icy", "ev": "change", "title": "Jefferson07 - Don't worry", "first": false, "kind": "song", "t": 1793271825.598176}
+{"id": "laut.fm:Dark Asylum", "src": "icy", "ev": "change", "title": "mind.in.a.box - What Used to Be", "first": false, "kind": "song", "t": 1793271826.08385}
+{"id": "laut.fm:Dark Asylum", "src": "api", "ev": "change", "title": "What Used to Be", "artist": "mind.in.a.box", "kind": "song", "started_at": 1793271824.0, "duration": 476, "stale": false, "t": 1793271828.4531252}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to Pour Une Ame Souveraine:  A Dedication To Nina Simone", "first": false, "kind": "song", "t": 1793271829.272355}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "api", "ev": "change", "title": "Na trexoume panw sta kimata (Live)", "artist": "Matthaios Giannoulis; Eleni Dimoliani", "kind": "song", "started_at": null, "duration": 176.0, "stale": null, "t": 1793271839.7389052}
+{"id": "azuracast:RADIO VISION", "src": "api", "ev": "change", "title": "Don't worry", "artist": "Jefferson07", "kind": "song", "started_at": 1793271828.0, "duration": 0, "stale": false, "t": 1793271840.141608}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Playlist Videos 1A and more at kutx.org - https://kutx.org/", "first": false, "kind": "song", "t": 1793271840.313538}
+{"id": "sr:P3", "src": "api", "ev": "change", "title": "Falling Slow", "artist": "Kasbo", "kind": "song", "started_at": 1793271778.0, "duration": 212.0, "stale": false, "t": 1793271840.9167051}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "change", "title": "Matthaios Giannoulis; Eleni Dimoliani - Na trexoume panw sta kimata (Live)", "first": false, "kind": "song", "t": 1793271843.795097}
+{"id": "iheart:5162 K-LOVE", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793271846.490907}
+{"id": "npr_composer:KUTX", "src": "api", "ev": "change", "title": "Bitchin' Camaro", "artist": "The Dead Milkmen", "kind": "song", "started_at": 1793271827.0, "duration": 177.0, "stale": false, "t": 1793271847.4941282}
+{"id": "laut.fm:Ahuga laut.fm", "src": "icy", "ev": "change", "title": "Marian Meyer - Zeit zu gehen", "first": false, "kind": "song", "t": 1793271848.512608}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Bitchin` Camaro - The Dead Milkmen", "first": false, "kind": "song", "t": 1793271849.272087}
+{"id": "iheart:5162 K-LOVE", "src": "api", "ev": "change", "title": "Holy Water", "artist": "We The Kingdom & Franni Cash", "kind": "song", "started_at": 1793271843.736, "duration": 242, "stale": false, "t": 1793271854.575402}
+{"id": "radio.co:The Christmas Station", "src": "icy", "ev": "change", "title": "The Christmas Station - Merry Christmas", "first": false, "kind": "song", "t": 1793271863.813728}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "Pubblicita", "first": false, "kind": "song", "t": 1793271868.1611462}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "Pubblicita", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271868.4414139}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "CIRELLA", "first": false, "kind": "song", "t": 1793271870.284831}
+{"id": "radio.co:The Christmas Station", "src": "api", "ev": "change", "title": "Merry Christmas", "artist": "The Christmas Station", "kind": "song", "started_at": 1793271861.0, "duration": null, "stale": false, "t": 1793271873.203186}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "CIRELLA", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271876.6768608}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to The Dead Milkmen", "first": false, "kind": "song", "t": 1793271879.312396}
+{"id": "radio.co:The Christmas Station", "src": "icy", "ev": "change", "title": "Josh Groban - What Child Is This", "first": false, "kind": "song", "t": 1793271896.0852768}
+{"id": "radio.co:The Christmas Station", "src": "api", "ev": "change", "title": "What Child Is This", "artist": "Josh Groban", "kind": "song", "started_at": 1793271893.0, "duration": null, "stale": false, "t": 1793271897.8010151}
+{"id": "radiofrance:FIP", "src": "api", "ev": "change", "title": "Without you", "artist": "The Sextones", "kind": "song", "started_at": 1793271896, "duration": 186, "stale": false, "t": 1793271897.997772}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Bitchin` Camaro - The Dead Milkmen", "first": false, "kind": "song", "t": 1793271909.3334148}
+{"id": "laut.fm:Ahuga laut.fm", "src": "api", "ev": "change", "title": "Platonische Liebe", "artist": "Rüdiger Bierhorst", "kind": "song", "started_at": 1793271911.0, "duration": 200, "stale": false, "t": 1793271916.3925362}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "Pubblicita", "first": false, "kind": "song", "t": 1793271918.89121}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "O MURZILL SAPURIT", "first": false, "kind": "song", "t": 1793271921.003384}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "O MURZILL SAPURIT", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271926.249943}
+{"id": "radioparadise:main", "src": "icy", "ev": "change", "title": "Commercial-free - Listener-supported", "first": false, "kind": "ad", "t": 1793271937.234478}
+{"id": "icecast:RDS relax", "src": "icy", "ev": "change", "title": "Link*JINGLE  RDS RELAX 2025 - 1*La tua oasi di Relax**bdb1437f-3984-4cac-9464-9fb8e7d6c32e", "first": false, "kind": "placeholder", "t": 1793271939.237621}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to The Dead Milkmen", "first": false, "kind": "song", "t": 1793271940.294262}
+{"id": "icecast:RDS relax", "src": "api", "ev": "change", "title": "1*La tua oasi di Relax**bdb1437f-3984-4cac-9464-9fb8e7d6c32e", "artist": "Link*JINGLE  RDS RELAX 2025", "kind": "placeholder", "started_at": null, "duration": null, "stale": null, "t": 1793271941.067648}
+{"id": "radioparadise:main", "src": "icy", "ev": "change", "title": "My Morning Jacket - Die for It", "first": false, "kind": "song", "t": 1793271941.353002}
+{"id": "radioparadise:main", "src": "api", "ev": "change", "title": "Die for It", "artist": "My Morning Jacket", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271941.920258}
+{"id": "icecast:Radio Rebetikes Melodi", "src": "api", "ev": "change", "title": "Nihta xelogiastra", "artist": "Καρράς", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271946.044927}
+{"id": "abc:triplej", "src": "api", "ev": "change", "title": "Foreplay", "artist": "Shenseea", "kind": "song", "started_at": 1793271945.0, "duration": 166, "stale": false, "t": 1793271954.4253812}
+{"id": "icecast:RDS relax", "src": "icy", "ev": "change", "title": "Song*CINQUE GIORNI*MICHELE ZARRILLO*1994*22f277e3-23b4-47d0-b549-d862b44d51e0", "first": false, "kind": "song", "t": 1793271955.2654662}
+{"id": "icecast:RDS relax", "src": "api", "ev": "change", "title": "Song*CINQUE GIORNI*MICHELE ZARRILLO*1994*22f277e3-23b4-47d0-b549-d862b44d51e0", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271957.610553}
+{"id": "kcrw:e24", "src": "api", "ev": "change", "title": "Slowly", "artist": "RIO KOSTA", "kind": "song", "started_at": 1793271866.0, "duration": null, "stale": false, "t": 1793271959.7796822}
+{"id": "radio.co:Radio Trib", "src": "icy", "ev": "change", "title": "Enter Shikari - Lightyears", "first": false, "kind": "song", "t": 1793271959.9980328}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Bitchin` Camaro - The Dead Milkmen", "first": false, "kind": "song", "t": 1793271970.3032598}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "Pubblicita", "first": false, "kind": "song", "t": 1793271972.249971}
+{"id": "azuracast:demo", "src": "api", "ev": "change", "title": "Flipside", "artist": "Avionics", "kind": "song", "started_at": 1793271963.0, "duration": 228, "stale": false, "t": 1793271974.118933}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "DOLCE PER TE", "first": false, "kind": "song", "t": 1793271974.207432}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "DOLCE PER TE", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271975.762051}
+{"id": "azuracast:Glitchy Radio", "src": "icy", "ev": "change", "title": "Mela Mirage - Dissonant | Zooble's Abstraction Song (Digital Circus)", "first": false, "kind": "song", "t": 1793271980.425477}
+{"id": "radio.co:Radio Trib", "src": "api", "ev": "change", "title": "Lightyears", "artist": "Enter Shikari", "kind": "song", "started_at": 1793271958.0, "duration": null, "stale": false, "t": 1793271982.808156}
+{"id": "iheart:6045 Power106", "src": "api", "ev": "change", "title": "Kill Bill", "artist": "SZA feat. Doja Cat", "kind": "song", "started_at": 1793271945.77, "duration": 175, "stale": false, "t": 1793271984.5751731}
+{"id": "sr:P3", "src": "icy", "ev": "change", "title": "Magasinet i P3 med Siri Fagerudd", "first": false, "kind": "song", "t": 1793271990.975608}
+{"id": "shoutcast:Radio Magica 87.7 (Ecu", "src": "icy", "ev": "change", "title": "A Flock of Seagulls - Messages", "first": false, "kind": "song", "t": 1793271991.649743}
+{"id": "shoutcast:Radio Magica 87.7 (Ecu", "src": "api", "ev": "change", "title": "Messages", "artist": "A Flock of Seagulls", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793271995.440864}
+{"id": "azuracast:Glitchy Radio", "src": "api", "ev": "change", "title": "Dissonant | Zooble's Abstraction Song (Digital Circus)", "artist": "Mela Mirage", "kind": "song", "started_at": 1793271984.0, "duration": 222, "stale": false, "t": 1793271998.4950578}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to The Dead Milkmen", "first": false, "kind": "song", "t": 1793272001.337993}
+{"id": "laut.fm:Ahuga laut.fm", "src": "icy", "ev": "change", "title": "Rüdiger Bierhorst - Platonische Liebe", "first": false, "kind": "song", "t": 1793272002.541507}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "change", "title": "Nikos Hatzopoulos; The Union From Koronida In Naxos - Roussiko", "first": false, "kind": "song", "t": 1793272017.661498}
+{"id": "npr_composer:KUTX", "src": "api", "ev": "change", "title": "Taylor Wallace-Riegel", "artist": null, "kind": "show", "started_at": 1793268000.0, "duration": null, "stale": true, "t": 1793272017.908652}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "Pubblicita", "first": false, "kind": "song", "t": 1793272019.7627578}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "api", "ev": "change", "title": "Roussiko", "artist": "Nikos Hatzopoulos; The Union From Koronida In Naxos", "kind": "song", "started_at": null, "duration": 138.0, "stale": null, "t": 1793272020.1569269}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "GRAPHICOMANIA", "first": false, "kind": "song", "t": 1793272021.893894}
+{"id": "triton:Sky Radio Lounge", "src": "icy", "ev": "change", "title": "Lionel Richie - Dancing On The Ceiling", "first": false, "kind": "song", "t": 1793272023.9984682}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "GRAPHICOMANIA", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272025.3428328}
+{"id": "live365:a75642", "src": "icy", "ev": "change", "title": "Channel 19 - Stinger: Weather", "first": false, "kind": "song", "t": 1793272027.042063}
+{"id": "triton:Sky Radio Lounge", "src": "api", "ev": "change", "title": "Dancing On The Ceiling", "artist": "Lionel Richie", "kind": "song", "started_at": 1793272015.154, "duration": 258.089, "stale": false, "t": 1793272029.817458}
+{"id": "sr:P3", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793272031.2268229}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "The Austin Music Experience - KUTX 98.9", "first": false, "kind": "song", "t": 1793272034.313527}
+{"id": "live365:a75642", "src": "api", "ev": "change", "title": "WX 03", "artist": "Joann Marie", "kind": "song", "started_at": 1793272010.14, "duration": 58.2, "stale": false, "t": 1793272035.8934772}
+{"id": "live365:a75642", "src": "icy", "ev": "change", "title": "Joann Marie - WX 03", "first": false, "kind": "song", "t": 1793272036.076276}
+{"id": "azuracast:RADIO VISION", "src": "icy", "ev": "change", "title": "Steve Green - to good all praise", "first": false, "kind": "song", "t": 1793272042.660853}
+{"id": "azuracast:RADIO VISION", "src": "api", "ev": "change", "title": "to good all praise", "artist": "Steve Green", "kind": "song", "started_at": 1793272046.0, "duration": 0, "stale": false, "t": 1793272050.04264}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Playlist Videos 1A and more at kutx.org - https://kutx.org/", "first": false, "kind": "song", "t": 1793272056.322334}
+{"id": "airtime:dublab", "src": "icy", "ev": "change", "title": "Hakushi Hasegawa - Vanilla Value", "first": false, "kind": "song", "t": 1793272065.054691}
+{"id": "radioking:416299", "src": "icy", "ev": "change", "title": "Trentemoller - Into The Tress (Serenetti Part 3)", "first": false, "kind": "song", "t": 1793272065.160088}
+{"id": "kexp", "src": "icy", "ev": "change", "title": "Jam City feat. Aidan, Bawo & Ox Eye - My World", "first": false, "kind": "song", "t": 1793272065.79443}
+{"id": "kexp", "src": "api", "ev": "change", "title": "My World", "artist": "Jam City feat. Aidan, Bawo & Ox Eye", "kind": "song", "started_at": 1793272025.0, "duration": null, "stale": false, "t": 1793272066.780548}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "Pubblicita", "first": false, "kind": "song", "t": 1793272067.795089}
+{"id": "somafm:groovesalad", "src": "icy", "ev": "change", "title": "Simon Le Grec - I need somebody", "first": false, "kind": "song", "t": 1793272068.854978}
+{"id": "npo:radio2", "src": "icy", "ev": "change", "title": "Lenny Kravitz - Are You Gonna Go My Way", "first": false, "kind": "song", "t": 1793272069.57664}
+{"id": "shoutcast:RDU 98.5FM", "src": "icy", "ev": "change", "title": "TL STAMP (nz) - Belladonna of Sadness", "first": false, "kind": "song", "t": 1793272069.8749619}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "TUFANO UN MONDO", "first": false, "kind": "song", "t": 1793272069.8963552}
+{"id": "airtime:dublab", "src": "api", "ev": "change", "title": "Vanilla Value", "artist": "Hakushi Hasegawa", "kind": "song", "started_at": 1793272064.0, "duration": 166.0, "stale": false, "t": 1793272071.211808}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "The Austin Music Experience - KUTX 98.9", "first": false, "kind": "song", "t": 1793272072.392731}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "Pubblicita", "first": false, "kind": "song", "t": 1793272073.010978}
+{"id": "iheart:5162 K-LOVE", "src": "api", "ev": "change", "title": "Honest", "artist": "Leanna Crawford", "kind": "song", "started_at": 1793272064.92, "duration": 232, "stale": false, "t": 1793272074.030316}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "Pubblicita", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272074.89594}
+{"id": "shoutcast:RDU 98.5FM", "src": "api", "ev": "change", "title": "Belladonna of Sadness", "artist": "TL STAMP (nz)", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272076.414722}
+{"id": "radioking:416299", "src": "api", "ev": "change", "title": "Into The Tress (Serenetti Part 3)", "artist": "Trentemoller", "kind": "song", "started_at": 1793272062.0, "duration": 400.87, "stale": false, "t": 1793272083.288077}
+{"id": "somafm:groovesalad", "src": "api", "ev": "change", "title": "I need somebody", "artist": "Simon Le Grec", "kind": "song", "started_at": 1793272065.0, "duration": null, "stale": false, "t": 1793272085.811929}
+{"id": "icecast:Radio Rebetikes Melodi", "src": "api", "ev": "change", "title": "ΤΟ ΒΟΥΝΟ", "artist": "Λ Νταράλας", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272085.83626}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "GIGI D'ALESSIO - SI TE SAPESSE DICERE", "first": false, "kind": "song", "t": 1793272086.3975072}
+{"id": "radiofrance:FIP", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793272087.0938182}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": "Are You Gonna Go My Way", "artist": "Lenny Kravitz", "kind": "song", "started_at": 1793272062.0, "duration": 211.0, "stale": false, "t": 1793272087.926257}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Playlist Videos 1A and more at kutx.org - https://kutx.org/", "first": false, "kind": "song", "t": 1793272090.327518}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "SI TE SAPESSE DICERE", "artist": "GIGI D'ALESSIO", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272091.404811}
+{"id": "live365:a75642", "src": "icy", "ev": "change", "title": "Joann Marie Gold - The Weigh Station", "first": false, "kind": "song", "t": 1793272094.045645}
+{"id": "radiofrance:FIP", "src": "api", "ev": "change", "title": "Rhythm is key", "artist": "DJ Psychiatre", "kind": "song", "started_at": 1793272086, "duration": 403, "stale": false, "t": 1793272095.303721}
+{"id": "live365:a75642", "src": "api", "ev": "change", "title": "The Weigh Station", "artist": "Joann Marie Gold", "kind": "song", "started_at": 1793272068.36, "duration": 202.9, "stale": false, "t": 1793272101.757847}
+{"id": "radiojar:I-Radio Jakarta", "src": "icy", "ev": "change", "title": "AFGAN - PANAH ASMARA", "first": false, "kind": "song", "t": 1793272104.206982}
+{"id": "radiojar:I-Radio Jakarta", "src": "api", "ev": "change", "title": "PANAH ASMARA", "artist": "AFGAN", "kind": "song", "started_at": null, "duration": 0.0, "stale": null, "t": 1793272110.043242}
+{"id": "abc:triplej", "src": "api", "ev": "change", "title": "Telephone", "artist": "Brodinski, Vv Pete & UTILITY", "kind": "song", "started_at": 1793272107.0, "duration": 157, "stale": false, "t": 1793272117.6206279}
+{"id": "laut.fm:Ahuga laut.fm", "src": "api", "ev": "change", "title": "Liegen Bleiben", "artist": "Götz Widmann", "kind": "song", "started_at": 1793272111.0, "duration": 568, "stale": false, "t": 1793272120.9852438}
+{"id": "iheart:6045 Power106", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793272122.8041651}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "The Austin Music Experience - KUTX 98.9", "first": false, "kind": "song", "t": 1793272126.434592}
+{"id": "sr:P3", "src": "icy", "ev": "change", "title": "Magasinet i P3 med Siri Fagerudd, spelar nu Dahi, Kendrick Lamar & Amber Mark - How To Pray", "first": false, "kind": "song", "t": 1793272127.4477282}
+{"id": "radio.co:The Christmas Station", "src": "icy", "ev": "change", "title": "Dean Martin - The Christmas Blues", "first": false, "kind": "song", "t": 1793272129.953821}
+{"id": "iheart:6045 Power106", "src": "api", "ev": "change", "title": "P.I.M.P.", "artist": "50 Cent", "kind": "song", "started_at": 1793272122.598, "duration": 249, "stale": false, "t": 1793272130.8905358}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793272131.128907}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Playlist Videos 1A and more at kutx.org - https://kutx.org/", "first": false, "kind": "song", "t": 1793272132.375978}
+{"id": "radio.co:The Christmas Station", "src": "api", "ev": "change", "title": "The Christmas Blues", "artist": "Dean Martin", "kind": "song", "started_at": 1793272127.0, "duration": null, "stale": false, "t": 1793272136.015619}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": "Are You Gonna Go My Way", "artist": "Lenny Kravitz", "kind": "song", "started_at": 1793272062.0, "duration": 211.0, "stale": false, "t": 1793272139.724972}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793272148.330403}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "api", "ev": "change", "title": "Tsarka Me To Trehantiri (Live)", "artist": "Maria Nomikou; Stelios Manolas", "kind": "song", "started_at": null, "duration": 88.0, "stale": null, "t": 1793272151.224543}
+{"id": "sr:P3", "src": "api", "ev": "change", "title": "How To Pray", "artist": "Dahi, Kendrick Lamar & Amber Mark", "kind": "song", "started_at": 1793272117.0, "duration": 160.0, "stale": false, "t": 1793272151.636631}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "change", "title": "Maria Nomikou; Stelios Manolas - Tsarka Me To Trehantiri (Live)", "first": false, "kind": "song", "t": 1793272153.7095969}
+{"id": "radiojar:Monkey Bros", "src": "icy", "ev": "change", "title": "Mark Ronson, RAYE -  Suzanne (feat. Pitbull)", "first": false, "kind": "song", "t": 1793272155.8313081}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": "Are You Gonna Go My Way", "artist": "Lenny Kravitz", "kind": "song", "started_at": 1793272062.0, "duration": 211.0, "stale": false, "t": 1793272156.9207108}
+{"id": "radiojar:Monkey Bros", "src": "api", "ev": "change", "title": "Suzanne (feat. Pitbull)", "artist": "Mark Ronson, RAYE", "kind": "song", "started_at": null, "duration": 235.0, "stale": null, "t": 1793272159.071476}
+{"id": "shoutcast:Radio Magica 87.7 (Ecu", "src": "icy", "ev": "change", "title": "INXS - New Sensation (1988)", "first": false, "kind": "song", "t": 1793272161.5842519}
+{"id": "shoutcast:Radio Magica 87.7 (Ecu", "src": "api", "ev": "change", "title": "New Sensation (1988)", "artist": "INXS", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272166.114638}
+{"id": "radioparadise:main", "src": "api", "ev": "change", "title": "Four Three", "artist": "All India Radio", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272169.65994}
+{"id": "radioparadise:main", "src": "icy", "ev": "change", "title": "All India Radio - Four Three", "first": false, "kind": "song", "t": 1793272169.668301}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "The Austin Music Experience - KUTX 98.9", "first": false, "kind": "song", "t": 1793272171.349219}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Silencio - U2", "first": false, "kind": "song", "t": 1793272174.383117}
+{"id": "laut.fm:Odessa", "src": "icy", "ev": "change", "title": "Dina Ögon - Undantag", "first": false, "kind": "song", "t": 1793272177.2536378}
+{"id": "laut.fm:Odessa", "src": "api", "ev": "change", "title": "Undantag", "artist": "Dina Ögon", "kind": "song", "started_at": 1793272176.0, "duration": 238, "stale": false, "t": 1793272184.982205}
+{"id": "azuracast:demo", "src": "api", "ev": "change", "title": "Meaningless", "artist": "Dilemmachine", "kind": "song", "started_at": 1793272189.0, "duration": 368, "stale": false, "t": 1793272188.02044}
+{"id": "npr_composer:KUTX", "src": "api", "ev": "change", "title": "Silencio", "artist": "U2", "kind": "song", "started_at": 1793272144.0, "duration": 153.0, "stale": false, "t": 1793272188.538209}
+{"id": "shoutcast:RDU 98.5FM", "src": "icy", "ev": "change", "title": "JULIA JACKLIN - If I Had The Hand Of God", "first": false, "kind": "song", "t": 1793272190.173741}
+{"id": "shoutcast:RDU 98.5FM", "src": "api", "ev": "change", "title": "If I Had The Hand Of God", "artist": "JULIA JACKLIN", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272193.322782}
+{"id": "icecast:RDS relax", "src": "icy", "ev": "change", "title": "Link*Liner 28 relax a casa*La tua oasi di Relax**eafc584c-612b-4b51-a54e-3731ee41b393", "first": false, "kind": "song", "t": 1793272193.769567}
+{"id": "icecast:RDS relax", "src": "api", "ev": "change", "title": "Link*Liner 28 relax a casa*La tua oasi di Relax**eafc584c-612b-4b51-a54e-3731ee41b393", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272196.69855}
+{"id": "radiojar:I-Radio Jakarta", "src": "icy", "ev": "error", "err": "EOFError: ", "t": 1793272197.700404}
+{"id": "laut.fm:Ahuga laut.fm", "src": "icy", "ev": "change", "title": "Götz Widmann - Liegen Bleiben", "first": false, "kind": "song", "t": 1793272202.599319}
+{"id": "radio.co:Radio Trib", "src": "icy", "ev": "change", "title": "NIDAL - Foc", "first": false, "kind": "song", "t": 1793272205.133912}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to Carnaval De Luz", "first": false, "kind": "song", "t": 1793272206.359657}
+{"id": "icecast:RDS relax", "src": "icy", "ev": "change", "title": "Song*UNSTOPPABLE*SIA*2016*7b9003e7-453a-42ee-94db-6c8ddd4a2328", "first": false, "kind": "song", "t": 1793272207.279043}
+{"id": "radiojar:I-Radio Jakarta", "src": "icy", "ev": "open", "metaint": "16000", "t": 1793272208.413697}
+{"id": "kcrw:e24", "src": "api", "ev": "change", "title": "GOBACK", "artist": "Mr GISCARD", "kind": "song", "started_at": 1793272080.0, "duration": null, "stale": false, "t": 1793272211.600645}
+{"id": "icecast:RDS relax", "src": "api", "ev": "change", "title": "Song*UNSTOPPABLE*SIA*2016*7b9003e7-453a-42ee-94db-6c8ddd4a2328", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272213.16554}
+{"id": "radio.co:Radio Trib", "src": "api", "ev": "change", "title": "Foc", "artist": "NIDAL", "kind": "song", "started_at": 1793272203.0, "duration": null, "stale": false, "t": 1793272219.351147}
+{"id": "airtime:dublab", "src": "icy", "ev": "change", "title": "Hakushi Hasegawa - Never Lack Nothing", "first": false, "kind": "song", "t": 1793272231.570255}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Silencio - U2", "first": false, "kind": "song", "t": 1793272236.36748}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "change", "title": "Leta Korre - Omorfi nisiotisa (Live)", "first": false, "kind": "song", "t": 1793272239.693588}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "api", "ev": "change", "title": "Omorfi nisiotisa (Live)", "artist": "Leta Korre", "kind": "song", "started_at": null, "duration": 68.0, "stale": null, "t": 1793272241.330395}
+{"id": "airtime:dublab", "src": "api", "ev": "change", "title": "Never Lack Nothing", "artist": "Hakushi Hasegawa", "kind": "song", "started_at": 1793272230.0, "duration": 136.0, "stale": false, "t": 1793272246.0811589}
+{"id": "azuracast:RADIO VISION", "src": "icy", "ev": "change", "title": "Tercer cielo - Tu Amor Es Un Sueño", "first": false, "kind": "song", "t": 1793272257.522411}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to Carnaval De Luz", "first": false, "kind": "song", "t": 1793272267.4312582}
+{"id": "icecast:Radio Rebetikes Melodi", "src": "api", "ev": "change", "title": "mi_mou_xanafigeis_pia", "artist": "Sotiria_Mpelou", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272269.347861}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "LA NOSTRA MUSICA", "artist": "JINGLE", "kind": "placeholder", "started_at": null, "duration": null, "stale": null, "t": 1793272273.048125}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "JINGLE - LA NOSTRA MUSICA", "first": false, "kind": "placeholder", "t": 1793272273.2897012}
+{"id": "azuracast:RADIO VISION", "src": "api", "ev": "change", "title": "Tu Amor Es Un Sueño", "artist": "Tercer cielo", "kind": "song", "started_at": 1793272260.0, "duration": 0, "stale": false, "t": 1793272277.205633}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793272277.398763}
+{"id": "triton:Sky Radio Lounge", "src": "icy", "ev": "change", "title": "Adele - Send My Love (To Your New Lover)", "first": false, "kind": "song", "t": 1793272277.5302012}
+{"id": "npo:radio2", "src": "icy", "ev": "change", "title": "NPO Radio 2 - NPO Radio 2 Top '90s - NPO", "first": false, "kind": "song", "t": 1793272277.670182}
+{"id": "sr:P3", "src": "icy", "ev": "change", "title": "Magasinet i P3 med Siri Fagerudd", "first": false, "kind": "song", "t": 1793272278.2051468}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "icy", "ev": "change", "title": "GIGI FINIZIO - RITORNERO'", "first": false, "kind": "song", "t": 1793272282.805225}
+{"id": "triton:Sky Radio Lounge", "src": "api", "ev": "change", "title": "Send My Love (To Your New Lover)", "artist": "Adele", "kind": "song", "started_at": 1793272268.88, "duration": 220.74, "stale": false, "t": 1793272285.0274801}
+{"id": "npo:radio2", "src": "icy", "ev": "change", "title": "Linda, Roos & Jessica - Ademnood", "first": false, "kind": "song", "t": 1793272285.4737868}
+{"id": "shoutcast:Radio Nuova San Giorgi", "src": "api", "ev": "change", "title": "RITORNERO'", "artist": "GIGI FINIZIO", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272289.5882921}
+{"id": "sr:P3", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793272290.5024111}
+{"id": "kexp", "src": "icy", "ev": "change", "title": "Daft Punk - Short Circuit", "first": false, "kind": "song", "t": 1793272290.753418}
+{"id": "live365:a75642", "src": "icy", "ev": "change", "title": "Bob Seger - Against the Wind", "first": false, "kind": "song", "t": 1793272295.073011}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Silencio - U2", "first": false, "kind": "song", "t": 1793272299.4356349}
+{"id": "laut.fm:Dark Asylum", "src": "api", "ev": "change", "title": "Stripped", "artist": "In Strict Confidence", "kind": "song", "started_at": 1793272301.0, "duration": 460, "stale": false, "t": 1793272301.368557}
+{"id": "iheart:5162 K-LOVE", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793272301.71806}
+{"id": "laut.fm:Dark Asylum", "src": "icy", "ev": "change", "title": "In Strict Confidence - Stripped", "first": false, "kind": "song", "t": 1793272302.577251}
+{"id": "radio.co:The Christmas Station", "src": "icy", "ev": "change", "title": "Doris Day - Ill Be Home For Christmas", "first": false, "kind": "song", "t": 1793272303.885521}
+{"id": "kexp", "src": "api", "ev": "change", "title": "Short Circuit", "artist": "Daft Punk", "kind": "song", "started_at": 1793272235.0, "duration": null, "stale": false, "t": 1793272304.99145}
+{"id": "live365:a75642", "src": "api", "ev": "change", "title": "Against the Wind", "artist": "Bob Seger", "kind": "song", "started_at": 1793272268.35, "duration": 344.9, "stale": false, "t": 1793272307.423444}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Deep End - Fousheé", "first": false, "kind": "song", "t": 1793272307.452987}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "icy", "ev": "change", "title": "Μάνεσης Παναγιώτης - Οξω Μέρη", "first": false, "kind": "song", "t": 1793272307.772491}
+{"id": "npr_composer:KUTX", "src": "api", "ev": "change", "title": "Deep End", "artist": "Fousheé", "kind": "song", "started_at": 1793272284.0, "duration": 139.0, "stale": false, "t": 1793272310.498106}
+{"id": "radiojar:Νησιώτικα 24/7", "src": "api", "ev": "change", "title": "Οξω Μέρη", "artist": "Μάνεσης Παναγιώτης", "kind": "song", "started_at": null, "duration": 201.0, "stale": null, "t": 1793272315.189693}
+{"id": "radio.co:The Christmas Station", "src": "api", "ev": "change", "title": "Ill Be Home For Christmas", "artist": "Doris Day", "kind": "song", "started_at": 1793272300.0, "duration": null, "stale": false, "t": 1793272317.5444548}
+{"id": "iheart:5162 K-LOVE", "src": "api", "ev": "change", "title": "My Jesus", "artist": "Anne Wilson", "kind": "song", "started_at": 1793272301.616, "duration": 217, "stale": false, "t": 1793272317.876878}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": "Ademnood", "artist": "Linda, Roos & Jessica", "kind": "song", "started_at": 1793272271.0, "duration": 237.0, "stale": false, "t": 1793272320.3935292}
+{"id": "kcrw:e24", "src": "api", "ev": "change", "title": "Spring Dream", "artist": "1LDK", "kind": "song", "started_at": 1793272202.0, "duration": null, "stale": false, "t": 1793272333.801566}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to Time Machine", "first": false, "kind": "song", "t": 1793272338.4142988}
+{"id": "somafm:groovesalad", "src": "icy", "ev": "change", "title": "Fascinating Earthbound Objects - Prap", "first": false, "kind": "song", "t": 1793272367.035372}
+{"id": "airtime:dublab", "src": "icy", "ev": "change", "title": "dubstream", "first": false, "kind": "song", "t": 1793272367.7119832}
+{"id": "airtime:dublab", "src": "api", "ev": "change", "title": "We The Ominous Warriors", "artist": "Hakushi Hasegawa, HaHa And The Hairpins", "kind": "song", "started_at": 1793272366.0, "duration": 193.0, "stale": false, "t": 1793272367.781856}
+{"id": "airtime:dublab", "src": "icy", "ev": "change", "title": "Hakushi Hasegawa, HaHa And The Hairpins - We The Ominous Warriors", "first": false, "kind": "song", "t": 1793272368.117227}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Deep End - Fousheé", "first": false, "kind": "song", "t": 1793272368.3895428}
+{"id": "shoutcast:RDU 98.5FM", "src": "icy", "ev": "change", "title": "TOROA (nz) - Hautonga", "first": false, "kind": "song", "t": 1793272370.437712}
+{"id": "iheart:6045 Power106", "src": "api", "ev": "change", "title": "Mask Off", "artist": "Future", "kind": "song", "started_at": 1793272360.951, "duration": 203, "stale": false, "t": 1793272374.449982}
+{"id": "radiojar:I-Radio Jakarta", "src": "icy", "ev": "change", "title": "ISWARA JAKARTA", "first": false, "kind": "song", "t": 1793272376.0369961}
+{"id": "abc:triplej", "src": "api", "ev": "change", "title": "Meet Me Halfway", "artist": "The Black Eyed Peas", "kind": "song", "started_at": 1793272360.0, "duration": 284, "stale": false, "t": 1793272376.0538151}
+{"id": "shoutcast:Radio Magica 87.7 (Ecu", "src": "icy", "ev": "change", "title": "Foreigner - Say You Will", "first": false, "kind": "song", "t": 1793272376.644365}
+{"id": "shoutcast:RDU 98.5FM", "src": "api", "ev": "change", "title": "Hautonga", "artist": "TOROA (nz)", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272376.777479}
+{"id": "shoutcast:Radio Magica 87.7 (Ecu", "src": "api", "ev": "change", "title": "Say You Will", "artist": "Foreigner", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272377.400005}
+{"id": "somafm:groovesalad", "src": "api", "ev": "change", "title": "Prap", "artist": "Fascinating Earthbound Objects", "kind": "song", "started_at": 1793272363.0, "duration": null, "stale": false, "t": 1793272378.944957}
+{"id": "radiojar:I-Radio Jakarta", "src": "api", "ev": "change", "title": "ISWARA JAKARTA", "artist": null, "kind": "song", "started_at": null, "duration": 0.0, "stale": null, "t": 1793272380.760159}
+{"id": "sr:P3", "src": "icy", "ev": "change", "title": "Magasinet i P3 med Siri Fagerudd, spelar nu sombr - Homewrecker", "first": false, "kind": "song", "t": 1793272389.114362}
+{"id": "radiojar:Monkey Bros", "src": "icy", "ev": "change", "title": "Spillage Village -  Hapi feat. Big Rube", "first": false, "kind": "song", "t": 1793272391.3429399}
+{"id": "radioparadise:main", "src": "api", "ev": "change", "title": "Rakim", "artist": "Dead Can Dance", "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272396.993265}
+{"id": "radioparadise:main", "src": "icy", "ev": "change", "title": "Dead Can Dance - Rakim", "first": false, "kind": "song", "t": 1793272399.080129}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "You are Listening to Time Machine", "first": false, "kind": "song", "t": 1793272399.405511}
+{"id": "radiojar:Monkey Bros", "src": "api", "ev": "change", "title": "Hapi feat. Big Rube", "artist": "Spillage Village", "kind": "song", "started_at": null, "duration": 383.0, "stale": null, "t": 1793272404.77031}
+{"id": "icecast:RDS relax", "src": "icy", "ev": "change", "title": "Link*JINGLE  RDS RELAX 2025 - 4*La tua oasi di Relax**c64c1b33-f59d-4d94-9b50-4a1ead827168", "first": false, "kind": "placeholder", "t": 1793272407.2454321}
+{"id": "icecast:RDS relax", "src": "api", "ev": "change", "title": "4*La tua oasi di Relax**c64c1b33-f59d-4d94-9b50-4a1ead827168", "artist": "Link*JINGLE  RDS RELAX 2025", "kind": "placeholder", "started_at": null, "duration": null, "stale": null, "t": 1793272411.148363}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": null, "artist": null, "kind": null, "started_at": null, "duration": null, "stale": null, "t": 1793272414.485944}
+{"id": "laut.fm:Odessa", "src": "icy", "ev": "change", "title": "The Tamlins - Baltimore", "first": false, "kind": "song", "t": 1793272415.1498392}
+{"id": "sr:P3", "src": "api", "ev": "change", "title": "Homewrecker", "artist": "sombr", "kind": "song", "started_at": 1793272377.0, "duration": 200.0, "stale": false, "t": 1793272416.6027038}
+{"id": "npo:radio2", "src": "api", "ev": "change", "title": "Ademnood", "artist": "Linda, Roos & Jessica", "kind": "song", "started_at": 1793272271.0, "duration": 237.0, "stale": false, "t": 1793272423.0364218}
+{"id": "icecast:RDS relax", "src": "icy", "ev": "change", "title": "Song*I'M NOT IN LOVE*10 CC*1975*41814d11-4057-45ff-bd57-6cb571ed8408", "first": false, "kind": "song", "t": 1793272423.733176}
+{"id": "npr_composer:KUTX", "src": "icy", "ev": "change", "title": "Playlist Videos 1A and more at kutx.org - https://kutx.org/", "first": false, "kind": "song", "t": 1793272427.413394}
+{"id": "icecast:RDS relax", "src": "api", "ev": "change", "title": "Song*I'M NOT IN LOVE*10 CC*1975*41814d11-4057-45ff-bd57-6cb571ed8408", "artist": null, "kind": "song", "started_at": null, "duration": null, "stale": null, "t": 1793272427.587148}
+{"id": "laut.fm:Odessa", "src": "api", "ev": "change", "title": "Baltimore", "artist": "The Tamlins", "kind": "song", "started_at": 1793272414.0, "duration": 241, "stale": false, "t": 1793272429.453197}
+{"ev": "end", "t": 1793272433.462137}

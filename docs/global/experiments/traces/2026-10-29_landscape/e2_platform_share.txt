@@ -1,0 +1,33 @@
+Other                                                        25062  40.2%
+Self-hosted/other, explicit port                             16217  26.0%
+Zeno                                                          3044   4.9%
+Triton / StreamTheWorld                                       2831   4.5%
+Radiocast / Shoutcast hosts (fastcast4u, radioca.st, myradio  2794   4.5%
+AzuraCast (path/host)                                         2227   3.6%
+laut.fm                                                       1502   2.4%
+Qingting/Qtfm (CN)                                            1318   2.1%
+Infomaniak                                                    1023   1.6%
+iHeart / Revma                                                 896   1.4%
+NRJ audio                                                      804   1.3%
+SecureNet                                                      781   1.3%
+Radio.co                                                       718   1.2%
+StreamGuys                                                     711   1.1%
+Live365                                                        648   1.0%
+RadioCult / Mediastream / Radiomast                            453   0.7%
+Akamai/CDN HLS (akamaized/cloudfront/fastly)                   419   0.7%
+RadioJar                                                       376   0.6%
+RadioKing                                                      315   0.5%
+Airtime Pro / LibreTime                                        181   0.3%
+Mixlr/Spreaker/Hearthis                                         55   0.1%
+
+HLS: Other 2919
+HLS: Akamai/CDN HLS (akamaized/cloudfront/fastly) 398
+HLS: iHeart / Revma 193
+HLS: Self-hosted/other, explicit port 150
+HLS: RadioCult / Mediastream / Radiomast 129
+HLS: Qingting/Qtfm (CN) 123
+HLS: Radiocast / Shoutcast hosts (fastcast4u, radioca.st, myradiostream, leanstream) 101
+HLS: Triton / StreamTheWorld 59
+
+has favicon: 38693 homepage: 59559 geo: 13798
+tags nonempty: 41624 language nonempty: 41116 country: 61168
