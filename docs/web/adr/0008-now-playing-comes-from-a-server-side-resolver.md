@@ -73,8 +73,9 @@ The page does not call station or platform metadata APIs itself.
   client. Keep as a later optimisation for adapters whose hosts allow it.
 - **Server-side ICY peek:** would cover the 58% of top-100 clicks whose ICY has a
   title. It means the server connects to station audio URLs, which ADR 0006
-  forbids. Each peek may look like a listener to the station. **Left open.** It
-  needs a new ADR that amends 0006, and the user's decision.
+  forbids. Each peek may look like a listener to the station. **Not chosen for
+  now (2026-10-29).** Reconsider only through a new ADR that amends 0006, after
+  checking station terms and listener-count effects.
 - **Browser reads ICY:** works for about a fifth of streams (a station must allow
   the `Icy-MetaData` header) and needs a second connection per listener. Ruled out
   as a baseline by ADR 0006.

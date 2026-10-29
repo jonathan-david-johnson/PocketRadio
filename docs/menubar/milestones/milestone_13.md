@@ -1,6 +1,6 @@
 # Menubar M13 — NowPlayingFeed package (Swift port of the contract)
 
-**Status**: IN PROGRESS — started 2026-10-29. The package is built and committed on `feature/now-playing-feed` (menubar `d9ac655`, unmerged and unpushed). `swift test` passes: 41 contract cases, 28 junk cases, and the time, boundary and schema checks (18 tests). A deliberately broken fixture made the suite fail, then was restored. Open: whether to land it on `main`, and the iOS adoption milestone
+**Status**: IN PROGRESS — started 2026-10-29. The package is built and committed on its separate `feature/now-playing-feed` worktree (menubar `d9ac655`, unmerged and unpushed). `swift test` was rerun on 2026-10-29 and passes: 41 contract cases, 28 junk cases, and the time, boundary and schema checks (18 tests). A deliberately broken fixture made the suite fail, then was restored. Open: whether to land it on `main`, and the iOS adoption milestone
 **Parent**: [Global M4](../../global/milestones/milestone_4.md)
 **Depends on**: shell contract `contracts/now_playing_feed/` (on `main`)
 **Required by**: iOS adoption of the contract (not opened)

@@ -44,8 +44,8 @@ is extractable from the iOS binary. So:
 ## Repo
 
 `pocket-radio-web/` — own git repo (`jonathan-david-johnson/pocket-radio-web`).
-M1 is merged into its `main` (Pairing, sessions, direct HTTPS playback). M2 is
-on `feature/m2-shell-nav`. A private staging Pages project
+M1 and M2 are merged into `main` (M2 adds the app shell and synced Layout
+navigation). M3a is on `feature/m3a-now-playing`. A private staging Pages project
 (`pocket-radio-web-m1-staging`) runs behind email-only Cloudflare Access with a
 separate Free staging database; see [deployment](architecture/deployment.md).
 What M1 verified, and how, is in
@@ -81,8 +81,8 @@ M1's checks were mostly user-reported, with no browser versions recorded; see
 | Milestone | What | User checkpoint |
 |-----------|------|-----------------|
 | M1 (`archive/web-m1`) | Prove Pairing, direct HTTPS playback and Cloudflare deployment | Pair, play a permitted HTTPS station directly, and reject HTTP without fallback |
-| [M2](./milestones/milestone_2.md) | App shell and navigation from the synced Layout *(in progress)* | Sidebar matches the iPhone's tabs and More, with the Bar line |
-| [M3a](./milestones/milestone_3a.md) | Now Playing resolver *(planned; precedes M3's Now Playing card)* | Open `/api/now-playing` for KEXP, KCRW and an AzuraCast station; titles match the iPhone, and an ended song shows `between` |
+| [M2](./milestones/milestone_2.md) | App shell and navigation from the synced Layout *(merged; two live follow-ups remain)* | Sidebar matches the iPhone's tabs and More, with the Bar line |
+| [M3a](./milestones/milestone_3a.md) | Now Playing resolver *(in progress; precedes M3's Now Playing card)* | Open `/api/now-playing` for KEXP, KCRW and an AzuraCast station; titles match the iPhone, and an ended song shows `between` |
 | [M3](./milestones/milestone_3.md) | Streams, the player, and the installable app *(planned)* | Install, play a favorite, control it from media keys and Now Playing |
 | [M4](./milestones/milestone_4.md) | Lyrics for radio Tracks *(planned; metadata source/timing gate)* | A supported station has verified metadata/timing; lyric nudge survives reload |
 | [M5](./milestones/milestone_5.md) | Podcasts, Up Next, and episode playback *(planned)* | Pause on the web, resume on the phone where it stopped |

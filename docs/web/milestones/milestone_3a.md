@@ -1,6 +1,6 @@
 # Web M3a — Now Playing resolver
 
-**Status**: PLANNED
+**Status**: IN PROGRESS — worktree and branch created from web `main` at `dbf7759` on 2026-10-29. No resolver code yet.
 **Depends on**: Web M2 (session validation, `curated_stations`, the `/api/playback` pattern); web [ADR 0006](../adr/0006-direct-https-playback-without-an-audio-relay.md) and [ADR 0008](../adr/0008-now-playing-comes-from-a-server-side-resolver.md); shell contract `contracts/now_playing_feed/`
 **Parent**: [Global M4](../../global/milestones/milestone_4.md)
 **Required by**: Web M3 (the Now Playing card and Media Session read this record), Web M4 (lyrics need a verified timing label)
@@ -84,7 +84,7 @@ the old title. Open a SomaFM station: it shows `unsupported`. Open it signed out
 - Triton, iHeart, Radio France, NPR Composer, Airtime Pro, RadioKing, Live365,
   ABC, NPO: held until a terms review is recorded. Each becomes a later slice.
 - SomaFM: excluded by decision. Radio Paradise, NTS, TuneIn: not recorded yet.
-- A server-side ICY peek, browser-side ICY, and hls.js: open (ADR 0008).
+- A server-side ICY peek, browser-side ICY, and hls.js. Server-side peeking is not chosen for now (ADR 0008); a new ADR amending ADR 0006 is required before reconsidering it.
 - History and next-up lists.
 - The Swift port of the contract. iOS and the menubar adopt it in their own
   milestones.
@@ -96,8 +96,7 @@ the old title. Open a SomaFM station: it shows `unsupported`. Open it signed out
   roadmap; `docs/web/architecture/communication.md` (a new endpoint);
   `docs/web/CONTEXT.md` (terms: Now Playing record, Adapter, Between);
   `contracts/now_playing_feed/README.md` once a port has checked it.
-- **Questions this must settle:** whether the server may read ICY (a new ADR that
-  amends 0006); whether the resolver stays on a Cloudflare free plan once
-  Cloudflare's current limits are checked; who reads the laut.fm API docs and
-  records the terms entry; whether `station_metadata_sources` belongs in the
-  shared database or the web's own.
+- **Questions this must settle:** whether the resolver stays on a Cloudflare free
+  plan once Cloudflare's current limits are checked; who reads the laut.fm API
+  docs and records the terms entry; whether `station_metadata_sources` belongs
+  in the shared database or the web's own.

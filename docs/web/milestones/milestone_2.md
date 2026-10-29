@@ -1,6 +1,6 @@
 # Web M2 — App shell and navigation from the synced Layout
 
-**Status**: IN PROGRESS — started 2026-10-18 on `feature/m2-shell-nav`. Behaviors 1–8 are green in local tests, and the user's hand checks on the staging deployment passed on 2026-10-23 (deployment `5a84f6b6`, web `dbf7759`). Open: an unexplained missed refocus refresh, one skipped check (deleted playlist on the server), and merging the branch to web `main`; see *Manual results* below. The `curated_stations` migration was applied to the main PocketRadio database on 2026-10-22. The web build uses pnpm since web `8e42079`.
+**Status**: IN PROGRESS — started 2026-10-18 and fast-forwarded to web `main` at `dbf7759` on 2026-10-29. Behaviors 1–8 are green in local tests, and the user's hand checks on the staging deployment passed on 2026-10-23 (deployment `5a84f6b6`, web `dbf7759`). Open: an unexplained missed refocus refresh and one skipped check (deleted playlist on the server); see *Manual results* below. The `curated_stations` migration was applied to the main PocketRadio database on 2026-10-22. The web build uses pnpm since web `8e42079`.
 **Depends on**: Web M1 (Pairing, session, protobuf client decision, ADR 0007); web ADR 0005
 **Required by**: Web M3–M8
 
@@ -9,8 +9,8 @@
 | | |
 |---|---|
 | Plan | Shell `main`: this file |
-| Code | `pocket-radio-web`, branch `feature/m2-shell-nav`. It branched from `feature/m1-spikes` at `faf4fd7`; M1 has since merged into `main`, and the branch merged `main` at `7a196bd` |
-| Worktree | `pocket-radio-web-m2/`, a git worktree of `pocket-radio-web/`, whose main checkout is on `main`. It has its own `node_modules`, installed by pnpm; the main checkout's is still npm's until M2 merges |
+| Code | `pocket-radio-web`, `main` at `dbf7759`. The merged branch `feature/m2-shell-nav` began from `feature/m1-spikes` at `faf4fd7` and last merged `main` at `7a196bd` |
+| Worktree | `pocket-radio-web/` is now the merged checkout. `pocket-radio-web-m2/` remains only while the two manual follow-ups are open |
 | Shell changes | Additive: `contracts/nav_layout/` fixtures and README; a `supabase/migrations/` file creating and seeding `curated_stations`; iOS ADR 0002 consequence updated |
 
 **Goal:** Build the signed-in app shell and its navigation. The web player reads

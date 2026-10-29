@@ -16,16 +16,16 @@ What is running across PocketRadio, what each one is waiting for, and what is pa
 | # | Initiative | Parent milestone | Code | State | Next | Needs you |
 |---|---|---|---|---|---|---|
 | 1 | **iOS: KCRW alignment and routes** | [iOS M14](ios/milestones/milestone_14.md), step 14.4 | `pocket-radio-ios`, branch `experiment/unified-skew` (`56a7ecf21`), worktree `pocket-radio-ios-alignment/`. 16 commits are not on `trunk` | The stall cause is found and a Debug fix passed about 21 minutes on the phone's speaker. **Not resolved** (see below) | Run Bluetooth, wired CarPlay and locked/background checks on the fixed build | Wired phone for installs; the car; a decision on the production path for the fix |
-| 2 | **Web player** | [Web M2](web/milestones/milestone_2.md), then M3a, M3 | `pocket-radio-web-m2/`, branch `feature/m2-shell-nav` (`dbf7759`). 13 commits are not on web `main` | M2: hand checks passed 2026-10-23. Open: one unexplained missed refocus refresh, one skipped check (deleted playlist), and the merge | Merge M2 to web `main`. That unblocks M3a, which branches from `main` | The M2 merge decision; the two open M2 items |
-| 3 | **Now Playing normalization** | [Global M4](global/milestones/milestone_4.md) | Web: M3a (not started). Menubar: M13, package built and passing, unmerged. iOS: not opened | Research done (cycle 1). Contract on `main`. ADR 0008 accepted | Merge the Swift package or leave it on its branch. Build the web resolver (M3a) once M2 is merged | The ICY-peek decision (A, B or C in the cycle 1 report) |
-| 4 | **CarPlay verification backlog** | iOS M14.4, and closed M13.x (bugs 4–8) | Same as 1 | The simulator suite passes (128 tests, nine expected failures). **No real-CarPlay run is recorded** | See the backlog table | A parked car, the wired cable, consent for device-harness runs |
+| 2 | **Web player** | [Web M2](web/milestones/milestone_2.md), then M3a, M3 | `pocket-radio-web` `main` (`dbf7759`); M3a branch `feature/m3a-now-playing` in `pocket-radio-web-m3a/` | M2 merged 2026-10-29. Its missed-refocus observation and deleted-playlist hand check remain open. M3a has started. | Build the M3a resolver | Run the two M2 follow-ups only when you want to validate them live |
+| 3 | **Now Playing normalization** | [Global M4](global/milestones/milestone_4.md) | Web: M3a in `pocket-radio-web-m3a/`. Menubar: M13 package branch `feature/now-playing-feed` in `pocket-radio-menubar-nowplaying/`. iOS: not opened | Research done (cycle 1). Contract on `main`. The isolated Swift package passes its tests and remains unintegrated. ADR 0008 accepts no server-side ICY peek for now. | Build the web resolver; decide later whether to merge the Swift package | No decision now |
+| 4 | **CarPlay verification backlog** | iOS M14.4, and closed M13.x (bugs 4–8) | Same as 1 | The simulator suite passes (128 tests, nine expected failures). **No real-CarPlay run is recorded. Deferred by the user on 2026-10-29.** | Wait until the user schedules a session | A parked car, the wired cable, consent for device-harness runs |
 
 ## Parked or dormant
 
 | Platform | Current milestone | State (as the doc says) | Note |
 |---|---|---|---|
 | Menubar | [M12](menubar/milestones/milestone_12.md) | ACCEPTED 2026-10-04, merged | Bugs 1, 2, 3 open. M12 and the M10–M11 milestone files are finished but not closed. iOS depends on the menubar `StreamSession` package by path |
-| Global (remote control) | [M1.1](global/milestones/milestone_1.1.md) | M1 is IN PROGRESS, M1.1 PLANNED, M2 and M3 are stubs | I did not check whether M1 is still moving. Decide whether to park it |
+| Global (remote control) | [M1.1](global/milestones/milestone_1.1.md) | M1 is IN PROGRESS, M1.1 PLANNED, M2 and M3 are stubs | Leave as is, per the user on 2026-10-29 |
 | Console | [M5](console/milestones/milestone_5.md) | The file has no Status line; 4 commits name M5 | Three uncommitted Go files date from before 2026-06-08 |
 | Roku | [M10](roku/milestones/milestone_10.md) | NOT STARTED | Two uncommitted icon files |
 | Android | [M0](android/milestones/milestone_0.md) | Not scaffolded | No repo directory |
@@ -77,8 +77,7 @@ The simulator suite does not certify real head-unit behavior (ADR 0003). The rea
 ## Decisions waiting for you
 
 1. Production path for the KCRW stall fix (A, B or C above).
-2. Merge web M2 to `main`, and what to do with the two open M2 items.
-3. ICY peek for the web (cycle 1 report). Until you decide, ADR 0008 forbids it.
-4. Whether to park Global M1 (remote control).
-5. Whether to schedule the real-car CarPlay session, and whether the device harness is wanted.
-6. Whether to spend a session closing the finished milestones.
+2. Whether to run the two remaining Web M2 hand checks (a missed refocus refresh and a deleted playlist).
+3. Whether to merge the Swift package into menubar `main` after it remains isolated long enough for review.
+4. Whether to schedule the real-car CarPlay session, and whether the device harness is wanted.
+5. Whether to spend a session closing the finished milestones.
