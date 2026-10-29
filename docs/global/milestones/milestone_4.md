@@ -12,7 +12,7 @@ This is a parent milestone. It holds the goal, the slice list, the archetype boa
 | Slice | Milestone | Code | State |
 |---|---|---|---|
 | Shared contract | this milestone | Shell `main`: `contracts/now_playing_feed/` | Done (41 cases, 28 junk cases, schema) |
-| Web resolver | [Web M3a](../../web/milestones/milestone_3a.md) | `pocket-radio-web`, branch `feature/m3a-now-playing`, worktree `pocket-radio-web-m3a/` | IN PROGRESS. Contract port and allowlisted request builders are committed (`77c513f`, `e918742`); Function and cache remain |
+| Web resolver | [Web M3a](../../web/milestones/milestone_3a.md) | `pocket-radio-web`, branch `feature/m3a-now-playing`, worktree `pocket-radio-web-m3a/` | IN PROGRESS. Contract port, request builders, and resolver Function are committed (`77c513f`, `e918742`, `b4aac07`). Migration `14e5ef2` is unapplied; only KEXP/KCRW are configured |
 | Swift port of the contract | [Menubar M13](../../menubar/milestones/milestone_13.md) | `pocket-radio-menubar`, branch `feature/now-playing-feed`, worktree `pocket-radio-menubar-nowplaying/` | Package built and passing (menubar `d9ac655`, unmerged, unpushed). **Not integrated** into the menubar app or iOS |
 | iOS adoption | not opened | `pocket-radio-ios` | Not started. Opens after M13, when the user says so |
 | Source research | this milestone (Archetype board) | Shell `main`: `docs/global/experiments/` | Cycle 1 done |

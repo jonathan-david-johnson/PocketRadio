@@ -1,6 +1,6 @@
 # Web M3a — Now Playing resolver
 
-**Status**: IN PROGRESS — worktree and branch created from web `main` at `dbf7759` on 2026-10-29. The pure TypeScript contract port and request builders are committed on the branch (`77c513f`, `e918742`); the authenticated resolver Function and cache are not built yet.
+**Status**: IN PROGRESS — worktree and branch created from web `main` at `dbf7759` on 2026-10-29. The pure TypeScript contract port, request builders, and authenticated resolver Function with an edge-cache boundary are committed (`77c513f`, `e918742`, `b4aac07`). Hermetic tests pass. The migration is committed on shell `main` (`14e5ef2`) but is not applied; only KEXP and KCRW are configured, so staging validation and first-release source seeds remain.
 **Depends on**: Web M2 (session validation, `curated_stations`, the `/api/playback` pattern); web [ADR 0006](../adr/0006-direct-https-playback-without-an-audio-relay.md) and [ADR 0008](../adr/0008-now-playing-comes-from-a-server-side-resolver.md); shell contract `contracts/now_playing_feed/`
 **Parent**: [Global M4](../../global/milestones/milestone_4.md)
 **Required by**: Web M3 (the Now Playing card and Media Session read this record), Web M4 (lyrics need a verified timing label)
