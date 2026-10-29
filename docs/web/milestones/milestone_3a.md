@@ -2,6 +2,7 @@
 
 **Status**: PLANNED
 **Depends on**: Web M2 (session validation, `curated_stations`, the `/api/playback` pattern); web [ADR 0006](../adr/0006-direct-https-playback-without-an-audio-relay.md) and [ADR 0008](../adr/0008-now-playing-comes-from-a-server-side-resolver.md); shell contract `contracts/now_playing_feed/`
+**Parent**: [Global M4](../../global/milestones/milestone_4.md)
 **Required by**: Web M3 (the Now Playing card and Media Session read this record), Web M4 (lyrics need a verified timing label)
 
 ## Where the work happens
@@ -9,8 +10,8 @@
 | | |
 |---|---|
 | Plan | Shell `main`: this file |
-| Code | `pocket-radio-web`, branch `feature/m3a-now-playing` from `main` after M2 merges. **Proposed; confirm before branching** |
-| Worktree | `pocket-radio-web-m3a/`, a sibling of the main checkout. **Proposed; confirm** |
+| Code | `pocket-radio-web`, branch `feature/m3a-now-playing` from `main` after M2 merges. Confirmed by the user, 2026-10-29 |
+| Worktree | `pocket-radio-web-m3a/`, a sibling of the main checkout. Confirmed by the user, 2026-10-29 |
 | Shell changes | Additive: `contracts/now_playing_feed/` (already on `main`); a `supabase/migrations/` file adding a nullable `metadata_source` column to `curated_stations` and a public-read table `station_metadata_sources` |
 
 **Goal:** Give the web player one Now Playing record per station, built on the

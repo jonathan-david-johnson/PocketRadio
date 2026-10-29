@@ -4,7 +4,9 @@ Golden fixtures for turning a station's raw "now playing" response into one norm
 
 ## Status of the reference
 
-The expected values were produced by a research prototype (`docs/global/experiments/traces/2026-10-29_now_playing/scripts/np_adapters.py`) and then **read case by case by a person**. No port exists yet, so nothing here has been checked by a second implementation. The TypeScript port is the first check, and any disagreement is a bug in the port or in a fixture. Fix the fixture only with a reason written in its `description`.
+The expected values were produced by a research prototype (`docs/global/experiments/traces/2026-10-29_now_playing/scripts/np_adapters.py`) and then **read case by case by a person**.
+
+**Swift port (2026-10-29):** `pocket-radio-menubar` branch `feature/now-playing-feed`, package `Packages/NowPlayingFeed`, passes all 41 cases and all 28 junk cases, and its time-converter checks were verified against Python's `datetime`. The same person wrote it from the Python reference, so it shows the fixtures are consistent and the rules port cleanly. It is not an independent reading of the rules. The TypeScript port (web M3a) is the next check. Disagreements the Swift port exposed are written into the rules below.
 
 Raw bodies were recorded from live services on 2026-10-29 and trimmed. Several carry a few hand edits, each named in the case's `description`. The services' terms of use were not reviewed for fixture use. No audio is involved.
 
@@ -33,7 +35,7 @@ Raw bodies were recorded from live services on 2026-10-29 and trimmed. Several c
 ## Rules every port must apply
 
 1. **Times are UTC.** Each adapter converts its source's format and zone (epoch seconds or milliseconds, ISO with or without a colon in the offset, naive local time with a zone named elsewhere, `/Date(ms)/`). `startedAt` is `null` when the source gives no stamp.
-2. **Combined titles are split.** `Artist - Title` in one string splits at the first ` - `. The star format `Song*TITLE*ARTIST*YEAR*ID` splits into title and artist. A leading `#123:` counter is removed (NPO).
+2. **Combined titles are split.** `Artist - Title` in one string splits at the first ` - `, unless the adapter already marked the item `station_id` or `show`. The star format `Song*TITLE*ARTIST*YEAR*ID` splits into title and artist. A leading `#123:` counter is removed (NPO).
    - **Automation attributes in an ICY title** (iHeart): `Artist - text="Title" song_spot="M" … amgArtworkURL="…" length="00:03:23"`. `text` is the title, the prefix is the artist, `amgArtworkURL` is the artwork, a non-zero `length` is the duration. `song_spot="M"` is a song; any other value is a `station_id`. A `text` that matches an ad marker is an `ad`.
 3. **Junk is removed.** After parsing, the title and artist pass the junk filter. `ad`, `station_id`, `placeholder` and `unknown` give `status: "between"`, `item: null`, and `provenance.suppressed` set to that kind.
    - Structural junk always counts: a template token such as `{cartNumber}`, a file extension, an automation slate id (`XYZ_ID6`), an HTML fragment, an empty-ish title (`-`), the artist `Unknown Artist`.
@@ -44,6 +46,7 @@ Raw bodies were recorded from live services on 2026-10-29 and trimmed. Several c
 5. **`timing`** is `stamped` when `startedAt` is present and `observed` when it is not. It is `none` when there is no item and no stamp. A stamp is the station's clock, not the listener's audio position.
 6. **A show** has `item.kind: "show"`, its title as `item.title`, no artist, and `show.title` set.
 7. **`pollAfterSec`** is 10, or 30 when `stale`.
+   **Several matching steps (Radio France):** when more than one song step spans `now`, take the one with the latest `start`. The prototype took the last in the response's key order, which a JSON reader cannot rely on.
 8. **Artwork is `https` or `null`.** An `http://` artwork URL is rewritten to `https://`. This is for artwork only; audio URLs are never rewritten (web ADR 0006). The rewrite was checked for one host (iHeart's image host).
 
 ## Cases

@@ -96,6 +96,7 @@ pocket-radio-menubar/
 | [M11-A](./milestones/milestone_11a.md) | Offline KCRW media-clock selection proof *(accepted; merged/pushed at `e6fa855`)* | Reproduce all retained-trace decisions and review their errors and exclusions |
 | [M11-B](./milestones/milestone_11b.md) | Opt-in AAC/HLS menubar experiment *(qualitative prototype accepted; merged/pushed at `e6fa855`)* | Titles and lyrics align by listener report; Off works; formal numerical targets remain unverified |
 | [M12](./milestones/milestone_12.md) | KCRW alignment in normal playback *(accepted; merged/pushed at `8838df5`; bugs 2 and 3 open)* | Play KCRW with aligned titles/lyrics without Debug Apply or automatic recording |
+| [M13](./milestones/milestone_13.md) | NowPlayingFeed package, a Swift port of the shared Now Playing contract *(in progress; not integrated)* | `swift test` passes every case in `contracts/now_playing_feed/` |
 
 ## Build & Run
 

@@ -70,6 +70,7 @@ include the actual choice even when the preceding document defines it.
 
 ## Pointers
 
+- What is running across all platforms, what each initiative waits for, and what is parked — `docs/INITIATIVES.md`. Refresh its facts with `python3 tools/initiatives.py`.
 - Build/test/run targets — `make help` (top level delegates; real logic lives
   in each sub-project's Makefile).
 - Repo + docs + milestone conventions — `docs/REPO_STRUCTURE.md`, or invoke the
