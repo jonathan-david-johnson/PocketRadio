@@ -7,23 +7,26 @@ description: Create model subagent plans when the user asks for a subagent plan,
 
 ## Rate snapshot
 
-**Last updated: 2026-10-04 (UTC).** These are selected public rates, not a complete model catalog or a guarantee of account access. Check freshness before using them.
+**Last updated: 2026-11-16 (UTC).** These are selected public rates, not a complete model catalog or a guarantee of account access. Check freshness before using them.
 
 ### API rates — USD per 1 million tokens
 
-Standard-speed text rates from [OpenAI API pricing](https://developers.openai.com/api/docs/pricing) and [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing). OpenAI rows use short-context rates; Anthropic rows use default global routing.
+Standard-speed text rates from [OpenAI API pricing](https://developers.openai.com/api/docs/pricing) and [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing). OpenAI rows use short-context standard rates; cache write is the 30-minute price (12-hour is 2x). Anthropic rows use default global routing.
 
 | Publisher | Model ID | Uncached input | Cached input/read | Cache write | Output |
 |---|---|---:|---:|---:|---:|
 | OpenAI | `gpt-6-astra` | $10.00 | $1.00 | $12.50 | $50.00 |
 | OpenAI | `gpt-6.1-sol` | $2.00 | $0.10 | $2.50 | $10.00 |
+| OpenAI | `gpt-6.1-terra` | $1.00 | $0.05 | $1.25 | $5.00 |
 | OpenAI | `gpt-6-luna` | $0.10 | $0.01 | $0.125 | $0.50 |
+| Anthropic | `claude-fable-5-2` | $8.00 | $0.20 | $10.00 / $16.00 | $40.00 |
 | Anthropic | `claude-fable-5-1` | $10.00 | $0.25 | $12.50 / $20.00 | $50.00 |
 | Anthropic | `claude-opus-5-5` | $4.00 | $0.20 | $5.00 / $8.00 | $20.00 |
-| Anthropic | `claude-sonnet-5-5` | $2.00 | $0.20 | $2.50 / $4.00 | $10.00 |
+| Anthropic | `claude-sonnet-5-5` | $2.00 | $0.10 | $2.50 / $4.00 | $10.00 |
+| Anthropic | `claude-haiku-5-5` | $0.10 | $0.01 | $0.125 / $0.20 | $0.50 |
 | Anthropic | `claude-haiku-4-5` | $1.00 | $0.10 | $1.25 / $2.00 | $5.00 |
 
-Anthropic cache-write cells show **5-minute / 1-hour** prices. The Haiku ID is an alias; its current dated API ID is `claude-haiku-4-5-20251001`. Confirm IDs and access against the [Anthropic model overview](https://platform.claude.com/docs/en/about-claude/models/overview) and the local model registry.
+Anthropic cache-write cells show **5-minute / 1-hour** prices. Haiku 5.5 rates apply to prompts up to 100,000 tokens; above that, input is $0.50, output $2.50, cache write $0.625 / $1.00, cache read $0.05. The Haiku 4.5 ID is an alias; its current dated API ID is `claude-haiku-4-5-20251001`. Confirm IDs and access against the [Anthropic model overview](https://platform.claude.com/docs/en/about-claude/models/overview) and the local model registry.
 
 OpenAI's listed flagship API models charge 2x input/cache rates and 1.5x output rates for requests over 272,000 input tokens, applied to the full request; see the [Sol 6.1 model specification](https://developers.openai.com/api/docs/models/gpt-6.1-sol). Anthropic 4.6 and later models include long context at standard token rates. Speed modes, regional routing, tools, and account agreements can change costs. Do not apply this table to an unlisted model or billing mode.
 
@@ -35,6 +38,7 @@ Standard-speed rates from [OpenAI Codex/ChatGPT Work pricing](https://developers
 |---|---:|---:|---:|
 | `gpt-6-astra` | 250 | 25 | 1,250 |
 | `gpt-6.1-sol` | 50 | 2.5 | 250 |
+| `gpt-6.1-terra` | 25 | 1.25 | 125 |
 | `gpt-6-sol` | 50 | 5 | 250 |
 | `gpt-6-luna` | 2.5 | 0.25 | 12.5 |
 | `gpt-5.6-terra` | 50 | 5 | 300 |
